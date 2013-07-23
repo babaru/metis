@@ -34,7 +34,7 @@ SimpleNavigation::Configuration.run do |navigation|
   navigation.items do |primary|
     primary.item :page_dashboard, t('navigation.dashboard'), dashboard_path, link: {icon: 'icon-dashboard'}, :highlights_on => /dashboard/
     primary.item :page_clients, t('navigation.clients'), clients_path, link: {icon: 'icon-user'}, highlights_on: /clients/
-    primary.item :page_spots, t('navigation.spots'), Website.count > 0 ? website_data_path(Website.first, :spot) : websites_path, link: {icon: 'icon-trello'}, highlights_on: /websites/ do |spots|
+    primary.item :page_spots, t('navigation.spots'), websites_path, link: {icon: 'icon-trello'}, highlights_on: /websites/ do |spots|
       spots.item :page_websites, t('navigation.websites'), websites_path, link: {icon: 'icon-globe'}, highlights_on: ::Regexp.new("websites$")
       Website.all.each do |item|
         spots.item "page_website_#{item.id}".to_sym, item.name, website_data_path(item.id, :spot), highlights_on: ::Regexp.new("websites/#{item.id}/data_type")

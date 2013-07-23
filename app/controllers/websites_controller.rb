@@ -4,6 +4,7 @@ class WebsitesController < ApplicationController
   # GET /websites.json
   def index
     @websites_grid = initialize_grid(Website)
+    @websites = Website.all
 
     respond_to do |format|
       format.html # index.html.erb

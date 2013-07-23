@@ -6,21 +6,8 @@
   }
 end %>
 
-<%= grid(@websites_grid, :show_filters => :always) do |g|
-
-  g.column html: {style: "width: 40px;"} do |website|
-    image_tag website.logo.url(:thumb)
-  end
-
-  g.column name: t('activerecord.attributes.website.name') do |website|
-    link_to website.name, website_channels_path(website)
-  end
-
-  g.column :html => {class: 'buttons'} do |website|
-    link_to(render_icon_content('icon-edit'), edit_website_path(website), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
-  end
-
-  g.column :html => {class: 'buttons'} do |website|
-    link_to(render_icon_content('icon-trash'), website_path(website), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete'))
-  end
-end -%>
+<div class="icon-grid">
+  <% @websites.each do |website| %>
+  <%= link_to content_tag(:span, website.name), website_path(website), 'logo-url' => website.logo.url(:thumb) %>
+  <% end %>
+</div>

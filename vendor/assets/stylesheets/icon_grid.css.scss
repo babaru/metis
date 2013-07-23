@@ -1,7 +1,8 @@
 @import 'bootstrap/mixins';
 .icon-grid {
-  a {
+  .item {
     display: block;
+    cursor: pointer;
     @include border-radius(50px);
     width: 100px; height: 100px;
     margin: auto; clear: both;
@@ -19,5 +20,13 @@
       font-size: 16px;
       font-weight: bold;
     }
+  }
+
+  .edit-panel {
+    display: block;
+    position: relative;
+    left: 150px; top: -100px;
+    width: 24px;
+    color: #666;
   }
 }
