@@ -1,0 +1,20 @@
+<%= render_page_title "#{t('model.create', model: Channel.model_name.human)}" do |toolbar|
+  toolbar << {
+    name: "#{t('labels.back_to')}#{t('model.list', :model => Channel.model_name.human)}",
+    url: website_data_type_path(@website, 'channel'),
+    options: {class: 'button'}
+  }
+  end %>
+
+<%= simple_form_for(@channel , :html => {:class => 'form-horizontal' }) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :website_id, as: :hidden %>
+    <%= f.input :names, label: '频道名称列表', placeholder: '一行一个频道名称', as: :text %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: 'button button-primary' %>
+  </div>
+<% end %>

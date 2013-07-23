@@ -1,0 +1,55 @@
+<%= render_page_title "#{@client.name}" do |toolbar|
+  toolbar << {
+      name: render_icon_content('icon-edit'),
+      url: edit_client_path(@client),
+      options: {class: "button",
+      title: t('model.edit', :model => Client.model_name.human),
+      rel: 'tooltip'}
+    }
+  toolbar << {
+      name: render_icon_content('icon-trash'),
+      url: client_path(@client),
+      options: {
+        method: :delete,
+        confirm: t('confirms.delete'),
+        class: "button",
+        title: t('model.delete', :model => Client.model_name.human),
+        rel: 'tooltip'
+      }
+    }
+  toolbar << {
+    name: "#{t('labels.back_to')}#{t('model.list', :model => Client.model_name.human)}",
+    url: clients_path,
+    options: {class: 'button'}
+  }
+end %>
+
+<%= render_article_title t('model.list', model: Project.model_name.human) do |toolbar|
+  toolbar << {
+    name: render_icon_and_text_content('icon-plus', t('model.add', model: Project.model_name.human)),
+    url: new_client_project_path(@client),
+    options: {class: 'button button-success'}
+  }
+  end %>
+
+<%= grid(@projects_grid, :show_filters => :always) do |g|
+  g.column name: t('activerecord.attributes.project.name') do |project|
+    project.name
+  end
+
+  g.column name: t('activerecord.attributes.project.started_at') do |project|
+    project.started_at.strftime('%Y-%m-%d')
+  end
+
+  g.column name: t('activerecord.attributes.project.ended_at') do |project|
+    project.ended_at.strftime('%Y-%m-%d')
+  end
+
+  g.column :html => {class: 'buttons'} do |project|
+    link_to(render_icon_content('icon-edit'), edit_project_path(project), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
+  end
+
+  g.column :html => {class: 'buttons'} do |project|
+    link_to(render_icon_content('icon-trash'), project_path(project), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete'))
+  end
+end -%>

@@ -1,0 +1,26 @@
+<%= render_page_title "#{t('model.list', model: Website.model_name.human)}" do |toolbar|
+  toolbar << {
+    name: render_icon_and_text_content('icon-plus-sign', t('model.create', :model => Website.model_name.human)),
+    url: new_website_path,
+    options: {class: 'button button-primary'}
+  }
+end %>
+
+<%= grid(@websites_grid, :show_filters => :always) do |g|
+
+  g.column html: {style: "width: 40px;"} do |website|
+    image_tag website.logo.url(:thumb)
+  end
+
+  g.column name: t('activerecord.attributes.website.name') do |website|
+    link_to website.name, website_channels_path(website)
+  end
+
+  g.column :html => {class: 'buttons'} do |website|
+    link_to(render_icon_content('icon-edit'), edit_website_path(website), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
+  end
+
+  g.column :html => {class: 'buttons'} do |website|
+    link_to(render_icon_content('icon-trash'), website_path(website), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete'))
+  end
+end -%>

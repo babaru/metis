@@ -1,0 +1,23 @@
+@import 'bootstrap/mixins';
+.icon-grid {
+  a {
+    display: block;
+    @include border-radius(50px);
+    width: 100px; height: 100px;
+    margin: auto; clear: both;
+    @include box-shadow(rgba(0, 0, 0, 0.3) 0px -5px 25px inset);
+
+    &:hover {
+      @include box-shadow(rgba(0, 0, 0, 0.3) 0px -5px 15px inset);
+    }
+
+    > span {
+      position: relative; top: 110px;
+      display: block;
+      width: 100px; height: 25px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+}

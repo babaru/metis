@@ -1,0 +1,13 @@
+defaults: &defaults
+  app:
+    name: 'metis.tida'
+    copy_right: ''
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

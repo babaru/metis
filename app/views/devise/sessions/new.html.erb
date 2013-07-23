@@ -1,0 +1,19 @@
+<%= simple_form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+
+<%- if alert %>
+<div id="alert-box">
+  <%= alert %><span class="caret"></span>
+</div>
+<% end -%>
+
+<%= f.input :email, autofocus: true, label: false, placeholder: 'email' %>
+<%= f.input :password, label: false, placeholder: 'password' %>
+<div class="clearfix">
+	<%= f.button :submit, t("buttons.sign_in"), :class => 'button button-logo' %>
+</div>
+
+
+<% end %>
+
+
+

@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  client: 
+  created_by: 
+  started_at: 2013-07-15 16:27:46
+  ended_at: 2013-07-15 16:27:46
+
+two:
+  name: MyString
+  client: 
+  created_by: 
+  started_at: 2013-07-15 16:27:46
+  ended_at: 2013-07-15 16:27:46

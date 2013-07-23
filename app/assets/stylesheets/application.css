@@ -1,0 +1,11 @@
+/*
+ *= require jquery.ui.all
+ *= require wice_grid
+ *= require tida_template
+ *= require icon_grid
+ */
+
+html {
+  width: 100%; height: 100%;
+  overflow-x: hidden;
+}

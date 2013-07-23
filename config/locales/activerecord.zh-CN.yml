@@ -1,0 +1,22 @@
+zh-CN:
+  activerecord:
+    models:
+      user: 用户
+      client: 客户
+      website: 网站
+      channel: 频道
+      spot: 媒介点位
+    attributes:
+      website:
+        name: 名称
+        url: 地址
+        logo: Logo
+      channel:
+        name: 名称
+        website: 所属网站
+      spot:
+        channel: 所在频道
+        website: 所属网站
+        name: 位置名称
+        price: 价格
+        spec: 规格

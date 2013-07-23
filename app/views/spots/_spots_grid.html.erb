@@ -1,0 +1,18 @@
+<%= grid(@spots_grid, :show_filters => :always) do |g|
+
+  g.column name: t('activerecord.attributes.spot.name') do |spot|
+    spot.name
+  end
+
+  g.column name: t('activerecord.attributes.spot.spec') do |spot|
+    content_tag :span, spot.spec[:dimension], class: 'label label-info'
+  end
+
+  g.column :html => {class: 'buttons'} do |spot|
+    link_to(render_icon_content('icon-edit'), edit_spot_path(spot), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
+  end
+
+  g.column :html => {class: 'buttons'} do |spot|
+    link_to(render_icon_content('icon-trash'), spot_path(spot), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete'))
+  end
+end -%>

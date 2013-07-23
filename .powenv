@@ -1,0 +1,12 @@
+export PATH ; PATH="/Users/apple/.rvm/gems/ruby-1.9.3-p429@metis/bin:/Users/apple/.rvm/gems/ruby-1.9.3-p429@global/bin:/Users/apple/.rvm/rubies/ruby-1.9.3-p429/bin:/Users/apple/.rvm/bin:$PATH"
+export rvm_env_string ; rvm_env_string='ruby-1.9.3-p429@metis'
+export rvm_path ; rvm_path='/Users/apple/.rvm'
+export rvm_ruby_string ; rvm_ruby_string='ruby-1.9.3-p429'
+export rvm_gemset_name ; rvm_gemset_name='metis'
+export RUBY_VERSION ; RUBY_VERSION='ruby-1.9.3-p429'
+export GEM_HOME ; GEM_HOME='/Users/apple/.rvm/gems/ruby-1.9.3-p429@metis'
+export GEM_PATH ; GEM_PATH='/Users/apple/.rvm/gems/ruby-1.9.3-p429@metis:/Users/apple/.rvm/gems/ruby-1.9.3-p429@global'
+export MY_RUBY_HOME ; MY_RUBY_HOME='/Users/apple/.rvm/rubies/ruby-1.9.3-p429'
+export IRBRC ; IRBRC='/Users/apple/.rvm/rubies/ruby-1.9.3-p429/.irbrc'
+unset MAGLEV_HOME
+unset RBXOPT

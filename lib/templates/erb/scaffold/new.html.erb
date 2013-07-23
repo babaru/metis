@@ -1,0 +1,8 @@
+<%%= render_page_title "#{t('model.create', model: <%= class_name.split('::').last %>.model_name.human)} <small>#{t('simple_form.required.text') }</small>" do |toolbar|
+  toolbar << {
+    name: "#{t('labels.back_to')}#{t('model.list', :model => <%= class_name.split('::').last %>.model_name.human)}",
+    url: <%= class_name.split('::').last.underscore.downcase.pluralize %>_path,
+    options: {class: 'button'}
+  }
+  end %>
+<%%= render 'form' %>

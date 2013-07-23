@@ -1,0 +1,23 @@
+<%%= render_page_title "#{t('model.list', model: <%= class_name.split('::').last %>.model_name.human)}" do |toolbar|
+  toolbar << {
+    name: render_icon_and_text_content('icon-plus-sign', t('model.create', :model => <%= class_name.split('::').last %>.model_name.human)),
+    url: new_<%= class_name.split('::').last.underscore.downcase %>_path,
+    options: {class: 'button button-primary'}
+  }
+end %>
+
+<%%= grid(@<%= class_name.split('::').last.underscore.downcase.pluralize %>_grid, :show_filters => :always) do |g|
+<% attributes.each do |attribute| -%>
+  g.column :name => t('activerecord.attributes.<%= class_name.split('::').last.underscore.downcase %>.<%= attribute.name %>'), :html => {:class => "grid-cell"} do |<%= class_name.split('::').last.underscore.downcase %>|
+    <%= class_name.split('::').last.underscore.downcase %>.<%= attribute.name %>
+  end
+<% end -%>
+
+  g.column :html => {class: 'buttons'} do |<%= class_name.split('::').last.underscore.downcase %>|
+    link_to(render_icon_content('icon-edit'), edit_<%= singular_table_name %>_path(<%= class_name.split('::').last.underscore.downcase %>), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
+  end
+
+  g.column :html => {class: 'buttons'} do |<%= class_name.split('::').last.underscore.downcase %>|
+    link_to(render_icon_content('icon-trash'), <%= singular_table_name %>_path(<%= class_name.split('::').last.underscore.downcase %>), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete'))
+  end
+end -%>
