@@ -105,46 +105,15 @@ class WebsitesController < ApplicationController
         Rails.logger.debug "meta_data: #{@upload_file.meta_data}"
         @upload_file.save!
 
+        spots_data = @upload_file.parse(@website.id)
+
         Spot.transaction do
-          Spreadsheet.open @upload_file.data_file.path do |book|
-            sheet = book.worksheet(0)
-            1.upto(sheet.last_row_index) do |index|
-              channel_name = sheet.row(index)[0]
-              channel = Channel.where(name: channel_name, website_id: @website.id).first
-              if channel.nil?
-                Rails.logger.error "Can not find channel named #{channel_name}"
-                next
-              end
-              spot_spec = {}
-              spec_text = sheet.row(index)[4]
-              if spec_text
-                spec_text = spec_text.gsub(/[;；]/, ';').strip
-                specs = spec_text.split(';')
-                spot_spec[:dimension] = specs[0]
-                spot_spec[:size] = specs[1]
-                spot_spec[:types] = specs[2].split('.')
-              end
-              spot_name = sheet.row(index)[1]
-              spot = Spot.find_by_name_and_channel_id(spot_name, channel.id)
-              if spot.nil?
-                Spot.create!({
-                  website_id: @website.id,
-                  channel_id: channel.id,
-                  name: sheet.row(index)[1],
-                  price: sheet.row(index)[2],
-                  unit: sheet.row(index)[3],
-                  spec: spot_spec
-                  })
-              else
-                spot.update_attributes!({
-                  website_id: @website.id,
-                  channel_id: channel.id,
-                  name: sheet.row(index)[1],
-                  price: sheet.row(index)[2],
-                  unit: sheet.row(index)[3],
-                  spec: spot_spec
-                  })
-              end
+          spots_data.each do |spot_data|
+            spot = Spot.find_by_name_and_channel_id(spot_data[:name], spot_data[:channel_id])
+            if spot.nil?
+              Spot.create!(spot_data)
+            else
+              spot.update_attributes!(spot_data)
             end
           end
         end

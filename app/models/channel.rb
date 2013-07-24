@@ -3,5 +3,5 @@ class Channel < ActiveRecord::Base
   attr_accessible :name, :names, :website_id
   attr_accessor :names
 
-  validates :name, uniqueness: true
+  # validates :name, uniqueness: true
 end
