@@ -18,7 +18,7 @@ class WebsitesController < ApplicationController
     @website = Website.find(params[:id])
     @data_type = params[:data_type]
     if @data_type == 'spot'
-      @spots_grid = initialize_grid(Spot.where(website_id: @website.id))
+      @spots_grid = initialize_grid(Spot.where(website_id: @website.id).order('channel_id, name'))
     else
       @channels_grid = initialize_grid(Channel.where(website_id: @website.id))
     end
@@ -124,16 +124,43 @@ class WebsitesController < ApplicationController
                 spot_spec[:size] = specs[1]
                 spot_spec[:types] = specs[2].split('.')
               end
-              Spot.create!({
-                website_id: @website.id,
-                channel_id: channel.id,
-                name: sheet.row(index)[1],
-                price: sheet.row(index)[2],
-                unit: sheet.row(index)[3],
-                spec: spot_spec
-                })
+              spot_name = sheet.row(index)[1]
+              spot = Spot.find_by_name_and_channel_id(spot_name, channel.id)
+              if spot.nil?
+                Spot.create!({
+                  website_id: @website.id,
+                  channel_id: channel.id,
+                  name: sheet.row(index)[1],
+                  price: sheet.row(index)[2],
+                  unit: sheet.row(index)[3],
+                  spec: spot_spec
+                  })
+              else
+                spot.update_attributes!({
+                  website_id: @website.id,
+                  channel_id: channel.id,
+                  name: sheet.row(index)[1],
+                  price: sheet.row(index)[2],
+                  unit: sheet.row(index)[3],
+                  spec: spot_spec
+                  })
+              end
             end
           end
+        end
+      end
+    end
+  end
+
+  def search
+    @website = Website.find params[:id]
+    @data_type = params[:data_type]
+
+    if request.post?
+      if @data_type == 'spot'
+        @spots_grid = initialize_grid(Spot.where("name like '%#{params[:keywords]}%'"))
+        respond_to do |format|
+          format.js
         end
       end
     end

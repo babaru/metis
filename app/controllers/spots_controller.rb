@@ -26,6 +26,7 @@ class SpotsController < ApplicationController
   # GET /spots/new.json
   def new
     @spot = Spot.new
+    @website = Website.find params[:website_id]
 
     respond_to do |format|
       format.html # new.html.erb

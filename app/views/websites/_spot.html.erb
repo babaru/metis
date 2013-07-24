@@ -1,7 +1,7 @@
 <%= render_page_title "#{@website.name}#{t('model.list', model: Spot.model_name.human)}" do |toolbar|
   toolbar << {
     name: render_icon_and_text_content('icon-plus-sign', t('model.create', :model => Spot.model_name.human)),
-    url: new_spot_path,
+    url: new_website_spot_path(@website),
     options: {class: 'button button-primary'}
   }
 
@@ -21,4 +21,53 @@ end %>
   </div>
 </article>
 
-<%= render partial: 'spots/spots_grid' %>
+<article>
+  <div class="padding">
+    <div class="grid">
+      <div class="grid-row">
+        <div class="cell6"></div>
+        <div class="cell6">
+          <%= form_tag website_data_search_path(@website, 'spot'), method: :post, remote: true, class: 'navbar-search pull-right spots-search-form' do %>
+            <%= text_field_tag :keywords, nil, placeholder: '输入关键字', class: 'search-query' %>
+            <%= button_tag '搜索', class: 'button' %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<div class="spots-grid-block">
+  <%= render partial: 'spots/spots_grid' %>
+</div>
+
+<% content_for :js do %>
+<script language='javascript'>
+  $(document).ready(function(){
+    $('form.spots-search-form').on('ajax:beforeSend', function(xhr, settings) {
+      $('.spots-grid-block').html();
+      $('#search-modal-window').modal({
+        backdrop: 'static',
+        keyboard: false
+      });
+    });
+
+    $('form.spots-search-form').on('ajax:complete', function(xhr, status) {
+      $('#search-modal-window').modal('hide');
+    });
+  });
+</script>
+<% end %>
+
+<% content_for :anything_else do %>
+<div class="modal hide fade" id="search-modal-window">
+  <div class="modal-header">
+    <h4>正在搜索...</h4>
+  </div>
+  <div class="modal-body">
+    <div class="progress progress-striped active">
+      <div class="bar" style="width: 100%;" id="modal-progress-bar"><span id="model-progress-value">请等待...</span></div>
+    </div>
+  </div>
+</div>
+<% end %>

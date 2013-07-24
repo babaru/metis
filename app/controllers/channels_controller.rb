@@ -38,6 +38,7 @@ class ChannelsController < ApplicationController
   # GET /channels/1/edit
   def edit
     @channel = Channel.find(params[:id])
+    @website = @channel.website
   end
 
   # POST /channels
