@@ -33,6 +33,10 @@
     content.join(' ').html_safe
   end
 
+  g.column name: t('activerecord.attributes.spot.remark') do |spot|
+    spot.remark
+  end
+
   g.column :html => {class: 'buttons'} do |spot|
     link_to(render_icon_content('icon-edit'), edit_spot_path(spot), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
   end
