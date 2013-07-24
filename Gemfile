@@ -25,7 +25,7 @@ group :assets do
 end
 
 # gem 'tida_template', path: '/Users/apple/Projects/tida/src/tida_template'
-gem 'tida_template'
+gem 'tida_template', '~> 0.1.5'
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
