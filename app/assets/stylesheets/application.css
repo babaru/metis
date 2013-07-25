@@ -3,6 +3,7 @@
  *= require wice_grid
  *= require tida_template
  *= require icon_grid
+ *= require shopping_selector
  */
 
 html {

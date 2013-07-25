@@ -1,11 +1,19 @@
 <%= grid(@spots_grid, :show_filters => :always) do |g|
 
+  g.column name: t('activerecord.attributes.spot.website') do |spot|
+    spot.website.name
+  end
+
   g.column name: t('activerecord.attributes.spot.channel') do |spot|
     spot.channel.name
   end
 
   g.column name: t('activerecord.attributes.spot.name') do |spot|
     spot.name
+  end
+
+  g.column name: t('activerecord.attributes.spot.price') do |spot|
+    "#{spot.price} #{spot.unit}"
   end
 
   g.column name: t('activerecord.attributes.spot.spec') do |spot|

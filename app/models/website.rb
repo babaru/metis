@@ -5,4 +5,6 @@ class Website < ActiveRecord::Base
   has_attached_file :logo, :styles => { :thumb => "100x100>" },
     :path => ":rails_root/public:url",
     :url => "/system/website_logos/:attachment_access_token/pic_:style.:extension"
+
+  has_many :channels
 end

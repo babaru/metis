@@ -1,18 +1,79 @@
-<%= render_page_title "#{@website.name}#{t('model.list', model: Spot.model_name.human)}" do |toolbar|
-  toolbar << {
-    name: render_icon_and_text_content('icon-plus-sign', t('model.create', :model => Spot.model_name.human)),
-    url: new_spot_path,
-    options: {class: 'button button-primary'}
-  }
+<%= render_page_title t('model.list', model: Spot.model_name.human) do |toolbar|
 end %>
 
 <article>
   <div class="padding">
-    <ul class="nav nav-tabs">
-      <li class="active"><%= link_to render_icon_and_text_content('icon-trello', Spot.model_name.human), website_spots_path(@website) %></li>
-      <li><%= link_to render_icon_and_text_content('icon-sitemap', Channel.model_name.human), website_channels_path(@website) %></li>
-    </ul>
+
+    <table class='shopping-selector'>
+      <% if @selected_website %>
+      <tr class="shopping-filter-row">
+        <td class="title">您已选择</td>
+        <td>
+          <ul class="shopping-query-items">
+            <% if @selected_website %>
+            <li>
+              <%= render_remove_website_query_item @selected_website, @selected_channel, @selected_unit_type %>
+            </li>
+            <% end %>
+            <% if @selected_channel %>
+            <li>
+              <%= link_to "#{@selected_channel.name} X", spots_path(website_id: @selected_channel.website_id), class: 'label label-warning' %>
+            </li>
+            <% end %>
+            <% if @selected_unit_type %>
+            <li>
+              <%= render_remove_unit_type_query_item(@selected_unit_type, @selected_website, @selected_channel) %>
+            </li>
+            <% end %>
+          </ul>
+        </td>
+      </tr>
+      <% end %>
+      <tr class="shopping-query-row">
+        <td class="title">所属网站</td>
+        <td>
+          <ul class="shopping-query-items">
+            <% @websites.each do |website| %>
+            <li>
+              <%= render_website_query_item website, @selected_website, @selected_channel, @selected_unit_type %>
+            </li>
+            <% end %>
+          </ul>
+        </td>
+      </tr>
+      <% if @selected_website %>
+      <tr class="shopping-query-row">
+        <td class="title">所属频道</td>
+        <td>
+          <ul class="shopping-query-items">
+            <% @channels.each do |channel| %>
+            <li>
+              <% if @selected_channel && channel.id == @selected_channel.id %>
+              <%= link_to channel.name, spots_path(website_id: @selected_website.id, channel_id: channel.id), class: 'label' %>
+              <% else %>
+              <%= link_to channel.name, spots_path(website_id: @selected_website.id, channel_id: channel.id) %>
+              <% end %>
+            </li>
+            <% end %>
+          </ul>
+        </td>
+      </tr>
+      <% end %>
+      <tr class="shopping-query-row">
+        <td class="title">售卖方式</td>
+        <td>
+          <ul class="shopping-query-items">
+            <% @unit_types.each do |unit_type| %>
+            <li>
+              <%= render_unit_type_query_item(unit_type, @selected_website, @selected_channel, @selected_unit_type) %>
+            </li>
+            <% end %>
+          </ul>
+        </td>
+      </tr>
+    </table>
   </div>
 </article>
 
-<%= render partial: 'spots_grid' %>
+
+<%= render partial: 'spots_grid' if @spots_grid %>

@@ -5,6 +5,8 @@ Metis::Application.routes.draw do
   match 'websites/:id/data_type/:data_type/upload' => 'websites#upload_data_file', as: :website_data_file_upload
   match 'websites/:id/data_type/:data_type/search' => 'websites#search', as: :website_data_search
 
+  resources :websites, :channels, :spots
+
   resources :websites do
     resources :channels do
       resources :spots
@@ -12,8 +14,6 @@ Metis::Application.routes.draw do
 
     resources :spots
   end
-
-  resources :websites, :channels, :spots
 
   resources :clients do
     resources :projects

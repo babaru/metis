@@ -1,9 +1,53 @@
+#encoding: utf-8
 class SpotsController < ApplicationController
   # GET /spots
   # GET /spots.json
   def index
-    @website = Website.find params[:website_id]
-    @spots_grid = initialize_grid(Spot.where(website_id: params[:website_id]))
+    @websites = Website.all
+
+    unit_type_query_string = nil
+    if params[:website_id]
+      @selected_website = Website.find params[:website_id]
+      @channels = @selected_website.channels
+      unit_type_query_string = "website_id = #{@selected_website.id}"
+    end
+
+    if params[:channel_id]
+      @selected_channel = Channel.find params[:channel_id]
+      unit_type_query_string = "#{unit_type_query_string} and channel_id=#{@selected_channel.id}"
+    end
+
+    @selected_unit_type = params[:unit_type] if params[:unit_type]
+
+    if unit_type_query_string.nil?
+      @unit_types = ['day', 'cpm', 'cpc']
+    else
+      @unit_types = []
+      if Spot.count("#{unit_type_query_string} and unit like '%天%'") > 0
+        @unit_types << 'day'
+      elsif Spot.count("#{unit_type_query_string} and (unit like '%CPM%' or unit like '%cpm%')") > 0
+        @unit_types << 'cpm'
+      elsif Spot.count("#{unit_type_query_string} and (unit like '%CPC%' or unit like '%cpc%')") > 0
+        @unit_types << 'cpc'
+      end
+    end
+
+    where_clause = []
+    where_clause << "website_id=#{@selected_website.id}" if @selected_website
+    where_clause << "channel_id=#{@selected_channel.id}" if @selected_channel
+
+    if @selected_unit_type
+      if @selected_unit_type == 'day'
+        where_clause << "unit like '%天%'"
+      elsif @selected_unit_type == 'cpm'
+        where_clause << "(unit like '%CPM%' or unit like '%cpm%')"
+      elsif @selected_unit_type == 'cpc'
+        where_clause << "(unit like '%CPC%' or unit like '%CPC%')"
+      end
+    end
+
+
+    @spots_grid = initialize_grid(Spot.where(where_clause.join(' and ')))
 
     respond_to do |format|
       format.html # index.html.erb

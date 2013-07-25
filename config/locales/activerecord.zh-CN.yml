@@ -21,3 +21,8 @@ zh-CN:
         price: 价格
         spec: 规格
         remark: 备注
+        unit: 价格单位
+        unit_type:
+          day: 按天/轮
+          cpm: 按CPM
+          cpc: 按CPC
