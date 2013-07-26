@@ -34,6 +34,8 @@ module SpotsHelper
             end
           end
         end
+
+        content << content_tag(:span, spec[:remark],class: 'label') if spec[:remark]
       end
     end
     content.join(' ').html_safe
