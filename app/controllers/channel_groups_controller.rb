@@ -45,7 +45,7 @@ class ChannelGroupsController < ApplicationController
 
     respond_to do |format|
       if @channel_group.save
-        format.html { redirect_to channel_group_path(@channel_group), notice: 'Channel group was successfully created.' }
+        format.html { redirect_to website_data_path(@channel_group.website_id, :channel_group), notice: 'Channel group was successfully created.' }
         format.json { render json: @channel_group, status: :created, location: @channel_group }
       else
         format.html { render action: "new" }
@@ -61,7 +61,7 @@ class ChannelGroupsController < ApplicationController
 
     respond_to do |format|
       if @channel_group.update_attributes(params[:channel_group])
-        format.html { redirect_to channel_group_path(@channel_group), notice: 'Channel group was successfully updated.' }
+        format.html { redirect_to website_data_path(@channel_group.website_id, :channel_group), notice: 'Channel group was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

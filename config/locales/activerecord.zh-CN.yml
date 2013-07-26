@@ -5,6 +5,7 @@ zh-CN:
       client: 客户
       website: 网站
       channel: 频道
+      channel_group: 频道分组
       spot: 媒介点位
       spot_category: 刊例分类
     attributes:
@@ -13,6 +14,10 @@ zh-CN:
         url: 地址
         logo: Logo
       channel:
+        name: 名称
+        website: 所属网站
+        channel_group: 所属分组
+      channel_group:
         name: 名称
         website: 所属网站
       spot:

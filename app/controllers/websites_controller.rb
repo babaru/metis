@@ -17,8 +17,8 @@ class WebsitesController < ApplicationController
   def show
     @website = Website.find(params[:id])
     @data_type = params[:data_type]
-    if @data_type == 'spot'
-      @spots_grid = initialize_grid(Spot.where(website_id: @website.id).order('channel_id, name'))
+    if @data_type == 'channel_group'
+      @channel_groups_grid = initialize_grid(ChannelGroup.where(website_id: @website.id))
     else
       @channels_grid = initialize_grid(Channel.where(website_id: @website.id))
     end
@@ -110,7 +110,7 @@ class WebsitesController < ApplicationController
         SpotCategory.transaction do
           spot_categories_data.each do |spot_category_data|
             spot_category = SpotCategory.find_or_create_by_data!(spot_category_data)
-            filled_channels = []
+            filled_channel_ids = []
             spot_category_data[:spots].each do |spot_data|
               the_other_channels = false
               group_name = spot_data[:channel_name]
@@ -122,9 +122,9 @@ class WebsitesController < ApplicationController
               channel_group = ChannelGroup.find_by_name_and_website_id(group_name, spot_data[:website_id])
               if channel_group
                 Rails.logger.debug group_name
-                channels = nil
+                channels = []
                 if the_other_channels
-                  channels = channel_group.reset_channels(filled_channels)
+                  channels = channel_group.reset_channels(filled_channel_ids)
                 else
                   channels = channel_group.channels
                 end
@@ -147,7 +147,7 @@ class WebsitesController < ApplicationController
                   })
 
                 Spot.find_or_create_by_data!(spot_data)
-                filled_channels << channel
+                filled_channel_ids << channel.id unless filled_channel_ids.include? channel.id
               end
             end
           end

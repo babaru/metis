@@ -9,7 +9,7 @@ end %>
 <article>
   <div class="padding">
     <ul class="nav nav-tabs">
-      <li><%= link_to render_icon_and_text_content('icon-trello', Spot.model_name.human), website_data_path(@website, :spot) %></li>
+      <li><%= link_to render_icon_and_text_content('icon-trello', ChannelGroup.model_name.human), website_data_path(@website, :channel_group) %></li>
       <li class="active"><%= link_to render_icon_and_text_content('icon-sitemap', Channel.model_name.human), website_data_path(@website, :channel) %></li>
     </ul>
   </div>

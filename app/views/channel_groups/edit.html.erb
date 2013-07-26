@@ -1,7 +1,7 @@
 <%= render_page_title "#{t('model.edit', model: ChannelGroup.model_name.human)} <small>#{t('simple_form.required.text') }</small>" do |toolbar|
   toolbar << {
     name: "#{t('labels.back_to')}#{t('model.list', :model => ChannelGroup.model_name.human)}",
-    url: channel_groups_path,
+    url: website_data_path(@channel_group.website_id, :channel_group),
     options: {class: 'button'}
   }
   end %>

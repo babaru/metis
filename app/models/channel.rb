@@ -1,7 +1,8 @@
 class Channel < ActiveRecord::Base
   belongs_to :website
+  belongs_to :channel_group
   has_many :spots
-  attr_accessible :name, :names, :website_id
+  attr_accessible :name, :names, :website_id, :channel_group_id
   attr_accessor :names
 
   # validates :name, uniqueness: true

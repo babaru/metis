@@ -4,6 +4,10 @@
     channel.name
   end
 
+  g.column name: t('activerecord.attributes.channel.channel_group') do |channel|
+    channel.channel_group.name if channel.channel_group
+  end
+
   g.column :html => {class: 'buttons'} do |channel|
     link_to(render_icon_content('icon-edit'), edit_channel_path(channel), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
   end
