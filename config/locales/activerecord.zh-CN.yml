@@ -6,6 +6,7 @@ zh-CN:
       website: 网站
       channel: 频道
       spot: 媒介点位
+      spot_category: 刊例分类
     attributes:
       website:
         name: 名称
@@ -17,6 +18,7 @@ zh-CN:
       spot:
         channel: 所在频道
         website: 所属网站
+        spot_category: 刊例分类
         name: 位置名称
         price: 价格
         spec: 规格

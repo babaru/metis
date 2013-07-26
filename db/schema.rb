@@ -11,15 +11,26 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130723095404) do
+ActiveRecord::Schema.define(:version => 20130726070157) do
 
-  create_table "channels", :force => true do |t|
-    t.integer  "website_id"
+  create_table "channel_groups", :force => true do |t|
     t.string   "name"
+    t.integer  "website_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
 
+  add_index "channel_groups", ["website_id"], :name => "index_channel_groups_on_website_id"
+
+  create_table "channels", :force => true do |t|
+    t.integer  "website_id"
+    t.string   "name"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+    t.integer  "channel_group_id"
+  end
+
+  add_index "channels", ["channel_group_id"], :name => "index_channels_on_channel_group_id"
   add_index "channels", ["website_id"], :name => "index_channels_on_website_id"
 
   create_table "clients", :force => true do |t|
@@ -49,19 +60,41 @@ ActiveRecord::Schema.define(:version => 20130723095404) do
   add_index "projects", ["client_id"], :name => "index_projects_on_client_id"
   add_index "projects", ["created_by_id"], :name => "index_projects_on_created_by_id"
 
+  create_table "spot_categories", :force => true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.string   "sample_file_name"
+    t.string   "sample_content_type"
+    t.integer  "sample_file_size"
+    t.datetime "sample_updated_at"
+    t.string   "attachment_access_token"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
+    t.integer  "website_id"
+  end
+
+  add_index "spot_categories", ["website_id"], :name => "index_spot_categories_on_website_id"
+
   create_table "spots", :force => true do |t|
     t.integer  "website_id"
     t.integer  "channel_id"
     t.string   "name"
     t.integer  "price"
     t.text     "spec"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
     t.string   "unit"
     t.text     "remark"
+    t.integer  "spot_category_id"
+    t.string   "sample_file_name"
+    t.string   "sample_content_type"
+    t.integer  "sample_file_size"
+    t.datetime "sample_updated_at"
+    t.string   "attachment_access_token"
   end
 
   add_index "spots", ["channel_id"], :name => "index_spots_on_channel_id"
+  add_index "spots", ["spot_category_id"], :name => "index_spots_on_spot_category_id"
   add_index "spots", ["website_id"], :name => "index_spots_on_website_id"
 
   create_table "upload_files", :force => true do |t|

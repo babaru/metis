@@ -8,37 +8,24 @@
     spot.channel.name
   end
 
-  g.column name: t('activerecord.attributes.spot.name') do |spot|
-    spot.name
+  g.column name: t('activerecord.attributes.spot.spot_category') do |spot|
+    spot.spot_category.name
   end
 
-  g.column name: t('activerecord.attributes.spot.price') do |spot|
-    "#{spot.price} #{spot.unit}"
+  g.column name: t('activerecord.attributes.spot.name') do |spot|
+    content_tag :strong, spot.name
+  end
+
+  g.column name: t('activerecord.attributes.spot.price'), html: {style: 'text-align: right;'} do |spot|
+    content_tag :strong, number_to_currency(spot.price, format: "%n", precision: 0)
+  end
+
+  g.column name: t('activerecord.attributes.spot.unit') do |spot|
+    spot.unit
   end
 
   g.column name: t('activerecord.attributes.spot.spec') do |spot|
-    content = []
-    if spot.spec[:specs]
-      spot.spec[:specs].each_with_index do |spec, index|
-        content << '|' if index > 0
-        content << content_tag(:span, spec[:dimension], class: 'label')
-        content << content_tag(:span, spec[:size], class: 'label')
-        if spec[:types]
-          spec[:types].each do |type|
-            if type == 'jpg'
-              content << content_tag(:span, type, class: 'label label-warning')
-            elsif type == 'swf'
-              content << content_tag(:span, type, class: 'label label-important')
-            elsif type == 'gif'
-              content << content_tag(:span, type, class: 'label label-success')
-            else
-              content << content_tag(:span, type, class: 'label')
-            end
-          end
-        end
-      end
-    end
-    content.join(' ').html_safe
+    render_spec(spot.spec[:specs])
   end
 
   g.column name: t('activerecord.attributes.spot.remark') do |spot|

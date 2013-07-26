@@ -105,15 +105,50 @@ class WebsitesController < ApplicationController
         Rails.logger.debug "meta_data: #{@upload_file.meta_data}"
         @upload_file.save!
 
-        spots_data = @upload_file.parse(@website.id)
+        spot_categories_data = @upload_file.parse(@website.id)
 
-        Spot.transaction do
-          spots_data.each do |spot_data|
-            spot = Spot.find_by_name_and_channel_id(spot_data[:name], spot_data[:channel_id])
-            if spot.nil?
-              Spot.create!(spot_data)
-            else
-              spot.update_attributes!(spot_data)
+        SpotCategory.transaction do
+          spot_categories_data.each do |spot_category_data|
+            spot_category = SpotCategory.find_or_create_by_data!(spot_category_data)
+            filled_channels = []
+            spot_category_data[:spots].each do |spot_data|
+              the_other_channels = false
+              group_name = spot_data[:channel_name]
+              group_name.scan(/(.+)其他/) do |matches|
+                the_other_channels = true if matches.length > 0
+                group_name = matches[0]
+              end
+
+              channel_group = ChannelGroup.find_by_name_and_website_id(group_name, spot_data[:website_id])
+              if channel_group
+                Rails.logger.debug group_name
+                channels = nil
+                if the_other_channels
+                  channels = channel_group.reset_channels(filled_channels)
+                else
+                  channels = channel_group.channels
+                end
+                channels.each do |ch|
+                  spot_data = spot_data.merge({
+                  channel_id: ch.id,
+                  spot_category_id: spot_category.id
+                  })
+
+                  Spot.find_or_create_by_data!(spot_data)
+                end
+              else
+                channel = Channel.find_or_create_by_data!({
+                  name: spot_data[:channel_name],
+                  website_id: spot_data[:website_id]
+                  })
+                spot_data = spot_data.merge({
+                  channel_id: channel.id,
+                  spot_category_id: spot_category.id
+                  })
+
+                Spot.find_or_create_by_data!(spot_data)
+                filled_channels << channel
+              end
             end
           end
         end

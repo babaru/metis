@@ -18,19 +18,7 @@ class SpotsController < ApplicationController
     end
 
     @selected_unit_type = params[:unit_type] if params[:unit_type]
-
-    if unit_type_query_string.nil?
-      @unit_types = ['day', 'cpm', 'cpc']
-    else
-      @unit_types = []
-      if Spot.count("#{unit_type_query_string} and unit like '%天%'") > 0
-        @unit_types << 'day'
-      elsif Spot.count("#{unit_type_query_string} and (unit like '%CPM%' or unit like '%cpm%')") > 0
-        @unit_types << 'cpm'
-      elsif Spot.count("#{unit_type_query_string} and (unit like '%CPC%' or unit like '%cpc%')") > 0
-        @unit_types << 'cpc'
-      end
-    end
+    @unit_types = ['day', 'cpm', 'cpc']
 
     where_clause = []
     where_clause << "website_id=#{@selected_website.id}" if @selected_website
@@ -46,6 +34,12 @@ class SpotsController < ApplicationController
       end
     end
 
+    @spot_categories = @selected_website.spot_categories if @selected_website
+    @selected_spot_category = SpotCategory.find params[:spot_category_id] if params[:spot_category_id]
+
+    if @selected_spot_category
+      where_clause << "spot_category_id=#{@selected_spot_category.id}"
+    end
 
     @spots_grid = initialize_grid(Spot.where(where_clause.join(' and ')))
 

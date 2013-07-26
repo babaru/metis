@@ -7,4 +7,6 @@ class Website < ActiveRecord::Base
     :url => "/system/website_logos/:attachment_access_token/pic_:style.:extension"
 
   has_many :channels
+  has_many :spot_categories
+  has_many :spots
 end

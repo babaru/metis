@@ -1,4 +1,4 @@
-<%= render_page_title "#{t('model.import', model: @data_type.capitalize.constantize.model_name.human)} <small>#{t('simple_form.required.text') }</small>" do |toolbar|
+<%= render_page_title "<strong>#{@website.name}</strong>#{t('model.import', model: @data_type.capitalize.constantize.model_name.human)} <small>#{t('simple_form.required.text') }</small>" do |toolbar|
   toolbar << {
     name: "#{t('labels.back_to')}#{t('model.list', :model => Channel.model_name.human)}",
     url: website_data_path(@website, 'spot'),

@@ -5,24 +5,29 @@ end %>
   <div class="padding">
 
     <table class='shopping-selector'>
-      <% if @selected_website %>
+      <% if @selected_website || @selected_unit_type %>
       <tr class="shopping-filter-row">
         <td class="title">您已选择</td>
         <td>
           <ul class="shopping-query-items">
             <% if @selected_website %>
             <li>
-              <%= render_remove_website_query_item @selected_website, @selected_channel, @selected_unit_type %>
+              <%= render_filter_item(@selected_website.name, {spot_category_id: @selected_spot_category.nil? ? nil : @selected_spot_category.id, channel_id: @selected_channel.nil? ? nil : @selected_channel.id, unit_type: @selected_unit_type.nil? ? nil : @selected_unit_type}) %>
             </li>
             <% end %>
             <% if @selected_channel %>
             <li>
-              <%= link_to "#{@selected_channel.name} X", spots_path(website_id: @selected_channel.website_id), class: 'label label-warning' %>
+              <%= render_filter_item(@selected_channel.name, {spot_category_id: @selected_spot_category.nil? ? nil : @selected_spot_category.id, website_id: @selected_website.nil? ? nil : @selected_website.id, unit_type: @selected_unit_type.nil? ? nil : @selected_unit_type}) %>
+            </li>
+            <% end %>
+            <% if @selected_spot_category %>
+            <li>
+              <%= render_filter_item(@selected_spot_category.name, {website_id: @selected_website.nil? ? nil : @selected_website.id, channel_id: @selected_channel.nil? ? nil : @selected_channel.id, unit_type: @selected_unit_type.nil? ? nil : @selected_unit_type}) %>
             </li>
             <% end %>
             <% if @selected_unit_type %>
             <li>
-              <%= render_remove_unit_type_query_item(@selected_unit_type, @selected_website, @selected_channel) %>
+              <%= render_filter_item(t("activerecord.attributes.spot.unit_type.#{@selected_unit_type}"), {website_id: @selected_website.nil? ? nil : @selected_website.id, channel_id: @selected_channel.nil? ? nil : @selected_channel.id, spot_category_id: @selected_spot_category.nil? ? nil : @selected_spot_category}) %>
             </li>
             <% end %>
           </ul>
@@ -35,7 +40,7 @@ end %>
           <ul class="shopping-query-items">
             <% @websites.each do |website| %>
             <li>
-              <%= render_website_query_item website, @selected_website, @selected_channel, @selected_unit_type %>
+              <%= render_query_item(:website_id, website.id, website.name, {website_id: @selected_website.id, spot_category_id: @selected_spot_category.nil? ? nil : @selected_spot_category.id, channel_id: @selected_channel.nil? ? nil : @selected_channel.id, unit_type: @selected_unit_type.nil? ? nil : @selected_unit_type}) %>
             </li>
             <% end %>
           </ul>
@@ -48,11 +53,21 @@ end %>
           <ul class="shopping-query-items">
             <% @channels.each do |channel| %>
             <li>
-              <% if @selected_channel && channel.id == @selected_channel.id %>
-              <%= link_to channel.name, spots_path(website_id: @selected_website.id, channel_id: channel.id), class: 'label' %>
-              <% else %>
-              <%= link_to channel.name, spots_path(website_id: @selected_website.id, channel_id: channel.id) %>
-              <% end %>
+              <%= render_query_item(:channel_id, channel.id, channel.name, {website_id: @selected_website.id, spot_category_id: @selected_spot_category.nil? ? nil : @selected_spot_category.id, channel_id: @selected_channel.nil? ? nil : @selected_channel.id, unit_type: @selected_unit_type.nil? ? nil : @selected_unit_type}) %>
+            </li>
+            <% end %>
+          </ul>
+        </td>
+      </tr>
+      <% end %>
+      <% if @selected_website %>
+      <tr class="shopping-query-row">
+        <td class="title">刊例类型</td>
+        <td>
+          <ul class="shopping-query-items">
+            <% @spot_categories.each do |spot_category| %>
+            <li>
+              <%= render_query_item(:spot_category_id, spot_category.id, spot_category.name, {website_id: @selected_website.id, spot_category_id: @selected_spot_category.nil? ? nil : @selected_spot_category.id, channel_id: @selected_channel.nil? ? nil : @selected_channel.id, unit_type: @selected_unit_type.nil? ? nil : @selected_unit_type}) %>
             </li>
             <% end %>
           </ul>
@@ -65,7 +80,7 @@ end %>
           <ul class="shopping-query-items">
             <% @unit_types.each do |unit_type| %>
             <li>
-              <%= render_unit_type_query_item(unit_type, @selected_website, @selected_channel, @selected_unit_type) %>
+              <%= render_query_item(:unit_type, unit_type, t("activerecord.attributes.spot.unit_type.#{unit_type}"), {website_id: @selected_website.nil? ? nil : @selected_website.id, spot_category_id: @selected_spot_category.nil? ? nil : @selected_spot_category.id, channel_id: @selected_channel.nil? ? nil : @selected_channel.id, unit_type: @selected_unit_type.nil? ? nil : @selected_unit_type}) %>
             </li>
             <% end %>
           </ul>

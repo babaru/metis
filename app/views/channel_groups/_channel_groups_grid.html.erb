@@ -1,0 +1,17 @@
+<%= grid(@channel_groups_grid, :show_filters => :always) do |g|
+  g.column name: t('activerecord.attributes.channel_group.name') do |channel_group|
+    channel_group.name
+  end
+
+  g.column name: t('activerecord.attributes.channel_group.website') do |channel_group|
+    channel_group.website.name
+  end
+
+  g.column :html => {class: 'buttons'} do |channel_group|
+    link_to(render_icon_content('icon-edit'), edit_channel_group_path(channel_group), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
+  end
+
+  g.column :html => {class: 'buttons'} do |channel_group|
+    link_to(render_icon_content('icon-trash'), channel_group_path(channel_group), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete'))
+  end
+end -%>

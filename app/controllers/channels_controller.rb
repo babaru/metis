@@ -49,11 +49,10 @@ class ChannelsController < ApplicationController
     trans_commit = false
     Channel.transaction do
       @channel.names.gsub(/\r\n/, '\n').split('\n').each_with_index do |line, index|
-        if Channel.exists? name: line
-          next
-        end
-        channel = Channel.new(name: line, website_id: @channel.website_id)
-        channel.save!
+        channel = Channel.find_or_create_by_data!({
+          name: line,
+          website_id: @channel.website_id
+          })
         @channels << channel
       end
       trans_commit = true
@@ -61,7 +60,7 @@ class ChannelsController < ApplicationController
 
     respond_to do |format|
       if trans_commit
-        format.html { redirect_to website_data_type_path(@channel.website_id, 'channel'), notice: 'Channel(s) was successfully created.' }
+        format.html { redirect_to website_data_path(@channel.website_id, 'channel'), notice: 'Channel(s) was successfully created.' }
         # format.json { render json: @channels, status: :created, location: @channel }
       else
         format.html { render action: "new" }
@@ -77,7 +76,7 @@ class ChannelsController < ApplicationController
 
     respond_to do |format|
       if @channel.update_attributes(params[:channel])
-        format.html { redirect_to website_channels_path(@channel.website_id), notice: 'Channel was successfully updated.' }
+        format.html { redirect_to website_data_path(@channel.website_id, 'channel'), notice: 'Channel was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

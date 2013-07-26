@@ -1,47 +1,41 @@
 module SpotsHelper
-  def render_unit_type_query_item(unit_type, selected_website = nil, selected_channel = nil, selected_unit_type = nil)
+  def render_query_item(key_name, value, link_name, options)
     params = {}
-    params[:unit_type] = unit_type
-    params[:channel_id] = selected_channel.id if selected_channel
-    params[:website_id] = selected_website.id if selected_website
-
+    params[key_name] = value
+    options.map {|k, v| params[k] = v if v && k.to_s != key_name.to_s}
     class_string = ""
-    if selected_unit_type == unit_type
-      class_string = "label"
+    class_string = "label" if value == options[key_name]
+    return link_to(link_name, spots_path(params), class: class_string)
+  end
+
+  def render_filter_item(link_name, options)
+    params = {}
+    options.map {|k, v| params[k] = v if v}
+    return link_to("#{link_name} X", spots_path(params), class: 'label label-warning')
+  end
+
+  def render_spec(data)
+    content = []
+    if data
+      data.each_with_index do |spec, index|
+        content << '|' if index > 0
+        content << content_tag(:span, spec[:dimension], class: 'label')
+        content << content_tag(:span, spec[:size], class: 'label')
+        if spec[:types]
+          spec[:types].each do |type|
+            if type.upcase == 'JPG'
+              content << content_tag(:span, type, class: 'label label-warning')
+            elsif type.upcase == 'SWF'
+              content << content_tag(:span, type, class: 'label label-important')
+            elsif type.upcase == 'GIF'
+              content << content_tag(:span, type, class: 'label label-success')
+            else
+              content << content_tag(:span, type, class: 'label')
+            end
+          end
+        end
+      end
     end
-
-    return link_to(t("activerecord.attributes.spot.unit_type.#{unit_type}"), spots_path(params), class: class_string)
-  end
-
-  def render_remove_unit_type_query_item(unit_type, selected_website = nil, selected_channel = nil)
-    params = {}
-    params[:channel_id] = selected_channel.id if selected_channel
-    params[:website_id] = selected_website.id if selected_website
-
-    key_string = "activerecord.attributes.spot.unit_type.#{unit_type}"
-
-    return link_to("#{t(key_string)} X", spots_path(params), class: 'label label-warning')
-  end
-
-  def render_website_query_item(website, selected_website = nil, selected_channel = nil, selected_unit_type = nil)
-    params = {}
-    params[:unit_type] = selected_unit_type if selected_unit_type
-    params[:channel_id] = selected_channel.id if selected_channel
-    params[:website_id] = website.id
-
-    class_string = ""
-    if selected_website && selected_website.id == website.id
-      class_string = "label"
-    end
-
-    return link_to(website.name, spots_path(params), class: class_string)
-  end
-
-  def render_remove_website_query_item(website, selected_channel = nil, selected_unit_type = nil)
-    params = {}
-    params[:channel_id] = selected_channel.id if selected_channel
-    params[:unit_type] = selected_unit_type if selected_unit_type
-
-    return link_to("#{website.name} X", spots_path(params), class: 'label label-warning')
+    content.join(' ').html_safe
   end
 end
