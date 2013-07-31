@@ -1,0 +1,2 @@
+module SpotCategoriesHelper
+end

@@ -2,7 +2,8 @@ class ChannelGroupsController < ApplicationController
   # GET /channel_groups
   # GET /channel_groups.json
   def index
-    @channel_groups_grid = initialize_grid(ChannelGroup)
+    @website = Website.find params[:website_id]
+    @channel_groups_grid = initialize_grid(ChannelGroup.where(website_id: @website))
 
     respond_to do |format|
       format.html # index.html.erb
@@ -26,6 +27,7 @@ class ChannelGroupsController < ApplicationController
   def new
     @channel_group = ChannelGroup.new
     @channel_group.website_id = params[:website_id]
+    @website = Website.find params[:website_id]
 
     respond_to do |format|
       format.html # new.html.erb
@@ -45,7 +47,7 @@ class ChannelGroupsController < ApplicationController
 
     respond_to do |format|
       if @channel_group.save
-        format.html { redirect_to website_data_path(@channel_group.website_id, :channel_group), notice: 'Channel group was successfully created.' }
+        format.html { redirect_to website_channel_groups_path(@channel_group.website_id), notice: 'Channel group was successfully created.' }
         format.json { render json: @channel_group, status: :created, location: @channel_group }
       else
         format.html { render action: "new" }

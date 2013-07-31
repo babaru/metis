@@ -1,0 +1,8 @@
+<%= render_page_title "#{t('model.edit', model: SpotCategory.model_name.human)} <small>#{t('simple_form.required.text') }</small>" do |toolbar|
+  toolbar << {
+    name: "#{t('labels.back_to')}#{t('model.list', :model => SpotCategory.model_name.human)}",
+    url: spot_categories_path,
+    options: {class: 'button'}
+  }
+  end %>
+<%= render 'form' %>

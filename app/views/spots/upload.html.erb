@@ -1,0 +1,47 @@
+<%= render_page_title "<strong>#{@website.name}</strong> #{t('model.upload', model: Spot.model_name.human)}" do |toolbar|
+  toolbar << {
+    name: "#{t('labels.back_to')}#{t('model.list', :model => Channel.model_name.human)}",
+    url: website_spots_path(@website),
+    class: 'button'
+  }
+  end %>
+
+<%= simple_form_for(@upload_file, url: upload_spots_path(website_id: @website), method: :post, remote: true, :html => {:class => 'form-horizontal upload-spot-data-file-form'}) do |f| %>
+  <%= f.error_notification %>
+  <div class="form-inputs">
+    <%= f.input :data_file, as: :file, label: '上传文件' %>
+  </div>
+  <div class="form-actions">
+    <%= f.button :submit, '确定', class: 'button button-primary' %>
+  </div>
+<% end %>
+
+<% content_for :js do %>
+<script language='javascript'>
+  $(document).ready(function(){
+    $('form.upload-spot-data-file-form').on('ajax:beforeSend', function(xhr, settings) {
+      $('#upload-spot-data-file-modal-window').modal({
+        backdrop: 'static',
+        keyboard: false
+      });
+    });
+
+    $('form.upload-spot-data-file-form').on('ajax:complete', function(xhr, status) {
+      $('#upload-spot-data-file-modal-window').modal('hide');
+    });
+  });
+</script>
+<% end %>
+
+<% content_for :anything_else do %>
+<div class="modal hide fade" id="upload-spot-data-file-modal-window">
+  <div class="modal-header">
+    <h4>正在上传...</h4>
+  </div>
+  <div class="modal-body">
+    <div class="progress progress-striped active">
+      <div class="bar" style="width: 100%;" id="modal-progress-bar"><span id="model-progress-value">请等待...</span></div>
+    </div>
+  </div>
+</div>
+<% end %>

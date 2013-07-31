@@ -1,11 +1,14 @@
 Metis::Application.routes.draw do
   devise_for :users
 
-  get 'websites/:id/data_type/:data_type' => 'websites#show', as: :website_data
-  match 'websites/:id/data_type/:data_type/upload' => 'websites#upload_data_file', as: :website_data_file_upload
+  match 'spots/upload' => 'spots#upload', as: :upload_spots
   match 'websites/:id/data_type/:data_type/search' => 'websites#search', as: :website_data_search
+  post 'projects/:id' => 'projects#show'
+  get 'projects/:id/cart' => 'projects#view_cart', as: :view_project_cart
 
-  resources :websites, :channels, :spots, :channel_groups
+  get 'websites/:website_id/channel_groups' => 'channel_groups#index'
+
+  resources :websites, :channels, :spots, :channel_groups, :spot_categories
 
   resources :websites do
     resources :channels, :channel_groups, :spots

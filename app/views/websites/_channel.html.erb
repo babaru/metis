@@ -1,4 +1,4 @@
-<%= render_page_title "#{@website.name}#{t('model.list', model: Channel.model_name.human)}" do |toolbar|
+<%= render_page_title "<strong>#{@website.name}</strong> #{t('model.list', model: Channel.model_name.human)}" do |toolbar|
   toolbar << {
     name: render_icon_and_text_content('icon-plus-sign', t('model.create', :model => Channel.model_name.human)),
     url: new_website_channel_path(@website),

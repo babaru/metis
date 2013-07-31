@@ -1,94 +1,15 @@
-<%= render_page_title t('model.list', model: Spot.model_name.human) do |toolbar|
+<%= render_page_title "<strong>#{@website.name}</strong> #{t('model.list', model: Spot.model_name.human)}" do |toolbar|
+  toolbar << {
+    name: t('model.upload', model: Spot.model_name.human),
+    url: upload_spots_path(website_id: @website),
+    options: {
+      class: 'button button-primary'
+    }
+  }
 end %>
 
-<article>
-  <div class="padding">
+<%= render partial: 'spot_category_navs', object: @spot_categories %>
 
-    <table class='shopping-selector'>
-      <% if @selected_website || @selected_unit_type %>
-      <tr class="shopping-filter-row">
-        <td class="title">您已选择</td>
-        <td>
-          <ul class="shopping-query-items">
-            <% if @selected_website %>
-            <li>
-              <%= render_filter_item(@selected_website.name, {spot_category_id: @selected_spot_category.nil? ? nil : @selected_spot_category.id, channel_id: @selected_channel.nil? ? nil : @selected_channel.id, unit_type: @selected_unit_type.nil? ? nil : @selected_unit_type}) %>
-            </li>
-            <% end %>
-            <% if @selected_channel %>
-            <li>
-              <%= render_filter_item(@selected_channel.name, {spot_category_id: @selected_spot_category.nil? ? nil : @selected_spot_category.id, website_id: @selected_website.nil? ? nil : @selected_website.id, unit_type: @selected_unit_type.nil? ? nil : @selected_unit_type}) %>
-            </li>
-            <% end %>
-            <% if @selected_spot_category %>
-            <li>
-              <%= render_filter_item(@selected_spot_category.name, {website_id: @selected_website.nil? ? nil : @selected_website.id, channel_id: @selected_channel.nil? ? nil : @selected_channel.id, unit_type: @selected_unit_type.nil? ? nil : @selected_unit_type}) %>
-            </li>
-            <% end %>
-            <% if @selected_unit_type %>
-            <li>
-              <%= render_filter_item(t("activerecord.attributes.spot.unit_type.#{@selected_unit_type}"), {website_id: @selected_website.nil? ? nil : @selected_website.id, channel_id: @selected_channel.nil? ? nil : @selected_channel.id, spot_category_id: @selected_spot_category.nil? ? nil : @selected_spot_category}) %>
-            </li>
-            <% end %>
-          </ul>
-        </td>
-      </tr>
-      <% end %>
-      <tr class="shopping-query-row">
-        <td class="title">所属网站</td>
-        <td>
-          <ul class="shopping-query-items">
-            <% @websites.each do |website| %>
-            <li>
-              <%= render_query_item(:website_id, website.id, website.name, {website_id: @selected_website.id, spot_category_id: @selected_spot_category.nil? ? nil : @selected_spot_category.id, channel_id: @selected_channel.nil? ? nil : @selected_channel.id, unit_type: @selected_unit_type.nil? ? nil : @selected_unit_type}) %>
-            </li>
-            <% end %>
-          </ul>
-        </td>
-      </tr>
-      <% if @selected_website %>
-      <tr class="shopping-query-row">
-        <td class="title">所属频道</td>
-        <td>
-          <ul class="shopping-query-items">
-            <% @channels.each do |channel| %>
-            <li>
-              <%= render_query_item(:channel_id, channel.id, channel.name, {website_id: @selected_website.id, spot_category_id: @selected_spot_category.nil? ? nil : @selected_spot_category.id, channel_id: @selected_channel.nil? ? nil : @selected_channel.id, unit_type: @selected_unit_type.nil? ? nil : @selected_unit_type}) %>
-            </li>
-            <% end %>
-          </ul>
-        </td>
-      </tr>
-      <% end %>
-      <% if @selected_website %>
-      <tr class="shopping-query-row">
-        <td class="title">刊例类型</td>
-        <td>
-          <ul class="shopping-query-items">
-            <% @spot_categories.each do |spot_category| %>
-            <li>
-              <%= render_query_item(:spot_category_id, spot_category.id, spot_category.name, {website_id: @selected_website.id, spot_category_id: @selected_spot_category.nil? ? nil : @selected_spot_category.id, channel_id: @selected_channel.nil? ? nil : @selected_channel.id, unit_type: @selected_unit_type.nil? ? nil : @selected_unit_type}) %>
-            </li>
-            <% end %>
-          </ul>
-        </td>
-      </tr>
-      <% end %>
-      <tr class="shopping-query-row">
-        <td class="title">售卖方式</td>
-        <td>
-          <ul class="shopping-query-items">
-            <% @unit_types.each do |unit_type| %>
-            <li>
-              <%= render_query_item(:unit_type, unit_type, t("activerecord.attributes.spot.unit_type.#{unit_type}"), {website_id: @selected_website.nil? ? nil : @selected_website.id, spot_category_id: @selected_spot_category.nil? ? nil : @selected_spot_category.id, channel_id: @selected_channel.nil? ? nil : @selected_channel.id, unit_type: @selected_unit_type.nil? ? nil : @selected_unit_type}) %>
-            </li>
-            <% end %>
-          </ul>
-        </td>
-      </tr>
-    </table>
-  </div>
-</article>
-
+<%= render partial: 'spot_category' %>
 
 <%= render partial: 'spots_grid' if @spots_grid %>

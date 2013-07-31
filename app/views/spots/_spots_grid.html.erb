@@ -25,7 +25,7 @@
   end
 
   g.column name: t('activerecord.attributes.spot.spec') do |spot|
-    render_spec(spot.spec[:specs])
+    spot.spec
   end
 
   g.column name: t('activerecord.attributes.spot.remark') do |spot|

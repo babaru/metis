@@ -6,13 +6,4 @@
   }
 end %>
 
-<%= grid(@projects_grid, :show_filters => :always) do |g|
-
-  g.column :html => {class: 'buttons'} do |project|
-    link_to(render_icon_content('icon-edit'), edit_project_path(project), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
-  end
-
-  g.column :html => {class: 'buttons'} do |project|
-    link_to(render_icon_content('icon-trash'), project_path(project), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete'))
-  end
-end -%>
+<%= render partial: 'projects/projects_grid' %>

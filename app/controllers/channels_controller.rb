@@ -60,7 +60,7 @@ class ChannelsController < ApplicationController
 
     respond_to do |format|
       if trans_commit
-        format.html { redirect_to website_data_path(@channel.website_id, 'channel'), notice: 'Channel(s) was successfully created.' }
+        format.html { redirect_to website_channels_path(@channel.website_id), notice: 'Channel(s) was successfully created.' }
         # format.json { render json: @channels, status: :created, location: @channel }
       else
         format.html { render action: "new" }

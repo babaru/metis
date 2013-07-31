@@ -15,18 +15,7 @@ class WebsitesController < ApplicationController
   # GET /websites/1
   # GET /websites/1.json
   def show
-    @website = Website.find(params[:id])
-    @data_type = params[:data_type]
-    if @data_type == 'channel_group'
-      @channel_groups_grid = initialize_grid(ChannelGroup.where(website_id: @website.id))
-    else
-      @channels_grid = initialize_grid(Channel.where(website_id: @website.id))
-    end
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @website }
-    end
+    redirect_to website_channels_path(params[:id])
   end
 
   # GET /websites/new

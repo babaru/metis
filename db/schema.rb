@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130726070157) do
+ActiveRecord::Schema.define(:version => 20130731071346) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -75,22 +75,39 @@ ActiveRecord::Schema.define(:version => 20130726070157) do
 
   add_index "spot_categories", ["website_id"], :name => "index_spot_categories_on_website_id"
 
+  create_table "spot_contracts", :force => true do |t|
+    t.integer  "client_id"
+    t.integer  "project_id"
+    t.integer  "created_by_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "spot_contracts", ["client_id"], :name => "index_spot_contracts_on_client_id"
+  add_index "spot_contracts", ["created_by_id"], :name => "index_spot_contracts_on_created_by_id"
+  add_index "spot_contracts", ["project_id"], :name => "index_spot_contracts_on_project_id"
+
+  create_table "spot_contracts_spots", :force => true do |t|
+    t.integer  "spot_id"
+    t.integer  "spot_contract_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
+
+  add_index "spot_contracts_spots", ["spot_contract_id"], :name => "index_spot_contracts_spots_on_spot_contract_id"
+  add_index "spot_contracts_spots", ["spot_id"], :name => "index_spot_contracts_spots_on_spot_id"
+
   create_table "spots", :force => true do |t|
     t.integer  "website_id"
     t.integer  "channel_id"
     t.string   "name"
     t.integer  "price"
     t.text     "spec"
-    t.datetime "created_at",              :null => false
-    t.datetime "updated_at",              :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
     t.string   "unit"
     t.text     "remark"
     t.integer  "spot_category_id"
-    t.string   "sample_file_name"
-    t.string   "sample_content_type"
-    t.integer  "sample_file_size"
-    t.datetime "sample_updated_at"
-    t.string   "attachment_access_token"
   end
 
   add_index "spots", ["channel_id"], :name => "index_spots_on_channel_id"

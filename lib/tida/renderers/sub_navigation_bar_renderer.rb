@@ -6,7 +6,6 @@ module Tida
         list_content = []
         if item_container.selected_item && include_sub_navigation?(item_container.selected_item)
           list_content = item_container.selected_item.sub_navigation.items.inject([]) do |list, item|
-            Rails.logger.debug include_sub_navigation?(item)
             content = []
             content << tag_for_level_1(item)
             content << tag_for_level_2(item) if include_sub_navigation?(item)
@@ -15,8 +14,6 @@ module Tida
         end
         menu_content = content_tag(:ul, list_content.join, {class: 'accordion'})
         div_content = []
-        # div_content << header_content
-        # div_content << menu_content
         content_tag(:div, menu_content, {id: 'sub-navigation-bar'})
       end
 

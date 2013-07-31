@@ -43,23 +43,7 @@ class SpotDataFile < UploadFile
     price = data[2].to_i
     unit = data[3].upcase
     specs_text = data[4].upcase if data[4]
-    remark = data[5]
-
-    spot_specs = {}
-    spot_specs[:specs] = []
-    if specs_text
-      specs_text = specs_text.gsub(/[;；]/, ';').strip
-      spec_blocks = specs_text.split('|')
-      spec_blocks.each do |spec_block|
-        spot_data = {}
-        specs = spec_block.split(';')
-        spot_data[:dimension] = specs[0]
-        spot_data[:size] = specs[1] if specs.length > 1
-        spot_data[:types] = specs[2].split('.') if specs.length > 2
-        spot_data[:remark] = specs[3] if specs.length > 3
-        spot_specs[:specs] << spot_data
-      end
-    end
+    remark = data[5].upcase if data[5]
 
     return {
         website_id: website_id,
@@ -67,7 +51,8 @@ class SpotDataFile < UploadFile
         name: spot_name,
         price: price,
         unit: unit,
-        spec: spot_specs
+        spec: specs_text,
+        remark: remark
       }
   end
 

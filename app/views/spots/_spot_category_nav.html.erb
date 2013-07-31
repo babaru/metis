@@ -1,0 +1,5 @@
+<%= if @spot_category.id == spot_category_nav.id
+   content_tag :li, link_to(spot_category_nav.name, spots_path(website_id: @website, spot_category_id: spot_category_nav)), class: "active"
+else
+  content_tag :li, link_to(spot_category_nav.name, spots_path(website_id: @website, spot_category_id: spot_category_nav))
+end %>

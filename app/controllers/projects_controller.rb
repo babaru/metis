@@ -2,7 +2,7 @@ class ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.json
   def index
-    @projects_grid = initialize_grid(Project)
+    @projects_grid = initialize_grid(Project.where(client_id: params[:client_id]))
 
     respond_to do |format|
       format.html # index.html.erb
@@ -14,11 +14,32 @@ class ProjectsController < ApplicationController
   # GET /projects/1.json
   def show
     @project = Project.find(params[:id])
+    @spot_filter = SpotFilter.new params
+
+    @spots_grid = initialize_grid(Spot.where(@spot_filter.spots_query_clause))
+    @selected_spot_ids = []
+    @selected_spot_ids = params[:spots].split(',') if params[:spots]
+    @selected_spots_params = params[:spots]
+    Rails.logger.debug @selected_spot_ids
+
+    if request.post?
+      add_spot_id = params[:add_spot_id]
+      @selected_spot_ids << add_spot_id unless @selected_spot_ids.include? add_spot_id
+      redirect_to project_path(@project, {spots: @selected_spot_ids.join(',')}.merge(@spot_filter.filter_params)) and return
+    end
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html
       format.json { render json: @project }
     end
+  end
+
+  def view_cart
+    @selected_spot_ids = []
+    @selected_spot_ids = params[:spots].split(',') if params[:spots]
+    @project = Project.find(params[:id])
+
+    @spots_grid = initialize_grid(Spot.where("id in (#{@selected_spot_ids.join(',')})"))
   end
 
   # GET /projects/new

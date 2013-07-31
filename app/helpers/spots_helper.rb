@@ -1,17 +1,20 @@
 module SpotsHelper
-  def render_query_item(key_name, value, link_name, options)
-    params = {}
-    params[key_name] = value
-    options.map {|k, v| params[k] = v if v && k.to_s != key_name.to_s}
+  def render_query_item(key_name, value, link_name, opt)
+    options = {}
+    options = params.merge options
+    opt.map {|k, v| options[k] = v if v && k.to_s != key_name.to_s}
+    options[key_name] = value
     class_string = ""
-    class_string = "label" if value == options[key_name]
-    return link_to(link_name, spots_path(params), class: class_string)
+    class_string = "label" if value == opt[key_name]
+    return link_to(link_name, options, class: class_string)
   end
 
-  def render_filter_item(link_name, options)
-    params = {}
-    options.map {|k, v| params[k] = v if v}
-    return link_to("#{link_name} X", spots_path(params), class: 'label label-warning')
+  def render_filter_item(key_name, link_name, opt)
+    options = {}
+    options = params.merge options
+    opt.map {|k, v| options[k] = v if v}
+    options[key_name] = nil
+    return link_to("#{link_name} X", options, class: 'label label-warning')
   end
 
   def render_spec(data)

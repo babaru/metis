@@ -3,6 +3,7 @@ zh-CN:
     models:
       user: 用户
       client: 客户
+      project: 专项
       website: 网站
       channel: 频道
       channel_group: 频道分组

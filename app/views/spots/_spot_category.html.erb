@@ -1,0 +1,17 @@
+<article>
+  <div class="padding grid">
+    <div class="grid-row">
+      <div class="cell6">
+        <%= image_tag @spot_category.sample.url(:thumb) if @spot_category %>
+      </div>
+      <div class="cell6">
+        <div class="toolbar pull-right">
+          <%= link_to t('model.edit', model: SpotCategory.model_name.human), edit_spot_category_path(@spot_category), class: 'button' if @spot_category %>
+        </div>
+        <p>
+          <%= @spot_category.description if @spot_category %>
+        </p>
+      </div>
+    </div>
+  </div>
+</article>

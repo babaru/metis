@@ -6,7 +6,9 @@ module Tida
           list << item_content(item)
         end.join
         div_content = content_tag :ul, ul_content
-        content_tag(:div, div_content, {id: "top-navigation-bar"})
+        class_string = ""
+        class_string = "no-content"
+        content_tag(:div, div_content, {id: "top-navigation-bar", class: class_string})
       end
 
       protected

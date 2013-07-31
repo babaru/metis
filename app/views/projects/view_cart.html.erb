@@ -1,0 +1,9 @@
+<%= render_page_title "<strong>#{@project.client.name}</strong> #{@project.name} 已选择点位" do |toolbar|
+  toolbar << {
+    name: "#{t('labels.back_to')} #{@project.name}",
+    url: url_for(:back),
+    options: {class: 'button'}
+  }
+end %>
+
+<%= render partial: 'spots/spots_grid', locals: {show_select: false} %>

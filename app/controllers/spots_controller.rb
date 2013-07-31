@@ -4,48 +4,17 @@ class SpotsController < ApplicationController
   # GET /spots.json
   def index
     @websites = Website.all
-
-    unit_type_query_string = nil
-    if params[:website_id]
-      @selected_website = Website.find params[:website_id]
-      @channels = @selected_website.channels
-      unit_type_query_string = "website_id = #{@selected_website.id}"
+    @website = Website.find params[:website_id]
+    @spot_categories = @website.spot_categories
+    @spot_category = SpotCategory.find params[:spot_category_id] if params[:spot_category_id]
+    @spot_category = @spot_categories.first if @spot_category.nil?
+    if @spot_category
+      @spots_grid = initialize_grid(Spot.where(website_id: @website.id, spot_category_id: @spot_category.id))
     end
-
-    if params[:channel_id]
-      @selected_channel = Channel.find params[:channel_id]
-      unit_type_query_string = "#{unit_type_query_string} and channel_id=#{@selected_channel.id}"
-    end
-
-    @selected_unit_type = params[:unit_type] if params[:unit_type]
-    @unit_types = ['day', 'cpm', 'cpc']
-
-    where_clause = []
-    where_clause << "website_id=#{@selected_website.id}" if @selected_website
-    where_clause << "channel_id=#{@selected_channel.id}" if @selected_channel
-
-    if @selected_unit_type
-      if @selected_unit_type == 'day'
-        where_clause << "unit like '%天%'"
-      elsif @selected_unit_type == 'cpm'
-        where_clause << "(unit like '%CPM%' or unit like '%cpm%')"
-      elsif @selected_unit_type == 'cpc'
-        where_clause << "(unit like '%CPC%' or unit like '%CPC%')"
-      end
-    end
-
-    @spot_categories = @selected_website.spot_categories if @selected_website
-    @selected_spot_category = SpotCategory.find params[:spot_category_id] if params[:spot_category_id]
-
-    if @selected_spot_category
-      where_clause << "spot_category_id=#{@selected_spot_category.id}"
-    end
-
-    @spots_grid = initialize_grid(Spot.where(where_clause.join(' and ')))
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @spots_grid }
+      format.json
     end
   end
 
@@ -118,6 +87,71 @@ class SpotsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to spots_url }
       format.json { head :no_content }
+    end
+  end
+
+  def upload
+    @website = Website.find params[:website_id]
+    @upload_file = SpotDataFile.new
+    @upload_file.website_id = @website.id
+    Rails.logger.debug "meta_data: #{@upload_file.meta_data}"
+
+    if request.post?
+      @upload_file = SpotDataFile.new(params[:spot_data_file])
+      Rails.logger.debug "meta_data: #{@upload_file.meta_data}"
+      @upload_file.save!
+
+      spot_categories_data = @upload_file.parse(@website.id)
+
+      SpotCategory.transaction do
+        spot_categories_data.each do |spot_category_data|
+          spot_category = SpotCategory.find_or_create_by_data!(spot_category_data)
+          filled_channel_ids = []
+          spot_category_data[:spots].each do |spot_data|
+            the_other_channels = false
+            group_name = spot_data[:channel_name]
+            group_name.scan(/(.+)其他/) do |matches|
+              the_other_channels = true if matches.length > 0
+              group_name = matches[0]
+            end
+
+            channel_group = ChannelGroup.find_by_name_and_website_id(group_name, spot_data[:website_id])
+            if channel_group
+              Rails.logger.debug group_name
+              channels = []
+              if the_other_channels
+                channels = channel_group.reset_channels(filled_channel_ids)
+              else
+                channels = channel_group.channels
+              end
+              channels.each do |ch|
+                spot_data = spot_data.merge({
+                channel_id: ch.id,
+                spot_category_id: spot_category.id
+                })
+
+                Spot.find_or_create_by_data!(spot_data)
+              end
+            else
+              channel = Channel.find_or_create_by_data!({
+                name: spot_data[:channel_name],
+                website_id: spot_data[:website_id]
+                })
+              spot_data = spot_data.merge({
+                channel_id: channel.id,
+                spot_category_id: spot_category.id
+                })
+
+              Spot.find_or_create_by_data!(spot_data)
+              filled_channel_ids << channel.id unless filled_channel_ids.include? channel.id
+            end
+          end
+        end
+      end
+
+      respond_to do |format|
+        format.html { redirect_to website_spots_path(@website), notice: 'Spots were successfully uploaded' }
+      end
     end
   end
 end

@@ -37,10 +37,14 @@ SimpleNavigation::Configuration.run do |navigation|
     primary.item :page_websites, t('navigation.websites'), websites_path, link: {icon: 'icon-globe'}, highlights_on: /websites/ do |websites|
       websites.item :page_websites, t('navigation.websites'), websites_path, link: {icon: 'icon-globe'}, highlights_on: ::Regexp.new("websites$")
       Website.all.each do |item|
-        websites.item "page_website_#{item.id}".to_sym, item.name, website_data_path(item.id, :spot), highlights_on: ::Regexp.new("websites/#{item.id}/data_type")
+        websites.item "page_website_#{item.id}".to_sym, item.name, website_channels_path(item.id), highlights_on: ::Regexp.new("websites/#{item.id}")
       end
     end
-    primary.item :page_spots, t('navigation.spots'), spots_path, link: {icon: 'icon-book'}, highlights_on: /spots/
+    primary.item :page_spots, t('navigation.spots'), Website.count > 0 ? spots_path(website_id: Website.first) : nil, link: {icon: 'icon-book'}, highlights_on: /spots/ do |spots|
+      Website.all.each do |website|
+        spots.item "page_website_#{website.id}_spots".to_sym, website.name, spots_path(website_id: website), highlights_on: ::Regexp.new("website_id=#{website.id}")
+      end
+    end
   end
 
 end
