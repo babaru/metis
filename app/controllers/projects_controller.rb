@@ -24,8 +24,10 @@ class ProjectsController < ApplicationController
     Rails.logger.debug @selected_spot_ids
 
     if request.post?
-      add_spot_id = params[:add_spot_id]
-      @selected_spot_ids << add_spot_id unless @selected_spot_ids.include? add_spot_id
+      add_spot_ids = params[:add_spots]
+      add_spot_ids.split(',').each do |spot_id|
+        @selected_spot_ids << spot_id unless @selected_spot_ids.include? spot_id
+      end
       redirect_to project_path(@project, {spots: @selected_spot_ids.join(',')}.merge(@spots_filter.filter_params)) and return
     end
 
