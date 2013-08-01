@@ -68,5 +68,9 @@ module Metis
 
     config.generators.stylesheets = false
     config.generators.javascripts = false
+
+    config.to_prepare do
+      Devise::SessionsController.layout "single"
+    end
   end
 end

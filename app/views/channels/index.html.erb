@@ -6,13 +6,9 @@
   }
 end %>
 
-<article>
-  <div class="padding">
-    <ul class="nav nav-tabs">
-      <li><%= link_to render_icon_and_text_content('icon-trello', ChannelGroup.model_name.human), website_channel_groups_path(@website) %></li>
-      <li class="active"><%= link_to render_icon_and_text_content('icon-sitemap', Channel.model_name.human), website_channels_path(@website) %></li>
-    </ul>
-  </div>
-</article>
+<ul class="nav nav-tabs">
+  <li><%= link_to render_icon_and_text_content('icon-trello', ChannelGroup.model_name.human), website_channel_groups_path(@website) %></li>
+  <li class="active"><%= link_to render_icon_and_text_content('icon-sitemap', Channel.model_name.human), website_channels_path(@website) %></li>
+</ul>
 
 <%= render partial: 'channels_grid' %>

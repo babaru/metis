@@ -1,0 +1,19 @@
+<tr class="selectors">
+  <td class="title">所属频道</td>
+  <td>
+    <ul class="nav nav-pills">
+      <% spots_filter.channels.each do |channel| %>
+      <%= render_selector_item(
+        :channel_id,
+        channel.id,
+        channel.name,
+        {
+          website_id: spots_filter.selected_website.id,
+          spot_category_id: spots_filter.selected_spot_category.nil? ? nil : spots_filter.selected_spot_category.id,
+          channel_id: spots_filter.selected_channel.nil? ? nil : spots_filter.selected_channel.id,
+          unit_type: spots_filter.selected_unit_type.nil? ? nil : spots_filter.selected_unit_type
+        }) %>
+      <% end %>
+    </ul>
+  </td>
+</tr>

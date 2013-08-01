@@ -3,7 +3,7 @@
  *= require wice_grid
  *= require tida_template
  *= require icon_grid
- *= require shopping_selector
+ *= require filter
  */
 
 html {
@@ -14,4 +14,22 @@ html {
 #spot-candidates-panel {
   overflow-y: auto;
   bottom: 50px;
+}
+
+.pjax-loading-dialog.fade, .pjax-loading-dialog.fade.in {
+  -webkit-transition: opacity .2s linear, none;
+  -moz-transition: opacity .2s linear, none;
+  -ms-transition: opacity .2s linear, none;
+  -o-transition: opacity .2s linear, none;
+  transition: opacity .2s linear, none;
+  top: 50%;
+}
+
+.pjax-loading-dialog .modal-body {
+  padding-top: 20px;
+  text-align: center;
+}
+
+.pjax-loading-dialog .modal-body p {
+  padding-top: 10px;
 }

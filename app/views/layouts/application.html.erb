@@ -43,6 +43,11 @@
     </footer>
   </div>
 
+  <div id="pjax-loading-dialog" class="modal hide fade in pjax-loading-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-body">
+      <%= image_tag 'ajax-loader.gif' %> <p>正在载入，请稍等...</p>
+    </div>
+  </div>
   <%= yield :anything_else %>
   <%= stylesheet_link_tag "retina", :media => "all" %>
 </body>

@@ -18,6 +18,7 @@ group :assets do
   gem 'font-awesome-rails'
   gem 'bootstrap-datetimepicker-rails'
   gem 'bootstrap-x-editable-rails'
+  gem "pjax_rails"
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', :platforms => :ruby
 

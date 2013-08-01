@@ -1,3 +1,5 @@
+<div data-pjax-container>
+
 <%= render_page_title "<strong>#{@project.client.name}</strong> #{@project.name}" do |toolbar|
   toolbar << {
     name: "#{t('labels.back_to')}#{t('model.list', :model => Project.model_name.human)}",
@@ -14,8 +16,13 @@ end %>
 
 <article>
   <div class="padding">
-    <%= render partial: 'spots/spot_filter' %>
+    <div class="well">
+      <%= render partial: 'spots/filter/spots_filter', locals: {websites: @websites, spots_filter: @spots_filter} %>
+    </div>
   </div>
 </article>
 
-<%= render partial: 'spots/spots_grid', locals: {show_select: true} %>
+<%= render partial: 'spots/filter/spots_narrow_grid', locals: {spots: @spots_grid} if @spots_grid %>
+
+</div>
+

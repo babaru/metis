@@ -1,16 +1,14 @@
 #encoding: utf-8
 
-class SpotFilter
-  attr_reader :selected_website, :selected_channel, :selected_spot_category, :selected_unit_type, :selected_spots
+class SpotsFilter
+  attr_reader :selected_website, :selected_channel, :selected_spot_category, :selected_unit_type, :selected_spots, :selected_unit_type_name
   attr_reader :spots_query_clause
   attr_reader :unit_types
   attr_reader :spot_categories
-  attr_reader :websites
   attr_reader :channels
   attr_reader :filter_params
 
   def initialize(options)
-    @websites = Website.all
     unit_type_query_string = nil
     if options[:website_id]
       @selected_website = Website.find options[:website_id]
@@ -38,6 +36,8 @@ class SpotFilter
       elsif @selected_unit_type == 'cpc'
         where_clause << "(unit like '%CPC%' or unit like '%CPC%')"
       end
+
+      @selected_unit_type_name = I18n.t("activerecord.attributes.spot.unit_type.#{@selected_unit_type}")
     end
 
     @spot_categories = @selected_website.spot_categories if @selected_website

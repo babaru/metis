@@ -13,10 +13,11 @@ class ProjectsController < ApplicationController
   # GET /projects/1
   # GET /projects/1.json
   def show
+    @websites = Website.all
     @project = Project.find(params[:id])
-    @spot_filter = SpotFilter.new params
+    @spots_filter = SpotsFilter.new params
 
-    @spots_grid = initialize_grid(Spot.where(@spot_filter.spots_query_clause))
+    @spots_grid = initialize_grid(Spot.where(@spots_filter.spots_query_clause)) if @spots_filter.selected_website
     @selected_spot_ids = []
     @selected_spot_ids = params[:spots].split(',') if params[:spots]
     @selected_spots_params = params[:spots]
@@ -25,12 +26,13 @@ class ProjectsController < ApplicationController
     if request.post?
       add_spot_id = params[:add_spot_id]
       @selected_spot_ids << add_spot_id unless @selected_spot_ids.include? add_spot_id
-      redirect_to project_path(@project, {spots: @selected_spot_ids.join(',')}.merge(@spot_filter.filter_params)) and return
+      redirect_to project_path(@project, {spots: @selected_spot_ids.join(',')}.merge(@spots_filter.filter_params)) and return
     end
 
     respond_to do |format|
       format.html
       format.json { render json: @project }
+      format.js
     end
   end
 
