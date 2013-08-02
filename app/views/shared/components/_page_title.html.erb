@@ -4,7 +4,7 @@
       <h3><%= page_title[:title] %></h3>
     </div>
     <div class="cell6">
-      <%= render partial: 'shared/components/toolbar', locals: {toolbar: page_title[:toolbar], classes: []} if page_title[:toolbar] %>
+      <%= render partial: 'shared/components/toolbar', object: page_title[:toolbar] if page_title[:toolbar] %>
     </div>
   </div>
 </div>

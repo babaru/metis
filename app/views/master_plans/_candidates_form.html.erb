@@ -1,0 +1,35 @@
+<%= grid(spots, :show_filters => :always) do |g|
+  g.column do |spot|
+    hidden_field_tag "spot_id[]", spot.id
+  end
+
+  g.column name: t('activerecord.attributes.spot.spot_category') do |spot|
+    spot.spot_category.name
+  end
+
+  g.column name: t('activerecord.attributes.spot.name') do |spot|
+    content_tag :strong, spot.name
+  end
+
+  g.column name: t('activerecord.attributes.spot.price'), html: {style: 'text-align: right;'} do |spot|
+    content_tag :strong, number_to_currency(spot.price, format: "%n", precision: 0)
+  end
+
+  g.column name: t('activerecord.attributes.spot.unit') do |spot|
+    spot.unit
+  end
+
+  g.column name: t('activerecord.attributes.spot.spec') do |spot|
+    spot.spec
+  end
+
+  g.column name: t('activerecord.attributes.spot.remark') do |spot|
+    spot.remark
+  end
+
+  g.column name: '天数' do |spot|
+    text_field_tag 'day_count[]', nil, class: 'spot-day-count-text-field'
+  end
+end -%>
+
+

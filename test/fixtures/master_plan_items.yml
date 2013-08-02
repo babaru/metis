@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  spot: 
+  master_plan: 
+  count: 9.99
+
+two:
+  spot: 
+  master_plan: 
+  count: 9.99

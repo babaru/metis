@@ -13,29 +13,8 @@ class ProjectsController < ApplicationController
   # GET /projects/1
   # GET /projects/1.json
   def show
-    @websites = Website.all
-    @project = Project.find(params[:id])
-    @spots_filter = SpotsFilter.new params
-
-    @spots_grid = initialize_grid(Spot.where(@spots_filter.spots_query_clause)) if @spots_filter.selected_website
-    @selected_spot_ids = []
-    @selected_spot_ids = params[:spots].split(',') if params[:spots]
-    @selected_spots_params = params[:spots]
-    Rails.logger.debug @selected_spot_ids
-
-    if request.post?
-      add_spot_ids = params[:add_spots]
-      add_spot_ids.split(',').each do |spot_id|
-        @selected_spot_ids << spot_id unless @selected_spot_ids.include? spot_id
-      end
-      redirect_to project_path(@project, {spots: @selected_spot_ids.join(',')}.merge(@spots_filter.filter_params)) and return
-    end
-
-    respond_to do |format|
-      format.html
-      format.json { render json: @project }
-      format.js
-    end
+    @project = Project.find params[:id]
+    @master_plans_grid = initialize_grid(MasterPlan.where(project_id: @project))
   end
 
   def view_cart

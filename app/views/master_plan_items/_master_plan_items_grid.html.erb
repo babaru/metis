@@ -1,0 +1,25 @@
+<%= grid(master_plan_items, :show_filters => :always) do |g|
+  g.column name: t('activerecord.attributes.spot.website') do |master_plan_item|
+    master_plan_item.spot.website.name
+  end
+
+  g.column name: t('activerecord.attributes.spot.channel') do |master_plan_item|
+    master_plan_item.spot.channel.name
+  end
+
+  g.column name: t('activerecord.attributes.spot.spot_category') do |master_plan_item|
+    master_plan_item.spot.spot_category.name
+  end
+
+  g.column name: t('activerecord.attributes.spot.name') do |master_plan_item|
+    content_tag :strong, master_plan_item.spot.name
+  end
+
+  g.column name: t('activerecord.attributes.master_plan_item.count') do |master_plan_item|
+    "<strong>#{master_plan_item.count}</strong> #{t('activerecord.spot.unit_type.day')}".html_safe
+  end
+
+  g.column :html => {class: 'buttons'} do |master_plan_item|
+    link_to(render_icon_content('icon-remove'), master_plan_item_path(master_plan_item), :method => :delete, :confirm => t("confirms.delete"), :class => 'button button-danger', :rel => 'tooltip', :title => t('buttons.delete'), "data-skip-pjax" => true)
+  end
+end -%>

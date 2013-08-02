@@ -1,0 +1,9 @@
+<%= render_page_title "#{t('model.list', model: MasterPlan.model_name.human)}" do |toolbar|
+  toolbar << {
+    name: render_icon_and_text_content('icon-plus-sign', t('model.create', :model => MasterPlan.model_name.human)),
+    url: new_master_plan_path,
+    options: {class: 'button button-primary'}
+  }
+end %>
+
+

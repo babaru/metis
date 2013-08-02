@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130731071346) do
+ActiveRecord::Schema.define(:version => 20130802113305) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -46,6 +46,28 @@ ActiveRecord::Schema.define(:version => 20130731071346) do
   end
 
   add_index "clients", ["created_by_id"], :name => "index_clients_on_created_by_id"
+
+  create_table "master_plan_items", :force => true do |t|
+    t.integer  "spot_id"
+    t.integer  "master_plan_id"
+    t.decimal  "count",          :precision => 10, :scale => 0
+    t.datetime "created_at",                                    :null => false
+    t.datetime "updated_at",                                    :null => false
+  end
+
+  add_index "master_plan_items", ["master_plan_id"], :name => "index_master_plan_items_on_master_plan_id"
+  add_index "master_plan_items", ["spot_id"], :name => "index_master_plan_items_on_spot_id"
+
+  create_table "master_plans", :force => true do |t|
+    t.integer  "project_id"
+    t.integer  "created_by_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.string   "name"
+  end
+
+  add_index "master_plans", ["created_by_id"], :name => "index_master_plans_on_created_by_id"
+  add_index "master_plans", ["project_id"], :name => "index_master_plans_on_project_id"
 
   create_table "projects", :force => true do |t|
     t.string   "name"
@@ -108,6 +130,7 @@ ActiveRecord::Schema.define(:version => 20130731071346) do
     t.string   "unit"
     t.text     "remark"
     t.integer  "spot_category_id"
+    t.string   "unit_type"
   end
 
   add_index "spots", ["channel_id"], :name => "index_spots_on_channel_id"

@@ -1,0 +1,2 @@
+module MasterPlansHelper
+end

@@ -1,6 +1,11 @@
-<div data-pjax-container>
-
 <%= render_page_title "<strong>#{@project.client.name}</strong> #{@project.name}" do |toolbar|
+  toolbar << {
+    name: render_icon_and_text_content('icon-plus', t('model.create', model: MasterPlan.model_name.human)),
+    url: new_project_master_plan_path(@project),
+    options: {
+      class: 'button button-success'
+    }
+  }
   toolbar << {
     name: "#{t('labels.back_to')}#{t('model.list', :model => Project.model_name.human)}",
     url: projects_path,
@@ -8,143 +13,4 @@
   }
 end %>
 
-<article>
-  <div class="padding">
-    <div class="well">
-      <%= render partial: 'spots/filter/spots_filter', locals: {websites: @websites, spots_filter: @spots_filter} %>
-    </div>
-  </div>
-</article>
-
-<article>
-  <div class="padding">
-    <div class="grid">
-      <div class="grid-row">
-        <div class="cell6">
-          <%= render partial: 'shared/components/toolbar', locals: {toolbar: [
-            {
-              name: render_icon_and_text_content('icon-shopping-cart', "查看已选点位 <span class=\"badge badge-inverse\">#{@selected_spot_ids.count}</span>".html_safe),
-              url: nil,
-              options: {
-                class: 'button button-success'
-              }
-            }
-            ], classes: []} %>
-        </div>
-        <div class="cell6">
-          <%= render partial: 'shared/components/toolbar', locals: {toolbar: [
-            {
-              name: render_icon_and_text_content('icon-plus', '添加'),
-              url: '#',
-              options: {
-                class: 'button button-warning',
-                id: 'select-spot-button',
-                'data-skip-pjax' => true
-              }
-            }
-            ], classes: ['pull-right']} %>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-
-<%= render partial: 'spots/filter/spots_narrow_grid', locals: {spots: @spots_grid} if @spots_grid %>
-
-</div>
-
-<% content_for :js do %>
-<script>
-  $(document).ready(function() {
-    var selected_ids = null;
-    $('input[type="checkbox"]').change(function() {
-      selected_ids = new Array();
-      $('input[type="checkbox"]').each(function() {
-        if (this.checked) {
-          selected_ids.push(this.value);
-        }
-      });
-      // $('#select-spot-button').attr('href', '<%= request.url.html_safe %>&add_spots=' + selected_ids.join(','));
-    });
-
-    $('#select-spot-button').click(function() {
-      $('#adding-spots-window').modal('show');
-      $('tr', '.candidate-spots-list-body').remove();
-      var index = 0;
-      $('input[type="checkbox"]').each(function() {
-        if (this.checked) {
-          var row_data = $(this).closest('tr').children();
-          var row = $('<tr/>').append($('<td/>').text(row_data[1].innerText))
-          .append($('<td>').text(row_data[2].innerText))
-          .append($('<td>').text(row_data[3].innerText))
-          .append($('<td>').text(row_data[4].innerText))
-          .append($('<td>').text(row_data[5].innerText))
-          .append($('<td>').text(row_data[6].innerText))
-          .append($('<td>').append($('<input>').attr('name', 'start_date').css('width:5em;')))
-          .append($('<input />').attr('name', 'end_date').css('width:5em;'))
-          .append($('<input />').attr('name', 'roll_count').css('width:5em;'));
-          if(index % 2 == 0) {
-            row.addClass('odd');
-          } else {
-            row.addClass('even');
-          }
-          $('.candidate-spots-list-body').append(row);
-        }
-      });
-
-    });
-
-    $('.close-button', '#adding-spots-window').click(function() {
-      $('#adding-spots-window').modal('hide');
-    });
-  });
-</script>
-<% end %>
-
-<% content_for :anything_else do %>
-<div class="modal hide fade" id="adding-spots-window" style="width: 900px; margin-left: -450px; height: auto; max-height: 100%;">
-  <div class="modal-header">
-    <h3>添加媒介购买位置</h3>
-  </div>
-  <div class="modal-body">
-    <table class="table-striped table-bordered table wice-grid">
-      <tr>
-        <th>刊例分类</th>
-        <th>位置名称</th>
-        <th style="text-align: right;">价格</th>
-        <th>价格单位</th>
-        <th>规格</th>
-        <th>备注</th>
-        <th>起始日期</th>
-        <th>结束日期</th>
-        <th>轮数</th>
-      </tr>
-
-      <tbody class='candidate-spots-list-body'>
-        <tr class="odd">
-          <td class="sel"><input name="grid[selected][]" type="checkbox" value="5"></td>
-          <td>按钮广告</td>
-          <td><strong>右侧第三按钮</strong></td>
-          <td style="text-align: right;"><strong>120,000</strong></td>
-          <td>元/天</td>
-          <td>160*140；15K</td>
-          <td></td>
-        </tr>
-        <tr class="even">
-          <td class="sel"><input name="grid[selected][]" type="checkbox" value="6"></td>
-          <td>按钮广告</td>
-          <td><strong>右侧第一和第二按钮通发</strong></td>
-          <td style="text-align: right;"><strong>300,000</strong></td>
-          <td>元/天</td>
-          <td>160*140；15K</td>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="modal-footer">
-    <a href="#" class="button close-button">关闭</a>
-    <a href="#" class="button button-primary">保存</a>
-  </div>
-</div>
-<% end %>
+<%= render partial: 'master_plans/master_plans_grid' %>

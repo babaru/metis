@@ -1,0 +1,104 @@
+<div data-pjax-container>
+
+<%= render_page_title "<strong>#{@master_plan.project.client.name}</strong> #{@master_plan.project.name}: #{@master_plan.name}" do |toolbar|
+  toolbar << {
+    name: "#{t('labels.back_to')}#{@master_plan.project.name}#{t('model.show', :model => Project.model_name.human)}",
+    url: project_path(@master_plan.project_id),
+    options: {class: 'button'}
+  }
+end %>
+
+<ul class="nav nav-tabs">
+  <li class="active">
+    <%= link_to render_icon_and_text_content('icon-check-sign', '挑选点位'), choose_spots_path(@master_plan) %>
+  </li>
+  <li>
+    <%= link_to render_icon_and_text_content('icon-shopping-cart', "查看已选点位 <span class=\"badge badge-inverse\">#{@master_plan.items.count}</span>".html_safe), master_plan_path(@master_plan) %>
+  </li>
+</ul>
+
+<article>
+  <div class="padding">
+    <div class="well">
+      <%= render partial: 'spots/filter/spots_filter', locals: {websites: @websites, spots_filter: @spots_filter} %>
+    </div>
+  </div>
+</article>
+
+<%= form_tag url_for(controller: params[:controller], action: :candidates, id: @master_plan), remote: true, class: 'no-padding', id: 'candidates-list-form' do %>
+<article>
+  <div class="padding">
+    <div class="grid">
+      <div class="grid-row">
+        <div class="cell6">
+          <div class="button-group">
+            <%= submit_tag '添加', class: 'button button-warning' if @spots_grid %>
+          </div>
+        </div>
+        <div class="cell6">
+
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<%= render partial: 'spots/filter/spots_narrow_grid', locals: {spots: @spots_grid} if @spots_grid %>
+<% end %>
+
+</div>
+
+<% content_for :js do %>
+<script>
+  $(document).ready(function() {
+    var selected_ids = null;
+    $('input[type="checkbox"]').change(function() {
+      selected_ids = new Array();
+      $('input[type="checkbox"]').each(function() {
+        if (this.checked) {
+          selected_ids.push(this.value);
+        }
+      });
+    });
+
+    $('#candidates-list-form').on('ajax:beforeSend', function(xhr, settings) {
+      var selected_ids = new Array();
+      $('input[type="checkbox"]').each(function() {
+        if (this.checked) {
+          selected_ids.push(this.value);
+        }
+      });
+      if (selected_ids.length == 0) {
+        xhr.abort();
+      } else {
+        $('#candidates-window').modal();
+      }
+    });
+
+    $('#close-candidates-window-button').click(function() {
+      $('#candidates-window').modal('hide');
+    });
+
+    $('#candidates-form').on('ajax:beforeSend', function(xhr, settings) {
+      $('#save-candidates-button').button('loading');
+    }).on('ajax:complete', function(xhr, status) {
+      $('#candidates-window').modal('hide');
+    });
+  });
+</script>
+<% end %>
+
+<% content_for :anything_else do %>
+<div class="modal hide fade" id="candidates-window" style="width: 900px; margin-left: -450px; height: auto; max-height: 100%;">
+  <div class="modal-header">
+    <h3>添加媒介购买位置</h3>
+  </div>
+  <div class="modal-body">
+    <%= form_tag save_candidates_path(id: @master_plan.id), class: 'no-padding', id: 'candidates-form', remote: true do %>
+    <div class="form"></div>
+    <%= submit_tag '保存', class: 'button button-primary pull-right', 'data-loading-text' => "正在保存...", id: 'save-candidates-button' %>
+    <a href="#" id="close-candidates-window-button" class="close-button button">关闭</a>
+    <% end %>
+  </div>
+</div>
+<% end %>

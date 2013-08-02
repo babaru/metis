@@ -33,3 +33,7 @@ html {
 .pjax-loading-dialog .modal-body p {
   padding-top: 10px;
 }
+
+.spot-day-count-text-field {
+  width: 2em;
+}

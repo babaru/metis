@@ -1,0 +1,30 @@
+<div data-pjax-container>
+
+<%= render_page_title "<strong>#{@master_plan.project.client.name}</strong> #{@master_plan.project.name}: #{@master_plan.name}" do |toolbar|
+  toolbar << {
+    name: "#{t('labels.back_to')}#{@master_plan.project.name}#{t('model.show', :model => Project.model_name.human)}",
+    url: project_path(@master_plan.project_id),
+    options: {class: 'button'}
+  }
+end %>
+
+<ul class="nav nav-tabs">
+  <li>
+    <%= link_to '挑选点位', choose_spots_path(@master_plan) %>
+  </li>
+  <li class="active">
+    <%= link_to render_icon_and_text_content('icon-shopping-cart', "查看已选点位 <span class=\"badge badge-inverse\">#{@master_plan.items.count}</span>".html_safe), master_plan_path(@master_plan) %>
+  </li>
+</ul>
+
+<%= render partial: 'master_plan_items/master_plan_items_grid', locals: {master_plan_items: @master_plan_items_grid} %>
+
+<article>
+  <div class="padding">
+    <div class="well">
+      <h2>2544.09</h2>
+    </div>
+  </div>
+</article>
+
+</div>
