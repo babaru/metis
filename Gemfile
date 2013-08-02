@@ -25,8 +25,8 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
-gem 'tida_template', path: '/Users/apple/Projects/tida/src/tida_template'
-# gem 'tida_template'
+# gem 'tida_template', path: '/Users/apple/Projects/tida/src/tida_template'
+gem 'tida_template'
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
