@@ -17,14 +17,21 @@ end %>
   </li>
 </ul>
 
-<%= render partial: 'master_plan_items/master_plan_items_grid', locals: {master_plan_items: @master_plan_items_grid} %>
-
 <article>
   <div class="padding">
     <div class="well">
-      <h2>2544.09</h2>
+      <div class="grid">
+        <div class="grid-row">
+          <div class="cell3"></div>
+          <div class="cell3"></div>
+          <div class="cell3"></div>
+          <div class="cell3">总合同额：<span class="total-price"><%= number_to_currency(@total_price, unit: '', precision: 0) %></span> 元</div>
+        </div>
+      </div>
     </div>
   </div>
 </article>
+
+<%= render partial: 'master_plan_items/master_plan_items_grid', locals: {master_plan_items: @master_plan_items_grid} %>
 
 </div>

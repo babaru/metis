@@ -37,3 +37,17 @@ html {
 .spot-day-count-text-field {
   width: 2em;
 }
+
+.well {
+  padding: 9px;
+  margin-bottom: 10px;
+}
+
+.cell3 {
+  line-height: 30px;
+}
+
+.total-price {
+  font-size: 16px;
+  font-weight: bold;
+}

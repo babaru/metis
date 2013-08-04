@@ -15,6 +15,10 @@
     content_tag :strong, master_plan_item.spot.name
   end
 
+  g.column name: t('activerecord.attributes.spot.price') do |master_plan_item|
+    "<strong>#{master_plan_item.spot.price}</strong> #{master_plan_item.spot.unit}".html_safe
+  end
+
   g.column name: t('activerecord.attributes.master_plan_item.count') do |master_plan_item|
     "<strong>#{master_plan_item.count}</strong> #{t('activerecord.spot.unit_type.day')}".html_safe
   end

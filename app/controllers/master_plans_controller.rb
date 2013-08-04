@@ -15,6 +15,7 @@ class MasterPlansController < ApplicationController
   def show
     @master_plan = MasterPlan.find(params[:id])
     @master_plan_items_grid = initialize_grid(MasterPlanItem.where(master_plan_id: @master_plan.id).order('created_at'))
+    @total_price = @master_plan.calculate_total_price
 
     respond_to do |format|
       format.html
