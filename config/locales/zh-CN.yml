@@ -148,3 +148,7 @@ zh-CN:
     national: 全国媒体
     region_important: 地区重要媒体
     others: 其他媒体
+  roles:
+    admin: 管理员
+    super_user: 超级用户
+    user: 一般用户

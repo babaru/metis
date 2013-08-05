@@ -1,6 +1,6 @@
 <%= grid(@projects_grid, :show_filters => :always) do |g|
   g.column name: t('activerecord.attributes.project.name') do |project|
-    link_to project.name, project_path(project)
+    link_to content_tag(:strong, project.name), client_project_path(id: project, client_id: project.client)
   end
 
   g.column name: t('activerecord.attributes.project.started_at') do |project|
@@ -11,11 +11,23 @@
     project.ended_at.strftime('%Y-%m-%d')
   end
 
-  g.column :html => {class: 'buttons'} do |project|
-    link_to(render_icon_content('icon-edit'), edit_project_path(project), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
+  g.column name: t('activerecord.attributes.project.budget') do |project|
+    "#{number_to_currency(project.budget, precision: 0, unit: '')} #{project.budget_unit}"
+  end
+
+  g.column name: t('activerecord.attributes.project.assigned_to') do |project|
+    project.assigned_to.email
+  end
+
+  g.column do |project|
+    link_to(render_icon_and_text_content('icon-flag', '分配项目'), assign_project_path(id: project), class: 'button-warning button') if can? :manage, :project
   end
 
   g.column :html => {class: 'buttons'} do |project|
-    link_to(render_icon_content('icon-trash'), project_path(project), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete'))
+    link_to(render_icon_content('icon-edit'), edit_project_path(project), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit')) if can? :update, Project
+  end
+
+  g.column :html => {class: 'buttons'} do |project|
+    link_to(render_icon_content('icon-trash'), project_path(project), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete')) if can? :destroy, Project
   end
 end -%>

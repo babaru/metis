@@ -47,7 +47,7 @@ html {
   line-height: 30px;
 }
 
-.total-price {
+.total-price, .currency {
   font-size: 16px;
   font-weight: bold;
 }

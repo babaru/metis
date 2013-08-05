@@ -1,6 +1,10 @@
 <%= grid(@master_plans_grid, :show_filters => :always) do |g|
   g.column name: t('activerecord.attributes.master_plan.name') do |master_plan|
-    link_to master_plan.name, master_plan_path(master_plan)
+    link_to content_tag(:strong, master_plan.name), master_plan_path(master_plan)
+  end
+
+  g.column name: t('activerecord.attributes.master_plan.updated_at') do |master_plan|
+    master_plan.updated_at.strftime('%Y-%m-%d %H:%S:%M')
   end
 
   g.column :html => {class: 'buttons'} do |master_plan|

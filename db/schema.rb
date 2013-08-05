@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130802113305) do
+ActiveRecord::Schema.define(:version => 20130805085528) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -32,6 +32,16 @@ ActiveRecord::Schema.define(:version => 20130802113305) do
 
   add_index "channels", ["channel_group_id"], :name => "index_channels_on_channel_group_id"
   add_index "channels", ["website_id"], :name => "index_channels_on_website_id"
+
+  create_table "client_assignments", :force => true do |t|
+    t.integer  "client_id"
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "client_assignments", ["client_id"], :name => "index_client_assignments_on_client_id"
+  add_index "client_assignments", ["user_id"], :name => "index_client_assignments_on_user_id"
 
   create_table "clients", :force => true do |t|
     t.string   "name"
@@ -69,6 +79,16 @@ ActiveRecord::Schema.define(:version => 20130802113305) do
   add_index "master_plans", ["created_by_id"], :name => "index_master_plans_on_created_by_id"
   add_index "master_plans", ["project_id"], :name => "index_master_plans_on_project_id"
 
+  create_table "project_assignments", :force => true do |t|
+    t.integer  "project_id"
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "project_assignments", ["project_id"], :name => "index_project_assignments_on_project_id"
+  add_index "project_assignments", ["user_id"], :name => "index_project_assignments_on_user_id"
+
   create_table "projects", :force => true do |t|
     t.string   "name"
     t.integer  "client_id"
@@ -77,10 +97,27 @@ ActiveRecord::Schema.define(:version => 20130802113305) do
     t.datetime "ended_at"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
+    t.integer  "budget_unit"
   end
 
   add_index "projects", ["client_id"], :name => "index_projects_on_client_id"
   add_index "projects", ["created_by_id"], :name => "index_projects_on_created_by_id"
+
+  create_table "role_assignments", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "role_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "role_assignments", ["role_id"], :name => "index_role_assignments_on_role_id"
+  add_index "role_assignments", ["user_id"], :name => "index_role_assignments_on_user_id"
+
+  create_table "roles", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "spot_categories", :force => true do |t|
     t.string   "name"

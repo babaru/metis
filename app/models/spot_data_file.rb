@@ -16,6 +16,7 @@ class SpotDataFile < UploadFile
     Spreadsheet.open self.data_file.path do |book|
       sheet = book.worksheet(0)
       current_spot_category = nil
+      logger.debug "Row count: #{sheet.last_row_index}"
       1.upto(sheet.last_row_index) do |index|
         Rails.logger.debug "ROW: #{index}"
         type_id = sheet.row(index)[0].upcase
@@ -45,6 +46,11 @@ class SpotDataFile < UploadFile
     specs_text = data[4].upcase if data[4]
     remark = data[5].upcase if data[5]
 
+    unit_type = nil
+    unit.scan(/CPC/) {|matches| unit_type = 'cpc' if matches.length > 0}
+    unit.scan(/CPM/) {|matches| unit_type = 'cpm' if matches.length > 0} if unit_type.nil?
+    unit_type = 'day' if unit_type.nil?
+
     return {
         website_id: website_id,
         channel_name: channel_name,
@@ -52,7 +58,8 @@ class SpotDataFile < UploadFile
         price: price,
         unit: unit,
         spec: specs_text,
-        remark: remark
+        remark: remark,
+        unit_type: unit_type
       }
   end
 

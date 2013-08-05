@@ -1,22 +1,14 @@
-<%= render_page_title "#{@client.name}" do |toolbar|
+<%= render_page_title "客户 <strong>#{@client.name}</strong>".html_safe do |toolbar|
   toolbar << {
-      name: render_icon_content('icon-edit'),
-      url: edit_client_path(@client),
-      options: {class: "button",
-      title: t('model.edit', :model => Client.model_name.human),
-      rel: 'tooltip'}
-    }
+    name: render_icon_and_text_content('icon-plus', t('model.add', model: Project.model_name.human)),
+    url: new_client_project_path(@client),
+    options: {class: 'button button-success'}
+  }
   toolbar << {
-      name: render_icon_content('icon-trash'),
-      url: client_path(@client),
-      options: {
-        method: :delete,
-        confirm: t('confirms.delete'),
-        class: "button",
-        title: t('model.delete', :model => Client.model_name.human),
-        rel: 'tooltip'
-      }
-    }
+    name: render_icon_and_text_content('icon-male', '管理项目执行人员'),
+    url: manage_client_assignment_path(@client),
+    options: {class: 'button button-primary'}
+  } if can? :manage, Client
   toolbar << {
     name: "#{t('labels.back_to')}#{t('model.list', :model => Client.model_name.human)}",
     url: clients_path,
@@ -24,12 +16,15 @@
   }
 end %>
 
-<%= render_article_title t('model.list', model: Project.model_name.human) do |toolbar|
-  toolbar << {
-    name: render_icon_and_text_content('icon-plus', t('model.add', model: Project.model_name.human)),
-    url: new_client_project_path(@client),
-    options: {class: 'button button-success'}
-  }
-  end %>
+<article>
+  <div class="padding">
+    <div class="well">
+      已分配项目执行人员：
+      <% @users.each do |user| %>
+      <%= content_tag :span, user.email, class: 'label label-info label-large' %>
+      <% end %>
+    </div>
+  </div>
+</article>
 
 <%= render partial: 'projects/projects_grid' %>

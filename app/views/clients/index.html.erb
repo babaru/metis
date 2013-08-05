@@ -6,8 +6,4 @@
   }
 end %>
 
-<div class="icon-grid">
-  <% @clients.each do |client| %>
-  <%= link_to content_tag(:span, client.name), client_path(client), 'logo-url' => client.logo.url(:thumb) %>
-  <% end %>
-</div>
+<%= render partial: 'shared/icon_grid', locals: {items: @clients.collect {|client| {name: client.name, url: client_path(client), icon: client.logo.url(:thumb)}}, editable: can?(:manage, Client) } %>

@@ -1,0 +1,21 @@
+<%= render_page_title "分配 <strong>#{@client.name}</strong> 客户执行人" do |toolbar|
+  toolbar << {
+    name: "#{t('labels.back_to')} #{@client.name} 分配人员列表",
+    url: url_for(:back),
+    options: {class: 'button'}
+  }
+end %>
+
+<%= simple_form_for(@client , :html => {:class => 'form-horizontal' }) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.association :assigned_users,
+    :collection => User.all_the_other_users(@client.created_by).collect{|u| [u.email, u.id] },
+    :as => :check_boxes %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: 'button button-primary' %>
+  </div>
+<% end %>

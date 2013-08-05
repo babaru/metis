@@ -34,7 +34,7 @@ SimpleNavigation::Configuration.run do |navigation|
   navigation.items do |primary|
     primary.item :page_dashboard, t('navigation.dashboard'), dashboard_path, link: {icon: 'icon-dashboard'}, :highlights_on => /dashboard/
     primary.item :page_clients, t('navigation.clients'), clients_path, link: {icon: 'icon-user'}, highlights_on: /clients/ do |clients|
-      Client.all.each do |client|
+      current_user.viewable_clients.each do |client|
         clients.item "page_client_#{client.id}".to_sym, client.name, client_path(client), highlights_on: ::Regexp.new("clients/#{client.id}")
       end
     end

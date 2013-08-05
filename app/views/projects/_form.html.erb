@@ -4,6 +4,8 @@
 
   <div class="form-inputs">
     <%= f.input :name %>
+    <%= f.input :budget %>
+    <%= f.input :budget_unit, as: :hidden %>
     <%= f.input :client_id, as: :hidden %>
     <%= f.input :created_by_id, as: :hidden %>
     <%= f.input :started_at, as: :date_picker %>

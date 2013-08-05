@@ -1,0 +1,27 @@
+<%= render_page_title "客户 <strong>#{@client.name}</strong>".html_safe do |toolbar|
+  toolbar << {
+    name: render_icon_and_text_content('icon-flag', '分配任务'),
+    url: client_assign_user_path(id: @client, user_id: current_user.id),
+    options: {class: 'button button-success'}
+  } if can? :manage, :client
+  toolbar << {
+    name: "#{t('labels.back_to')}#{t('model.list', :model => Client.model_name.human)}",
+    url: clients_path,
+    options: {class: 'button'}
+  }
+end %>
+
+<article>
+  <div class="padding">
+    <ul class="nav nav-tabs">
+      <li>
+        <%= link_to render_icon_and_text_content('icon-list', t('model.list', model: Project.model_name.human)), client_path(@client) %>
+      </li>
+      <li class="active">
+        <%= link_to render_icon_and_text_content('icon-male', '已分配人员'), client_assigned_users_path(@client) %>
+      </li>
+    </ul>
+  </div>
+</article>
+
+<%= render partial: 'shared/icon_grid', locals: {items: @users.collect {|user| {name: user.email, url: '#', icon: '/assets/default_user.png'}}, editable: can?(:manage, User) } %>

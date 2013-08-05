@@ -1,3 +1,4 @@
+#encoding: utf-8
 class ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.json
@@ -17,12 +18,8 @@ class ProjectsController < ApplicationController
     @master_plans_grid = initialize_grid(MasterPlan.where(project_id: @project))
   end
 
-  def view_cart
-    @selected_spot_ids = []
-    @selected_spot_ids = params[:spots].split(',') if params[:spots]
-    @project = Project.find(params[:id])
-
-    @spots_grid = initialize_grid(Spot.where("id in (#{@selected_spot_ids.join(',')})"))
+  def assign
+    @project = Project.find params[:id]
   end
 
   # GET /projects/new
@@ -31,6 +28,7 @@ class ProjectsController < ApplicationController
     @project = Project.new
     @project.client_id = params[:client_id]
     @project.created_by_id = current_user.id
+    @project.budget_unit = '元'
 
     respond_to do |format|
       format.html # new.html.erb
@@ -50,7 +48,7 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if @project.save
-        format.html { redirect_to project_path(@project), notice: 'Project was successfully created.' }
+        format.html { redirect_to client_path(@project.client_id), notice: 'Project was successfully created.' }
         format.json { render json: @project, status: :created, location: @project }
       else
         format.html { render action: "new" }
@@ -66,7 +64,7 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if @project.update_attributes(params[:project])
-        format.html { redirect_to project_path(@project), notice: 'Project was successfully updated.' }
+        format.html { redirect_to client_path(@project.client_id), notice: 'Project was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -79,10 +77,11 @@ class ProjectsController < ApplicationController
   # DELETE /projects/1.json
   def destroy
     @project = Project.find(params[:id])
+    client_id = @project.client_id
     @project.destroy
 
     respond_to do |format|
-      format.html { redirect_to projects_url }
+      format.html { redirect_to client_path(client_id) }
       format.json { head :no_content }
     end
   end

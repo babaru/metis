@@ -8,9 +8,24 @@
   }
   toolbar << {
     name: "#{t('labels.back_to')}#{t('model.list', :model => Project.model_name.human)}",
-    url: projects_path,
+    url: url_for(:back),
     options: {class: 'button'}
   }
 end %>
+
+<article>
+  <div class="padding">
+    <div class="well">
+      <div class="grid">
+        <div class="grid-row">
+          <div class="cell3">预算： <span class="currency"><%= number_to_currency(@project.budget, :precision => 0, :unit => '') %></span> <%= @project.budget_unit %></div>
+          <div class="cell3"></div>
+          <div class="cell3"></div>
+          <div class="cell3">开始日期：<strong><%= @project.started_at.strftime('%Y-%m-%d') %></strong> 结束日期：<strong><%= @project.ended_at.strftime('%Y-%m-%d') %></strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
 
 <%= render partial: 'master_plans/master_plans_grid' %>

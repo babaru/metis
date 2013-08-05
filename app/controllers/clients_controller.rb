@@ -2,8 +2,7 @@ class ClientsController < ApplicationController
   # GET /clients
   # GET /clients.json
   def index
-    # @clients_grid = initialize_grid(Client)
-    @clients = Client.all
+    @clients = current_user.viewable_clients
 
     respond_to do |format|
       format.html # index.html.erb
@@ -15,12 +14,21 @@ class ClientsController < ApplicationController
   # GET /clients/1.json
   def show
     @client = Client.find(params[:id])
-    @projects_grid = initialize_grid(Project.where(client_id: @client.id))
+    @users = @client.assigned_users
+    if current_user.has_role? :admin
+      @projects_grid = initialize_grid(Project.where(client_id: @client.id))
+    else
+      @projects_grid = initialize_grid(Project.joins('left outer join project_assignments on project_assignments.project_id=projects.id').where('client_id=? and (project_assignments.user_id=? or created_by_id=?)', @client.id, current_user.id, current_user.id))
+    end
 
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @client }
     end
+  end
+
+  def assign
+    @client = Client.find(params[:id])
   end
 
   # GET /clients/new
@@ -47,7 +55,7 @@ class ClientsController < ApplicationController
 
     respond_to do |format|
       if @client.save
-        format.html { redirect_to clients_path(), notice: 'Client was successfully created.' }
+        format.html { redirect_to client_path(@client), notice: 'Client was successfully created.' }
         format.json { render json: @client, status: :created, location: @client }
       else
         format.html { render action: "new" }
@@ -63,7 +71,7 @@ class ClientsController < ApplicationController
 
     respond_to do |format|
       if @client.update_attributes(params[:client])
-        format.html { redirect_to clients_path(), notice: 'Client was successfully updated.' }
+        format.html { redirect_to client_path(@client), notice: 'Client was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

@@ -1,10 +1,17 @@
 Metis::Application.routes.draw do
   devise_for :users
 
+  scope "/admin" do
+    resources :users, :roles
+  end
+
   match 'spots/upload' => 'spots#upload', as: :upload_spots
+
+  get 'clients/:id/assigned_users' => 'clients#assigned_users', as: :client_assigned_users
+  get 'clients/:id/assign' => 'clients#assign', as: :manage_client_assignment
+
   match 'websites/:id/data_type/:data_type/search' => 'websites#search', as: :website_data_search
-  post 'projects/:id' => 'projects#show'
-  get 'projects/:id/cart' => 'projects#view_cart', as: :view_project_cart
+  match 'projects/:id/assign' => 'projects#assign', as: :assign_project
 
   get 'websites/:website_id/channel_groups' => 'channel_groups#index'
 

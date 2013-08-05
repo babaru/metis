@@ -17,6 +17,11 @@
         <li class="dropdown">
           <a href="javascript:void(0);" class="dropdown-toggle"><%= t("labels.welcome")%>, <strong><%= current_user.email %></strong> <b class="caret"></b></a>
           <ul class="dropdown-menu">
+            <% if can? :manage, :user %>
+            <li>
+              <%= link_to(render_icon_and_text_content('icon-group', t("model.list", model: User.model_name.human)), users_path) %>
+            </li>
+            <% end %>
             <li>
               <%= link_to(t("buttons.sign_out"), destroy_user_session_path, :method=>'delete') %>
             </li>

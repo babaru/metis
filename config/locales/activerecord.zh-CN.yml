@@ -3,13 +3,32 @@ zh-CN:
     models:
       user: 用户
       client: 客户
-      project: 专项
+      project: 项目
       website: 网站
       channel: 频道
       channel_group: 频道分组
       spot: 媒介点位
       spot_category: 刊例分类
+      role: 身份
+      master_plan: Master Plan
     attributes:
+      user:
+        name: 用户名
+        email: 邮箱
+        password: 密码
+        password_confirmation: 确认密码
+        roles: 用户身份
+      client:
+        name: 名称
+      project:
+        name: 名称
+        budget: 预算
+        started_at: 开始日期
+        ended_at: 结束日期
+        assigned_to: 项目分配给
+      master_plan:
+        name: 名称
+        updated_at: 最后修改时间
       website:
         name: 名称
         url: 地址
