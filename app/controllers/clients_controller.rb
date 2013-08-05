@@ -18,7 +18,7 @@ class ClientsController < ApplicationController
     if current_user.has_role? :admin
       @projects_grid = initialize_grid(Project.where(client_id: @client.id))
     else
-      @projects_grid = initialize_grid(Project.joins('left outer join project_assignments on project_assignments.project_id=projects.id').where('client_id=? and (project_assignments.user_id=? or created_by_id=?)', @client.id, current_user.id, current_user.id))
+      @projects_grid = initialize_grid(Project.joins('left outer join project_assignments on project_assignments.project_id=projects.id').where('client_id=? and project_assignments.user_id=?', @client.id, current_user.id))
     end
 
     respond_to do |format|

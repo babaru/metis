@@ -5,12 +5,14 @@ class Project < ActiveRecord::Base
   has_many :project_assignments
   has_many :assigned_users, through: :project_assignments
 
-  def assigned_user?(user)
-    false
+  def assigned_to?(user)
+    assigned_to_user = assigned_to
+    return assigned_to_user.id == user.id if assigned_to_user
+    return false
   end
 
   def assigned_to
     return assigned_users.first if assigned_users.count > 0
-    return created_by
+    nil
   end
 end

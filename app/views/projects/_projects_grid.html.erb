@@ -16,7 +16,7 @@
   end
 
   g.column name: t('activerecord.attributes.project.assigned_to') do |project|
-    project.assigned_to.email
+    project.assigned_to.email if project.assigned_to
   end
 
   g.column do |project|

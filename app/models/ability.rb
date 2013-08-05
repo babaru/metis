@@ -6,7 +6,7 @@ class Ability
       can :manage, :all
     else
       can [:update, :destroy], Project do |p|
-        p.created_by_id == user.id
+        p.assigned_to?(user)
       end
 
       can :manage, MasterPlan, created_by_id: user.id
