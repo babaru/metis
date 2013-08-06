@@ -31,6 +31,32 @@ class ClientsController < ApplicationController
     @client = Client.find(params[:id])
   end
 
+  def discounts
+    @client = Client.find(params[:id])
+
+    if request.post?
+      Website.all.each do |website|
+        discount = 1
+        if params[:client_discounts] && params[:client_discounts][website.id.to_s.to_sym]
+          discount = params[:client_discounts][website.id.to_s.to_sym].to_f / 10
+        end
+        d = @client.discounts.where(website_id: website.id).first
+        if d
+          d.discount = discount
+          d.save!
+        else
+          @client.discounts << ClientDiscount.new(client_id: @client.id, website_id: website.id, discount: discount)
+        end
+      end
+      @client.save!
+
+      respond_to do |format|
+        format.html # show.html.erb
+        format.json { render json: @client }
+      end
+    end
+  end
+
   # GET /clients/new
   # GET /clients/new.json
   def new

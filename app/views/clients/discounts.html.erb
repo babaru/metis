@@ -1,0 +1,21 @@
+<%= render_page_title "<strong>#{@client.name}</strong> 折扣设置" do |toolbar|
+  toolbar << {
+    name: "#{t('labels.back_to')} #{@client.name}",
+    url: client_path(@client),
+    options: {class: 'button'}
+  }
+end %>
+
+<%= simple_form_for(:client_discounts, url: manage_client_discounts_path(@client), :html => {:class => 'form-horizontal' }) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <% Website.all.each do |website| %>
+    <%= f.input website.id.to_s.to_sym, label: website.name, input_html: {value: @client.discount_value(website.id)} %>
+    <% end %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: 'button button-primary' %>
+  </div>
+<% end %>

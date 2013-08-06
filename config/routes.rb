@@ -9,6 +9,7 @@ Metis::Application.routes.draw do
 
   get 'clients/:id/assigned_users' => 'clients#assigned_users', as: :client_assigned_users
   get 'clients/:id/assign' => 'clients#assign', as: :manage_client_assignment
+  match 'clients/:id/discounts' => 'clients#discounts', as: :manage_client_discounts
 
   match 'websites/:id/data_type/:data_type/search' => 'websites#search', as: :website_data_search
   match 'projects/:id/assign' => 'projects#assign', as: :assign_project

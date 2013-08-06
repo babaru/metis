@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130805085528) do
+ActiveRecord::Schema.define(:version => 20130806092645) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -43,6 +43,17 @@ ActiveRecord::Schema.define(:version => 20130805085528) do
   add_index "client_assignments", ["client_id"], :name => "index_client_assignments_on_client_id"
   add_index "client_assignments", ["user_id"], :name => "index_client_assignments_on_user_id"
 
+  create_table "client_discounts", :force => true do |t|
+    t.integer  "client_id"
+    t.integer  "website_id"
+    t.decimal  "discount",   :precision => 8, :scale => 2
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
+  end
+
+  add_index "client_discounts", ["client_id"], :name => "index_client_discounts_on_client_id"
+  add_index "client_discounts", ["website_id"], :name => "index_client_discounts_on_website_id"
+
   create_table "clients", :force => true do |t|
     t.string   "name"
     t.string   "logo_file_name"
@@ -61,8 +72,9 @@ ActiveRecord::Schema.define(:version => 20130805085528) do
     t.integer  "spot_id"
     t.integer  "master_plan_id"
     t.decimal  "count",          :precision => 10, :scale => 0
-    t.datetime "created_at",                                    :null => false
-    t.datetime "updated_at",                                    :null => false
+    t.datetime "created_at",                                                       :null => false
+    t.datetime "updated_at",                                                       :null => false
+    t.boolean  "is_on_house",                                   :default => false
   end
 
   add_index "master_plan_items", ["master_plan_id"], :name => "index_master_plan_items_on_master_plan_id"
@@ -71,9 +83,11 @@ ActiveRecord::Schema.define(:version => 20130805085528) do
   create_table "master_plans", :force => true do |t|
     t.integer  "project_id"
     t.integer  "created_by_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",                                  :null => false
+    t.datetime "updated_at",                                  :null => false
     t.string   "name"
+    t.string   "type"
+    t.decimal  "discount",      :precision => 2, :scale => 0
   end
 
   add_index "master_plans", ["created_by_id"], :name => "index_master_plans_on_created_by_id"
@@ -97,7 +111,8 @@ ActiveRecord::Schema.define(:version => 20130805085528) do
     t.datetime "ended_at"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
-    t.integer  "budget_unit"
+    t.string   "budget_unit"
+    t.integer  "budget"
   end
 
   add_index "projects", ["client_id"], :name => "index_projects_on_client_id"

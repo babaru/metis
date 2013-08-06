@@ -5,6 +5,7 @@ class Client < ActiveRecord::Base
   has_many :projects
   has_many :client_assignments
   has_many :assigned_users, class_name: 'User', through: :client_assignments
+  has_many :discounts, class_name: 'ClientDiscount', foreign_key: :client_id
 
   attr_accessible :logo, :name, :created_by_id, :created_by, :assigned_user_ids
   has_attached_file :logo, :styles => { :thumb => "160x160>" },
@@ -13,5 +14,9 @@ class Client < ActiveRecord::Base
 
   def created_by?(user)
     user.id == created_by_id
+  end
+
+  def discount_value(website_id, options)
+    return discounts.where(website_id: website_id).first.discount_value(options)
   end
 end

@@ -1,14 +1,14 @@
 @import 'bootstrap/mixins';
 .icon-grid {
   .cell2 {
-    height: 150px;
+    height: 160px;
   .item {
     display: block;
     cursor: pointer;
     @include border-radius(50px);
     width: 100px; height: 100px;
     margin: auto; clear: both;
-    @include box-shadow(rgba(0, 0, 0, 0.4) 0px -10px 35px inset);
+    @include box-shadow(rgba(0, 0, 0, 0.3) 0px -15px 35px inset);
     color: #666;
 
     &:hover {

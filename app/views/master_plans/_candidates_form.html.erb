@@ -30,6 +30,10 @@
   g.column name: '天数' do |spot|
     text_field_tag 'day_count[]', nil, class: 'spot-day-count-text-field'
   end
+
+  g.column name: '配送？' do |spot|
+    check_box_tag 'is_on_house[]'
+  end
 end -%>
 
 

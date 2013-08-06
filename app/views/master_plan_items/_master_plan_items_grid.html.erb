@@ -19,8 +19,16 @@
     "<strong>#{master_plan_item.spot.price}</strong> #{master_plan_item.spot.unit}".html_safe
   end
 
+  g.column name: t('activerecord.attributes.spot.discount') do |master_plan_item|
+    "#{master_plan_item.discount_value(master_plan_item.spot.website_id, {percent: true})}%"
+  end
+
   g.column name: t('activerecord.attributes.master_plan_item.count') do |master_plan_item|
     "<strong>#{master_plan_item.count}</strong> #{t('activerecord.spot.unit_type.day')}".html_safe
+  end
+
+  g.column name: t('activerecord.attributes.master_plan_item.is_on_house') do |master_plan_item|
+    content_tag(:span, render_icon_and_text_content('icon-truck', '配送'), class: 'label label-success label-big') if master_plan_item.is_on_house
   end
 
   g.column :html => {class: 'buttons'} do |master_plan_item|

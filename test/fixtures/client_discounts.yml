@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  client: 
+  website: 
+  discount: 9.99
+
+two:
+  client: 
+  website: 
+  discount: 9.99

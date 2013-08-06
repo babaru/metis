@@ -9,4 +9,17 @@ class MasterPlan < ActiveRecord::Base
       sum += item.spot.price * item.count
     end
   end
+
+  def on_house_ratio
+    total_price = 0
+    items.where(is_on_house: false).each do |item|
+      total_price += item.spot.price * item.discount_value(item.spot.website.id)
+    end
+
+    on_house_amount = 0
+    items.where(is_on_house: true).each do |item|
+      on_house_amount += item.spot.price
+    end
+    (on_house_amount / total_price).round(1)
+  end
 end

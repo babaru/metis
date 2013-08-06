@@ -47,7 +47,16 @@ html {
   line-height: 30px;
 }
 
-.total-price, .currency {
+.well {
+  color: #999;
+}
+
+.well h4 {
   font-size: 16px;
   font-weight: bold;
+  line-height: 24px;
+  margin: 5px 0px;
+  color: #333;
 }
+
+

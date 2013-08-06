@@ -50,9 +50,10 @@ class MasterPlansController < ApplicationController
     @master_plan = MasterPlan.find params[:id]
     spot_ids = params[:spot_id]
     counts = params[:day_count]
+    is_on_houses = params[:is_on_house]
     if spot_ids && spot_ids.length > 0
       spot_ids.each_with_index do |item, index|
-        @master_plan.items << MasterPlanItem.new(spot_id: item, count: counts[index].to_f)
+        @master_plan.items << MasterPlanItem.new(spot_id: item, count: counts[index].to_f, is_on_house: is_on_houses[index])
       end
     end
     @master_plan.save!
