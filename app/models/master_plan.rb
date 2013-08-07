@@ -24,14 +24,14 @@ class MasterPlan < ActiveRecord::Base
     contract_price - cost
   end
 
-  def on_house_rate
+  def on_house_rate(website_id)
     total_price = 0
-    items.where(is_on_house: false).each do |item|
+    items.joins('left join spots on spot_id=spots.id').where("is_on_house=0 and spots.website_id=#{website_id}").each do |item|
       total_price += item.spot.price * item.count * item.master_plan.project.client.our_discount_value(item.spot.website_id)
     end
 
     on_house_amount = 0
-    items.where(is_on_house: true).each do |item|
+    items.joins('left join spots on spot_id=spots.id').where("is_on_house=1 and spots.website_id=#{website_id}").each do |item|
       on_house_amount += item.spot.price * item.count
     end
     (on_house_amount.to_f / total_price.to_f).to_f.round(2)

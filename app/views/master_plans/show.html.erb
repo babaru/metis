@@ -28,7 +28,7 @@ end %>
           <div class="cell3">总合同额（元）：<h4><%= number_to_currency(@master_plan.contract_price, unit: '', precision: 0) %></h4></div>
           <div class="cell3">预估利润（元）：<h4><%= number_to_currency(@master_plan.profit, unit: '', precision: 0) %></h4></div>
           <div class="cell3"></div>
-          <div class="cell3">配送比率：<h4><%= @master_plan.on_house_rate %> / <%= @master_plan.project.client.on_house_rate(@selected_website_id) %></h4></div>
+          <div class="cell3">配送比率：<h4><%= @master_plan.on_house_rate(@selected_website_id) %> / <%= @master_plan.project.client.on_house_rate(@selected_website_id) %></h4></div>
         </div>
       </div>
     </div>
