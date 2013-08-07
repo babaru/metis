@@ -16,7 +16,21 @@ class Client < ActiveRecord::Base
     user.id == created_by_id
   end
 
-  def discount_value(website_id, options)
-    return discounts.where(website_id: website_id).first.discount_value(options)
+  def website_discount_value(website_id, options={})
+    client_discount = discounts.where(website_id: website_id).first
+    return client_discount.website_discount_value(options) if client_discount
+    0
+  end
+
+  def our_discount_value(website_id, options = {})
+    client_discount = discounts.where(website_id: website_id).first
+    return client_discount.our_discount_value(options) if client_discount
+    0
+  end
+
+  def on_house_rate(website_id)
+    client_discount = discounts.where(website_id: website_id).first
+    return client_discount.on_house_rate if client_discount
+    0
   end
 end

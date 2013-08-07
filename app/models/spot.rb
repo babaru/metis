@@ -1,3 +1,4 @@
+#encoding: utf-8
 class Spot < ActiveRecord::Base
   belongs_to :website
   belongs_to :channel
@@ -22,6 +23,19 @@ class Spot < ActiveRecord::Base
       Spot.create!(params)
     else
       spot.update_attributes!(params)
+    end
+  end
+
+  def count_unit
+    case unit_type
+    when 'day'
+      return '天'
+    when 'cpm'
+      return 'CPM'
+    when 'cpc'
+      return 'CPC'
+    else
+      return '天'
     end
   end
 end

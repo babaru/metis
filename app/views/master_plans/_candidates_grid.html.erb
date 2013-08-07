@@ -1,0 +1,31 @@
+<%= grid(spots, :show_filters => :always) do |g|
+  g.column html: {style: "width:1px;"} do |spot|
+    hidden_field_tag "spot_id[]", spot.id
+  end
+
+  g.column name: t('activerecord.attributes.spot.spot_category') do |spot|
+    spot.spot_category.name
+  end
+
+  g.column name: t('activerecord.attributes.spot.name') do |spot|
+    content_tag :strong, spot.name
+  end
+
+  g.column name: t('activerecord.attributes.spot.price'), html: {style: 'text-align: right; width: 120px;'} do |spot|
+    "#{content_tag(:strong, number_to_currency(spot.price, format: "%n", precision: 0))} #{spot.unit}".html_safe
+  end
+
+  g.column name: t('activerecord.attributes.spot.remark') do |spot|
+    spot.remark
+  end
+
+  g.column name: '数量' do |spot|
+    [text_field_tag('count[]', nil, class: 'spot-day-count-text-field'), spot.count_unit].join(' ').html_safe
+  end
+
+  g.column name: '配送？' do |spot|
+    check_box_tag 'is_on_house[]', spot.id
+  end
+end -%>
+
+

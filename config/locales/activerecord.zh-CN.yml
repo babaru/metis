@@ -11,6 +11,7 @@ zh-CN:
       spot_category: 刊例分类
       role: 身份
       master_plan: Master Plan
+      client_discount: 客户媒体政策
     attributes:
       user:
         name: 用户名
@@ -20,6 +21,7 @@ zh-CN:
         roles: 用户身份
       client:
         name: 名称
+        discounts: 媒体政策 / 客户政策
       project:
         name: 名称
         budget: 预算
@@ -29,6 +31,9 @@ zh-CN:
       master_plan:
         name: 名称
         updated_at: 最后修改时间
+      master_plan_item:
+        count: 数量
+        is_on_house: 是否配送
       website:
         name: 名称
         url: 地址

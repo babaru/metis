@@ -10,6 +10,11 @@
     options: {class: 'button button-primary'}
   } if can? :manage, Client
   toolbar << {
+    name: render_icon_and_text_content('icon-male', '管理媒体政策'),
+    url: manage_client_discounts_path(@client),
+    options: {class: 'button button-primary'}
+  } if can? :manage, Client
+  toolbar << {
     name: "#{t('labels.back_to')}#{t('model.list', :model => Client.model_name.human)}",
     url: clients_path,
     options: {class: 'button'}

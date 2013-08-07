@@ -1,4 +1,4 @@
-<%= render_page_title "<strong>#{@client.name}</strong> 折扣设置" do |toolbar|
+<%= render_page_title "<strong>#{@client.name}</strong> 客户媒体政策管理" do |toolbar|
   toolbar << {
     name: "#{t('labels.back_to')} #{@client.name}",
     url: client_path(@client),
@@ -6,13 +6,29 @@
   }
 end %>
 
-<%= simple_form_for(:client_discounts, url: manage_client_discounts_path(@client), :html => {:class => 'form-horizontal' }) do |f| %>
+<%= simple_form_for(:client_discounts, url: manage_client_discounts_path(@client), :html => {:class => 'form-horizontal no-border' }) do |f| %>
   <%= f.error_notification %>
 
   <div class="form-inputs">
-    <% Website.all.each do |website| %>
-    <%= f.input website.id.to_s.to_sym, label: website.name, input_html: {value: @client.discount_value(website.id)} %>
-    <% end %>
+
+    <table class="table-striped table-bordered table">
+      <tr>
+        <th style="width:auto;">网站名称</th>
+        <th></th>
+        <th>媒体政策</th>
+        <th>客户政策</th>
+        <th>配送比例(诸如: 2.0)</th>
+      </tr>
+      <% Website.all.each do |website| %>
+      <tr>
+        <td><%= website.name %></td>
+        <td><%= hidden_field_tag 'website_ids[]', website.id %></td>
+        <td style="align: center;"><%= text_field_tag 'website_discounts[]', @client.website_discount_value(website.id), style: "width: 2em;" %> 折</td>
+        <td style="align: center;"><%= text_field_tag 'our_discounts[]', @client.our_discount_value(website.id), style: "width: 2em;" %> 折</td>
+        <td style="align: center;"><%= text_field_tag 'on_house_rates[]', @client.on_house_rate(website.id), style: "width: 2em; " %></td>
+      </tr>
+      <% end %>
+    </table>
   </div>
 
   <div class="form-actions">

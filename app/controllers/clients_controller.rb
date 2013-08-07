@@ -35,17 +35,23 @@ class ClientsController < ApplicationController
     @client = Client.find(params[:id])
 
     if request.post?
-      Website.all.each do |website|
-        discount = 1
-        if params[:client_discounts] && params[:client_discounts][website.id.to_s.to_sym]
-          discount = params[:client_discounts][website.id.to_s.to_sym].to_f / 10
-        end
-        d = @client.discounts.where(website_id: website.id).first
-        if d
-          d.discount = discount
-          d.save!
+      params[:website_ids].each_with_index do |website_id, index|
+        website_discount = 1
+        our_discount = 1
+        on_house_rate = 0
+
+        website_discount = params[:website_discounts][index].to_f / 10
+        our_discount = params[:our_discounts][index].to_f / 10
+        on_house_rate = params[:on_house_rates][index]
+
+        client_discount = @client.discounts.where(website_id: website_id).first
+        if client_discount
+          client_discount.website_discount = website_discount
+          client_discount.our_discount = our_discount
+          client_discount.on_house_rate = on_house_rate
+          client_discount.save!
         else
-          @client.discounts << ClientDiscount.new(client_id: @client.id, website_id: website.id, discount: discount)
+          @client.discounts << ClientDiscount.new(client_id: @client.id, website_id: website_id, website_discount: website_discount, our_discount: our_discount, on_house_rate: on_house_rate)
         end
       end
       @client.save!

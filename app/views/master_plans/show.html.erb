@@ -13,25 +13,42 @@ end %>
     <%= link_to '挑选点位', choose_spots_path(@master_plan) %>
   </li>
   <li class="active">
-    <%= link_to render_icon_and_text_content('icon-shopping-cart', "查看已选点位 <span class=\"badge badge-inverse\">#{@master_plan.items.count}</span>".html_safe), master_plan_path(@master_plan) %>
+    <%= link_to render_icon_and_text_content('icon-shopping-cart', "查看已选点位 <span class=\"badge badge-success\">#{@master_plan.items.count}</span>".html_safe), master_plan_path(@master_plan) %>
   </li>
 </ul>
 
+<% if @candidate_websites %>
+
 <article>
   <div class="padding">
+
     <div class="well">
       <div class="grid">
         <div class="grid-row">
-          <div class="cell3">总合同额（元）：<h4><%= number_to_currency(@total_price, unit: '', precision: 0) %></h4></div>
+          <div class="cell3">总合同额（元）：<h4><%= number_to_currency(@master_plan.contract_price, unit: '', precision: 0) %></h4></div>
+          <div class="cell3">预估利润（元）：<h4><%= number_to_currency(@master_plan.profit, unit: '', precision: 0) %></h4></div>
           <div class="cell3"></div>
-          <div class="cell3"></div>
-          <div class="cell3">配送比率：<h4><%= @master_plan.on_house_ratio %></h4></div>
+          <div class="cell3">配送比率：<h4><%= @master_plan.on_house_rate %> / <%= @master_plan.project.client.on_house_rate(@selected_website_id) %></h4></div>
         </div>
       </div>
     </div>
+
+    <ul class="nav nav-tabs">
+      <% @candidate_websites.each do |website| %>
+      <% if website.id == @selected_website_id.to_i %>
+      <li class="active">
+      <% else %>
+      <li>
+      <% end %>
+        <%= link_to website.name, master_plan_path(website_id: website.id) %>
+      </li>
+      <% end %>
+    </ul>
   </div>
 </article>
 
 <%= render partial: 'master_plan_items/master_plan_items_grid', locals: {master_plan_items: @master_plan_items_grid} %>
+
+<% end %>
 
 </div>

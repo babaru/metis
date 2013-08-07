@@ -8,21 +8,26 @@
     @include border-radius(50px);
     width: 100px; height: 100px;
     margin: auto; clear: both;
-    @include box-shadow(rgba(0, 0, 0, 0.3) 0px -15px 35px inset);
-    color: #666;
+    @include box-shadow(rgba(0, 0, 0, 0.5) 0px 0px 3px inset);
 
     &:hover {
-      @include box-shadow(rgba(0, 0, 0, 0.3) 0px -5px 15px inset);
+      // @include box-shadow(rgba(0, 0, 0, 0.3) 0px -5px 15px inset);
       text-decoration: none !important;
     }
 
     > span {
       position: relative; top: 110px;
       display: block;
-      width: 100px; height: 25px;
+      min-width: 50px; height: 25px;
+      margin: auto; clear: both;
       text-align: center;
       font-size: 16px;
+      line-height: 25px;
       font-weight: bold;
+      color: #999;
+
+      &:hover {
+      }
     }
   }
 

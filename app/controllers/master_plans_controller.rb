@@ -14,8 +14,10 @@ class MasterPlansController < ApplicationController
   # GET /master_plans/1.json
   def show
     @master_plan = MasterPlan.find(params[:id])
-    @master_plan_items_grid = initialize_grid(MasterPlanItem.where(master_plan_id: @master_plan.id).order('created_at'))
-    @total_price = @master_plan.calculate_total_price
+    @candidate_websites = Website.find_by_sql("select * from websites where id in (select distinct website_id from master_plan_items left join spots on master_plan_items.spot_id = spots.id where master_plan_items.master_plan_id=#{@master_plan.id})")
+    @selected_website_id = @candidate_websites.first.id if @candidate_websites.count > 0
+    @selected_website_id = params[:website_id] if params[:website_id]
+    @master_plan_items_grid = initialize_grid(MasterPlanItem.joins('left join spots on spot_id = spots.id').where("master_plan_id=#{@master_plan.id} and spots.website_id=#{@selected_website_id}").order('created_at'))
 
     respond_to do |format|
       format.html
@@ -37,12 +39,19 @@ class MasterPlansController < ApplicationController
 
   def candidates
     @master_plan = MasterPlan.find params[:id]
-    spot_ids = [0]
-    spot_ids = params[:candidates_grid][:selected] if params[:candidates_grid] && params[:candidates_grid][:selected]
-    @spots_grid = initialize_grid(Spot.where("id in (#{spot_ids.join(',')})"))
+    if request.post?
+      counts = params[:count]
+      spot_ids = params[:spot_id]
+      is_on_houses = params[:is_on_house]
+      counts.each_with_index do |item, index|
+        next if item.nil? || item.strip == ''
+        @master_plan.items << MasterPlanItem.new(spot_id: spot_ids[index], count: item, is_on_house: is_on_houses.include?(spot_ids[index]))
+      end
+      @master_plan.save!
 
-    respond_to do |format|
-      format.js
+      respond_to do |format|
+        format.html {redirect_to master_plan_path(@master_plan), notice: 'Master plan was successfully saved.'}
+      end
     end
   end
 

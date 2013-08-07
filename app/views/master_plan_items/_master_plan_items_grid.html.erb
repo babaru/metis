@@ -1,4 +1,8 @@
 <%= grid(master_plan_items, :show_filters => :always) do |g|
+  g.column do |master_plan_item|
+    content_tag(:span, render_icon_and_text_content('icon-truck', '配送'), class: 'label label-success label-big') if master_plan_item.is_on_house
+  end
+
   g.column name: t('activerecord.attributes.spot.website') do |master_plan_item|
     master_plan_item.spot.website.name
   end
@@ -19,16 +23,13 @@
     "<strong>#{master_plan_item.spot.price}</strong> #{master_plan_item.spot.unit}".html_safe
   end
 
-  g.column name: t('activerecord.attributes.spot.discount') do |master_plan_item|
-    "#{master_plan_item.discount_value(master_plan_item.spot.website_id, {percent: true})}%"
+  g.column name: t('activerecord.attributes.client.discounts') do |master_plan_item|
+    [content_tag(:span, "#{master_plan_item.master_plan.project.client.website_discount_value(master_plan_item.spot.website_id, {view: true})} 折", class: 'label label-success'),
+      content_tag(:span, "#{master_plan_item.master_plan.project.client.our_discount_value(master_plan_item.spot.website_id, {view: true})} 折", class: 'label label-warning')].join(' ').html_safe
   end
 
   g.column name: t('activerecord.attributes.master_plan_item.count') do |master_plan_item|
     "<strong>#{master_plan_item.count}</strong> #{t('activerecord.spot.unit_type.day')}".html_safe
-  end
-
-  g.column name: t('activerecord.attributes.master_plan_item.is_on_house') do |master_plan_item|
-    content_tag(:span, render_icon_and_text_content('icon-truck', '配送'), class: 'label label-success label-big') if master_plan_item.is_on_house
   end
 
   g.column :html => {class: 'buttons'} do |master_plan_item|
