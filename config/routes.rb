@@ -19,6 +19,8 @@ Metis::Application.routes.draw do
   post 'master_plans/:id/save_candidates' => 'master_plans#save_candidates', as: :save_candidates
   get 'master_plans/:id/choose_spots' => 'master_plans#choose_spots', as: :choose_spots
 
+  post 'master_plan_items/:id/modify' => 'master_plan_items#modify', as: :modify_master_plan_item
+
   resources :websites, :channels, :spots, :channel_groups, :spot_categories, :master_plans, :master_plan_items
 
   resources :websites do

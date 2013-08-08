@@ -1,4 +1,6 @@
 class MasterPlanItemsController < ApplicationController
+  include ActionView::Helpers::NumberHelper
+
   # GET /master_plan_items
   # GET /master_plan_items.json
   def index
@@ -29,6 +31,25 @@ class MasterPlanItemsController < ApplicationController
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @master_plan_item }
+    end
+  end
+
+  def modify
+    if request.post?
+      @master_plan_item = MasterPlanItem.find params["id"]
+      if @master_plan_item
+        @master_plan_item.send "#{params['name']}=", params["value"]
+        @master_plan_item.save!
+      end
+
+      respond_to do |format|
+        format.json { render json: {
+          contract_price: number_to_currency(@master_plan_item.master_plan.contract_price, unit: '', precision: 0),
+          profit: number_to_currency(@master_plan_item.master_plan.profit, unit: '', precision: 0),
+          run_time_on_house_rate: @master_plan_item.master_plan.on_house_rate(params[:selected_website_id]),
+          is_on_house: @master_plan_item.is_on_house
+        }}
+      end
     end
   end
 

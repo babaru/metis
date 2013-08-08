@@ -22,15 +22,8 @@ end %>
 <article>
   <div class="padding">
 
-    <div class="well">
-      <div class="grid">
-        <div class="grid-row">
-          <div class="cell3">总合同额（元）：<h4><%= number_to_currency(@master_plan.contract_price, unit: '', precision: 0) %></h4></div>
-          <div class="cell3">预估利润（元）：<h4><%= number_to_currency(@master_plan.profit, unit: '', precision: 0) %></h4></div>
-          <div class="cell3"></div>
-          <div class="cell3">配送比率：<h4><%= @master_plan.on_house_rate(@selected_website_id) %> / <%= @master_plan.project.client.on_house_rate(@selected_website_id) %></h4></div>
-        </div>
-      </div>
+    <div class="well master-plan-summary">
+      <%= render partial: 'master_plan_summary', locals: {contract_price: @master_plan.contract_price, profit: @master_plan.profit, run_time_on_house_rate: @master_plan.on_house_rate(@selected_website_id), standard_on_house_rate: @master_plan.project.client.on_house_rate(@selected_website_id)} %>
     </div>
 
     <ul class="nav nav-tabs">
@@ -47,7 +40,7 @@ end %>
   </div>
 </article>
 
-<%= render partial: 'master_plan_items/master_plan_items_grid', locals: {master_plan_items: @master_plan_items_grid} %>
+<%= render partial: 'master_plan_items/master_plan_items_grid', locals: {master_plan_items: @master_plan_items_grid, selected_website_id: @selected_website_id} %>
 
 <% end %>
 

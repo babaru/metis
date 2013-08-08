@@ -1,7 +1,4 @@
 <%= grid(master_plan_items, :show_filters => :always) do |g|
-  g.column do |master_plan_item|
-    content_tag(:span, render_icon_and_text_content('icon-truck', '配送'), class: 'label label-success label-big') if master_plan_item.is_on_house
-  end
 
   g.column name: t('activerecord.attributes.spot.website') do |master_plan_item|
     master_plan_item.spot.website.name
@@ -24,15 +21,74 @@
   end
 
   g.column name: t('activerecord.attributes.client.discounts') do |master_plan_item|
-    [content_tag(:span, "#{master_plan_item.master_plan.project.client.website_discount_value(master_plan_item.spot.website_id, {view: true})} 折", class: 'label label-success'),
-      content_tag(:span, "#{master_plan_item.master_plan.project.client.our_discount_value(master_plan_item.spot.website_id, {view: true})} 折", class: 'label label-warning')].join(' ').html_safe
+    content_tag(:div, [content_tag(:span, "#{master_plan_item.master_plan.project.client.website_discount_value(master_plan_item.spot.website_id, {view: true})} 折", class: 'label'),
+      content_tag(:span, "#{master_plan_item.master_plan.project.client.our_discount_value(master_plan_item.spot.website_id, {view: true})} 折", class: 'label label-important')].join(' ').html_safe, class: 'discounts', :style => master_plan_item.is_on_house ? 'display: none;' : '')
   end
 
   g.column name: t('activerecord.attributes.master_plan_item.count') do |master_plan_item|
-    "<strong>#{master_plan_item.count}</strong> #{t('activerecord.spot.unit_type.day')}".html_safe
+    [link_to(content_tag(:strong, master_plan_item.count), '#', class: 'master_plan_item_count', 'data-type' => 'text', 'data-pk' => master_plan_item.id, 'data-name' => "count", 'data-url' => "/master_plan_items/#{master_plan_item.id}/modify", 'data-original-title' => '输入数量', 'data-params' => "{'selected_website_id': #{selected_website_id}}", 'data-skip-pjax' => true), content_tag(:span, t('activerecord.spot.unit_type.day'))].join(' ').html_safe
+  end
+
+  g.column do |master_plan_item|
+    master_plan_item.is_on_house ? link_to(render_icon_and_text_content('icon-truck', '配送'), '#', 'data-id' => master_plan_item.id, 'data-value' => false, 'data-website-id' => selected_website_id, class: 'master_plan_item_is_on_house button button-success', 'data-skip-pjax' => true) : link_to(render_icon_and_text_content('icon-truck', '配送'), '#', 'data-id' => master_plan_item.id, 'data-website-id' => selected_website_id, class: 'master_plan_item_is_on_house button', 'data-value' => true, 'data-skip-pjax' => true)
   end
 
   g.column :html => {class: 'buttons'} do |master_plan_item|
-    link_to(render_icon_content('icon-remove'), master_plan_item_path(master_plan_item), :method => :delete, :confirm => t("confirms.delete"), :class => 'button button-danger', :rel => 'tooltip', :title => t('buttons.delete'), "data-skip-pjax" => true)
+    link_to(render_icon_content('icon-remove'), master_plan_item_path(master_plan_item), :method => :delete, :confirm => t("confirms.delete"), :class => 'button icon button-danger', :rel => 'tooltip', :title => t('buttons.delete'), "data-skip-pjax" => true)
   end
 end -%>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $('.master_plan_item_count').editable({
+    success: function(data) {
+      update_summary(data);
+    }
+  });
+
+  $('.master_plan_item_is_on_house').click(function() {
+    var item_id = $(this).data('id');
+    var website_id = $(this).data('website-id');
+    var val = $(this).data('value');
+    var button = $(this);
+    $.ajax({
+      url: '/master_plan_items/' + item_id + '/modify?selected_website_id=' + website_id,
+      type: 'POST',
+      data: {
+        name: 'is_on_house',
+        value: val
+      },
+      success: function(data) {
+        update_summary(data);
+        var is_on_house = false;
+        if(data["is_on_house"] == true) is_on_house = true;
+        switch_button(is_on_house, button);
+        update_grid(is_on_house, button);
+      },
+    });
+  })
+});
+
+function update_summary(data) {
+  $('.master-plan-summary .contract_price').text(data["contract_price"]);
+  $('.master-plan-summary .profit').text(data["profit"]);
+  $('.master-plan-summary .run_time_on_house_rate').text(data["run_time_on_house_rate"]);
+}
+
+function switch_button(is_on_house, button) {
+  if (is_on_house) {
+    button.data('value', false).addClass('button-success');
+  } else {
+    button.data('value', true).removeClass('button-success');
+  }
+}
+
+function update_grid(is_on_house, button) {
+  if (is_on_house) {
+    button.parent().parent().find('.discounts').hide();
+  } else {
+    button.parent().parent().find('.discounts').show();
+  }
+}
+
+</script>
