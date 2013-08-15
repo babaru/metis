@@ -1,0 +1,52 @@
+#spot-plan-table {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: moz-none;
+  -ms-user-select: none;
+  user-select: none;
+
+  .master-plan-item-row {
+    td {
+      padding: 0px; margin: 0px;
+      text-align: center;
+    }
+
+    .spot-plan-item {
+      cursor: pointer;
+      border-left: 1px solid #ccc;
+      border-bottom: 1px solid #ccc;
+    }
+  }
+
+  .spot-plan-month-calendar-row {
+    height: 30px;
+    .title {
+      background: #179ac8;
+      text-align: right;
+      padding: 0px 10px;
+      font: {
+        size: 21px;
+        weight: bold;
+      }
+      color: white;
+    }
+
+    td {
+      padding: 0px; margin: 0px;
+      text-align: center;
+      width: 25px;
+      line-height: 30px;
+      color: #ccc;
+      border-left: 1px solid #ddd;
+
+      &.calendar-item {
+        font: {
+          weight: bold;
+        }
+        background: #eee;
+        color: #333;
+      }
+    }
+  }
+}

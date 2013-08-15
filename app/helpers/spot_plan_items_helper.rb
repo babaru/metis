@@ -1,0 +1,2 @@
+module SpotPlanItemsHelper
+end

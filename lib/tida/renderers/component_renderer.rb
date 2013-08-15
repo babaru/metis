@@ -23,9 +23,9 @@ module Tida
         render_component data
       end
 
-      def render_modal_window(name, title, inner_partial)
-        data = {name: name, title: title, inner_partial: inner_partial, partial: 'shared/components/modal'}
-        render_component data
+      def render_modal_window(options = {})
+        options = options.merge({partial: 'shared/components/modal'})
+        render_component options
       end
 
       def render_icon_and_text_content(icon_name, text)

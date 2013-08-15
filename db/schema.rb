@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130807084759) do
+ActiveRecord::Schema.define(:version => 20130808092032) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -172,6 +172,19 @@ ActiveRecord::Schema.define(:version => 20130807084759) do
 
   add_index "spot_contracts_spots", ["spot_contract_id"], :name => "index_spot_contracts_spots_on_spot_contract_id"
   add_index "spot_contracts_spots", ["spot_id"], :name => "index_spot_contracts_spots_on_spot_id"
+
+  create_table "spot_plan_items", :force => true do |t|
+    t.integer  "master_plan_item_id"
+    t.datetime "placed_at"
+    t.integer  "count"
+    t.boolean  "is_enabled"
+    t.integer  "created_by_id"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+  end
+
+  add_index "spot_plan_items", ["created_by_id"], :name => "index_spot_plan_items_on_created_by_id"
+  add_index "spot_plan_items", ["master_plan_item_id"], :name => "index_spot_plan_items_on_master_plan_item_id"
 
   create_table "spots", :force => true do |t|
     t.integer  "website_id"

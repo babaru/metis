@@ -6,6 +6,9 @@
 //= require wice_grid
 //= require blue
 //= require icon_grid
+//= require bootstrap-contextmenu
+//= require backbone-rails
+//= require context
 
 $(function() {
   $('[data-pjax-container]').pjax('a:not([data-remote]):not([data-behavior]):not([data-skip-pjax])');

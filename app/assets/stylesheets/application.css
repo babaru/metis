@@ -4,6 +4,7 @@
  *= require tida_template
  *= require icon_grid
  *= require filter
+ *= require spot_plan
  */
 
 html {
@@ -38,16 +39,13 @@ html {
   width: 2em;
 }
 
-.well {
-  padding: 9px;
-  margin-bottom: 10px;
-}
-
 .cell3 {
   line-height: 30px;
 }
 
 .well {
+  padding: 9px;
+  margin-bottom: 10px;
   color: #999;
 }
 
@@ -61,4 +59,43 @@ html {
 
 td input {
   margin-bottom: 0px !important;
+}
+
+.spot_plan_item_day_button {
+  padding: 0px !important; margin: 0px !important;
+  width:25px;
+}
+
+.spot-button {
+  display: block;
+  width: 25px;
+  cursor: pointer;
+  border-left: 1px solid #ccc;
+  line-height: 30px;
+  height: 30px;
+  text-align: center;
+  padding: 0px; margin: 0px;
+}
+
+.spot-calendar-item {
+  display: block;
+  text-align: center;
+  border-left: 1px solid white;
+  height: 35px;
+  line-height: 35px;
+  font-weight: bold;
+}
+
+.spot-calendar-title {
+  font-size: 18px;
+  line-height: 35px;
+  font-weight: bold;
+}
+
+.spot-button.selected {
+  background: #ccc;
+}
+
+.red {
+  color: red;
 }

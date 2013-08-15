@@ -25,8 +25,8 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
-# gem 'tida_template', path: '/Users/apple/Projects/tida/src/tida_template'
-gem 'tida_template', '>= 0.2.1'
+gem 'tida_template', path: '/Users/apple/Projects/tida/src/tida_template'
+# gem 'tida_template', '>= 0.2.1'
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
@@ -45,6 +45,7 @@ gem 'spreadsheet'
 gem 'remotipart'
 gem 'pdfkit'
 gem 'cancan'
+gem 'backbone-rails'
 
 # To use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.0.0'

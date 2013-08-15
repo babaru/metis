@@ -73,6 +73,14 @@ class MasterPlansController < ApplicationController
     end
   end
 
+  def spot_plan_items
+    @master_plan = MasterPlan.find params[:id]
+    @candidate_websites = Website.find_by_sql("select * from websites where id in (select distinct website_id from master_plan_items left join spots on master_plan_items.spot_id = spots.id where master_plan_items.master_plan_id=#{@master_plan.id})")
+    @selected_website_id = @candidate_websites.first.id if @candidate_websites.count > 0
+    @selected_website_id = params[:website_id] if params[:website_id]
+    # @spot_plan_items_grid = initialize_grid(MasterPlanItem.where(master_plan_id: @master_plan.id).order('is_on_house, created_at'))
+  end
+
   # GET /master_plans/new
   # GET /master_plans/new.json
   def new

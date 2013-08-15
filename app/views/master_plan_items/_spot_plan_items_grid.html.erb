@@ -1,0 +1,46 @@
+<table id="spot-plan-table" class="table table-ordered table-striped">
+  <tr>
+    <th>网站</th>
+    <th>频道</th>
+    <th>位置</th>
+    <th>数量</th>
+    <th>已选</th>
+    <th colspan="31"></th>
+  </tr>
+  <tr class="spot-plan-month-calendar-row">
+    <td colspan="5" class="title">6月</td>
+    <% 1.upto(31) do |n| %>
+    <% if n > Time.days_in_month(6, 2013) %>
+    <td>&nbsp;</td>
+    <% else %>
+    <% if @days['201306'][n - 1] > 0 %>
+    <%= content_tag(:td, n, class: 'calendar-item') %>
+    <% else %>
+    <%= content_tag :td, n %>
+    <% end %>
+    <% end %>
+    <% end %>
+  </tr>
+  <% @master_plan_items.each do |master_plan_item| %>
+  <tr class="master-plan-item-row" id="master_plan_item_<%= master_plan_item.id %>">
+    <td class="website_name"></td>
+    <td class="channel_name"></td>
+    <td class="spot_name"></td>
+    <td class="ideal_count"></td>
+    <td class="reality_count"></td>
+    <% 1.upto(31) do |n| %>
+    <% if @days['201306'].length > n && @days['201306'][n - 1] > 0 %>
+    <%= content_tag :td, '', id: "spot_plan_cell_201306#{sprintf '%02d', n}" %>
+    <% else %>
+    <td class="disabled"></td>
+    <% end %>
+    <% end %>
+  </tr>
+  <% end %>
+
+</table>
+
+
+<% content_for :anything_else do %>
+<%= render_modal_window name: "spot-plan-item-modify-count-modal", title: "调整投放数量", modal_content: 'spot_plan_item_modify_count_form' %>
+<% end %>

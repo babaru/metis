@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  master_plan_item: 
+  place_at: 2013-08-08 17:20:32
+  count: 1
+  is_enabled: false
+  created_by: 
+
+two:
+  master_plan_item: 
+  place_at: 2013-08-08 17:20:32
+  count: 1
+  is_enabled: false
+  created_by: 

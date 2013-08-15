@@ -4,11 +4,19 @@ class MasterPlanItemsController < ApplicationController
   # GET /master_plan_items
   # GET /master_plan_items.json
   def index
-    @master_plan_items_grid = initialize_grid(MasterPlanItem)
+    @master_plan = MasterPlan.find params[:master_plan_id]
+    @master_plan_items = MasterPlanItem.where(master_plan_id: params[:master_plan_id]).order('is_on_house, created_at')
+
+    @candidate_websites = Website.find_by_sql("select * from websites where id in (select distinct website_id from master_plan_items left join spots on master_plan_items.spot_id = spots.id where master_plan_items.master_plan_id=#{@master_plan.id})")
+    @selected_website_id = @candidate_websites.first.id if @candidate_websites.count > 0
+    @selected_website_id = params[:website_id] if params[:website_id]
+
+    @months = @master_plan.project.months
+    @days = @master_plan.project.days
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @master_plan_items_grid }
+      format.json { render json: @master_plan_items }
     end
   end
 

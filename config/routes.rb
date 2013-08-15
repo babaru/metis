@@ -14,14 +14,17 @@ Metis::Application.routes.draw do
   match 'websites/:id/data_type/:data_type/search' => 'websites#search', as: :website_data_search
   match 'projects/:id/assign' => 'projects#assign', as: :assign_project
 
-  get 'websites/:website_id/channel_groups' => 'channel_groups#index'
+  # get 'websites/:website_id/channel_groups' => 'channel_groups#index'
+  # get 'websites/:website_id/channels' => 'channels#index'
 
   post 'master_plans/:id/save_candidates' => 'master_plans#save_candidates', as: :save_candidates
   get 'master_plans/:id/choose_spots' => 'master_plans#choose_spots', as: :choose_spots
 
+  get 'spot_plan'=> 'master_plan_items#index', as: :spot_plan
+
   post 'master_plan_items/:id/modify' => 'master_plan_items#modify', as: :modify_master_plan_item
 
-  resources :websites, :channels, :spots, :channel_groups, :spot_categories, :master_plans, :master_plan_items
+  resources :websites, :channels, :spots, :channel_groups, :spot_categories, :master_plans, :master_plan_items, :spot_plan_items
 
   resources :websites do
     resources :channels, :channel_groups, :spots
@@ -45,6 +48,10 @@ Metis::Application.routes.draw do
 
   resources :master_plans do
     resources :master_plan_items
+  end
+
+  resources :master_plan_items do
+    resources :spot_plan_items
   end
 
   resources :upload_files

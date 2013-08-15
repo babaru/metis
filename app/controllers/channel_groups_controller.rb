@@ -28,6 +28,7 @@ class ChannelGroupsController < ApplicationController
     @channel_group = ChannelGroup.new
     @channel_group.website_id = params[:website_id]
     @website = Website.find params[:website_id]
+    @channels = @website.channels
 
     respond_to do |format|
       format.html # new.html.erb
@@ -38,6 +39,8 @@ class ChannelGroupsController < ApplicationController
   # GET /channel_groups/1/edit
   def edit
     @channel_group = ChannelGroup.find(params[:id])
+    @website = @channel_group.website
+    @channels = @website.channels
   end
 
   # POST /channel_groups
@@ -63,7 +66,7 @@ class ChannelGroupsController < ApplicationController
 
     respond_to do |format|
       if @channel_group.update_attributes(params[:channel_group])
-        format.html { redirect_to website_data_path(@channel_group.website_id, :channel_group), notice: 'Channel group was successfully updated.' }
+        format.html { redirect_to website_channel_groups_path(@channel_group.website_id), notice: 'Channel group was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
