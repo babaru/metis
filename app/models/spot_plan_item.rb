@@ -9,6 +9,7 @@ class SpotPlanItem < ActiveRecord::Base
     item['master_plan_item_reality_count'] = self.master_plan_item_reality_count
     item['date_token'] = self.placed_at.strftime('%Y%m%d')
     item['day_index'] = self.placed_at.strftime('%d')
+    item['placed_at'] = self.placed_at.strftime('%Y-%m-%d')
     item
   end
 end

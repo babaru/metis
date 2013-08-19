@@ -12,10 +12,25 @@
       text-align: center;
     }
 
-    .spot-plan-item {
-      cursor: pointer;
+    .spot-plan-item-cell, .disabled {
       border-left: 1px solid #ccc;
       border-bottom: 1px solid #ccc;
+    }
+
+    .spot-plan-item-cell {
+      cursor: pointer;
+
+      span {
+        display: block;
+        width: 25px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+      }
+    }
+
+    .disabled {
+      cursor: crosshair;
     }
   }
 

@@ -24,26 +24,39 @@ $(document).ready(function() {
             var master_plan_items = new MasterPlanItems(null, {url: '/master_plan_items.json?master_plan_id=' + master_plan.get('id')});
             master_plan_items.fetch({
                 success: function() {
-                    // console.log(master_plan_items.length);
+
                     _.each(master_plan_items.models, function(model) {
                         var view = new MasterPlanItemView({model: model});
                         view.render();
-                        // _(31).times(function(n) {
-                            // view.$el.append(emptySpotPlanItemView(model, n + 1));
-                        // });
+
                         var spot_plan_items = new SpotPlanItems(null, {url: '/spot_plan_items.json?master_plan_item_id=' + model.get('id')});
-                        var previous_day_index = 0;
                         spot_plan_items.fetch({
                             success: function() {
                                 _.each(spot_plan_items.models, function(s_model) {
-                                    var current_day_index = parseInt(s_model.get('day_index')) + 5;
-                                    var s_view = new SpotPlanItemView({model: s_model});
-                                    s_view.render();
-                                    view.$el.find('td:nth-child(' + current_day_index + ')').html(s_view.el);
+                                    s_model.master_plan_item = model;
+                                    var spot_plan_item_view = new SpotPlanItemView({model: s_model});
+                                    spot_plan_item_view.render();
+                                    spot_plan_item_view.$el.click(function() {
+                                        s_model.save('count', s_model.get('count') + 1, {
+                                            success: function(m, r, opt) {
+                                                model.fetch();
+                                            }
+                                        });
+                                    });
+                                });
+
+                                $('#master-plan-item' + model.get('id') + ' .empty-spot-plan-item').unbind('click').click(function() {
+                                    var new_spot_plan_item = new SpotPlanItem({master_plan_item_id: model.get('id'), count: 1, placed_at: $(this).data('placed-at'), master_plan_item: model});
+                                    new_spot_plan_item.save(null, {
+                                        success: function() {
+                                            var spot_plan_item_view = new SpotPlanItemView({model: new_spot_plan_item});
+                                            spot_plan_item_view.render();
+                                            model.fetch();
+                                        }
+                                    });
                                 });
                             }
                         });
-                        $('#spot-plan-table').append(view.el);
                     });
                 }
             });
@@ -59,30 +72,38 @@ $(document).ready(function() {
     });
 
     MasterPlanItemView = Backbone.View.extend({
-        tagName: 'tr',
-        template: _.template('<td><%= website_name %></td><td><%= channel_name %></td><td><strong><%= spot_name %></strong></td><td><span><%= ideal_count %></span></td><td><span><%= reality_count %></span></td>'),
         initialize: function() {
-            // this.model.on('change', this.render, this);
-            // this.collection.each()
+            this.model.on('change', this.render, this);
         },
         render: function() {
-            // console.log("render master_plan_item");
-            $('#master_plan_item_' + this.model.get('id') + ' .website_name').text(this.model.get('website_name'));
-            $('#master_plan_item_' + this.model.get('id') + ' .channel_name').text(this.model.get('channel_name'));
-            $('#master_plan_item_' + this.model.get('id') + ' .spot_name').text(this.model.get('spot_name'));
-            $('#master_plan_item_' + this.model.get('id') + ' .ideal_count').text(this.model.get('ideal_count'));
-            $('#master_plan_item_' + this.model.get('id') + ' .reality_count').text(this.model.get('reality_count'));
+            console.log('rendering MasterPlanItemView');
+            console.log(this.model);
+            $('#master-plan-item' + this.model.get('id') + ' .website_name').text(this.model.get('website_name'));
+            $('#master-plan-item' + this.model.get('id') + ' .channel_name').text(this.model.get('channel_name'));
+            $('#master-plan-item' + this.model.get('id') + ' .spot_name').text(this.model.get('spot_name'));
+            $('#master-plan-item' + this.model.get('id') + ' .ideal_count').text(this.model.get('ideal_count'));
+            $('#master-plan-item' + this.model.get('id') + ' .reality_count').text(this.model.get('reality_count'));
             return this;
         }
     });
 
     SpotPlanItemView = Backbone.View.extend({
+        master_plan_item: null,
         tagName: 'span',
         template: _.template('<%= count %>'),
+        initialize: function() {
+            this.model.on('change', this.render, this);
+        },
         render: function() {
+            console.log('rendering SpotPlanItemView');
+            console.log(this.model);
             this.$el.text(this.template(this.model.attributes));
             this.$el.addClass('spot-plan-item');
             this.$el.attr('id', 'spot_plan_item_' + this.model.get('id'));
+
+            var cell = $('#master-plan-item' + this.model.get('master_plan_item_id') + ' .spot-plan-item-cell' + this.model.get('date_token'));
+            cell.html(this.el);
+
             var m = this.model;
             var v = this.$el;
             context.attach('#spot_plan_item_' + this.model.get('id'), [
@@ -97,49 +118,45 @@ $(document).ready(function() {
                 text: '清空',
                 action: function(e) {
                     e.preventDefault();
+                    var master_plan_item_id = m.get('master_plan_item_id');
+                    var placed_at = m.get('placed_at');
+                    var date_token = m.get('date_token');
                     m.destroy({
                         success: function(model, response) {
-                            v.replaceWith('<td class="spot-plan-item empty"></td>');
+                            var master_plan_item = new MasterPlanItem({id: master_plan_item_id});
+                            master_plan_item.fetch({
+                                success: function() {
+                                    var master_plan_item_view = new MasterPlanItemView({model: master_plan_item});
+                                    master_plan_item_view.render();
+                                    resetSpotPlanItemCell(master_plan_item, placed_at, date_token);
+                                }
+                            });
                         }
                     });
                 }
             }
             ])
             return this;
-        },
-
-        events: {
-            'click': 'add_count',
-            'contextmenu': 'open_contextmenu'
-        },
-
-        add_count: function() {
-            var self = this;
-            this.model.save('count', this.model.get('count') + 1, {
-                success: function(m, r, opt) {
-                    self.render();
-                }
-            });
         }
     })
-
 });
 
-function emptySpotPlanItemView(master_plan_item, month_day) {
-    return $('<td class="spot-plan-item empty"></td>').click(function() {
-        var self = this;
-        new_spot_plan_item = new SpotPlanItem({master_plan_item_id: master_plan_item.get('id'), count: 1, placed_at: '2013-9-' + month_day});
+function bindEmptySpotPlanItemCellEvent(model, placed_at, date_token) {
+    $('#master-plan-item' + model.get('id') + ' .spot-plan-item-cell' + date_token + ' .empty-spot-plan-item').unbind('click').click(function() {
+        var new_spot_plan_item = new SpotPlanItem({master_plan_item_id: model.get('id'), count: 1, placed_at: placed_at});
         new_spot_plan_item.save(null, {
             success: function() {
-                var s_view = new SpotPlanItemView({model: new_spot_plan_item});
-                s_view.render();
-                $(self).replaceWith(s_view.el);
-                master_plan_item.fetch({
-                    success: function() {
-                        // master_plan_item.view.render();
-                    }
-                });
+                var spot_plan_item_view = new SpotPlanItemView({model: new_spot_plan_item});
+                spot_plan_item_view.render();
+                model.fetch();
             }
         });
     });
+}
+
+function resetSpotPlanItemCell(model, placed_at, date_token) {
+    $('#master-plan-item' + model.get('id') + ' .spot-plan-item-cell' + date_token + ' span').remove();
+    $('#master-plan-item' + model.get('id') + ' .spot-plan-item-cell' + date_token).html('<span class="empty-spot-plan-item" data-placed-at="' + placed_at + '"></span>');
+
+    bindEmptySpotPlanItemCellEvent(model, placed_at, date_token);
 }
