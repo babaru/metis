@@ -1,8 +1,13 @@
 class MasterPlanItem < ActiveRecord::Base
-  belongs_to :spot
+  belongs_to :client
+  belongs_to :project
   belongs_to :master_plan
-  has_many :spot_plan_items
-  attr_accessible :count, :spot_id, :master_plan_id, :is_on_house
+  belongs_to :spot
+  belongs_to :website
+  belongs_to :channel
+  has_many :spot_plan_items, dependent: :destroy
+
+  attr_accessible :count, :spot_id, :master_plan_id, :is_on_house, :project_id, :client_id, :website_id, :channel_id
 
   def spot_plan_item_count(date)
     item = spot_plan_items.find_by_placed_at(Time.parse(date))

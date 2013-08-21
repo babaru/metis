@@ -44,7 +44,16 @@ class SpotPlanItemsController < ApplicationController
   def create
     @spot_plan_item = SpotPlanItem.where(master_plan_item_id: params[:spot_plan_item][:master_plan_item_id], placed_at: Time.parse(params[:spot_plan_item][:placed_at])).first
     if @spot_plan_item.nil?
-      @spot_plan_item = SpotPlanItem.new(params[:spot_plan_item])
+      @master_plan_item = MasterPlanItem.find params[:spot_plan_item][:master_plan_item_id]
+      @spot_plan_item = SpotPlanItem.new(params[:spot_plan_item].merge({
+        client_id: @master_plan_item.client_id,
+        project_id: @master_plan_item.project_id,
+        master_plan_id: @master_plan_item.master_plan_id,
+        spot_id: @master_plan_item.spot_id,
+        website_id: @master_plan_item.website_id,
+        channel_id: @master_plan_item.channel_id,
+        version: @master_plan_item.master_plan.version_count
+        }))
       @spot_plan_item.created_by_id = current_user.id
     end
 

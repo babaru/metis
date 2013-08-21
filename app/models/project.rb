@@ -1,9 +1,12 @@
 class Project < ActiveRecord::Base
   belongs_to :client
   belongs_to :created_by, class_name: 'User', foreign_key: :created_by_id
-  attr_accessible :ended_at, :name, :started_at, :created_by_id, :created_by, :client_id, :client, :budget, :budget_unit, :assigned_user_ids
-  has_many :project_assignments
+  has_many :project_assignments, dependent: :destroy
   has_many :assigned_users, through: :project_assignments
+  has_many :master_plans, dependent: :destroy
+
+  attr_accessible :ended_at, :name, :started_at, :created_by_id, :created_by, :client_id, :client, :budget, :budget_unit, :assigned_user_ids
+
 
   def assigned_to?(user)
     assigned_to_user = assigned_to

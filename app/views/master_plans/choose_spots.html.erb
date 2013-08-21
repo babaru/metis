@@ -1,6 +1,6 @@
 <div data-pjax-container>
 
-<%= render_page_title "<strong>#{@master_plan.project.client.name}</strong> #{@master_plan.project.name}: #{@master_plan.name}" do |toolbar|
+<%= render_page_title "<strong>#{@master_plan.client.name}</strong> #{@master_plan.project.name}: #{@master_plan.name}" do |toolbar|
   toolbar << {
     name: "#{t('labels.back_to')}#{@master_plan.project.name}#{t('model.show', :model => Project.model_name.human)}",
     url: project_path(@master_plan.project_id),
@@ -27,6 +27,23 @@ end %>
 
 <%= simple_form_for(:choose_spots, url: url_for(controller: params[:controller], action: :candidates, id: @master_plan), html: {class: 'no-padding no-border form-horizontal', id: 'candidates-list-form'}) do |f| %>
 
+<% if @spots_grid %>
+<article>
+  <div class="padding">
+    <div class="grid">
+      <div class="grid-row">
+        <div class="cell6">
+        </div>
+        <div class="cell6">
+          <%= f.submit '添加', class: 'button button-warning pull-right', wrapper: false %>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+<% end %>
+
 <%= render partial: 'candidates_grid', locals: {spots: @spots_grid} if @spots_grid %>
 
 <% if @spots_grid %>
@@ -35,10 +52,9 @@ end %>
     <div class="grid">
       <div class="grid-row">
         <div class="cell6">
-          客户报价折扣： <%= text_field_tag :client_discount %> (例如：3折就填写数字3) <%= f.submit '添加', class: 'button button-warning', wrapper: false %>
         </div>
         <div class="cell6">
-          <%= hidden_field_tag :selected_website_id, @spots_filter.selected_website.id %>
+          <%= f.submit '添加', class: 'button button-warning pull-right', wrapper: false %>
         </div>
       </div>
     </div>

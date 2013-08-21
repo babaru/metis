@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130808092032) do
+ActiveRecord::Schema.define(:version => 20130821153659) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -77,10 +77,18 @@ ActiveRecord::Schema.define(:version => 20130808092032) do
     t.datetime "created_at",                                                       :null => false
     t.datetime "updated_at",                                                       :null => false
     t.boolean  "is_on_house",                                   :default => false
+    t.integer  "client_id"
+    t.integer  "project_id"
+    t.integer  "website_id"
+    t.integer  "channel_id"
   end
 
+  add_index "master_plan_items", ["channel_id"], :name => "index_master_plan_items_on_channel_id"
+  add_index "master_plan_items", ["client_id"], :name => "index_master_plan_items_on_client_id"
   add_index "master_plan_items", ["master_plan_id"], :name => "index_master_plan_items_on_master_plan_id"
+  add_index "master_plan_items", ["project_id"], :name => "index_master_plan_items_on_project_id"
   add_index "master_plan_items", ["spot_id"], :name => "index_master_plan_items_on_spot_id"
+  add_index "master_plan_items", ["website_id"], :name => "index_master_plan_items_on_website_id"
 
   create_table "master_plans", :force => true do |t|
     t.integer  "project_id"
@@ -90,8 +98,10 @@ ActiveRecord::Schema.define(:version => 20130808092032) do
     t.string   "name"
     t.string   "type"
     t.decimal  "discount",      :precision => 2, :scale => 0
+    t.integer  "client_id"
   end
 
+  add_index "master_plans", ["client_id"], :name => "index_master_plans_on_client_id"
   add_index "master_plans", ["created_by_id"], :name => "index_master_plans_on_created_by_id"
   add_index "master_plans", ["project_id"], :name => "index_master_plans_on_project_id"
 
@@ -179,12 +189,24 @@ ActiveRecord::Schema.define(:version => 20130808092032) do
     t.integer  "count"
     t.boolean  "is_enabled"
     t.integer  "created_by_id"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+    t.integer  "version",                    :default => 0
+    t.integer  "previous_spot_plan_item_id"
+    t.integer  "client_id"
+    t.integer  "project_id"
+    t.integer  "spot_id"
+    t.integer  "master_plan_id"
+    t.integer  "website_id"
+    t.integer  "channel_id"
   end
 
-  add_index "spot_plan_items", ["created_by_id"], :name => "index_spot_plan_items_on_created_by_id"
-  add_index "spot_plan_items", ["master_plan_item_id"], :name => "index_spot_plan_items_on_master_plan_item_id"
+  add_index "spot_plan_items", ["channel_id"], :name => "index_spot_plan_items_on_channel_id"
+  add_index "spot_plan_items", ["client_id"], :name => "index_spot_plan_items_on_client_id"
+  add_index "spot_plan_items", ["master_plan_id"], :name => "index_spot_plan_items_on_master_plan_id"
+  add_index "spot_plan_items", ["project_id"], :name => "index_spot_plan_items_on_project_id"
+  add_index "spot_plan_items", ["spot_id"], :name => "index_spot_plan_items_on_spot_id"
+  add_index "spot_plan_items", ["website_id"], :name => "index_spot_plan_items_on_website_id"
 
   create_table "spots", :force => true do |t|
     t.integer  "website_id"

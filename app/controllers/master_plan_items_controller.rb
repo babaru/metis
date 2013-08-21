@@ -5,11 +5,10 @@ class MasterPlanItemsController < ApplicationController
   # GET /master_plan_items.json
   def index
     @master_plan = MasterPlan.find params[:master_plan_id]
-    @candidate_websites = Website.find_by_sql("select * from websites where id in (select distinct website_id from master_plan_items left join spots on master_plan_items.spot_id = spots.id where master_plan_items.master_plan_id=#{@master_plan.id})")
+    @candidate_websites = @master_plan.candidate_websites
     @selected_website_id = @candidate_websites.first.id if @candidate_websites.count > 0
     @selected_website_id = params[:website_id] if params[:website_id]
-
-    @master_plan_items = MasterPlanItem.joins('left outer join spots on master_plan_items.spot_id = spots.id').where('master_plan_items.master_plan_id=? and spots.website_id=?', params[:master_plan_id], @selected_website_id).order('is_on_house, created_at')
+    @master_plan_items = MasterPlanItem.where('master_plan_id=? and website_id=?', params[:master_plan_id], @selected_website_id).order('is_on_house, created_at')
 
     @months = @master_plan.project.months
     @days = @master_plan.project.days

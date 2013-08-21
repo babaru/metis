@@ -17,7 +17,6 @@ Metis::Application.routes.draw do
   # get 'websites/:website_id/channel_groups' => 'channel_groups#index'
   # get 'websites/:website_id/channels' => 'channels#index'
 
-  post 'master_plans/:id/save_candidates' => 'master_plans#save_candidates', as: :save_candidates
   get 'master_plans/:id/choose_spots' => 'master_plans#choose_spots', as: :choose_spots
 
   get 'spot_plan'=> 'master_plan_items#index', as: :spot_plan
