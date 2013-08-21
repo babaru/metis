@@ -1,9 +1,9 @@
-<div data-pjax-container>
+<div>
 
 <%= render_page_title "<strong>#{@master_plan.project.client.name}</strong> #{@master_plan.project.name}: #{@master_plan.name}" do |toolbar|
   toolbar << {
-    name: "#{t('labels.back_to')}#{@master_plan.project.name}#{t('model.show', :model => Project.model_name.human)}",
-    url: project_path(@master_plan.project_id),
+    name: "#{t('labels.back_to')}#{@master_plan.name}#{t('model.show', :model => MasterPlan.model_name.human)}",
+    url: master_plan_path(@master_plan),
     options: {class: 'button'}
   }
 end %>
@@ -20,7 +20,7 @@ end %>
       <% else %>
       <li>
       <% end %>
-        <%= link_to website.name, spot_plan_path(website_id: website.id, master_plan_id: @master_plan) %>
+        <%= link_to website.name, spot_plan_path(website_id: website.id, master_plan_id: @master_plan, m: @selected_month, y: @selected_year) %>
       </li>
       <% end %>
     </ul>
@@ -31,9 +31,8 @@ end %>
         <div class="cell6">
           <div class="btn-group pull-right" data-toggle="buttons-radio">
             <% @months.each do |m| %>
-            <button type="button" class="btn"><%= "#{m[:year]}年#{m[:month]}月" %></button>
+            <%= link_to "#{m[:year]}年#{m[:month]}月", spot_plan_path(website_id: @selected_website_id, master_plan_id: @master_plan.id, y: m[:year], m: m[:month]), class: (@selected_year == m[:year] && @selected_month == m[:month]) ? 'button active' : 'button' %>
             <% end %>
-            <button type="button" class="btn">全部显示</button>
           </div>
         </div>
       </div>

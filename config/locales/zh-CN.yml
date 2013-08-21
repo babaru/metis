@@ -152,3 +152,11 @@ zh-CN:
     admin: 管理员
     super_user: 超级用户
     user: 一般用户
+  weekdays:
+    mon: 一
+    tue: 二
+    wed: 三
+    thu: 四
+    fri: 五
+    sat: 六
+    sun: 日

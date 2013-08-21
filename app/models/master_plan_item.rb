@@ -11,7 +11,7 @@ class MasterPlanItem < ActiveRecord::Base
   end
 
   def reality_count
-    result = MasterPlanItem.connection.select_all("select sum(count) as reality_count from spot_plan_items where master_plan_item_id=#{self.id}")
+    result = MasterPlanItem.connection.select_all("select sum(count) as reality_count from spot_plan_items where master_plan_item_id=#{self.id} and placed_at>='#{master_plan.project.started_at.utc.strftime('%Y-%m-%d %H:%M:%S')}' and placed_at<='#{master_plan.project.ended_at.utc.strftime('%Y-%m-%d %H:%M:%S')}'")
     return result[0]['reality_count'] if result.length > 0 && result[0]['reality_count']
     0
   end

@@ -7,30 +7,43 @@
     <th>已选</th>
     <th colspan="31"></th>
   </tr>
-  <tr class="spot-plan-month-calendar-row">
-    <td colspan="5" class="title">9月</td>
+
+  <tr class="spot-plan-calendar-days-row">
+    <td colspan="5"></td>
     <% 1.upto(31) do |n| %>
-    <% if n > Time.days_in_month(9, 2013) %>
+    <% if n > Time.days_in_month(@selected_month, @selected_year) %>
     <td>&nbsp;</td>
     <% else %>
-    <% if @days['201309'][n - 1] > 0 %>
-    <%= content_tag(:td, n, class: 'calendar-item') %>
+    <%= content_tag :td, t("weekdays.#{Time.new(@selected_year, @selected_month, n).strftime('%a').downcase}"), class: Time.new(@selected_year, @selected_month, n).strftime('%a').downcase %>
+    <% end %>
+    <% end %>
+  </tr>
+
+  <tr class="spot-plan-calendar-month-row">
+    <td colspan="5"><%= @selected_month %>月</td>
+    <% 1.upto(31) do |n| %>
+    <% if n > Time.days_in_month(@selected_month, @selected_year) %>
+    <td>&nbsp;</td>
     <% else %>
+    <% if @selected_days.length >= n && @selected_days[n - 1] > 0 %>
     <%= content_tag :td, n %>
+    <% else %>
+    <%= content_tag :td, n, class: 'disabled' %>
     <% end %>
     <% end %>
     <% end %>
   </tr>
+
   <% @master_plan_items.each do |master_plan_item| %>
   <tr class="master-plan-item-row" id="master-plan-item<%= master_plan_item.id %>">
-    <td class="website_name"></td>
+    <td class="website_name"><%= master_plan_item.spot.website.name %></td>
     <td class="channel_name"></td>
     <td class="spot_name"></td>
     <td class="ideal_count"></td>
     <td class="reality_count"></td>
     <% 1.upto(31) do |n| %>
-    <% if @days['201309'].length > n && @days['201309'][n - 1] > 0 %>
-    <%= content_tag :td, content_tag(:span, '', class: 'empty-spot-plan-item', 'data-placed-at' => "2013-09-#{sprintf '%02d', n}"), class: "spot-plan-item-cell spot-plan-item-cell201309#{sprintf '%02d', n}" %>
+    <% if @selected_days.length >= n && @selected_days[n - 1] > 0 %>
+    <%= content_tag :td, content_tag(:span, '', class: "empty-spot-plan-item", 'data-placed-at' => "#{@selected_year}-#{sprintf('%02d', @selected_month)}-#{sprintf '%02d', n}"), class: "spot-plan-item-cell spot-plan-item-cell#{@selected_year}#{sprintf('%02d', @selected_month)}#{sprintf '%02d', n} #{Time.new(@selected_year, @selected_month, n).strftime('%a').downcase}" %>
     <% else %>
     <td class="disabled"></td>
     <% end %>
@@ -39,6 +52,9 @@
   <% end %>
 
 </table>
+
+<%= content_tag :span, @selected_website_id, class: 'hide', id: 'selected-website-id-value' %>
+<%= content_tag :span, @master_plan.id, class: 'hide', id: 'master-plan-id-value' %>
 
 
 <% content_for :anything_else do %>

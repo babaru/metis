@@ -35,7 +35,7 @@ GEM
     bootstrap-datetimepicker-rails (0.0.11)
     bootstrap-sass (2.3.2.1)
       sass (~> 3.2)
-    bootstrap-x-editable-rails (1.4.5.1)
+    bootstrap-x-editable-rails (1.4.6.1)
       railties (>= 3.0)
     builder (3.0.4)
     cancan (1.6.10)
@@ -56,7 +56,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.3)
-    devise (3.0.0)
+    devise (3.0.3)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 3.2.6, < 5)
@@ -64,7 +64,7 @@ GEM
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
-    font-awesome-rails (3.2.1.2)
+    font-awesome-rails (3.2.1.3)
       railties (>= 3.2, < 5.0)
     highline (1.6.19)
     hike (1.2.3)
@@ -86,8 +86,8 @@ GEM
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
-    mime-types (1.23)
-    multi_json (1.7.7)
+    mime-types (1.24)
+    multi_json (1.7.9)
     mysql2 (0.3.13)
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
@@ -136,8 +136,8 @@ GEM
       json (~> 1.4)
     remotipart (1.2.1)
     ruby-ole (1.2.11.7)
-    rvm-capistrano (1.4.1)
-      capistrano (>= 2.0.0)
+    rvm-capistrano (1.4.4)
+      capistrano (>= 2.15.4)
     sass (3.2.10)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -149,7 +149,7 @@ GEM
     simple_form (2.1.0)
       actionpack (~> 3.0)
       activemodel (~> 3.0)
-    spreadsheet (0.8.7)
+    spreadsheet (0.8.8)
       ruby-ole (>= 1.0)
     sprockets (2.2.2)
       hike (~> 1.2)
@@ -158,7 +158,7 @@ GEM
       tilt (~> 1.1, != 1.3.0)
     systemu (2.5.2)
     thor (0.18.1)
-    tida_template (0.2.2)
+    tida_template (0.2.6)
       bootstrap-datetimepicker-rails
       bootstrap-sass
       bootstrap-x-editable-rails
@@ -176,7 +176,7 @@ GEM
       uuid
       wice_grid
     tilt (1.4.1)
-    treetop (1.4.14)
+    treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.37)
@@ -191,7 +191,7 @@ GEM
       macaddr (~> 1.0)
     warden (1.2.3)
       rack (>= 1.0)
-    wice_grid (3.2.1)
+    wice_grid (3.3.1)
       kaminari (>= 0.13.0)
 
 PLATFORMS
@@ -225,7 +225,7 @@ DEPENDENCIES
   simple-navigation
   simple_form
   spreadsheet
-  tida_template (>= 0.2.1)
+  tida_template (>= 0.2.6)
   uglifier (>= 1.0.3)
   unicorn
   uuid

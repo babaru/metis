@@ -10,6 +10,19 @@
     td {
       padding: 0px; margin: 0px;
       text-align: center;
+
+      &.sun {
+        background: #ddd;
+      }
+
+      &.sat {
+        background: #ddd;
+      }
+
+      &.warning {
+        color: #ff0000;
+        font-weight: bold;
+      }
     }
 
     .spot-plan-item-cell, .disabled {
@@ -34,34 +47,48 @@
     }
   }
 
-  .spot-plan-month-calendar-row {
+  .spot-plan-calendar-month-row {
     height: 30px;
-    .title {
-      background: #179ac8;
-      text-align: right;
-      padding: 0px 10px;
-      font: {
-        size: 21px;
-        weight: bold;
-      }
-      color: white;
+    background: #179ac8;
+    text-align: right;
+    padding: 0px 10px;
+    font: {
+      size: 21px;
+      weight: bold;
     }
-
+    color: white;
     td {
-      padding: 0px; margin: 0px;
+      padding: 0px;
+      background: #179ac8;
       text-align: center;
-      width: 25px;
-      line-height: 30px;
-      color: #ccc;
-      border-left: 1px solid #ddd;
 
-      &.calendar-item {
-        font: {
-          weight: bold;
-        }
-        background: #eee;
-        color: #333;
+      &.disabled {
+        color: #60b7d6;
       }
     }
   }
+
+  .spot-plan-calendar-days-row {
+    td {
+      padding: 0px;
+      width: 25px;
+      text-align: center;
+      color: #ccc;
+
+      &.sun {
+        background: #ddd;
+        color: white;
+      }
+
+      &.sat {
+        background: #ddd;
+        color: white;
+      }
+
+      &.calendar-item {
+        color: #888;
+      }
+    }
+  }
+
 }

@@ -18,10 +18,10 @@ $(document).ready(function() {
     });
 
     MasterPlan = Backbone.Model.extend({urlRoot: '/master_plans'});
-    var master_plan = new MasterPlan({id: 2});
+    var master_plan = new MasterPlan({id: $('#master-plan-id-value').text()});
     master_plan.fetch({
         success: function() {
-            var master_plan_items = new MasterPlanItems(null, {url: '/master_plan_items.json?master_plan_id=' + master_plan.get('id')});
+            var master_plan_items = new MasterPlanItems(null, {url: '/master_plan_items.json?master_plan_id=' + master_plan.get('id') + '&website_id=' + $('#selected-website-id-value').text()});
             master_plan_items.fetch({
                 success: function() {
 
@@ -83,6 +83,12 @@ $(document).ready(function() {
             $('#master-plan-item' + this.model.get('id') + ' .spot_name').text(this.model.get('spot_name'));
             $('#master-plan-item' + this.model.get('id') + ' .ideal_count').text(this.model.get('ideal_count'));
             $('#master-plan-item' + this.model.get('id') + ' .reality_count').text(this.model.get('reality_count'));
+
+            if (this.model.get('ideal_count') < this.model.get('reality_count')) {
+                $('#master-plan-item' + this.model.get('id') + ' .reality_count').removeClass('warning').addClass('warning');
+            } else {
+                $('#master-plan-item' + this.model.get('id') + ' .reality_count').removeClass('warning');
+            }
             return this;
         }
     });
