@@ -1,7 +1,7 @@
 class Channel < ActiveRecord::Base
   belongs_to :website
   belongs_to :channel_group
-  has_many :spots
+  has_many :spots, dependent: :destroy
   attr_accessible :name, :names, :website_id, :channel_group_id
   attr_accessor :names
 
