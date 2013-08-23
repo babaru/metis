@@ -33,16 +33,9 @@ $(document).ready(function() {
                         spot_plan_items.fetch({
                             success: function() {
                                 _.each(spot_plan_items.models, function(s_model) {
-                                    s_model.master_plan_item = model;
+                                    s_model.on('change', function() { model.fetch(); }, model);
                                     var spot_plan_item_view = new SpotPlanItemView({model: s_model});
                                     spot_plan_item_view.render();
-                                    spot_plan_item_view.$el.click(function() {
-                                        s_model.save('count', s_model.get('count') + 1, {
-                                            success: function(m, r, opt) {
-                                                model.fetch();
-                                            }
-                                        });
-                                    });
                                 });
 
                                 $('#master-plan-item' + model.get('id') + ' .empty-spot-plan-item').unbind('click').click(function() {
@@ -51,6 +44,7 @@ $(document).ready(function() {
                                         success: function() {
                                             var spot_plan_item_view = new SpotPlanItemView({model: new_spot_plan_item});
                                             spot_plan_item_view.render();
+                                            new_spot_plan_item.on('change', function() { model.fetch(); }, model);
                                             model.fetch();
                                         }
                                     });
@@ -94,7 +88,6 @@ $(document).ready(function() {
     });
 
     SpotPlanItemView = Backbone.View.extend({
-        master_plan_item: null,
         tagName: 'span',
         template: _.template('<%= count %>'),
         initialize: function() {
@@ -103,6 +96,9 @@ $(document).ready(function() {
         render: function() {
             console.log('rendering SpotPlanItemView');
             console.log(this.model);
+            var m = this.model;
+            var v = this.$el;
+            var that = this;
             this.$el.text(this.template(this.model.attributes));
             this.$el.addClass('spot-plan-item');
             this.$el.attr('id', 'spot_plan_item_' + this.model.get('id'));
@@ -110,14 +106,22 @@ $(document).ready(function() {
             var cell = $('#master-plan-item' + this.model.get('master_plan_item_id') + ' .spot-plan-item-cell' + this.model.get('date_token'));
             cell.html(this.el);
 
-            var m = this.model;
-            var v = this.$el;
+            this.$el.unbind('click').click(function() {
+                handleClickSpotPlanItem(m);
+            });
+
             context.attach('#spot_plan_item_' + this.model.get('id'), [
             {
                 text: '调整数量',
                 action: function(e) {
                     e.preventDefault();
-                    alert(m.get('id'));
+                    $('#spot_plan_item_count').val(m.get('count'));
+                    $('#spot-plan-item-modify-count-modal form').attr('action', '/spot_plan_items/' + m.get('id') + '.json');
+                    $('#spot-plan-item-modify-count-modal').off('ajax:success').on('ajax:success', function(data) {
+                        m.fetch();
+                        $('#spot-plan-item-modify-count-modal').modal('hide');
+                    })
+                    $('#spot-plan-item-modify-count-modal').modal();
                 }
             },
             {
@@ -146,6 +150,10 @@ $(document).ready(function() {
         }
     })
 });
+
+function handleClickSpotPlanItem(spot_plan_item) {
+    spot_plan_item.save('count', spot_plan_item.get('count') + 1);
+}
 
 function bindEmptySpotPlanItemCellEvent(model, placed_at, date_token) {
     $('#master-plan-item' + model.get('id') + ' .spot-plan-item-cell' + date_token + ' .empty-spot-plan-item').unbind('click').click(function() {

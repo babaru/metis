@@ -20,6 +20,7 @@ Metis::Application.routes.draw do
   get 'master_plans/:id/choose_spots' => 'master_plans#choose_spots', as: :choose_spots
 
   get 'spot_plan'=> 'master_plan_items#index', as: :spot_plan
+  match 'spot_plan/generate' => 'spot_plan_items#generate', as: :generate_spot_plan
 
   post 'master_plan_items/:id/modify' => 'master_plan_items#modify', as: :modify_master_plan_item
 

@@ -95,4 +95,11 @@ class SpotPlanItemsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def generate
+    if request.post?
+      Tida::Metis::ExcelGenerators::SpotPlans::CaratGenerator.new(params[:master_plan_id]).generate()
+      redirect_to spot_plan_path(master_plan_id: params[:master_plan_id])
+    end
+  end
 end

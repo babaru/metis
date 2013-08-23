@@ -19,6 +19,7 @@ group :assets do
   gem 'bootstrap-datetimepicker-rails'
   gem 'bootstrap-x-editable-rails'
   gem "pjax_rails"
+  gem 'backbone-rails'
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', :platforms => :ruby
 
@@ -45,7 +46,8 @@ gem 'spreadsheet'
 gem 'remotipart'
 gem 'pdfkit'
 gem 'cancan'
-gem 'backbone-rails'
+
+gem 'axlsx'
 
 # To use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.0.0'
