@@ -4,11 +4,11 @@
   end
 
   g.column name: t('activerecord.attributes.project.started_at') do |project|
-    project.started_at.strftime('%Y-%m-%d')
+    project.started_at.strftime('%Y-%m-%d') if project.started_at
   end
 
   g.column name: t('activerecord.attributes.project.ended_at') do |project|
-    project.ended_at.strftime('%Y-%m-%d')
+    project.ended_at.strftime('%Y-%m-%d') if project.ended_at
   end
 
   g.column name: t('activerecord.attributes.project.budget') do |project|

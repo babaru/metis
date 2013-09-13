@@ -7,7 +7,7 @@ class MasterPlanItem < ActiveRecord::Base
   belongs_to :channel
   has_many :spot_plan_items, dependent: :destroy
 
-  attr_accessible :count, :spot_id, :master_plan_id, :is_on_house, :project_id, :client_id, :website_id, :channel_id
+  attr_accessible :count, :spot_id, :master_plan_id, :is_on_house, :project_id, :client_id, :website_id, :channel_id, :website_name, :channel_name, :position_name, :material_format, :pv_tracking, :click_tracking, :link_to_official_site, :mr_deadline, :est_imp, :est_clicks, :est_total_imp, :est_total_clicks, :est_ctr, :est_cpc, :est_cpm, :days, :cpc, :unit_rate_card, :discount, :net_cost, :total_rate_card
 
   def spot_plan_item_count(date)
     item = spot_plan_items.find_by_placed_at(Time.parse(date))
@@ -29,5 +29,17 @@ class MasterPlanItem < ActiveRecord::Base
     item['ideal_count'] = self.count
     item['reality_count'] = self.reality_count
     item
+  end
+
+  # Attributes
+
+  def position_name_value
+    return spot.name if spot_id
+    position_name
+  end
+
+  def spot_price_value
+    return spot.price if spot_id
+    price
   end
 end

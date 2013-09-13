@@ -18,6 +18,13 @@ class SpotsController < ApplicationController
     end
   end
 
+  def apps
+    @platform = 'ios'
+    @platform = params[:platform] if params[:platform]
+    Feedzirra::Feed.add_common_feed_entry_element('im:image', as: :image)
+    @feed = Feedzirra::Feed.fetch_and_parse("https://itunes.apple.com/cn/rss/topfreeapplications/limit=100/xml")
+  end
+
   # GET /spots/1
   # GET /spots/1.json
   def show

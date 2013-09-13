@@ -5,12 +5,12 @@ class MasterPlan < ActiveRecord::Base
 
   has_many :items, class_name: 'MasterPlanItem', dependent: :destroy
 
-  attr_accessible :project_id, :created_by_id, :name, :client_id
+  attr_accessible :project_id, :created_by_id, :name, :client_id, :version, :is_readonly
 
   def contract_price
     sum = 0
     items.where(is_on_house: false).each do |item|
-      sum += (item.spot.price * item.count * project.client.our_discount_value(item.spot.website_id))
+      sum += (item.spot.price * item.count * project.client.our_discount_value(item.spot.website_id)) if item.spot_id
     end
     sum
   end
@@ -18,7 +18,7 @@ class MasterPlan < ActiveRecord::Base
   def cost
     sum = 0
     items.where(is_on_house: false).each do |item|
-      sum += (item.spot.price * item.count * project.client.website_discount_value(item.spot.website_id))
+      sum += (item.spot.price * item.count * project.client.website_discount_value(item.spot.website_id)) if item.spot_id
     end
     sum
   end
@@ -40,13 +40,27 @@ class MasterPlan < ActiveRecord::Base
     (on_house_amount.to_f / total_price.to_f).to_f.round(2)
   end
 
-  def version_count
-    result = MasterPlan.connection.select_all("select max(version) as version_count from spot_plan_items where master_plan_id=#{id}")
-    return result[0]['version_count'] if result.length > 0 && result[0]['version_count']
+  def working_version
+    result = MasterPlan.connection.select_all("select max(version) as working_version from spot_plan_items where master_plan_id=#{id}")
+    return result[0]['working_version'] if result.length > 0 && result[0]['working_version']
     1
   end
 
   def candidate_websites
     Website.find_by_sql("select * from websites where id in (select distinct website_id from master_plan_items where master_plan_id=#{id})")
+  end
+
+  def save_version!
+    working_version = self.working_version
+    MasterPlan.transaction do
+      spot_plan_items = SpotPlanItem.where('master_plan_id=? and version=? and count>0', self.id, working_version)
+      spot_plan_items.each {|item| item.copy_to_new_version!(working_version + 1)}
+      self.version = working_version
+      self.save!
+    end
+  end
+
+  def import_from_excel(excel_file)
+    Tida::ExcelParsers::MasterPlanParser.parse excel_file
   end
 end

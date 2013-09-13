@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130821153659) do
+ActiveRecord::Schema.define(:version => 20130911040629) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -73,14 +73,35 @@ ActiveRecord::Schema.define(:version => 20130821153659) do
   create_table "master_plan_items", :force => true do |t|
     t.integer  "spot_id"
     t.integer  "master_plan_id"
-    t.decimal  "count",          :precision => 10, :scale => 0
-    t.datetime "created_at",                                                       :null => false
-    t.datetime "updated_at",                                                       :null => false
-    t.boolean  "is_on_house",                                   :default => false
+    t.decimal  "count",                 :precision => 10, :scale => 0
+    t.datetime "created_at",                                                              :null => false
+    t.datetime "updated_at",                                                              :null => false
+    t.boolean  "is_on_house",                                          :default => false
     t.integer  "client_id"
     t.integer  "project_id"
     t.integer  "website_id"
     t.integer  "channel_id"
+    t.string   "website_name"
+    t.string   "channel_name"
+    t.string   "position_name"
+    t.string   "material_format"
+    t.boolean  "pv_tracking",                                          :default => false
+    t.boolean  "click_tracking",                                       :default => false
+    t.boolean  "link_to_official_site",                                :default => false
+    t.string   "mr_deadline"
+    t.integer  "est_total_imp"
+    t.integer  "est_total_clicks"
+    t.integer  "est_imp"
+    t.integer  "est_clicks"
+    t.integer  "est_ctr"
+    t.integer  "est_cpc"
+    t.integer  "est_cpm"
+    t.integer  "days"
+    t.integer  "cpc"
+    t.decimal  "unit_rate_card",        :precision => 10, :scale => 0
+    t.decimal  "discount",              :precision => 10, :scale => 0
+    t.decimal  "net_cost",              :precision => 10, :scale => 0
+    t.decimal  "total_rate_card",       :precision => 10, :scale => 0
   end
 
   add_index "master_plan_items", ["channel_id"], :name => "index_master_plan_items_on_channel_id"
@@ -93,12 +114,14 @@ ActiveRecord::Schema.define(:version => 20130821153659) do
   create_table "master_plans", :force => true do |t|
     t.integer  "project_id"
     t.integer  "created_by_id"
-    t.datetime "created_at",                                  :null => false
-    t.datetime "updated_at",                                  :null => false
+    t.datetime "created_at",                                                     :null => false
+    t.datetime "updated_at",                                                     :null => false
     t.string   "name"
     t.string   "type"
     t.decimal  "discount",      :precision => 2, :scale => 0
     t.integer  "client_id"
+    t.integer  "version",                                     :default => 1
+    t.boolean  "is_readonly",                                 :default => false
   end
 
   add_index "master_plans", ["client_id"], :name => "index_master_plans_on_client_id"
@@ -189,10 +212,10 @@ ActiveRecord::Schema.define(:version => 20130821153659) do
     t.integer  "count"
     t.boolean  "is_enabled"
     t.integer  "created_by_id"
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
-    t.integer  "version",                    :default => 0
-    t.integer  "previous_spot_plan_item_id"
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
+    t.integer  "version",               :default => 0
+    t.integer  "new_spot_plan_item_id"
     t.integer  "client_id"
     t.integer  "project_id"
     t.integer  "spot_id"

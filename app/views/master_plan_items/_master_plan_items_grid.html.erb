@@ -1,28 +1,24 @@
 <%= grid(master_plan_items, :show_filters => :always) do |g|
 
   g.column name: t('activerecord.attributes.spot.website') do |master_plan_item|
-    master_plan_item.spot.website.name
+    master_plan_item.website.name
   end
 
   g.column name: t('activerecord.attributes.spot.channel') do |master_plan_item|
-    master_plan_item.spot.channel.name
-  end
-
-  g.column name: t('activerecord.attributes.spot.spot_category') do |master_plan_item|
-    master_plan_item.spot.spot_category.name
+    master_plan_item.channel_name
   end
 
   g.column name: t('activerecord.attributes.spot.name') do |master_plan_item|
-    content_tag :strong, master_plan_item.spot.name
+    master_plan_item.position_name_value
   end
 
   g.column name: t('activerecord.attributes.spot.price') do |master_plan_item|
-    "<strong>#{master_plan_item.spot.price}</strong> #{master_plan_item.spot.unit}".html_safe
+    "<strong>#{master_plan_item.spot.price}</strong> #{master_plan_item.spot.unit}".html_safe  if master_plan_item.spot_id
   end
 
   g.column name: t('activerecord.attributes.client.discounts') do |master_plan_item|
     content_tag(:div, [content_tag(:span, "#{master_plan_item.master_plan.project.client.website_discount_value(master_plan_item.spot.website_id, {view: true})} 折", class: 'label'),
-      content_tag(:span, "#{master_plan_item.master_plan.project.client.our_discount_value(master_plan_item.spot.website_id, {view: true})} 折", class: 'label label-important')].join(' ').html_safe, class: 'discounts', :style => master_plan_item.is_on_house ? 'display: none;' : '')
+      content_tag(:span, "#{master_plan_item.master_plan.project.client.our_discount_value(master_plan_item.spot.website_id, {view: true})} 折", class: 'label label-important')].join(' ').html_safe, class: 'discounts', :style => master_plan_item.is_on_house ? 'display: none;' : '') if master_plan_item.spot_id
   end
 
   g.column name: t('activerecord.attributes.master_plan_item.count') do |master_plan_item|

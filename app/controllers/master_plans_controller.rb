@@ -130,4 +130,14 @@ class MasterPlansController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def save_version
+    @master_plan = MasterPlan.find(params[:master_plan_id])
+    if request.post?
+      @master_plan.save_version!
+      respond_to do |format|
+        format.html { redirect_to spot_plan_path(master_plan_id: @master_plan), notice: 'This version spot plan was successfully save.' }
+      end
+    end
+  end
 end

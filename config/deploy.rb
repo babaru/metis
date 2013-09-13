@@ -1,7 +1,7 @@
 default_run_options[:pty] = true
 set :application, "Metis.Tida"
 set :repository,  "git@github.com:babaru/metis.git"
-set :domain, "42.121.56.31"
+set :domain, "112.124.62.108"
 
 set :rvm_ruby_string, '1.9.3-p429'
 set :rvm_type, :system
@@ -10,7 +10,7 @@ set :scm, :git
 set :scm_passphrase, "19800716"
 
 set :user, "app"
-set :password, "Mbi800707"
+set :password, "iForce654321"
 
 ssh_options[:forward_agent] = true
 set :branch, "master"

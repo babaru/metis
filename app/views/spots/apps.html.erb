@@ -1,0 +1,9 @@
+<%= render_page_title "APP 列表" do |toolbar|
+
+end %>
+
+<div class="app-icon-grid icon-grid">
+  <% @feed.entries.each do |entry| %>
+  <%= link_to content_tag(:span, entry.title), entry.url, 'logo-url' => entry.image %>
+  <% end %>
+</div>

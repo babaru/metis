@@ -123,4 +123,14 @@ class ClientsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def upload_spot_plan_excel_file
+    @client = Client.find params[:id]
+    @upload_file = SpotPlanExcelFile.new
+    if request.post?
+      @upload_file = SpotPlanExcelFile.new(params[:spot_plan_excel_file])
+      @upload_file.save!
+      @upload_file.parse!(@client.id, current_user.id)
+    end
+  end
 end

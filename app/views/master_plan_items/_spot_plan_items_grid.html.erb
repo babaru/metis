@@ -55,8 +55,10 @@
 
 <%= content_tag :span, @selected_website_id, class: 'hide', id: 'selected-website-id-value' %>
 <%= content_tag :span, @master_plan.id, class: 'hide', id: 'master-plan-id-value' %>
+<%= content_tag :span, @working_version, class: 'hide', id: 'working-version-value' %>
 
 
 <% content_for :anything_else do %>
 <%= render_modal_window name: "spot-plan-item-modify-count-modal", title: "调整投放数量", modal_content: 'spot_plan_item_modify_count_form' %>
+<%= render_modal_window name: "spot-plan-item-modify-placed-at-modal", title: "调整投放日期", modal_content: 'spot_plan_item_modify_placed_at_form' %>
 <% end %>

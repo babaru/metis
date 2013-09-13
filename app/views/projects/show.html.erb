@@ -21,7 +21,7 @@ end %>
           <div class="cell3">预算： <span class="currency"><%= number_to_currency(@project.budget, :precision => 0, :unit => '') %></span> <%= @project.budget_unit %></div>
           <div class="cell3"></div>
           <div class="cell3"></div>
-          <div class="cell3">开始日期：<strong><%= @project.started_at.strftime('%Y-%m-%d') %></strong> 结束日期：<strong><%= @project.ended_at.strftime('%Y-%m-%d') %></strong></div>
+          <div class="cell3">开始日期：<strong><%= @project.started_at.strftime('%Y-%m-%d') if @project.started_at %></strong> 结束日期：<strong><%= @project.ended_at.strftime('%Y-%m-%d') if @project.ended_at %></strong></div>
         </div>
       </div>
     </div>

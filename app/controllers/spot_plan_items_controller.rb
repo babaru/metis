@@ -2,9 +2,10 @@ class SpotPlanItemsController < ApplicationController
   # GET /spot_plan_items
   # GET /spot_plan_items.json
   def index
-    @spot_plan_items_grid = initialize_grid(SpotPlanItem)
-
-    @spot_plan_items = SpotPlanItem.where(master_plan_item_id: params[:master_plan_item_id]).order('placed_at')
+    @master_plan_item = MasterPlanItem.find params[:master_plan_item_id]
+    @working_version = params[:wv]
+    @working_version = @master_plan_item.master_plan.working_version if params[:wv].nil?
+    @spot_plan_items = SpotPlanItem.where(master_plan_item_id: params[:master_plan_item_id], version: @working_version).order('placed_at')
 
     respond_to do |format|
       format.html # index.html.erb
@@ -52,7 +53,7 @@ class SpotPlanItemsController < ApplicationController
         spot_id: @master_plan_item.spot_id,
         website_id: @master_plan_item.website_id,
         channel_id: @master_plan_item.channel_id,
-        version: @master_plan_item.master_plan.version_count
+        version: @master_plan_item.master_plan.working_version
         }))
       @spot_plan_item.created_by_id = current_user.id
     end
@@ -100,6 +101,17 @@ class SpotPlanItemsController < ApplicationController
     if request.post?
       Tida::Metis::ExcelGenerators::SpotPlans::CaratGenerator.new(params[:master_plan_id]).generate()
       redirect_to spot_plan_path(master_plan_id: params[:master_plan_id])
+    end
+  end
+
+  def modify_placed_at
+    @spot_plan_item = SpotPlanItem.find params[:id]
+    if request.post?
+      new_placed_at = params[:spot_plan_item][:placed_at]
+      @new_spot_plan_item = @spot_plan_item.change_placed_at!(Time.parse(new_placed_at), current_user.id)
+      respond_to do |format|
+        format.json { render json: @new_spot_plan_item }
+      end
     end
   end
 end
