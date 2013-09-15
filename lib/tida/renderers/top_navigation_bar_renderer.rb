@@ -2,19 +2,20 @@ module Tida
   module Renderers
     class TopNavigationBarRenderer < ::SimpleNavigation::Renderer::Base
       def render(item_container)
-        ul_content = item_container.items.inject([]) do |list, item|
+        list_content = item_container.items.inject([]) do |list, item|
           list << item_content(item)
         end.join
-        div_content = content_tag :ul, ul_content
-        class_string = ""
-        class_string = "no-content"
-        content_tag(:div, div_content, {id: "top-navigation-bar", class: class_string})
+        content_tag(:div, content_tag(:ul, list_content), {id: "top-navigation-bar"})
       end
 
       protected
 
       def item_content(item)
-        content_tag :li, tag_for(item)
+        if include_sub_navigation?(item)
+          return render_sub_navigation(item)
+        else
+          return content_tag :li, tag_for(item)
+        end
       end
 
       def tag_for(item)
@@ -29,10 +30,56 @@ module Tida
           stack = content_tag(:span, stack_content.join(), class: 'icon-stack')
           content << stack
         else
-          content << content_tag(:i, nil, class: "#{icon} icon-2x")
+          content << content_tag(:i, nil, class: icon)
         end
         content << content_tag(:span, item.name)
-        link_to content.join('<br>'), item.url, options
+        link_to content.join(' '), item.url, options
+      end
+
+      def render_sub_navigation(parent_item)
+        content = []
+        content << tag_for_level_1(parent_item)
+        content << tag_for_level_2(parent_item)
+        content_tag :div, content_tag(:div, content.join(), class: 'accordion-group'), class: 'accordion', id: "accordion_#{parent_item.key}"
+      end
+
+      def tag_for_level_1(item)
+        item_content = nil
+        options = options_for(item)
+        icon = options.delete(:icon)
+
+        content = []
+        content << content_tag(:i, nil, class: icon) if icon
+        content << content_tag(:span, item.name)
+        content << content_tag(:i, nil, class: 'arrow icon-angle-left')
+        if options[:class] && options[:class].include?('active')
+          options[:class] = [options[:class], 'accordion-toggle'].flatten.compact.join(' ')
+        else
+          options[:class] = [options[:class], 'accordion-toggle collapsed'].flatten.compact.join(' ')
+        end
+        options = options.merge('data-toggle' => "collapse", 'data-parent' => "#accordion_#{item.key}")
+        item_content = link_to(content.join(' '), "#collapse_#{item.key}", options)
+
+        li_content = content_tag :div, item_content, class: 'accordion-heading'
+      end
+
+      def tag_for_level_2(item)
+        sub_list_content = item.sub_navigation.items.inject([]) do |list, sub_item|
+          options = link_options_for(sub_item)
+          icon = options.delete(:icon)
+          content = []
+          content << content_tag(:i, nil, class: icon) if icon
+          content << content_tag(:span, sub_item.name)
+          li_content = link_to(content.join(' '), sub_item.url, options)
+          list << content_tag(:li, li_content)
+        end.join
+        sub_list = content_tag(:ul, sub_list_content)
+        inner_container = content_tag(:div, sub_list, class: 'accordion-inner')
+        if item.selected?
+          content_tag(:div, inner_container, {:class => 'accordion-body in collapse active', 'id' => "collapse_#{item.key}"})
+        else
+          content_tag(:div, inner_container, {:class => 'accordion-body collapse', 'id' => "collapse_#{item.key}"})
+        end
       end
     end
   end
