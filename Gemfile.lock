@@ -1,7 +1,7 @@
 PATH
   remote: /Users/apple/Projects/tida/src/tida_template
   specs:
-    tida_template (0.2.6)
+    tida_template (0.2.7)
       bootstrap-datetimepicker-rails
       bootstrap-sass
       bootstrap-x-editable-rails

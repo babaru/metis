@@ -53,7 +53,7 @@ module Tida
         content << content_tag(:span, item.name)
         if options[:class] && options[:class].include?('active')
           content << content_tag(:i, nil, class: 'arrow icon-angle-down')
-          options[:class] = [options[:class], 'accordion-toggle'].flatten.compact.join(' ')
+          options[:class] = [options[:class].delete('active'), 'accordion-toggle open'].flatten.compact.join(' ')
         else
           content << content_tag(:i, nil, class: 'arrow icon-angle-left')
           options[:class] = [options[:class], 'accordion-toggle collapsed'].flatten.compact.join(' ')

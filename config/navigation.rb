@@ -33,18 +33,19 @@ SimpleNavigation::Configuration.run do |navigation|
   # Define the primary navigation
   navigation.items do |primary|
     primary.item :page_dashboard, t('navigation.dashboard'), dashboard_path, link: {icon: 'icon-dashboard'}, :highlights_on => /dashboard/
-    primary.item :page_clients, t('navigation.clients'), clients_path, link: {icon: 'icon-user'}, highlights_on: /clients/ do |clients|
+    primary.item :page_clients, t('navigation.clients'), nil, link: {icon: 'icon-user'} do |clients|
+      clients.item :page_clients, t('navigation.clients_list'), clients_path, link: {icon: 'icon-list'}, highlights_on: ::Regexp.new("clients$")
       current_user.viewable_clients.each do |client|
         clients.item "page_client_#{client.id}".to_sym, client.name, client_path(client), highlights_on: ::Regexp.new("clients/#{client.id}")
       end
     end
-    primary.item :page_websites, t('navigation.websites'), websites_path, link: {icon: 'icon-globe'}, highlights_on: /websites/ do |websites|
-      websites.item :page_websites, t('navigation.websites'), websites_path, link: {icon: 'icon-globe'}, highlights_on: ::Regexp.new("websites$")
+    primary.item :page_websites, t('navigation.websites'), nil, link: {icon: 'icon-globe'} do |websites|
+      websites.item :page_websites, t('navigation.websites_list'), websites_path, link: {icon: 'icon-list'}, highlights_on: ::Regexp.new("websites$")
       Website.all.each do |item|
         websites.item "page_website_#{item.id}".to_sym, item.name, website_channels_path(item.id), highlights_on: ::Regexp.new("websites/#{item.id}")
       end
     end
-    primary.item :page_spots, t('navigation.spots'), Website.count > 0 ? spots_path(website_id: Website.first) : nil, link: {icon: 'icon-book'}, highlights_on: /spots/ do |spots|
+    primary.item :page_spots, t('navigation.spots'), nil, link: {icon: 'icon-book'} do |spots|
       Website.all.each do |website|
         spots.item "page_website_#{website.id}_spots".to_sym, website.name, spots_path(website_id: website), highlights_on: ::Regexp.new("website_id=#{website.id}")
       end
