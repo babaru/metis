@@ -51,10 +51,11 @@ module Tida
         content = []
         content << content_tag(:i, nil, class: icon) if icon
         content << content_tag(:span, item.name)
-        content << content_tag(:i, nil, class: 'arrow icon-angle-left')
         if options[:class] && options[:class].include?('active')
+          content << content_tag(:i, nil, class: 'arrow icon-angle-down')
           options[:class] = [options[:class], 'accordion-toggle'].flatten.compact.join(' ')
         else
+          content << content_tag(:i, nil, class: 'arrow icon-angle-left')
           options[:class] = [options[:class], 'accordion-toggle collapsed'].flatten.compact.join(' ')
         end
         options = options.merge('data-toggle' => "collapse", 'data-parent' => "#accordion_#{item.key}")
