@@ -9,14 +9,9 @@ class MasterPlanItem < ActiveRecord::Base
 
   attr_accessible :count, :spot_id, :master_plan_id, :is_on_house, :project_id, :client_id, :website_id, :channel_id, :website_name, :channel_name, :position_name, :material_format, :pv_tracking, :click_tracking, :link_to_official_site, :mr_deadline, :est_imp, :est_clicks, :est_total_imp, :est_total_clicks, :est_ctr, :est_cpc, :est_cpm, :days, :cpc, :unit_rate_card, :discount, :net_cost, :total_rate_card
 
-  def spot_plan_item_count(date)
-    item = spot_plan_items.find_by_placed_at(Time.parse(date))
-    return item.count if item
-    ''
-  end
-
-  def reality_count
-    result = MasterPlanItem.connection.select_all("select sum(count) as reality_count from spot_plan_items where master_plan_item_id=#{self.id} and placed_at>='#{master_plan.project.started_at.utc.strftime('%Y-%m-%d %H:%M:%S')}' and placed_at<='#{master_plan.project.ended_at.utc.strftime('%Y-%m-%d %H:%M:%S')}'")
+  def reality_count(version = nil)
+    version = self.master_plan.working_version if version.nil?
+    result = MasterPlanItem.connection.select_all("select sum(count) as reality_count from spot_plan_items where version=#{version} and master_plan_item_id=#{self.id} and placed_at>='#{master_plan.project.started_at.utc.strftime('%Y-%m-%d %H:%M:%S')}' and placed_at<='#{master_plan.project.ended_at.utc.strftime('%Y-%m-%d %H:%M:%S')}'")
     return result[0]['reality_count'] if result.length > 0 && result[0]['reality_count']
     0
   end

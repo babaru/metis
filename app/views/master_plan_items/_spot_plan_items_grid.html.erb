@@ -25,7 +25,7 @@
     <% if n > Time.days_in_month(@selected_month, @selected_year) %>
     <td>&nbsp;</td>
     <% else %>
-    <% if @selected_days.length >= n && @selected_days[n - 1] > 0 %>
+    <% if @selected_days.length >= n && @selected_days[n - 1] && @selected_days[n - 1] > 0 %>
     <%= content_tag :td, n %>
     <% else %>
     <%= content_tag :td, n, class: 'disabled' %>
@@ -42,7 +42,7 @@
     <td class="ideal_count"></td>
     <td class="reality_count"></td>
     <% 1.upto(31) do |n| %>
-    <% if @selected_days.length >= n && @selected_days[n - 1] > 0 %>
+    <% if @selected_days.length >= n && @selected_days[n - 1] && @selected_days[n - 1] > 0 %>
     <%= content_tag :td, content_tag(:span, '', class: "empty-spot-plan-item", 'data-placed-at' => "#{@selected_year}-#{sprintf('%02d', @selected_month)}-#{sprintf '%02d', n}"), class: "spot-plan-item-cell spot-plan-item-cell#{@selected_year}#{sprintf('%02d', @selected_month)}#{sprintf '%02d', n} #{Time.new(@selected_year, @selected_month, n).strftime('%a').downcase}" %>
     <% else %>
     <td class="disabled"></td>

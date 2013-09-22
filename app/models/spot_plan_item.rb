@@ -13,6 +13,8 @@ class SpotPlanItem < ActiveRecord::Base
   attr_accessible :count, :is_enabled, :placed_at, :master_plan_item_id, :created_by_id, :master_plan_item_reality_count, :version, :new_spot_plan_item_id, :client_id, :project_id, :master_plan_id, :spot_id, :website_id, :channel_id
   attr_accessor :master_plan_item_reality_count
 
+  scope :in_version, lambda{|master_plan_item_id, version| where(master_plan_item_id: master_plan_item_id, version: version)}
+
   def change_placed_at!(new_placed_at, current_user_id)
     SpotPlanItem.transaction do
       @new_spot_plan_item = SpotPlanItem.find_by_master_plan_item_id_and_placed_at(self.master_plan_item_id, new_placed_at)

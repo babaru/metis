@@ -6,7 +6,7 @@ module Tida
         class CaratGenerator
           LINE_HEIGHT = 17
           FONT_NAME = '微软雅黑'
-          FONT_SIZE = 11
+          FONT_SIZE = 10
           COLUMN_NAMES = [
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
           ]
@@ -46,16 +46,50 @@ module Tida
               border: {style: :thin, color: "00", edges: [:right, :top, :bottom]}
               })
 
+            global_cell = styles.add_style({
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: false,
+              alignment: {horizontal: :left, vertical: :center}
+            })
+
+            center_cell = styles.add_style({
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: false,
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]}
+            })
+            left_cell = styles.add_style({
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: false,
+              alignment: {horizontal: :left, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]}
+            })
+            right_cell = styles.add_style({
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: false,
+              alignment: {horizontal: :right, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]}
+            })
+
             ap.workbook.add_worksheet name: master_plan.name do |sheet|
+
+              # Fill Global Header
+
               sheet.add_row()
+              sheet.add_row([nil, 'Carat Digital Media Spot Plan'], style: [nil, global_cell])
+              sheet.add_row([nil, 'Client:', master_plan.client.name], style: [nil, global_cell, global_cell])
+              sheet.add_row([nil, 'Product:', master_plan.project.name], style: [nil, global_cell, global_cell])
+              sheet.add_row([nil, 'Period:', "#{master_plan.project.started_at.strftime('%Y.%m.%d')} - #{master_plan.project.ended_at.strftime('%Y.%m.%d')}"], style: [nil, global_cell, global_cell])
+              sheet.add_row([nil, 'Version Date:', Time.now.strftime('%Y-%m-%d')], style: [nil, global_cell, global_cell])
+              sheet.add_row([nil, 'Prepared By:'], style: [nil, global_cell])
+              sheet.add_row([nil, 'Job Code:'], style: [nil, global_cell])
               sheet.add_row()
-              sheet.add_row()
-              sheet.add_row()
-              sheet.add_row()
-              sheet.add_row()
-              sheet.add_row()
-              sheet.add_row()
-              sheet.add_row()
+
+              # Fill Table Header
 
               table_headers = [
                 nil,
@@ -102,7 +136,7 @@ module Tida
                 col_count = 0
                 days[key].each_with_index do |day, index|
                   if m_index == 0
-                    if day > 0
+                    if day && day > 0
                       table_headers << nil if index + 1 < days[key].length
                       table_calendar_days << (index + 1)
                       col_count += 1 if index + 1 < days[key].length && index > 0
@@ -123,16 +157,21 @@ module Tida
               row = sheet.add_row(table_calendar_days, style: table_header_styles)
               row.height = 40
 
-              Rails.logger.debug month_segs
-
               0.upto(calendar_column_index - 1) do |n|
                 sheet.merge_cells("#{get_column_name(n)}10:#{get_column_name(n)}11")
               end
 
               month_segs.each do |seg|
-                Rails.logger.debug "#{get_column_name(calendar_column_index)}10:#{get_column_name(calendar_column_index + seg)}10"
                 sheet.merge_cells("#{get_column_name(calendar_column_index)}10:#{get_column_name(calendar_column_index + seg)}10")
                 calendar_column_index = calendar_column_index + seg + 1
+              end
+
+              # Fill records
+
+              master_plan.items.each do |item|
+                spot_plan_item_cells = get_spot_plan_item_cells(item, months, days)
+                sheet.add_row([nil, nil, item.website.name, item.channel.name, item.spot.name, item.spot.spec, Array.new(11, nil), item.count, nil, nil, nil, nil, nil, nil, spot_plan_item_cells].flatten,
+                  style: [nil, center_cell, center_cell, center_cell, left_cell, left_cell, Array.new(18 + spot_plan_item_cells.length(), center_cell)].flatten)
               end
 
               sheet.column_widths(2, 15, 12, 12, 45, 16, 16, 16, 16, 16, 16, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5)
@@ -146,6 +185,7 @@ module Tida
 
             # box_uploader = ::BackOffice::Box::Uploader.new
             # box_uploader.upload result_file, "#{Settings.file_system.box.sina_weibo_report_root}/#{sina_weibo_url_package.name}"
+            result_file
           end
 
           private
@@ -157,6 +197,24 @@ module Tida
             first_char = COLUMN_NAMES_2[l]
             second_char = COLUMN_NAMES[r]
             "#{first_char}#{second_char}"
+          end
+
+          def get_spot_plan_item_cells(master_plan_item, months, days)
+            cells = []
+            months.each_with_index do |month, m_index|
+              key = "#{month[:year]}#{sprintf('%02d', month[:month])}"
+              days[key].each_with_index do |day, index|
+                if day && day > 0
+                  spi = SpotPlanItem.in_version(master_plan_item.id, master_plan_item.master_plan.working_version).where(placed_at: Time.parse("#{month[:year]}-#{sprintf('%02d', month[:month])}-#{sprintf('%02d', index + 1)}")).first
+                  if spi
+                    cells << spi.count
+                  else
+                    cells << nil
+                  end
+                end
+              end
+            end
+            cells
           end
         end
       end

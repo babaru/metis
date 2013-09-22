@@ -99,8 +99,9 @@ class SpotPlanItemsController < ApplicationController
 
   def generate
     if request.post?
-      Tida::Metis::ExcelGenerators::SpotPlans::CaratGenerator.new(params[:master_plan_id]).generate()
-      redirect_to spot_plan_path(master_plan_id: params[:master_plan_id])
+      file = Tida::Metis::ExcelGenerators::SpotPlans::CaratGenerator.new(params[:master_plan_id]).generate()
+      # redirect_to spot_plan_path(master_plan_id: params[:master_plan_id])
+      send_file file, :type=>"application/vnd.ms-excel", :x_sendfile=>true
     end
   end
 

@@ -52,7 +52,7 @@ class MasterPlansController < ApplicationController
         @master_plan.items << MasterPlanItem.new({
           spot_id: spot_ids[index],
           count: item,
-          is_on_house: is_on_houses.include?(spot_ids[index]),
+          is_on_house: is_on_houses.nil? ? false : is_on_houses.include?(spot_ids[index]),
           client_id: @master_plan.client_id,
           project_id: @master_plan.project_id,
           website_id: website_id,

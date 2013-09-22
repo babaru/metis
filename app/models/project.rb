@@ -27,7 +27,7 @@ class Project < ActiveRecord::Base
     result = {}
     (started_at.to_datetime..ended_at.to_datetime).map do |m|
       key = m.strftime('%Y%m')
-      result[key] = Array.new(Time.days_in_month(m.month, m.year), 0) if result[key].nil?
+      result[key] = Array.new([ended_at.to_datetime.day, Time.days_in_month(m.month, m.year)].min, 0) if result[key].nil?
       result[key][m.day - 1] = 1
     end
     result
