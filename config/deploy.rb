@@ -3,7 +3,7 @@ set :application, "Metis.Tida"
 set :repository,  "git@github.com:babaru/metis.git"
 set :domain, "112.124.62.108"
 
-set :rvm_ruby_string, '1.9.3-head'
+set :rvm_ruby_string, '2.0.0-head'
 set :rvm_type, :system
 
 set :scm, :git
