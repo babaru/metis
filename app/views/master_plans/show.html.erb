@@ -2,6 +2,14 @@
 
 <%= render_page_title "<strong>#{@master_plan.project.client.name}</strong> #{@master_plan.project.name}: #{@master_plan.name}" do |toolbar|
   toolbar << {
+    name: render_icon_and_text_content('icon-calendar', 'Spot Plan'),
+    url: spot_plan_path(website_id: @selected_website_id),
+    options: {
+      class: 'button button-primary',
+      'data-skip-pjax' => true,
+      style: 'margin: 10px 0px;'}
+  }
+  toolbar << {
     name: "#{t('labels.back_to')}#{@master_plan.project.name}#{t('model.show', :model => Project.model_name.human)}",
     url: project_path(@master_plan.project_id),
     options: {class: 'button'}
@@ -23,7 +31,7 @@ end %>
   <div class="padding">
 
     <div class="well master-plan-summary">
-      <%= render partial: 'master_plan_summary', locals: {contract_price: @master_plan.contract_price, profit: @master_plan.profit, run_time_on_house_rate: @master_plan.on_house_rate(@selected_website_id), standard_on_house_rate: @master_plan.project.client.on_house_rate(@selected_website_id), is_managing_spot_plan: true, selected_website_id: @selected_website_id, master_plan_id: @master_plan.id} %>
+      <%= render partial: 'master_plan_summary', locals: {contract_price: @master_plan.contract_price, profit: @master_plan.profit, run_time_on_house_rate: @master_plan.on_house_rate(@selected_website_id), standard_on_house_rate: @master_plan.project.client.on_house_rate(@selected_website_id), selected_website_id: @selected_website_id, master_plan_id: @master_plan.id, budget: @master_plan.project.budget} %>
     </div>
 
     <ul class="nav nav-tabs">
@@ -40,7 +48,7 @@ end %>
   </div>
 </article>
 
-<%= render partial: 'master_plan_items/master_plan_items_grid', locals: {master_plan_items: @master_plan_items_grid, selected_website_id: @selected_website_id} %>
+<%= render partial: 'master_plan_items_grid', locals: {master_plan_items: @master_plan_items_grid, selected_website_id: @selected_website_id} %>
 
 <% end %>
 

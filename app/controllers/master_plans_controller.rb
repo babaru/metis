@@ -131,8 +131,45 @@ class MasterPlansController < ApplicationController
     end
   end
 
-  def save_version
-    @master_plan = MasterPlan.find(params[:master_plan_id])
+  def spot_plan
+    @master_plan = MasterPlan.find params[:id]
+    @candidate_websites = @master_plan.candidate_websites
+    @selected_website_id = @candidate_websites.first.id if @candidate_websites.count > 0
+    @selected_website_id = params[:website_id] if params[:website_id]
+    @master_plan_items = MasterPlanItem.where('master_plan_id=? and website_id=?', @master_plan.id, @selected_website_id).order('is_on_house, created_at')
+    @working_version = params[:wv]
+    @working_version = @master_plan.working_version if params[:wv].nil?
+
+    @months = @master_plan.project.months
+    @days = @master_plan.project.days
+
+    if @months.length > 0
+      @selected_month = @months.first[:month].to_i
+      @selected_year = @months.first[:year].to_i
+    end
+    @selected_month = params[:m].to_i if params[:m]
+    @selected_year = params[:y].to_i if params[:y]
+
+    @selected_days = []
+    if @selected_month && @selected_year
+      @selected_days = @days["#{@selected_year}#{sprintf('%02d', @selected_month)}"]
+    end
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @master_plan_items }
+    end
+  end
+
+  def generate_spot_plan
+    if request.post?
+      file = Tida::Metis::ExcelGenerators::SpotPlans::CaratGenerator.new(params[:id]).generate()
+      send_file file, :type=>"application/vnd.ms-excel", :x_sendfile=>true
+    end
+  end
+
+  def save_spot_plan
+    @master_plan = MasterPlan.find(params[:id])
     if request.post?
       @master_plan.save_version!
       respond_to do |format|

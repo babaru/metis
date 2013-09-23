@@ -1,11 +1,7 @@
 <%= grid(master_plan_items, :show_filters => :always) do |g|
 
-  g.column name: t('activerecord.attributes.spot.website') do |master_plan_item|
-    master_plan_item.website.name
-  end
-
   g.column name: t('activerecord.attributes.spot.channel') do |master_plan_item|
-    master_plan_item.channel_name
+    master_plan_item.channel_name_value
   end
 
   g.column name: t('activerecord.attributes.spot.name') do |master_plan_item|

@@ -18,10 +18,12 @@ Metis::Application.routes.draw do
   # get 'websites/:website_id/channels' => 'channels#index'
 
   get 'master_plans/:id/choose_spots' => 'master_plans#choose_spots', as: :choose_spots
-
-  get 'spot_plan'=> 'master_plan_items#index', as: :spot_plan
-  match 'spot_plan/generate' => 'spot_plan_items#generate', as: :generate_spot_plan
-  match 'spot_plan/save' => 'master_plans#save_version', as: :save_spot_plan
+  get 'master_plans/:id/spot_plan' => 'master_plans#spot_plan', as: :spot_plan
+  # get 'spot_plan'=> 'master_plan_items#index', as: :spot_plan
+  match 'master_plans/:id/generate_spot_plan' => 'master_plans#generate_spot_plan', as: :generate_spot_plan
+  # match 'spot_plan/generate' => 'spot_plan_items#generate', as: :generate_spot_plan
+  match 'master_plans/:id/save_spot_plan' => 'master_plans#save_spot_plan', as: :save_spot_plan
+  # match 'spot_plan/save' => 'master_plans#save_version', as: :save_spot_plan
   match 'spot_plan_items/:id/modify_placed_at' => 'spot_plan_items#modify_placed_at', as: :modify_placed_at
 
   post 'master_plan_items/:id/modify' => 'master_plan_items#modify', as: :modify_master_plan_item

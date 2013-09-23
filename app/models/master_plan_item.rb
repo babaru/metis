@@ -33,6 +33,11 @@ class MasterPlanItem < ActiveRecord::Base
     position_name
   end
 
+  def channel_name_value
+    return channel_name if channel_name
+    channel.name
+  end
+
   def spot_price_value
     return spot.price if spot_id
     price

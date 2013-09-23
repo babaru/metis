@@ -96,14 +96,6 @@ class SpotPlanItemsController < ApplicationController
     end
   end
 
-  def generate
-    if request.post?
-      file = Tida::Metis::ExcelGenerators::SpotPlans::CaratGenerator.new(params[:master_plan_id]).generate()
-      # redirect_to spot_plan_path(master_plan_id: params[:master_plan_id])
-      send_file file, :type=>"application/vnd.ms-excel", :x_sendfile=>true
-    end
-  end
-
   def modify_placed_at
     @spot_plan_item = SpotPlanItem.find params[:id]
     if request.post?
