@@ -6,7 +6,7 @@ module Tida
         class CaratGenerator
           LINE_HEIGHT = 17
           FONT_NAME = '微软雅黑'
-          FONT_SIZE = 10
+          FONT_SIZE = 9
           COLUMN_NAMES = [
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
           ]
@@ -74,6 +74,78 @@ module Tida
               alignment: {horizontal: :right, vertical: :center},
               border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]}
             })
+            old_cell = styles.add_style({
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: false,
+              alignment: {horizontal: :center, vertical: :center},
+              bg_color: "FFFF00"
+            })
+            on_house_center_cell = styles.add_style({
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: false,
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]},
+              fg_color: "FF0000"
+            })
+            on_house_left_cell = styles.add_style({
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: false,
+              alignment: {horizontal: :left, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]},
+              fg_color: "FF0000"
+            })
+            on_house_right_cell = styles.add_style({
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: false,
+              alignment: {horizontal: :right, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]},
+              fg_color: "FF0000"
+            })
+            sub_total_cell = styles.add_style({
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: false,
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]},
+              bg_color: "DDDDDD"
+            })
+            sub_total_on_house_cell = styles.add_style({
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: true,
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]},
+              bg_color: "DDDDDD"
+            })
+            total_cell = styles.add_style({
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: true,
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]},
+              bg_color: "00CCFF"
+            })
+            currency_cell = styles.add_style({
+              format_code: "¥#,##0;[Red]¥-#,##0",
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: false,
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]}
+            })
+            currency_on_house_cell = styles.add_style({
+              format_code: "¥#,##0;[Red]¥-#,##0",
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: false,
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]},
+              fg_color: "FF0000"
+            })
 
             ap.workbook.add_worksheet name: master_plan.name do |sheet|
 
@@ -130,6 +202,7 @@ module Tida
               Rails.logger.debug "days: #{days}"
 
               month_segs = []
+              total_day_count = 0
               months.each_with_index do |month, m_index|
                 key = "#{month[:year]}#{sprintf('%02d', month[:month])}"
                 table_headers << "#{month[:year]}-#{sprintf('%02d', month[:month])}"
@@ -148,7 +221,10 @@ module Tida
                   end
                 end
                 month_segs << col_count
+                total_day_count += days[key].length
               end
+
+              Rails.logger.debug("total_day_count: #{total_day_count}")
 
               table_header_styles = [nil, table_header_first_cell, Array.new(table_headers.length - 3, table_header_cell), table_header_last_cell].flatten
               row = sheet.add_row(table_headers, style: table_header_styles)
@@ -158,23 +234,40 @@ module Tida
               row.height = 40
 
               0.upto(calendar_column_index - 1) do |n|
-                sheet.merge_cells("#{get_column_name(n)}10:#{get_column_name(n)}11")
+                sheet.merge_cells("#{get_column_name(n)}#{row.index}:#{get_column_name(n)}#{row.index + 1}")
               end
 
               month_segs.each do |seg|
-                sheet.merge_cells("#{get_column_name(calendar_column_index)}10:#{get_column_name(calendar_column_index + seg)}10")
+                sheet.merge_cells("#{get_column_name(calendar_column_index)}#{row.index}:#{get_column_name(calendar_column_index + seg)}#{row.index}")
                 calendar_column_index = calendar_column_index + seg + 1
               end
 
               # Fill records
 
-              master_plan.items.each do |item|
-                spot_plan_item_cells = get_spot_plan_item_cells(item, months, days)
-                sheet.add_row([nil, nil, item.website.name, item.channel.name, item.spot.name, item.spot.spec, Array.new(11, nil), item.count, nil, nil, nil, nil, nil, nil, spot_plan_item_cells].flatten,
-                  style: [nil, center_cell, center_cell, center_cell, left_cell, left_cell, Array.new(18 + spot_plan_item_cells.length(), center_cell)].flatten)
+              start_index = row.index + 2
+              media_type_start_index = row.index + 2
+
+              sub_total_rows = []
+
+              master_plan.candidate_websites.each do |website|
+                master_plan.items.where(website_id: website.id).order('is_on_house').each do |item|
+                  if item.is_on_house?
+                    row = fill_data_row(sheet, item, months, days, center_cell, on_house_left_cell, on_house_center_cell, currency_on_house_cell, old_cell)
+                  else
+                    row = fill_data_row(sheet, item, months, days, center_cell, left_cell, center_cell, currency_cell, old_cell)
+                  end
+                end
+                sheet.merge_cells("#{get_column_name(2)}#{start_index}:#{get_column_name(2)}#{row.index + 1}")
+                row = fill_sub_total_row(sheet, master_plan.on_house_rate(website.id), start_index, row.index + 1, total_day_count, center_cell, sub_total_cell, sub_total_on_house_cell)
+                sub_total_rows << row.index + 1
+                start_index = row.index + 2
               end
 
-              sheet.column_widths(2, 15, 12, 12, 45, 16, 16, 16, 16, 16, 16, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5)
+              sheet.merge_cells("#{get_column_name(1)}#{media_type_start_index}:#{get_column_name(1)}#{row.index + 1}")
+
+              row = fill_total_row(sheet, row.index + 1, sub_total_rows, total_day_count, total_cell)
+
+              sheet.column_widths(2, 15, 12, 12, 35, 24, 16, 16, 16, 16, 16, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5)
             end
 
             root_folder = File.join Rails.root, 'tmp/spot_plans'
@@ -199,22 +292,84 @@ module Tida
             "#{first_char}#{second_char}"
           end
 
-          def get_spot_plan_item_cells(master_plan_item, months, days)
+          def fill_total_row(sheet, end_row_index, sub_total_rows, calendar_column_count, total_cell)
+            sp12 = "+#{get_column_name(12)}"
+            sp13 = "+#{get_column_name(13)}"
+            sp22 = "+#{get_column_name(22)}"
+            row = sheet.add_row([nil, 'Total', Array.new(8, nil), '-', '-',
+              "=#{get_column_name(12)}#{sub_total_rows.join(sp12)}",
+              "=#{get_column_name(13)}#{sub_total_rows.join(sp13)}",
+              "=#{get_column_name(13)}#{end_row_index + 1}/#{get_column_name(12)}#{end_row_index + 1}",
+              "=#{get_column_name(22)}#{end_row_index + 1}/#{get_column_name(13)}#{end_row_index + 1}",
+              "=#{get_column_name(22)}#{end_row_index + 1}/#{get_column_name(13)}#{end_row_index + 1}*1000",
+              '-', '-', nil, '-', '-',
+              "=#{get_column_name(22)}#{sub_total_rows.join(sp22)}", nil,
+              Array.new(calendar_column_count, nil)].flatten,
+              style: [nil, Array.new(23 + calendar_column_count, total_cell)].flatten)
+            sheet.merge_cells("#{get_column_name(1)}#{row.index + 1}:#{get_column_name(3)}#{row.index + 1}")
+            sheet.merge_cells("#{get_column_name(24)}#{row.index + 1}:#{get_column_name(23 + calendar_column_count)}#{row.index + 1}")
+            row
+          end
+
+          def fill_sub_total_row(sheet, on_house_ratio, start_row_index, end_row_index, calendar_column_count, center_cell, sub_total_cell, sub_total_on_house_cell)
+            row = sheet.add_row([nil, nil, 'Sub Total', Array.new(7, nil), '-', '-',
+              "=SUM(#{get_column_name(12)}#{start_row_index}:#{get_column_name(12)}#{end_row_index})",
+              "=SUM(#{get_column_name(13)}#{start_row_index}:#{get_column_name(13)}#{end_row_index})",
+              "=#{get_column_name(13)}#{end_row_index + 1}/#{get_column_name(12)}#{end_row_index + 1}",
+              "=#{get_column_name(22)}#{end_row_index + 1}/#{get_column_name(13)}#{end_row_index + 1}",
+              "=#{get_column_name(22)}#{end_row_index + 1}/#{get_column_name(13)}#{end_row_index + 1}*1000",
+              "-", "-", nil, '-', '-',
+              "=SUM(#{get_column_name(22)}#{start_row_index}:#{get_column_name(22)}#{end_row_index})",
+              "Bonus Ratio: #{on_house_ratio}",
+              Array.new(calendar_column_count, nil)].flatten,
+              style: [nil, center_cell, Array.new(21, sub_total_cell), sub_total_on_house_cell, Array.new(calendar_column_count, sub_total_cell)].flatten)
+            sheet.merge_cells("#{get_column_name(2)}#{row.index + 1}:#{get_column_name(3)}#{row.index + 1}")
+            sheet.merge_cells("#{get_column_name(24)}#{row.index + 1}:#{get_column_name(23 + calendar_column_count)}#{row.index + 1}")
+            row
+          end
+
+          def fill_data_row(sheet, master_plan_item, months, days, website_name_cell, left_cell, center_cell, currency_cell, old_cell)
+            spot_plan_item_cells, spot_plan_item_cells_styles = get_spot_plan_item_cells(master_plan_item, months, days, center_cell, old_cell)
+            sheet.add_row([nil, '网站',
+              master_plan_item.website.name,
+              master_plan_item.channel.name,
+              master_plan_item.spot.name,
+              master_plan_item.spot.spec,
+              Array.new(11, nil),
+              master_plan_item.count,
+              nil, nil,
+              master_plan_item.spot.price,
+              master_plan_item.is_on_house? ? '0%' : "#{master_plan_item.client.website_discount_value(master_plan_item.website_id, percent: true)}%",
+              master_plan_item.is_on_house? ? 0 : master_plan_item.client.website_discount_value(master_plan_item.website_id) * master_plan_item.spot.price * master_plan_item.count,
+              master_plan_item.spot.price * master_plan_item.count,
+              spot_plan_item_cells].flatten,
+              style: [nil, website_name_cell, website_name_cell, center_cell, left_cell, left_cell, Array.new(14, center_cell), currency_cell, center_cell, currency_cell, currency_cell, spot_plan_item_cells_styles].flatten)
+          end
+
+          def get_spot_plan_item_cells(master_plan_item, months, days, normal_style, old_cell_style)
             cells = []
+            styles = []
             months.each_with_index do |month, m_index|
               key = "#{month[:year]}#{sprintf('%02d', month[:month])}"
               days[key].each_with_index do |day, index|
                 if day && day > 0
                   spi = SpotPlanItem.in_version(master_plan_item.id, master_plan_item.master_plan.working_version).where(placed_at: Time.parse("#{month[:year]}-#{sprintf('%02d', month[:month])}-#{sprintf('%02d', index + 1)}")).first
                   if spi
-                    cells << spi.count
+                    if spi.new_spot_plan_item_id
+                      cells << nil
+                      styles << old_cell_style
+                    else
+                      cells << spi.count
+                      styles << normal_style
+                    end
                   else
                     cells << nil
+                    styles << normal_style
                   end
                 end
               end
             end
-            cells
+            [cells, styles]
           end
         end
       end

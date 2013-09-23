@@ -6,6 +6,10 @@
   -ms-user-select: none;
   user-select: none;
 
+  th {
+    text-align: center;
+  }
+
   .master-plan-item-row {
     td {
       padding: 0px; margin: 0px;
@@ -23,6 +27,15 @@
         color: #ff0000;
         font-weight: bold;
       }
+
+      &.spot_name {
+        text-align: left;
+        font-weight: bold;
+      }
+
+      .is_on_house {
+        color: red;
+      }
     }
 
     .spot-plan-item-cell, .disabled {
@@ -39,6 +52,10 @@
         height: 30px;
         line-height: 30px;
         text-align: center;
+
+        &.old_cell {
+          background: yellow;
+        }
       }
     }
 

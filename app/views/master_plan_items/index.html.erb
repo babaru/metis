@@ -2,6 +2,22 @@
 
 <%= render_page_title "<strong>#{@master_plan.project.client.name}</strong> #{@master_plan.project.name}: #{@master_plan.name}" do |toolbar|
   toolbar << {
+    name: '生成文件',
+    url: generate_spot_plan_path(master_plan_id: @master_plan),
+    options: {
+      method: :post,
+      class: 'button button-primary'
+    }
+  }
+  toolbar << {
+    name: '保存排期表',
+    url: save_spot_plan_path(master_plan_id: @master_plan),
+    options: {
+      method: :post,
+      class: 'button button-success'
+    }
+  } if @master_plan.is_dirty
+  toolbar << {
     name: "#{t('labels.back_to')}#{@master_plan.name}#{t('model.show', :model => MasterPlan.model_name.human)}",
     url: master_plan_path(@master_plan),
     options: {class: 'button'}
@@ -20,21 +36,23 @@ end %>
       <% else %>
       <li>
       <% end %>
-        <%= link_to website.name, spot_plan_path(website_id: website.id, master_plan_id: @master_plan, m: @selected_month, y: @selected_year) %>
+        <%= link_to website.name, spot_plan_path(website_id: website.id, master_plan_id: @master_plan, m: @selected_month, y: @selected_year, wv: @working_version) %>
       </li>
       <% end %>
     </ul>
 
+    <div class="well master-plan-summary">
+      <%= render partial: 'master_plans/master_plan_summary', locals: {contract_price: @master_plan.contract_price, profit: @master_plan.profit, run_time_on_house_rate: @master_plan.on_house_rate(@selected_website_id), standard_on_house_rate: @master_plan.project.client.on_house_rate(@selected_website_id), is_managing_spot_plan: true, selected_website_id: @selected_website_id, master_plan_id: @master_plan.id} %>
+    </div>
+
     <div class="grid">
       <div class="grid-row">
         <div class="cell6">
-          <%= link_to '生成文件', generate_spot_plan_path(master_plan_id: @master_plan), method: :post, class: 'button button-primary' %>
-          <%= link_to '保存排期表', save_spot_plan_path(master_plan_id: @master_plan), method: :post, class: 'button button-success' %>
         </div>
         <div class="cell6">
           <div class="btn-group pull-right" data-toggle="buttons-radio">
             <% @months.each do |m| %>
-            <%= link_to "#{m[:year]}年#{m[:month]}月", spot_plan_path(website_id: @selected_website_id, master_plan_id: @master_plan.id, y: m[:year], m: m[:month]), class: (@selected_year == m[:year] && @selected_month == m[:month]) ? 'button active' : 'button' %>
+            <%= link_to "#{m[:year]}年#{m[:month]}月", spot_plan_path(website_id: @selected_website_id, master_plan_id: @master_plan.id, y: m[:year], m: m[:month], wv: @working_version), class: (@selected_year == m[:year] && @selected_month == m[:month]) ? 'button active' : 'button' %>
             <% end %>
           </div>
         </div>

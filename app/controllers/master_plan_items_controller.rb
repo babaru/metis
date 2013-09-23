@@ -10,7 +10,7 @@ class MasterPlanItemsController < ApplicationController
     @selected_website_id = params[:website_id] if params[:website_id]
     @master_plan_items = MasterPlanItem.where('master_plan_id=? and website_id=?', params[:master_plan_id], @selected_website_id).order('is_on_house, created_at')
     @working_version = params[:wv]
-    @working_version = 1 if params[:wv].nil?
+    @working_version = @master_plan.working_version if params[:wv].nil?
 
     @months = @master_plan.project.months
     @days = @master_plan.project.days

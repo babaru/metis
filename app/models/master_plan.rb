@@ -5,7 +5,7 @@ class MasterPlan < ActiveRecord::Base
 
   has_many :items, class_name: 'MasterPlanItem', dependent: :destroy
 
-  attr_accessible :project_id, :created_by_id, :name, :client_id, :version, :is_readonly
+  attr_accessible :project_id, :created_by_id, :name, :client_id, :is_dirty, :is_readonly
 
   def contract_price
     sum = 0
@@ -55,7 +55,7 @@ class MasterPlan < ActiveRecord::Base
     MasterPlan.transaction do
       spot_plan_items = SpotPlanItem.where('master_plan_id=? and version=? and count>0', self.id, working_version)
       spot_plan_items.each {|item| item.copy_to_new_version!(working_version + 1)}
-      self.version = working_version
+      self.is_dirty = false
       self.save!
     end
   end

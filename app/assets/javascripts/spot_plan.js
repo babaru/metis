@@ -90,11 +90,14 @@ $(document).ready(function() {
             this.model.on('change', this.render, this);
         },
         render: function() {
-            console.log('rendering MasterPlanItemView');
-            console.log(this.model);
             $('#master-plan-item' + this.model.get('id') + ' .website_name').text(this.model.get('website_name'));
             $('#master-plan-item' + this.model.get('id') + ' .channel_name').text(this.model.get('channel_name'));
-            $('#master-plan-item' + this.model.get('id') + ' .spot_name').text(this.model.get('spot_name'));
+            if (this.model.get('is_on_house') == true) {
+                $('#master-plan-item' + this.model.get('id') + ' .spot_name').html($('<span>').text(this.model.get('spot_name')).addClass('is_on_house'));
+            } else {
+                $('#master-plan-item' + this.model.get('id') + ' .spot_name').html($('<span>').text(this.model.get('spot_name')));
+            }
+
             $('#master-plan-item' + this.model.get('id') + ' .ideal_count').text(this.model.get('ideal_count'));
             $('#master-plan-item' + this.model.get('id') + ' .reality_count').text(this.model.get('reality_count'));
 
@@ -109,7 +112,7 @@ $(document).ready(function() {
 
     SpotPlanItemView = Backbone.View.extend({
         tagName: 'span',
-        template: _.template('<%= count %>'),
+        template: _.template('<span><%= count %></span>'),
         initialize: function() {
             this.model.on('change', this.render, this);
         },
@@ -119,9 +122,12 @@ $(document).ready(function() {
             var m = this.model;
             var v = this.$el;
             var that = this;
-            this.$el.text(this.template(this.model.attributes));
+            this.$el.html(this.template(this.model.attributes));
             this.$el.addClass('spot-plan-item');
             this.$el.attr('id', 'spot_plan_item_' + this.model.get('id'));
+            if (this.model.get('new_spot_plan_item_id') > 0) {
+                this.$el.find('span').addClass('old_cell').text('');
+            }
 
             var cell = $('#master-plan-item' + this.model.get('master_plan_item_id') + ' .spot-plan-item-cell' + this.model.get('date_token'));
             cell.html(this.el);
@@ -136,10 +142,8 @@ $(document).ready(function() {
                 action: function(e) {
                     e.preventDefault();
                     $('#spot_plan_item_placed_at').parent().data('datetimepicker').setDate(new Date(m.get('placed_at')));
-                    // alert($('.date-picker').data('datetimepicker').setDate(new Date(2013,9,18)));
                     $('#spot-plan-item-modify-placed-at-modal form').attr('action', '/spot_plan_items/' + m.get('id') + '/modify_placed_at.json');
                     $('#spot-plan-item-modify-placed-at-modal').off('ajax:success').on('ajax:success', function(event, data, status, xhr) {
-                        console.log(data);
                         $('#spot-plan-item-modify-placed-at-modal').modal('hide');
                         m.fetch();
                         var spi = m.getMasterPlanItem().getSpotPlanItems().findWhere({"id": data["id"]})
@@ -155,7 +159,6 @@ $(document).ready(function() {
                                 }
                             });
                         } else {
-                            console.log(spi);
                             spi.fetch();
                         }
                     })

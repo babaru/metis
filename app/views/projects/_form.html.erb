@@ -3,13 +3,12 @@
   <%= f.error_notification %>
 
   <div class="form-inputs">
-    <%= f.input :name %>
-    <%= f.input :budget %>
-    <%= f.input :budget_unit, as: :hidden %>
+    <%= f.input :name, required: true %>
+    <%= f.input :budget, required: true %>
     <%= f.input :client_id, as: :hidden %>
     <%= f.input :created_by_id, as: :hidden %>
-    <%= f.input :started_at, as: :date_picker %>
-    <%= f.input :ended_at, as: :date_picker %>
+    <%= f.input :started_at, as: :date_picker, required: true %>
+    <%= f.input :ended_at, as: :date_picker, required: true %>
   </div>
 
   <div class="form-actions">

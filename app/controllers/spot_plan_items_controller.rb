@@ -58,13 +58,12 @@ class SpotPlanItemsController < ApplicationController
       @spot_plan_item.created_by_id = current_user.id
     end
 
-    respond_to do |format|
-      if @spot_plan_item.save
-        # format.html { redirect_to spot_plan_item_path(@spot_plan_item), notice: 'Spot plan item was successfully created.' }
+    SpotPlanItem.transaction do
+      @spot_plan_item.save!
+      @spot_plan_item.master_plan.is_dirty = true
+      @spot_plan_item.master_plan.save!
+      respond_to do |format|
         format.json { render json: @spot_plan_item, status: :created, location: @spot_plan_item }
-      else
-        # format.html { render action: "new" }
-        format.json { render json: @spot_plan_item.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -74,13 +73,13 @@ class SpotPlanItemsController < ApplicationController
   def update
     @spot_plan_item = SpotPlanItem.find(params[:id])
 
-    respond_to do |format|
-      if @spot_plan_item.update_attributes(params[:spot_plan_item])
+    SpotPlanItem.transaction do
+      @spot_plan_item.update_attributes!(params[:spot_plan_item])
+      @spot_plan_item.master_plan.is_dirty = true
+      @spot_plan_item.master_plan.save!
+      respond_to do |format|
         format.html { redirect_to spot_plan_item_path(@spot_plan_item), notice: 'Spot plan item was successfully updated.' }
         format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @spot_plan_item.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -108,10 +107,14 @@ class SpotPlanItemsController < ApplicationController
   def modify_placed_at
     @spot_plan_item = SpotPlanItem.find params[:id]
     if request.post?
-      new_placed_at = params[:spot_plan_item][:placed_at]
-      @new_spot_plan_item = @spot_plan_item.change_placed_at!(Time.parse(new_placed_at), current_user.id)
-      respond_to do |format|
-        format.json { render json: @new_spot_plan_item }
+      SpotPlanItem.transaction do
+        new_placed_at = params[:spot_plan_item][:placed_at]
+        @new_spot_plan_item = @spot_plan_item.change_placed_at!(Time.parse(new_placed_at), current_user.id)
+        @spot_plan_item.master_plan.is_dirty = true
+        @spot_plan_item.master_plan.save!
+        respond_to do |format|
+          format.json { render json: @new_spot_plan_item }
+        end
       end
     end
   end

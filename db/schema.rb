@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130911040629) do
+ActiveRecord::Schema.define(:version => 20130923033106) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -120,8 +120,8 @@ ActiveRecord::Schema.define(:version => 20130911040629) do
     t.string   "type"
     t.decimal  "discount",      :precision => 2, :scale => 0
     t.integer  "client_id"
-    t.integer  "version",                                     :default => 1
     t.boolean  "is_readonly",                                 :default => false
+    t.boolean  "is_dirty",                                    :default => true
   end
 
   add_index "master_plans", ["client_id"], :name => "index_master_plans_on_client_id"
