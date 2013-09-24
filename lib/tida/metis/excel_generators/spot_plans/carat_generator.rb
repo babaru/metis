@@ -146,6 +146,23 @@ module Tida
               border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]},
               fg_color: "FF0000"
             })
+            number_cell = styles.add_style({
+              format_code: "#,##0",
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: false,
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]}
+            })
+            number_on_house_cell = styles.add_style({
+              format_code: "#,##0",
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: false,
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]},
+              fg_color: "FF0000"
+            })
 
             ap.workbook.add_worksheet name: master_plan.name do |sheet|
 
@@ -252,9 +269,9 @@ module Tida
               master_plan.candidate_websites.each do |website|
                 master_plan.items.where(website_id: website.id).order('is_on_house').each do |item|
                   if item.is_on_house?
-                    row = fill_data_row(sheet, item, months, days, center_cell, on_house_left_cell, on_house_center_cell, currency_on_house_cell, old_cell)
+                    row = fill_data_row(sheet, item, months, days, center_cell, on_house_left_cell, on_house_center_cell, currency_on_house_cell, number_on_house_cell, old_cell)
                   else
-                    row = fill_data_row(sheet, item, months, days, center_cell, left_cell, center_cell, currency_cell, old_cell)
+                    row = fill_data_row(sheet, item, months, days, center_cell, left_cell, center_cell, currency_cell, number_cell, old_cell)
                   end
                 end
                 sheet.merge_cells("#{get_column_name(2)}#{start_index}:#{get_column_name(2)}#{row.index + 1}")
@@ -328,14 +345,20 @@ module Tida
             row
           end
 
-          def fill_data_row(sheet, master_plan_item, months, days, website_name_cell, left_cell, center_cell, currency_cell, old_cell)
+          def fill_data_row(sheet, master_plan_item, months, days, website_name_cell, left_cell, center_cell, currency_cell, number_cell, old_cell)
             spot_plan_item_cells, spot_plan_item_cells_styles = get_spot_plan_item_cells(master_plan_item, months, days, center_cell, old_cell)
             sheet.add_row([nil, '网站',
               master_plan_item.website.name,
               master_plan_item.channel.name,
               master_plan_item.spot.name,
               master_plan_item.spot.spec,
-              Array.new(11, nil),
+              Array.new(4, nil),
+              master_plan_item.est_imp,
+              master_plan_item.est_clicks,
+              master_plan_item.est_total_imp,
+              master_plan_item.est_total_clicks,
+              master_plan_item.est_ctr,
+              nil, nil,
               master_plan_item.count,
               nil, nil,
               master_plan_item.spot.price,
@@ -343,7 +366,9 @@ module Tida
               master_plan_item.is_on_house? ? 0 : master_plan_item.client.website_discount_value(master_plan_item.website_id) * master_plan_item.spot.price * master_plan_item.count,
               master_plan_item.spot.price * master_plan_item.count,
               spot_plan_item_cells].flatten,
-              style: [nil, website_name_cell, website_name_cell, center_cell, left_cell, left_cell, Array.new(14, center_cell), currency_cell, center_cell, currency_cell, currency_cell, spot_plan_item_cells_styles].flatten)
+              style: [nil, website_name_cell, website_name_cell, center_cell, left_cell, left_cell, Array.new(4, center_cell),
+                Array.new(4, number_cell),
+                Array.new(6, center_cell), currency_cell, center_cell, currency_cell, currency_cell, spot_plan_item_cells_styles].flatten)
           end
 
           def get_spot_plan_item_cells(master_plan_item, months, days, normal_style, old_cell_style)

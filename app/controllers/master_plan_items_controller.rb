@@ -60,15 +60,22 @@ class MasterPlanItemsController < ApplicationController
       @master_plan_item = MasterPlanItem.find params["id"]
       if @master_plan_item
         @master_plan_item.send "#{params['name']}=", params["value"]
+        @master_plan_item.est_total_imp = @master_plan_item.est_imp * @master_plan_item.count if @master_plan_item.est_imp
+        @master_plan_item.est_total_clicks = @master_plan_item.est_clicks * @master_plan_item.count if @master_plan_item.est_clicks
         @master_plan_item.save!
       end
 
       respond_to do |format|
         format.json { render json: {
+          id: @master_plan_item.id,
           contract_price: number_to_currency(@master_plan_item.master_plan.contract_price, unit: '', precision: 0),
+          website_contract_price: number_to_currency(@master_plan_item.master_plan.website_contract_price(params[:selected_website_id]), unit: '', precision: 0),
           profit: number_to_currency(@master_plan_item.master_plan.profit, unit: '', precision: 0),
+          website_profit: number_to_currency(@master_plan_item.master_plan.website_profit(params[:selected_website_id]), unit: '', precision: 0),
           run_time_on_house_rate: @master_plan_item.master_plan.on_house_rate(params[:selected_website_id]),
-          is_on_house: @master_plan_item.is_on_house
+          is_on_house: @master_plan_item.is_on_house,
+          est_total_imp: @master_plan_item.est_total_imp,
+          est_total_clicks: @master_plan_item.est_total_clicks
         }}
       end
     end

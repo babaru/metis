@@ -34,6 +34,12 @@ zh-CN:
       master_plan_item:
         count: 数量
         is_on_house: 是否配送
+        est_imp: 预估日展示数
+        est_clicks: 预估日点击数
+        est_ctr: 预估日点击率
+        est_total_imp: 预计总展示数
+        est_total_clicks: 预计总点击数
+        net_cost: 净价
       website:
         name: 名称
         url: 地址

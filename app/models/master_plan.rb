@@ -27,6 +27,26 @@ class MasterPlan < ActiveRecord::Base
     contract_price - cost
   end
 
+  def website_contract_price(website_id)
+    sum = 0
+    items.where(is_on_house: false, website_id: website_id).each do |item|
+      sum += (item.spot.price * item.count * project.client.our_discount_value(website_id)) if item.spot_id
+    end
+    sum
+  end
+
+  def website_cost(website_id)
+    sum = 0
+    items.where(is_on_house: false, website_id: website_id).each do |item|
+      sum += (item.spot.price * item.count * project.client.website_discount_value(website_id)) if item.spot_id
+    end
+    sum
+  end
+
+  def website_profit(website_id)
+    website_contract_price(website_id) - website_cost(website_id)
+  end
+
   def on_house_rate(website_id)
     total_price = 0
     items.joins('left join spots on spot_id=spots.id').where("is_on_house=0 and spots.website_id=#{website_id}").each do |item|

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130923033106) do
+ActiveRecord::Schema.define(:version => 20130924025444) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -93,13 +93,13 @@ ActiveRecord::Schema.define(:version => 20130923033106) do
     t.integer  "est_total_clicks"
     t.integer  "est_imp"
     t.integer  "est_clicks"
-    t.integer  "est_ctr"
+    t.decimal  "est_ctr",               :precision => 8,  :scale => 4
     t.integer  "est_cpc"
     t.integer  "est_cpm"
     t.integer  "days"
     t.integer  "cpc"
     t.decimal  "unit_rate_card",        :precision => 10, :scale => 0
-    t.decimal  "discount",              :precision => 10, :scale => 0
+    t.decimal  "discount",              :precision => 8,  :scale => 2
     t.decimal  "net_cost",              :precision => 10, :scale => 0
     t.decimal  "total_rate_card",       :precision => 10, :scale => 0
   end
