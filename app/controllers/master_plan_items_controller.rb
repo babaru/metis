@@ -76,7 +76,7 @@ class MasterPlanItemsController < ApplicationController
           is_on_house: @master_plan_item.is_on_house,
           est_total_imp: @master_plan_item.est_total_imp,
           est_total_clicks: @master_plan_item.est_total_clicks
-        }}
+        }, status: :ok, location: @master_plan_item}
       end
     end
   end
