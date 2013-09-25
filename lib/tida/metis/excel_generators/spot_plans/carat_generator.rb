@@ -275,7 +275,7 @@ module Tida
                   end
                 end
                 sheet.merge_cells("#{get_column_name(2)}#{start_index}:#{get_column_name(2)}#{row.index + 1}")
-                row = fill_sub_total_row(sheet, master_plan.on_house_rate(website.id), start_index, row.index + 1, total_day_count, center_cell, sub_total_cell, sub_total_on_house_cell)
+                row = fill_sub_total_row(sheet, master_plan.bonus_ratio(website.id), start_index, row.index + 1, total_day_count, center_cell, sub_total_cell, sub_total_on_house_cell)
                 sub_total_rows << row.index + 1
                 start_index = row.index + 2
               end
@@ -363,7 +363,7 @@ module Tida
               nil, nil,
               master_plan_item.spot.price,
               master_plan_item.is_on_house? ? '0%' : "#{master_plan_item.client.website_discount_value(master_plan_item.website_id, percent: true)}%",
-              master_plan_item.is_on_house? ? 0 : master_plan_item.client.website_discount_value(master_plan_item.website_id) * master_plan_item.spot.price * master_plan_item.count,
+              master_plan_item.is_on_house? ? 0 : master_plan_item.client.website_discount(master_plan_item.website_id) * master_plan_item.spot.price * master_plan_item.count,
               master_plan_item.spot.price * master_plan_item.count,
               spot_plan_item_cells].flatten,
               style: [nil, website_name_cell, website_name_cell, center_cell, left_cell, left_cell, Array.new(4, center_cell),

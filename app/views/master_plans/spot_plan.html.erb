@@ -42,7 +42,7 @@ end %>
     </ul>
 
     <div class="well master-plan-summary">
-      <%= render partial: 'master_plan_summary', locals: {contract_price: @master_plan.contract_price, website_contract_price: @master_plan.website_contract_price(@selected_website_id), profit: @master_plan.profit, website_profit: @master_plan.website_profit(@selected_website_id), run_time_on_house_rate: @master_plan.on_house_rate(@selected_website_id), standard_on_house_rate: @master_plan.project.client.on_house_rate(@selected_website_id), selected_website_id: @selected_website_id, master_plan_id: @master_plan.id, budget: @master_plan.project.budget} %>
+      <%= render partial: 'master_plan_summary' %>
     </div>
 
     <div class="grid">

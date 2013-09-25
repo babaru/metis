@@ -10,7 +10,9 @@ class SpotPlanItem < ActiveRecord::Base
   belongs_to :new_spot_plan_item, class_name: 'SpotPlanItem', foreign_key: :new_spot_plan_item_id
   has_one :spot_plan_item
 
-  attr_accessible :count, :is_enabled, :placed_at, :master_plan_item_id, :created_by_id, :master_plan_item_reality_count, :version, :new_spot_plan_item_id, :client_id, :project_id, :master_plan_id, :spot_id, :website_id, :channel_id
+  attr_accessible :count, :is_enabled, :placed_at, :master_plan_item_id,
+    :created_by_id, :master_plan_item_reality_count, :version,
+    :new_spot_plan_item_id, :client_id, :project_id, :master_plan_id, :spot_id, :website_id, :channel_id, :date_id
   attr_accessor :master_plan_item_reality_count
 
   scope :in_version, lambda{|master_plan_item_id, version| where(master_plan_item_id: master_plan_item_id, version: version)}

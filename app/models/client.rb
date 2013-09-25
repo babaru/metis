@@ -7,7 +7,6 @@ class Client < ActiveRecord::Base
   has_many :client_assignments, dependent: :destroy
   has_many :assigned_users, class_name: 'User', through: :client_assignments
   has_many :discounts, class_name: 'ClientDiscount', foreign_key: :client_id, dependent: :destroy
-
   attr_accessible :logo, :name, :created_by_id, :created_by, :assigned_user_ids
   has_attached_file :logo, :styles => { :thumb => "160x160>" },
     :path => ":rails_root/public:url",
@@ -17,21 +16,14 @@ class Client < ActiveRecord::Base
     user.id == created_by_id
   end
 
-  def website_discount_value(website_id, options={})
-    client_discount = discounts.where(website_id: website_id).first
-    return client_discount.website_discount_value(options) if client_discount
-    0
+  def method_missing(m, *args, &block)
+    Rails.logger.debug m.class
+    if [:website_discount, :company_discount, :website_bonus_ratio, :company_bonus_ratio].include?(m)
+      result = discounts.where(website_id: args[0]).first
+      return 0 unless result
+      return result.send(m)
+    end
+    puts "There's no method called #{m} here -- please try again."
   end
 
-  def our_discount_value(website_id, options = {})
-    client_discount = discounts.where(website_id: website_id).first
-    return client_discount.our_discount_value(options) if client_discount
-    0
-  end
-
-  def on_house_rate(website_id)
-    client_discount = discounts.where(website_id: website_id).first
-    return client_discount.on_house_rate if client_discount
-    0
-  end
 end
