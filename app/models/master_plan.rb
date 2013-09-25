@@ -79,7 +79,7 @@ class MasterPlan < ActiveRecord::Base
     Website.find_by_sql("select * from websites where id in (select distinct website_id from master_plan_items where master_plan_id=#{id})")
   end
 
-  def commit_version!
+  def save_version!
     working_version = self.working_version
     MasterPlan.transaction do
       spot_plan_items = SpotPlanItem.where('master_plan_id=? and version=? and count>0', self.id, working_version)
