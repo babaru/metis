@@ -25,7 +25,7 @@
   end
 
   g.column name: t('activerecord.attributes.master_plan_item.est_ctr') do |master_plan_item|
-    link_to(master_plan_item.est_ctr, '点击输入', class: 'editable-field', 'data-type' => 'text', 'data-pk' => master_plan_item.id, 'data-name' => "est_ctr", 'data-url' => "/master_plan_items/#{master_plan_item.id}/modify", 'data-original-title' => "#{t('activerecord.attributes.master_plan_item.est_ctr')} (小数形式)", 'data-params' => "{'selected_website_id': #{selected_website_id}}", 'data-skip-pjax' => true)
+    link_to(master_plan_item.est_ctr, '点击输入', class: 'editable-field', 'data-type' => 'text', 'data-pk' => master_plan_item.id, 'data-name' => "est_ctr", 'data-url' => "/master_plan_items/#{master_plan_item.id}/modify", 'data-original-title' => "#{t('activerecord.attributes.master_plan_item.est_ctr')} (小数形式)", 'data-params' => "{'selected_website_id': #{selected_website_id}}", 'data-skip-pjax' => true, id: "master-plan-item-#{master_plan_item.id}-est-ctr")
   end
 
   g.column name: t('activerecord.attributes.spot.price') do |master_plan_item|
@@ -55,11 +55,14 @@
   end
 end -%>
 
+<%= content_tag :span, @selected_website_id, class: 'hide', id: 'selected-website-id-value' %>
+<%= content_tag :span, @master_plan.id, class: 'hide', id: 'master-plan-id-value' %>
+
 <script type="text/javascript">
 $(document).ready(function() {
   $('.master_plan_item_count').editable({
     success: function(data) {
-      update_summary(data);
+      update_master_plan_summary();
     }
   });
 
@@ -101,6 +104,7 @@ function update_summary(data) {
 function update_total_fields(data) {
   $('#master-plan-item-' + data['id'] + '-est-total-imp').text(data["est_total_imp"]);
   $('#master-plan-item-' + data['id'] + '-est-total-clicks').text(data["est_total_clicks"]);
+  $('#master-plan-item-' + data['id'] + '-est-ctr').text(data["est_ctr"]);
 }
 
 function switch_button(is_on_house, button) {

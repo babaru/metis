@@ -1,8 +1,8 @@
-<div class="grid">
+<div class="grid" id="master-plan-summary">
   <div class="grid-row">
-    <div class="cell3">项目预算（元）：<h4 class="budget"><%= number_to_currency(budget, unit: '', precision: 0) %></h4></div>
-    <div class="cell3">合同额（元）：<h4 class="contract_price"><%= number_to_currency(website_contract_price, unit: '', precision: 0) %> (<%= number_to_currency(contract_price, unit: '', precision: 0) %>)</h4></div>
-    <div class="cell3">预估利润（元）：<h4 class="profit"><%= number_to_currency(website_profit, unit: '', precision: 0) %> (<%= number_to_currency(profit, unit: '', precision: 0) %>)</h4></div>
+    <div class="cell3">项目预算（元）：<h4 class="budget"></h4></div>
+    <div class="cell3">合同额（元）：<h4 class="contract_price"> ()</h4></div>
+    <div class="cell3">预估利润（元）：<h4 class="profit"> ()</h4></div>
     <div class="cell3">配送比率：<h4><span class="run_time_on_house_rate"><%= run_time_on_house_rate %></span> / <%= standard_on_house_rate %></h4></div>
   </div>
 </div>

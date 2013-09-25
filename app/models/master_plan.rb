@@ -1,4 +1,6 @@
 class MasterPlan < ActiveRecord::Base
+  include ActionView::Helpers::NumberHelper
+
   belongs_to :client
   belongs_to :project
   belongs_to :created_by, class_name: 'User', foreign_key: :created_by_id
@@ -35,6 +37,14 @@ class MasterPlan < ActiveRecord::Base
     sum
   end
 
+  def website_contract_prices()
+    result = {}
+    candidate_websites.each do |website|
+      result[website.id] = website_contract_price(website.id)
+    end
+    result
+  end
+
   def website_cost(website_id)
     sum = 0
     items.where(is_on_house: false, website_id: website_id).each do |item|
@@ -45,6 +55,14 @@ class MasterPlan < ActiveRecord::Base
 
   def website_profit(website_id)
     website_contract_price(website_id) - website_cost(website_id)
+  end
+
+  def website_profits()
+    result = {}
+    candidate_websites.each do |website|
+      result[website.id] = website_profit(website.id)
+    end
+    result
   end
 
   def on_house_rate(website_id)
@@ -58,6 +76,14 @@ class MasterPlan < ActiveRecord::Base
       on_house_amount += item.spot.price * item.count
     end
     (on_house_amount.to_f / total_price.to_f).to_f.round(2)
+  end
+
+  def client_on_house_rates()
+    result = {}
+    candidate_websites.each do |website|
+      result[website.id] = on_house_rate(website.id)
+    end
+    result
   end
 
   def working_version
@@ -82,5 +108,16 @@ class MasterPlan < ActiveRecord::Base
 
   def import_from_excel(excel_file)
     Tida::ExcelParsers::MasterPlanParser.parse excel_file
+  end
+
+  def as_json(options={})
+    item = super(options)
+    item[:budget] = number_to_currency(self.project.budget, precision: 0, unit: '')
+    item[:contract_price] = number_to_currency(self.contract_price, precision: 0, unit: '')
+    item[:profit] = number_to_currency(self.profit, precision: 0, unit: '')
+    item[:website_contract_prices] = self.website_contract_prices
+    item[:website_profits] = self.website_profits
+    item[:client_on_house_rates] = self.client_on_house_rates
+    item
   end
 end

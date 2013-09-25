@@ -62,6 +62,7 @@ class MasterPlanItemsController < ApplicationController
         @master_plan_item.send "#{params['name']}=", params["value"]
         @master_plan_item.est_total_imp = @master_plan_item.est_imp * @master_plan_item.count if @master_plan_item.est_imp
         @master_plan_item.est_total_clicks = @master_plan_item.est_clicks * @master_plan_item.count if @master_plan_item.est_clicks
+        @master_plan_item.est_ctr = @master_plan_item.est_clicks.to_f / @master_plan_item.est_imp.to_f if @master_plan_item.est_clicks && @master_plan_item.est_imp
         @master_plan_item.save!
       end
 

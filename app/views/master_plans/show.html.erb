@@ -1,4 +1,4 @@
-<div data-pjax-container>
+<div>
 
 <%= render_page_title "<strong>#{@master_plan.project.client.name}</strong> #{@master_plan.project.name}: #{@master_plan.name}" do |toolbar|
   toolbar << {
@@ -53,3 +53,7 @@ end %>
 <% end %>
 
 </div>
+
+<% content_for :js do %>
+<% javascript_include_tag "master_plan" %>
+<% end %>
