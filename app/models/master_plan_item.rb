@@ -23,6 +23,13 @@ class MasterPlanItem < ActiveRecord::Base
     item['spot_name'] = self.spot.name
     item['ideal_count'] = self.count
     item['reality_count'] = self.reality_count
+    item['contract_price'] = number_to_currency(self.master_plan.contract_price, unit: '', precision: 0),
+    item['website_contract_price'] = number_to_currency(self.master_plan.website_contract_price(params[:selected_website_id]), unit: '', precision: 0),
+    item['profit'] = number_to_currency(self.master_plan.profit, unit: '', precision: 0),
+    item['website_profit'] = number_to_currency(self.master_plan.website_profit(params[:selected_website_id]), unit: '', precision: 0),
+    item['run_time_on_house_rate'] = self.master_plan.on_house_rate(params[:selected_website_id]),
+    item['est_total_imp'] = self.est_total_imp,
+    item['est_total_clicks'] = self.est_total_clicks
     item
   end
 

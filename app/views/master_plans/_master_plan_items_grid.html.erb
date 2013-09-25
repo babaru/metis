@@ -58,19 +58,14 @@ end -%>
 <script type="text/javascript">
 $(document).ready(function() {
   $('.master_plan_item_count').editable({
-    success: function(response, data) {
+    success: function(data) {
       update_summary(data);
     }
   });
 
   $('.editable-field').editable({
-    success: function(response, data) {
-      if (response.success == false) {
-          console.log(response.msg);
-      } else {
-        console.log(response.msg);
-        update_total_fields(data);
-      }
+    success: function(data) {
+      update_total_fields(data);
     }
   });
 
