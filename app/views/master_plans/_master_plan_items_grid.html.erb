@@ -64,8 +64,12 @@ $(document).ready(function() {
   });
 
   $('.editable-field').editable({
-    success: function(data) {
-      update_total_fields(data);
+    success: function(response, data) {
+      if (response.success == false) {
+          console.log(response.msg);
+      } else {
+        update_total_fields(data);
+      }
     }
   });
 
@@ -81,12 +85,16 @@ $(document).ready(function() {
         name: 'is_on_house',
         value: val
       },
-      success: function(data) {
-        update_summary(data);
-        var is_on_house = false;
-        if(data["is_on_house"] == true) is_on_house = true;
-        switch_button(is_on_house, button);
-        update_grid(is_on_house, button);
+      success: function(response, data) {
+        if (response.success == false) {
+          console.log(response.msg);
+        } else {
+          update_summary(data);
+          var is_on_house = false;
+          if(data["is_on_house"] == true) is_on_house = true;
+          switch_button(is_on_house, button);
+          update_grid(is_on_house, button);
+        }
       },
     });
   })
