@@ -15,17 +15,19 @@ end %>
       <tr>
         <th style="width:auto;">网站名称</th>
         <th></th>
-        <th>媒体政策</th>
-        <th>客户政策</th>
-        <th>配送比例(诸如: 2.0)</th>
+        <th>媒体政策(如：0.6)</th>
+        <th>媒体配送比例(如: 2.0)</th>
+        <th>客户政策(如：0.7)</th>
+        <th>客户配送比例(如: 1.5)</th>
       </tr>
       <% Website.all.each do |website| %>
       <tr>
         <td><%= website.name %></td>
         <td><%= hidden_field_tag 'website_ids[]', website.id %></td>
-        <td style="align: center;"><%= text_field_tag 'website_discounts[]', @client.website_discount_value(website.id), style: "width: 2em;" %> 折</td>
-        <td style="align: center;"><%= text_field_tag 'our_discounts[]', @client.our_discount_value(website.id), style: "width: 2em;" %> 折</td>
-        <td style="align: center;"><%= text_field_tag 'on_house_rates[]', @client.on_house_rate(website.id), style: "width: 2em; " %></td>
+        <td style="align: center;"><%= text_field_tag 'website_discounts[]', @client.website_discount(website.id), style: "width: 2em;" %></td>
+        <td style="align: center;"><%= text_field_tag 'website_bonus_ratios[]', @client.website_bonus_ratio(website.id), style: "width: 2em; " %></td>
+        <td style="align: center;"><%= text_field_tag 'company_discounts[]', @client.company_discount(website.id), style: "width: 2em;" %></td>
+        <td style="align: center;"><%= text_field_tag 'company_bonus_ratios[]', @client.company_bonus_ratio(website.id), style: "width: 2em; " %></td>
       </tr>
       <% end %>
     </table>

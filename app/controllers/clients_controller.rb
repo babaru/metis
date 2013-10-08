@@ -37,21 +37,31 @@ class ClientsController < ApplicationController
     if request.post?
       params[:website_ids].each_with_index do |website_id, index|
         website_discount = 1
-        our_discount = 1
-        on_house_rate = 0
+        company_discount = 1
+        website_bonus_ratio = 0
+        company_bonus_ratio = 0
 
-        website_discount = params[:website_discounts][index].to_f / 10
-        our_discount = params[:our_discounts][index].to_f / 10
-        on_house_rate = params[:on_house_rates][index]
+        website_discount = params[:website_discounts][index]
+        company_discount = params[:company_discounts][index]
+        website_bonus_ratio = params[:website_bonus_ratios][index]
+        company_bonus_ratio = params[:company_bonus_ratios][index]
 
         client_discount = @client.discounts.where(website_id: website_id).first
         if client_discount
           client_discount.website_discount = website_discount
-          client_discount.our_discount = our_discount
-          client_discount.on_house_rate = on_house_rate
+          client_discount.company_discount = company_discount
+          client_discount.website_bonus_ratio = website_bonus_ratio
+          client_discount.company_bonus_ratio = company_bonus_ratio
           client_discount.save!
         else
-          @client.discounts << ClientDiscount.new(client_id: @client.id, website_id: website_id, website_discount: website_discount, our_discount: our_discount, on_house_rate: on_house_rate)
+          @client.discounts << ClientDiscount.new({
+            client_id: @client.id,
+            website_id: website_id,
+            website_discount: website_discount,
+            company_discount: company_discount,
+            website_bonus_ratio: website_bonus_ratio,
+            company_bonus_ratio: company_bonus_ratio
+            })
         end
       end
       @client.save!

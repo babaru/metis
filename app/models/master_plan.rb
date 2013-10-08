@@ -47,7 +47,7 @@ class MasterPlan < ActiveRecord::Base
     result
   end
 
-  def bonus_ratio(website_id)
+  def reality_bonus_ratio(website_id)
     return 0 unless website_id
     total_price = 0
     items.joins('left join spots on spot_id=spots.id').where("is_on_house=0 and spots.website_id=#{website_id}").each do |item|
@@ -61,12 +61,28 @@ class MasterPlan < ActiveRecord::Base
     (on_house_amount.to_f / total_price.to_f).to_f.round(2)
   end
 
-  def website_bonus_ratios()
+  def reality_bonus_ratios()
     result = {}
     candidate_websites.each do |website|
-      result[website.id] = bonus_ratio(website.id)
+      result[website.id] = reality_bonus_ratio(website.id)
     end
     result
+  end
+
+  def website_bonus_ratio(website_id)
+    self.client.website_bonus_ratio(website_id)
+  end
+
+  def website_bonus_ratios()
+    candidate_websites.inject([]) {|list, website| list << website_bonus_ratio(website.id)}
+  end
+
+  def company_bonus_ratio(website_id)
+    self.client.company_bonus_ratio(website_id)
+  end
+
+  def company_bonus_ratios()
+    candidate_websites.inject([]) {|list, website| list << company_bonus_ratio(website.id)}
   end
 
   def working_version
@@ -100,7 +116,9 @@ class MasterPlan < ActiveRecord::Base
     item[:profit] = number_to_currency(self.profit, precision: 0, unit: '')
     item[:website_contract_prices] = self.website_contract_prices
     item[:website_profits] = self.website_profits
+    item[:reality_bonus_ratios] = self.reality_bonus_ratios
     item[:website_bonus_ratios] = self.website_bonus_ratios
+    item[:company_bonus_ratios] = self.company_bonus_ratios
     item
   end
 end

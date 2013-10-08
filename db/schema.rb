@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130925090423) do
+ActiveRecord::Schema.define(:version => 20131008031353) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -46,12 +46,12 @@ ActiveRecord::Schema.define(:version => 20130925090423) do
   create_table "client_discounts", :force => true do |t|
     t.integer  "client_id"
     t.integer  "website_id"
-    t.datetime "created_at",                                        :null => false
-    t.datetime "updated_at",                                        :null => false
-    t.decimal  "website_discount",    :precision => 8, :scale => 2
-    t.decimal  "company_discount",    :precision => 8, :scale => 2
-    t.decimal  "website_bonus_ratio", :precision => 8, :scale => 2
-    t.decimal  "company_bonus_ratio", :precision => 8, :scale => 2
+    t.datetime "created_at",                                                         :null => false
+    t.datetime "updated_at",                                                         :null => false
+    t.decimal  "website_discount",    :precision => 8, :scale => 2, :default => 1.0
+    t.decimal  "company_discount",    :precision => 8, :scale => 2, :default => 1.0
+    t.decimal  "website_bonus_ratio", :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "company_bonus_ratio", :precision => 8, :scale => 2, :default => 0.0
   end
 
   add_index "client_discounts", ["client_id"], :name => "index_client_discounts_on_client_id"

@@ -9,8 +9,39 @@ $(document).ready(function() {
         },
         render: function() {
             $('#master-plan-summary .budget').text(this.model.get('budget'));
-            $('#master-plan-summary .contract_price').text(this.model.get('website_contract_prices')[$('#selected-website-id-value').text()] + ' (' + this.model.get('contract_price') + ')');
-            $('#master-plan-summary .profit').text(this.model.get('website_profits')[$('#selected-website-id-value').text()] + ' (' + this.model.get('profit') + ')');
+            $('#master-plan-summary .contract_price').text(
+                accounting.formatMoney(
+                    this.model.get('website_contract_prices')[$('#selected-website-id-value').text()],
+                    {
+                        symbol: '元',
+                        format: '%v%s'
+                    })
+                + ' (' +
+                accounting.formatMoney(
+                    this.model.get('contract_price') ,
+                    {
+                        symbol: '元',
+                        format: '%v%s'
+                    })
+                + ')');
+            $('#master-plan-summary .profit').text(
+                accounting.formatMoney(
+                    this.model.get('website_profits')[$('#selected-website-id-value').text()],
+                    {
+                        symbol: '元',
+                        format: '%v%s'
+                    })
+                + ' (' +
+                accounting.formatMoney(
+                    this.model.get('profit'),
+                    {
+                        symbol: '元',
+                        format: '%v%s'
+                    })
+                + ')');
+            $('#master-plan-summary .reality_bonus_ratio').text(this.model.get('reality_bonus_ratios')[$('#selected-website-id-value').text()]);
+            $('#master-plan-summary .website_bonus_ratio').text(this.model.get('website_bonus_ratios')[$('#selected-website-id-value').text()]);
+            $('#master-plan-summary .company_bonus_ratio').text(this.model.get('company_bonus_ratios')[$('#selected-website-id-value').text()]);
             return this;
         }
     });
