@@ -1,0 +1,14 @@
+defaults: &defaults
+  media_types:
+    unknown: 0
+    website: 1
+    video_website: 2
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

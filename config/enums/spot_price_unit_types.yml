@@ -1,0 +1,16 @@
+defaults: &defaults
+  spot_price_unit_types:
+    unknown: 0
+    day: 1
+    cpm: 2
+    cpc: 3
+    day_per_round: 4
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

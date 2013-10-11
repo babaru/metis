@@ -1,0 +1,3 @@
+class VideoWebsite < Website
+
+end

@@ -11,27 +11,27 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131008031353) do
+ActiveRecord::Schema.define(:version => 20131010094017) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
-    t.integer  "website_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "media_id"
   end
 
-  add_index "channel_groups", ["website_id"], :name => "index_channel_groups_on_website_id"
+  add_index "channel_groups", ["media_id"], :name => "index_channel_groups_on_media_id"
 
   create_table "channels", :force => true do |t|
-    t.integer  "website_id"
     t.string   "name"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
     t.integer  "channel_group_id"
+    t.integer  "media_id"
   end
 
   add_index "channels", ["channel_group_id"], :name => "index_channels_on_channel_group_id"
-  add_index "channels", ["website_id"], :name => "index_channels_on_website_id"
+  add_index "channels", ["media_id"], :name => "index_channels_on_media_id"
 
   create_table "client_assignments", :force => true do |t|
     t.integer  "client_id"
@@ -45,17 +45,17 @@ ActiveRecord::Schema.define(:version => 20131008031353) do
 
   create_table "client_discounts", :force => true do |t|
     t.integer  "client_id"
-    t.integer  "website_id"
     t.datetime "created_at",                                                         :null => false
     t.datetime "updated_at",                                                         :null => false
-    t.decimal  "website_discount",    :precision => 8, :scale => 2, :default => 1.0
+    t.decimal  "media_discount",      :precision => 8, :scale => 2, :default => 1.0
     t.decimal  "company_discount",    :precision => 8, :scale => 2, :default => 1.0
-    t.decimal  "website_bonus_ratio", :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "media_bonus_ratio",   :precision => 8, :scale => 2, :default => 0.0
     t.decimal  "company_bonus_ratio", :precision => 8, :scale => 2, :default => 0.0
+    t.integer  "media_id"
   end
 
   add_index "client_discounts", ["client_id"], :name => "index_client_discounts_on_client_id"
-  add_index "client_discounts", ["website_id"], :name => "index_client_discounts_on_website_id"
+  add_index "client_discounts", ["media_id"], :name => "index_client_discounts_on_media_id"
 
   create_table "clients", :force => true do |t|
     t.string   "name"
@@ -74,43 +74,50 @@ ActiveRecord::Schema.define(:version => 20131008031353) do
   create_table "master_plan_items", :force => true do |t|
     t.integer  "spot_id"
     t.integer  "master_plan_id"
-    t.decimal  "count",                 :precision => 10, :scale => 0
-    t.datetime "created_at",                                                              :null => false
-    t.datetime "updated_at",                                                              :null => false
-    t.boolean  "is_on_house",                                          :default => false
+    t.integer  "count",                                                   :default => 0
+    t.datetime "created_at",                                                                 :null => false
+    t.datetime "updated_at",                                                                 :null => false
+    t.boolean  "is_on_house",                                             :default => false
     t.integer  "client_id"
     t.integer  "project_id"
-    t.integer  "website_id"
     t.integer  "channel_id"
     t.string   "website_name"
     t.string   "channel_name"
-    t.string   "position_name"
+    t.string   "spot_name"
     t.string   "material_format"
-    t.boolean  "pv_tracking",                                          :default => false
-    t.boolean  "click_tracking",                                       :default => false
-    t.boolean  "link_to_official_site",                                :default => false
+    t.boolean  "pv_tracking",                                             :default => false
+    t.boolean  "click_tracking",                                          :default => false
+    t.boolean  "link_to_official_site",                                   :default => false
     t.string   "mr_deadline"
     t.integer  "est_total_imp"
     t.integer  "est_total_clicks"
     t.integer  "est_imp"
     t.integer  "est_clicks"
-    t.decimal  "est_ctr",               :precision => 8,  :scale => 4
+    t.decimal  "est_ctr",                  :precision => 8,  :scale => 4
     t.integer  "est_cpc"
     t.integer  "est_cpm"
-    t.integer  "days"
     t.integer  "cpc"
-    t.decimal  "unit_rate_card",        :precision => 10, :scale => 0
-    t.decimal  "discount",              :precision => 8,  :scale => 2
-    t.decimal  "net_cost",              :precision => 10, :scale => 0
-    t.decimal  "total_rate_card",       :precision => 10, :scale => 0
+    t.decimal  "unit_rate_card",           :precision => 10, :scale => 3, :default => 0.0
+    t.decimal  "net_cost",                 :precision => 10, :scale => 3, :default => 0.0
+    t.decimal  "total_rate_card",          :precision => 10, :scale => 3, :default => 0.0
+    t.decimal  "website_discount",         :precision => 8,  :scale => 2, :default => 1.0
+    t.decimal  "company_discount",         :precision => 8,  :scale => 2, :default => 1.0
+    t.decimal  "website_bonus_ratio",      :precision => 8,  :scale => 2, :default => 0.0
+    t.decimal  "company_bonus_ratio",      :precision => 8,  :scale => 2, :default => 0.0
+    t.string   "client_name"
+    t.string   "project_name"
+    t.string   "master_plan_name"
+    t.string   "unit_rate_card_unit"
+    t.integer  "unit_rate_card_unit_type",                                :default => 0
+    t.integer  "media_id"
   end
 
   add_index "master_plan_items", ["channel_id"], :name => "index_master_plan_items_on_channel_id"
   add_index "master_plan_items", ["client_id"], :name => "index_master_plan_items_on_client_id"
   add_index "master_plan_items", ["master_plan_id"], :name => "index_master_plan_items_on_master_plan_id"
+  add_index "master_plan_items", ["media_id"], :name => "index_master_plan_items_on_media_id"
   add_index "master_plan_items", ["project_id"], :name => "index_master_plan_items_on_project_id"
   add_index "master_plan_items", ["spot_id"], :name => "index_master_plan_items_on_spot_id"
-  add_index "master_plan_items", ["website_id"], :name => "index_master_plan_items_on_website_id"
 
   create_table "master_plans", :force => true do |t|
     t.integer  "project_id"
@@ -128,6 +135,22 @@ ActiveRecord::Schema.define(:version => 20131008031353) do
   add_index "master_plans", ["client_id"], :name => "index_master_plans_on_client_id"
   add_index "master_plans", ["created_by_id"], :name => "index_master_plans_on_created_by_id"
   add_index "master_plans", ["project_id"], :name => "index_master_plans_on_project_id"
+
+  create_table "media", :force => true do |t|
+    t.string   "name"
+    t.string   "url"
+    t.string   "logo_file_name"
+    t.string   "logo_content_type"
+    t.integer  "logo_file_size"
+    t.datetime "logo_updated_at"
+    t.string   "attachment_access_token"
+    t.string   "type"
+    t.integer  "created_by_id"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
+  end
+
+  add_index "media", ["created_by_id"], :name => "index_media_on_created_by_id"
 
   create_table "project_assignments", :force => true do |t|
     t.integer  "project_id"
@@ -180,10 +203,10 @@ ActiveRecord::Schema.define(:version => 20131008031353) do
     t.string   "attachment_access_token"
     t.datetime "created_at",              :null => false
     t.datetime "updated_at",              :null => false
-    t.integer  "website_id"
+    t.integer  "media_id"
   end
 
-  add_index "spot_categories", ["website_id"], :name => "index_spot_categories_on_website_id"
+  add_index "spot_categories", ["media_id"], :name => "index_spot_categories_on_media_id"
 
   create_table "spot_contracts", :force => true do |t|
     t.integer  "client_id"
@@ -221,20 +244,19 @@ ActiveRecord::Schema.define(:version => 20131008031353) do
     t.integer  "project_id"
     t.integer  "spot_id"
     t.integer  "master_plan_id"
-    t.integer  "website_id"
     t.integer  "channel_id"
     t.string   "date_id"
+    t.integer  "media_id"
   end
 
   add_index "spot_plan_items", ["channel_id"], :name => "index_spot_plan_items_on_channel_id"
   add_index "spot_plan_items", ["client_id"], :name => "index_spot_plan_items_on_client_id"
   add_index "spot_plan_items", ["master_plan_id"], :name => "index_spot_plan_items_on_master_plan_id"
+  add_index "spot_plan_items", ["media_id"], :name => "index_spot_plan_items_on_media_id"
   add_index "spot_plan_items", ["project_id"], :name => "index_spot_plan_items_on_project_id"
   add_index "spot_plan_items", ["spot_id"], :name => "index_spot_plan_items_on_spot_id"
-  add_index "spot_plan_items", ["website_id"], :name => "index_spot_plan_items_on_website_id"
 
   create_table "spots", :force => true do |t|
-    t.integer  "website_id"
     t.integer  "channel_id"
     t.string   "name"
     t.integer  "price"
@@ -245,11 +267,12 @@ ActiveRecord::Schema.define(:version => 20131008031353) do
     t.text     "remark"
     t.integer  "spot_category_id"
     t.string   "unit_type"
+    t.integer  "media_id"
   end
 
   add_index "spots", ["channel_id"], :name => "index_spots_on_channel_id"
+  add_index "spots", ["media_id"], :name => "index_spots_on_media_id"
   add_index "spots", ["spot_category_id"], :name => "index_spots_on_spot_category_id"
-  add_index "spots", ["website_id"], :name => "index_spots_on_website_id"
 
   create_table "upload_files", :force => true do |t|
     t.string   "data_file_file_name"
@@ -279,17 +302,5 @@ ActiveRecord::Schema.define(:version => 20131008031353) do
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
-
-  create_table "websites", :force => true do |t|
-    t.string   "name"
-    t.string   "url"
-    t.string   "logo_file_name"
-    t.string   "logo_content_type"
-    t.integer  "logo_file_size"
-    t.datetime "logo_updated_at"
-    t.string   "attachment_access_token"
-    t.datetime "created_at",              :null => false
-    t.datetime "updated_at",              :null => false
-  end
 
 end
