@@ -5,7 +5,7 @@ describe MasterPlanItem, '#create' do
   let(:master_plan) { create(:master_plan, {name: 'Master Plan 1'}) }
   let(:project) { create(:project, {name: 'Project 1'}) }
   let(:client) { create(:client, {name: 'Client 1'}) }
-  let(:website) { create(:website, {name: 'Website 1'}) }
+  let(:medium) { create(:medium, {name: 'Website 1'}) }
   let(:channel) { create(:channel, {name: 'Channel 1'}) }
 
   subject(:new_master_plan_item) { MasterPlanItem.create({
@@ -14,7 +14,7 @@ describe MasterPlanItem, '#create' do
       master_plan: master_plan,
       project: project,
       client: client,
-      website: website,
+      medium: medium,
       channel: channel
       }) }
 
@@ -23,7 +23,7 @@ describe MasterPlanItem, '#create' do
     expect(new_master_plan_item.master_plan_name).to eq(master_plan.name)
     expect(new_master_plan_item.project_name).to eq(project.name)
     expect(new_master_plan_item.client_name).to eq(client.name)
-    expect(new_master_plan_item.website_name).to eq(website.name)
+    expect(new_master_plan_item.medium_name).to eq(medium.name)
     expect(new_master_plan_item.channel_name).to eq(channel.name)
   end
 

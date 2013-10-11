@@ -24,19 +24,19 @@
   }
 end %>
 
-<% if @candidate_websites %>
+<% if @candidate_media %>
 
 <article>
   <div class="padding">
 
     <ul class="nav nav-tabs">
-      <% @candidate_websites.each do |website| %>
-      <% if website.id == @selected_website_id.to_i %>
+      <% @candidate_media.each do |medium| %>
+      <% if medium.id == @selected_medium_id.to_i %>
       <li class="active">
       <% else %>
       <li>
       <% end %>
-        <%= link_to website.name, spot_plan_path(website_id: website.id, master_plan_id: @master_plan, m: @selected_month, y: @selected_year, wv: @working_version) %>
+        <%= link_to medium.name, spot_plan_path(medium_id: medium.id, master_plan_id: @master_plan, m: @selected_month, y: @selected_year, wv: @working_version) %>
       </li>
       <% end %>
     </ul>
@@ -52,14 +52,14 @@ end %>
         <div class="cell6">
           <div class="btn-group pull-right" data-toggle="buttons-radio">
             <% @months.each do |m| %>
-            <%= link_to "#{m[:year]}年#{m[:month]}月", spot_plan_path(website_id: @selected_website_id, master_plan_id: @master_plan.id, y: m[:year], m: m[:month], wv: @working_version), class: (@selected_year == m[:year] && @selected_month == m[:month]) ? 'button active' : 'button' %>
+            <%= link_to "#{m[:year]}年#{m[:month]}月", spot_plan_path(medium_id: @selected_medium_id, master_plan_id: @master_plan.id, y: m[:year], m: m[:month], wv: @working_version), class: (@selected_year == m[:year] && @selected_month == m[:month]) ? 'button active' : 'button' %>
             <% end %>
           </div>
         </div>
       </div>
     </div>
 
-    <%= render partial: 'spot_plan_items_grid', locals: {spot_plan: @master_plan, selected_website_id: @selected_website_id} %>
+    <%= render partial: 'spot_plan_items_grid', locals: {spot_plan: @master_plan, selected_medium_id: @selected_medium_id} %>
   </div>
 
 </article>

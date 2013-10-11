@@ -4,20 +4,20 @@
     <td>
       <ul>
         <%= render_selected_item(
-              :website_id,
-              spots_filter.selected_website.name,
+              :medium_id,
+              spots_filter.selected_medium.name,
               {
                 spot_category_id: spots_filter.selected_spot_category.nil? ? nil : spots_filter.selected_spot_category.id,
                 channel_id: spots_filter.selected_channel.nil? ? nil : spots_filter.selected_channel.id,
                 unit_type: spots_filter.selected_unit_type.nil? ? nil : spots_filter.selected_unit_type
               }
-            ) if spots_filter.selected_website %>
+            ) if spots_filter.selected_medium %>
 
         <%= render_selected_item(
               :channel_id,
               spots_filter.selected_channel.name,
               {
-                website_id: spots_filter.selected_website.nil? ? nil : spots_filter.selected_website.id,
+                medium_id: spots_filter.selected_medium.nil? ? nil : spots_filter.selected_medium.id,
                 spot_category_id: spots_filter.selected_spot_category.nil? ? nil : spots_filter.selected_spot_category.id,
                 unit_type: spots_filter.selected_unit_type.nil? ? nil : spots_filter.selected_unit_type
               }
@@ -27,7 +27,7 @@
               :spot_category_id,
               spots_filter.selected_spot_category.name,
               {
-                website_id: spots_filter.selected_website.nil? ? nil : spots_filter.selected_website.id,
+                medium_id: spots_filter.selected_medium.nil? ? nil : spots_filter.selected_medium.id,
                 channel_id: spots_filter.selected_channel.nil? ? nil : spots_filter.selected_channel.id,
                 unit_type: spots_filter.selected_unit_type.nil? ? nil : spots_filter.selected_unit_type
               }
@@ -37,7 +37,7 @@
               :unit_type,
               spots_filter.selected_unit_type_name,
               {
-                website_id: spots_filter.selected_website.nil? ? nil : spots_filter.selected_website.id,
+                medium_id: spots_filter.selected_medium.nil? ? nil : spots_filter.selected_medium.id,
                 channel_id: spots_filter.selected_channel.nil? ? nil : spots_filter.selected_channel.id,
                 spot_category_id: spots_filter.selected_spot_category.nil? ? nil : spots_filter.selected_spot_category.id
               }
@@ -49,13 +49,13 @@
     <td class="title">所属网站</td>
     <td>
       <ul class="nav nav-pills">
-        <% websites.each do |website| %>
+        <% media.each do |medium| %>
         <%= render_selector_item(
-            :website_id,
-            website.id,
-            website.name,
+            :medium_id,
+            medium.id,
+            medium.name,
             {
-              website_id: spots_filter.selected_website.nil? ? nil : spots_filter.selected_website.id,
+              medium_id: spots_filter.selected_medium.nil? ? nil : spots_filter.selected_medium.id,
               spot_category_id: spots_filter.selected_spot_category.nil? ? nil : spots_filter.selected_spot_category.id,
               channel_id: spots_filter.selected_channel.nil? ? nil : spots_filter.selected_channel.id,
               unit_type: spots_filter.selected_unit_type.nil? ? nil : spots_filter.selected_unit_type
@@ -67,13 +67,13 @@
   <%= render({
         partial: 'spots/filter/spots_channel_selectors',
         locals: {spots_filter: spots_filter}
-      }) if spots_filter.selected_website %>
+      }) if spots_filter.selected_medium %>
   <%= render({
         partial: 'spots/filter/spots_category_selectors',
         locals: {spots_filter: spots_filter}
-      }) if spots_filter.selected_website %>
+      }) if spots_filter.selected_medium %>
   <%= render({
         partial: 'spots/filter/spots_unit_type_selectors',
         locals: {spots_filter: spots_filter}
-      }) if spots_filter.selected_website %>
+      }) if spots_filter.selected_medium %>
 </table>

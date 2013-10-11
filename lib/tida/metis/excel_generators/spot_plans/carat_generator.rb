@@ -266,8 +266,8 @@ module Tida
 
               sub_total_rows = []
 
-              master_plan.candidate_websites.each do |website|
-                master_plan.items.where(website_id: website.id).order('is_on_house').each do |item|
+              master_plan.candidate_mediums.each do |medium|
+                master_plan.items.where(medium_id: medium.id).order('is_on_house').each do |item|
                   if item.is_on_house?
                     row = fill_data_row(sheet, item, months, days, center_cell, on_house_left_cell, on_house_center_cell, currency_on_house_cell, number_on_house_cell, old_cell)
                   else
@@ -275,7 +275,7 @@ module Tida
                   end
                 end
                 sheet.merge_cells("#{get_column_name(2)}#{start_index}:#{get_column_name(2)}#{row.index + 1}")
-                row = fill_sub_total_row(sheet, master_plan.bonus_ratio(website.id), start_index, row.index + 1, total_day_count, center_cell, sub_total_cell, sub_total_on_house_cell)
+                row = fill_sub_total_row(sheet, master_plan.bonus_ratio(medium.id), start_index, row.index + 1, total_day_count, center_cell, sub_total_cell, sub_total_on_house_cell)
                 sub_total_rows << row.index + 1
                 start_index = row.index + 2
               end
@@ -345,10 +345,10 @@ module Tida
             row
           end
 
-          def fill_data_row(sheet, master_plan_item, months, days, website_name_cell, left_cell, center_cell, currency_cell, number_cell, old_cell)
+          def fill_data_row(sheet, master_plan_item, months, days, medium_name_cell, left_cell, center_cell, currency_cell, number_cell, old_cell)
             spot_plan_item_cells, spot_plan_item_cells_styles = get_spot_plan_item_cells(master_plan_item, months, days, center_cell, old_cell)
             sheet.add_row([nil, '网站',
-              master_plan_item.website.name,
+              master_plan_item.medium.name,
               master_plan_item.channel.name,
               master_plan_item.spot.name,
               master_plan_item.spot.spec,
@@ -362,11 +362,11 @@ module Tida
               master_plan_item.count,
               nil, nil,
               master_plan_item.spot.price,
-              master_plan_item.is_on_house? ? '0%' : "#{master_plan_item.client.website_discount_value(master_plan_item.website_id, percent: true)}%",
-              master_plan_item.is_on_house? ? 0 : master_plan_item.client.website_discount(master_plan_item.website_id) * master_plan_item.spot.price * master_plan_item.count,
+              master_plan_item.is_on_house? ? '0%' : "#{master_plan_item.client.medium_discount_value(master_plan_item.medium_id, percent: true)}%",
+              master_plan_item.is_on_house? ? 0 : master_plan_item.client.medium_discount(master_plan_item.medium_id) * master_plan_item.spot.price * master_plan_item.count,
               master_plan_item.spot.price * master_plan_item.count,
               spot_plan_item_cells].flatten,
-              style: [nil, website_name_cell, website_name_cell, center_cell, left_cell, left_cell, Array.new(4, center_cell),
+              style: [nil, medium_name_cell, medium_name_cell, center_cell, left_cell, left_cell, Array.new(4, center_cell),
                 Array.new(4, number_cell),
                 Array.new(6, center_cell), currency_cell, center_cell, currency_cell, currency_cell, spot_plan_item_cells_styles].flatten)
           end

@@ -51,7 +51,7 @@ class SpotPlanItemsController < ApplicationController
         project_id: @master_plan_item.project_id,
         master_plan_id: @master_plan_item.master_plan_id,
         spot_id: @master_plan_item.spot_id,
-        website_id: @master_plan_item.website_id,
+        medium_id: @master_plan_item.medium_id,
         channel_id: @master_plan_item.channel_id,
         version: @master_plan_item.master_plan.working_version
         }))

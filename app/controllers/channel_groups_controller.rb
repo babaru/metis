@@ -2,8 +2,8 @@ class ChannelGroupsController < ApplicationController
   # GET /channel_groups
   # GET /channel_groups.json
   def index
-    @website = Website.find params[:website_id]
-    @channel_groups_grid = initialize_grid(ChannelGroup.where(website_id: @website))
+    @medium = Medium.find params[:medium_id]
+    @channel_groups_grid = initialize_grid(ChannelGroup.where(medium_id: @medium))
 
     respond_to do |format|
       format.html # index.html.erb
@@ -26,9 +26,9 @@ class ChannelGroupsController < ApplicationController
   # GET /channel_groups/new.json
   def new
     @channel_group = ChannelGroup.new
-    @channel_group.website_id = params[:website_id]
-    @website = Website.find params[:website_id]
-    @channels = @website.channels
+    @channel_group.medium_id = params[:medium_id]
+    @medium = Medium.find params[:medium_id]
+    @channels = @medium.channels
 
     respond_to do |format|
       format.html # new.html.erb
@@ -39,8 +39,8 @@ class ChannelGroupsController < ApplicationController
   # GET /channel_groups/1/edit
   def edit
     @channel_group = ChannelGroup.find(params[:id])
-    @website = @channel_group.website
-    @channels = @website.channels
+    @medium = @channel_group.medium
+    @channels = @medium.channels
   end
 
   # POST /channel_groups
@@ -50,7 +50,7 @@ class ChannelGroupsController < ApplicationController
 
     respond_to do |format|
       if @channel_group.save
-        format.html { redirect_to website_channel_groups_path(@channel_group.website_id), notice: 'Channel group was successfully created.' }
+        format.html { redirect_to medium_channel_groups_path(@channel_group.medium_id), notice: 'Channel group was successfully created.' }
         format.json { render json: @channel_group, status: :created, location: @channel_group }
       else
         format.html { render action: "new" }
@@ -66,7 +66,7 @@ class ChannelGroupsController < ApplicationController
 
     respond_to do |format|
       if @channel_group.update_attributes(params[:channel_group])
-        format.html { redirect_to website_channel_groups_path(@channel_group.website_id), notice: 'Channel group was successfully updated.' }
+        format.html { redirect_to medium_channel_groups_path(@channel_group.medium_id), notice: 'Channel group was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

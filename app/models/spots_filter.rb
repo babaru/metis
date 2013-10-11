@@ -11,7 +11,7 @@ class SpotsFilter
   def initialize(options)
     unit_type_query_string = nil
     if options[:website_id]
-      @selected_website = Website.find options[:website_id]
+      @selected_website = Medium.find options[:website_id]
       @channels = @selected_website.channels
       unit_type_query_string = "website_id = #{@selected_website.id}"
     end

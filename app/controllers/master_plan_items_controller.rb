@@ -5,10 +5,10 @@ class MasterPlanItemsController < ApplicationController
   # GET /master_plan_items.json
   def index
     @master_plan = MasterPlan.find params[:master_plan_id]
-    @candidate_websites = @master_plan.candidate_websites
-    @selected_website_id = @candidate_websites.first.id if @candidate_websites.count > 0
-    @selected_website_id = params[:website_id] if params[:website_id]
-    @master_plan_items = MasterPlanItem.where('master_plan_id=? and website_id=?', params[:master_plan_id], @selected_website_id).order('is_on_house, created_at')
+    @candidate_media = @master_plan.candidate_media
+    @selected_medium_id = @candidate_media.first.id if @candidate_media.count > 0
+    @selected_medium_id = params[:medium_id] if params[:medium_id]
+    @master_plan_items = MasterPlanItem.where('master_plan_id=? and medium_id=?', params[:master_plan_id], @selected_medium_id).order('is_on_house, created_at')
     # @working_version = params[:wv]
     # @working_version = @master_plan.working_version if params[:wv].nil?
 

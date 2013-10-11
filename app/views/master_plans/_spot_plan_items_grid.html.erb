@@ -36,7 +36,7 @@
 
   <% @master_plan_items.each do |master_plan_item| %>
   <tr class="master-plan-item-row" id="master-plan-item<%= master_plan_item.id %>">
-    <td class="website_name"><%= master_plan_item.spot.website.name %></td>
+    <td class="medium_name"><%= master_plan_item.spot.medium.name %></td>
     <td class="channel_name"></td>
     <td class="spot_name"></td>
     <td class="ideal_count"></td>
@@ -53,7 +53,7 @@
 
 </table>
 
-<%= content_tag :span, @selected_website_id, class: 'hide', id: 'selected-website-id-value' %>
+<%= content_tag :span, @selected_medium_id, class: 'hide', id: 'selected-medium-id-value' %>
 <%= content_tag :span, @master_plan.id, class: 'hide', id: 'master-plan-id-value' %>
 <%= content_tag :span, @working_version, class: 'hide', id: 'working-version-value' %>
 

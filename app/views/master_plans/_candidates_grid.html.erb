@@ -1,6 +1,6 @@
 <%= grid(spots, :show_filters => :always) do |g|
   g.column html: {style: "width:1px;"} do |spot|
-    [hidden_field_tag("spot_id[]", spot.id), hidden_field_tag(:website_id, spot.website_id), hidden_field_tag(:channel_id, spot.channel_id)].join(' ').html_safe
+    [hidden_field_tag("spot_id[]", spot.id), hidden_field_tag(:medium_id, spot.medium_id), hidden_field_tag(:channel_id, spot.channel_id)].join(' ').html_safe
   end
 
   g.column name: t('activerecord.attributes.spot.spot_category') do |spot|

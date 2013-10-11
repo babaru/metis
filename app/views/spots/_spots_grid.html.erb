@@ -1,7 +1,7 @@
 <%= grid(@spots_grid, :show_filters => :always) do |g|
 
-  g.column name: t('activerecord.attributes.spot.website') do |spot|
-    spot.website.name
+  g.column name: t('activerecord.attributes.spot.medium') do |spot|
+    spot.medium.name
   end
 
   g.column name: t('activerecord.attributes.spot.channel') do |spot|

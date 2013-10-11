@@ -39,15 +39,15 @@ SimpleNavigation::Configuration.run do |navigation|
         clients.item "page_client_#{client.id}".to_sym, client.name, client_path(client), highlights_on: ::Regexp.new("clients/#{client.id}")
       end
     end
-    primary.item :page_websites, t('navigation.websites'), nil, link: {icon: 'icon-globe'} do |websites|
-      websites.item :page_websites, t('navigation.websites_list'), websites_path, link: {icon: 'icon-list'}, highlights_on: ::Regexp.new("websites$")
-      Website.all.each do |item|
-        websites.item "page_website_#{item.id}".to_sym, item.name, website_channels_path(item.id), highlights_on: ::Regexp.new("websites/#{item.id}")
+    primary.item :page_media, t('navigation.media'), nil, link: {icon: 'icon-globe'} do |media|
+      media.item :page_media, t('navigation.media_list'), media_path, link: {icon: 'icon-list'}, highlights_on: ::Regexp.new("media$")
+      Medium.all.each do |item|
+        media.item "page_medium_#{item.id}".to_sym, item.name, medium_channels_path(item.id), highlights_on: ::Regexp.new("media/#{item.id}")
       end
     end
     primary.item :page_spots, t('navigation.spots'), nil, link: {icon: 'icon-book'} do |spots|
-      Website.all.each do |website|
-        spots.item "page_website_#{website.id}_spots".to_sym, website.name, spots_path(website_id: website), highlights_on: ::Regexp.new("website_id=#{website.id}")
+      Medium.all.each do |medium|
+        spots.item "page_medium_#{medium.id}_spots".to_sym, medium.name, spots_path(medium_id: medium), highlights_on: ::Regexp.new("medium_id=#{medium.id}")
       end
     end
   end

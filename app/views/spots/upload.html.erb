@@ -1,12 +1,12 @@
-<%= render_page_title "<strong>#{@website.name}</strong> #{t('model.upload', model: Spot.model_name.human)}" do |toolbar|
+<%= render_page_title "<strong>#{@medium.name}</strong> #{t('model.upload', model: Spot.model_name.human)}" do |toolbar|
   toolbar << {
     name: "#{t('labels.back_to')}#{t('model.list', :model => Channel.model_name.human)}",
-    url: website_spots_path(@website),
+    url: medium_spots_path(@medium),
     class: 'button'
   }
   end %>
 
-<%= simple_form_for(@upload_file, url: upload_spots_path(website_id: @website), method: :post, remote: true, :html => {:class => 'form-horizontal upload-spot-data-file-form'}) do |f| %>
+<%= simple_form_for(@upload_file, url: upload_spots_path(medium_id: @medium), method: :post, remote: true, :html => {:class => 'form-horizontal upload-spot-data-file-form'}) do |f| %>
   <%= f.error_notification %>
   <div class="form-inputs">
     <%= f.input :data_file, as: :file, label: '上传文件' %>

@@ -3,13 +3,13 @@ class SpotsController < ApplicationController
   # GET /spots
   # GET /spots.json
   def index
-    @websites = Website.all
-    @website = Website.find params[:website_id]
-    @spot_categories = @website.spot_categories
+    @media = Medium.all
+    @medium = Medium.find params[:medium_id]
+    @spot_categories = @medium.spot_categories
     @spot_category = SpotCategory.find params[:spot_category_id] if params[:spot_category_id]
     @spot_category = @spot_categories.first if @spot_category.nil?
     if @spot_category
-      @spots_grid = initialize_grid(Spot.where(website_id: @website.id, spot_category_id: @spot_category.id))
+      @spots_grid = initialize_grid(Spot.where(medium_id: @medium.id, spot_category_id: @spot_category.id))
     end
 
     respond_to do |format|
@@ -40,7 +40,7 @@ class SpotsController < ApplicationController
   # GET /spots/new.json
   def new
     @spot = Spot.new
-    @website = Website.find params[:website_id]
+    @medium = Medium.find params[:medium_id]
 
     respond_to do |format|
       format.html # new.html.erb
@@ -98,9 +98,9 @@ class SpotsController < ApplicationController
   end
 
   def upload
-    @website = Website.find params[:website_id]
+    @medium = Medium.find params[:medium_id]
     @upload_file = SpotDataFile.new
-    @upload_file.website_id = @website.id
+    @upload_file.medium_id = @medium.id
     Rails.logger.debug "meta_data: #{@upload_file.meta_data}"
 
     if request.post?
@@ -108,7 +108,7 @@ class SpotsController < ApplicationController
       Rails.logger.debug "meta_data: #{@upload_file.meta_data}"
       @upload_file.save!
 
-      spot_categories_data = @upload_file.parse(@website.id)
+      spot_categories_data = @upload_file.parse(@medium.id)
 
       SpotCategory.transaction do
         spot_categories_data.each do |spot_category_data|
@@ -122,7 +122,7 @@ class SpotsController < ApplicationController
               group_name = matches[0]
             end
 
-            channel_group = ChannelGroup.find_by_name_and_website_id(group_name, spot_data[:website_id])
+            channel_group = ChannelGroup.find_by_name_and_medium_id(group_name, spot_data[:medium_id])
             if channel_group
               Rails.logger.debug group_name
               channels = []
@@ -142,7 +142,7 @@ class SpotsController < ApplicationController
             else
               channel = Channel.find_or_create_by_data!({
                 name: spot_data[:channel_name],
-                website_id: spot_data[:website_id]
+                medium_id: spot_data[:medium_id]
                 })
               spot_data = spot_data.merge({
                 channel_id: channel.id,
@@ -157,7 +157,7 @@ class SpotsController < ApplicationController
       end
 
       respond_to do |format|
-        format.html { redirect_to website_spots_path(@website), notice: 'Spots were successfully uploaded' }
+        format.html { redirect_to medium_spots_path(@medium), notice: 'Spots were successfully uploaded' }
       end
     end
   end

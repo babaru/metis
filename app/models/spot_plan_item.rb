@@ -4,7 +4,7 @@ class SpotPlanItem < ActiveRecord::Base
   belongs_to :master_plan
   belongs_to :master_plan_item
   belongs_to :spot
-  belongs_to :media
+  belongs_to :medium
   belongs_to :channel
   belongs_to :created_by
   belongs_to :new_spot_plan_item, class_name: 'SpotPlanItem', foreign_key: :new_spot_plan_item_id
@@ -12,7 +12,7 @@ class SpotPlanItem < ActiveRecord::Base
 
   attr_accessible :count, :is_enabled, :placed_at, :master_plan_item_id,
     :created_by_id, :master_plan_item_reality_count, :version,
-    :new_spot_plan_item_id, :client_id, :project_id, :master_plan_id, :spot_id, :media_id, :channel_id, :date_id
+    :new_spot_plan_item_id, :client_id, :project_id, :master_plan_id, :spot_id, :medium_id, :channel_id, :date_id
   attr_accessor :master_plan_item_reality_count
 
   scope :in_version, lambda{|master_plan_item_id, version| where(master_plan_item_id: master_plan_item_id, version: version)}
@@ -27,7 +27,7 @@ class SpotPlanItem < ActiveRecord::Base
           project_id: self.project_id,
           master_plan_id: self.master_plan_id,
           spot_id: self.spot_id,
-          media_id: self.media_id,
+          medium_id: self.medium_id,
           channel_id: self.channel_id,
           version: self.master_plan.working_version,
           placed_at: new_placed_at,
@@ -58,7 +58,7 @@ class SpotPlanItem < ActiveRecord::Base
       project_id: self.project_id,
       master_plan_id: self.master_plan_id,
       spot_id: self.spot_id,
-      media_id: self.media_id,
+      medium_id: self.medium_id,
       channel_id: self.channel_id,
       placed_at: self.placed_at,
       count: self.count,

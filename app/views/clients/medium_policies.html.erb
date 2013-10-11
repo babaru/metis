@@ -1,0 +1,46 @@
+<%= render_page_title "<strong>#{@client.name}</strong> 媒体政策" do |toolbar|
+
+end %>
+
+<article>
+  <div class="padding">
+
+    <%= simple_form_for(:medium_policies, url: client_medium_policies_path(@client), :html => {:class => 'form-horizontal no-border' }) do |f| %>
+    <%= f.error_notification %>
+
+      <table id="medium-policies-table" class="table table-ordered table-striped">
+        <tr>
+          <th>网站</th>
+          <th><%= t('activerecord.attributes.medium_policy.medium_discount') %></th>
+          <th><%= t('activerecord.attributes.medium_policy.company_discount') %></th>
+          <th><%= t('activerecord.attributes.medium_policy.medium_bonus_ratio') %></th>
+          <th><%= t('activerecord.attributes.medium_policy.company_bonus_ratio') %></th>
+          <th><%= t('activerecord.attributes.medium_policy.cpm_discount') %></th>
+        </tr>
+        <% Medium.all.each do |medium| %>
+        <tr>
+          <td><%= medium.name %></td>
+          <td><%= text_field_tag 'medium_discounts[]', MediumPolicy.medium_discount(medium.id, @client.id), style: "width: 2em;" %></td>
+          <td><%= text_field_tag 'company_discounts[]', MediumPolicy.company_discount(medium.id), @client.id, style: "width: 2em;" %></td>
+          <td><%= text_field_tag 'medium_bonus_ratio[]', MediumPolicy.medium_bonus_ratio(medium.id, @client.id), style: "width: 2em;" %></td>
+          <td><%= text_field_tag 'company_bonus_ratio[]', MediumPolicy.company_bonus_ratio(medium.id, @client.id), style: "width: 2em;" %></td>
+          <td><%= text_field_tag 'cpm_discount[]', MediumPolicy.cpm_discount(medium.id, @client.id), style: "width: 2em;" %></td>
+        </tr>
+        <% if medium.is_a?(VideoMedium) %>
+        <tr>
+          <td>-</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <% end %>
+        <% end %>
+      </table>
+      <div class="form-actions">
+    <%= f.button :submit, class: 'button button-primary' %>
+    </div>
+  <% end %>
+  </div>
+</article>

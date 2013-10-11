@@ -1,18 +1,18 @@
 #encoding: utf-8
 class Spot < ActiveRecord::Base
-  belongs_to :media
+  belongs_to :medium
   belongs_to :channel
   belongs_to :spot_category
   has_and_belongs_to_many :spot_contracts
 
-  attr_accessible :name, :price, :spec, :unit, :remark, :media_id, :channel_id, :spot_category_id
+  attr_accessible :name, :price, :spec, :unit, :remark, :medium_id, :channel_id, :spot_category_id
 
   def self.find_or_create_by_data!(data)
     spot = Spot.find_by_name_and_channel_id(data[:name], data[:channel_id])
     params = {
       name: data[:name],
       channel_id: data[:channel_id],
-      media_id: data[:media_id],
+      medium_id: data[:medium_id],
       spot_category_id: data[:spot_category_id],
       price: data[:price],
       unit: data[:unit],

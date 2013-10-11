@@ -45,7 +45,7 @@ $(document).ready(function() {
     var all_spot_plan_items = new SpotPlanItems();
     master_plan.fetch({
         success: function() {
-            var master_plan_items = new MasterPlanItems(null, {url: '/master_plan_items.json?master_plan_id=' + master_plan.get('id') + '&website_id=' + $('#selected-website-id-value').text()});
+            var master_plan_items = new MasterPlanItems(null, {url: '/master_plan_items.json?master_plan_id=' + master_plan.get('id') + '&medium_id=' + $('#selected-medium-id-value').text()});
             master_plan_items.fetch({
                 success: function() {
 
@@ -90,7 +90,7 @@ $(document).ready(function() {
             this.model.on('change', this.render, this);
         },
         render: function() {
-            $('#master-plan-item' + this.model.get('id') + ' .website_name').text(this.model.get('website_name'));
+            $('#master-plan-item' + this.model.get('id') + ' .medium_name').text(this.model.get('medium_name'));
             $('#master-plan-item' + this.model.get('id') + ' .channel_name').text(this.model.get('channel_name'));
             if (this.model.get('is_on_house') == true) {
                 $('#master-plan-item' + this.model.get('id') + ' .spot_name').html($('<span>').text(this.model.get('spot_name')).addClass('is_on_house'));

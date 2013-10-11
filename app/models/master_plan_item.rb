@@ -3,7 +3,7 @@ class MasterPlanItem < ActiveRecord::Base
   belongs_to :project
   belongs_to :master_plan
   belongs_to :spot
-  belongs_to :media
+  belongs_to :medium
   belongs_to :channel
   has_many :spot_plan_items, dependent: :destroy
 
@@ -14,7 +14,7 @@ class MasterPlanItem < ActiveRecord::Base
     :master_plan, :master_plan_id, :master_plan_name,
     :project, :project_id, :project_name,
     :client, :client_id, :client_name,
-    :media, :media_id, :media_name,
+    :medium, :medium_id, :medium_name,
     :channel, :channel_id, :channel_name,
     :is_on_house,
     :material_format,
@@ -33,9 +33,9 @@ class MasterPlanItem < ActiveRecord::Base
     :unit_rate_card, :unit_rate_card_unit, :unit_rate_card_unit_type,
     :net_cost,
     :total_rate_card,
-    :media_discount,
+    :medium_discount,
     :company_discount,
-    :media_bonus_ratio,
+    :medium_bonus_ratio,
     :company_bonus_ratio
 
   def reality_count(version = nil)
@@ -47,7 +47,7 @@ class MasterPlanItem < ActiveRecord::Base
 
   def as_json(options={})
     item = super(options)
-    item['media_name'] = self.spot.media.name
+    item['medium_name'] = self.spot.medium.name
     item['channel_name'] = self.spot.channel.name
     item['spot_name'] = self.spot.name
     item['ideal_count'] = self.count
@@ -68,7 +68,7 @@ class MasterPlanItem < ActiveRecord::Base
       self.master_plan_name = self.master_plan.name if self.master_plan_id
       self.project_name = self.project.name if self.project_id
       self.client_name = self.client.name if self.client_id
-      self.media_name = self.media.name if self.media_id
+      self.medium_name = self.medium.name if self.medium_id
       self.channel_name = self.channel.name if self.channel_id
     else
     end

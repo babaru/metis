@@ -9,14 +9,14 @@ module Tida
               Spreadsheet.open excel_file do |excel|
                 ws = excel.worksheet(0)
                 master_plan_data = {}
-                website_name = nil
+                medium_name = nil
                 0.upto(excel.worksheet(0).last_row_index) do |index|
                   if index == 6
                     get_master_plan_name(master_plan_data, ws.row(index))
                   end
                   if index > 13
-                    website_name = get_website_name(ws.row(index), website_name)
-                    get_master_plan_item(master_plan_data, website_name, ws.row(index))
+                    medium_name = get_medium_name(ws.row(index), medium_name)
+                    get_master_plan_item(master_plan_data, medium_name, ws.row(index))
                   end
                 end
 
@@ -26,9 +26,9 @@ module Tida
                   master_plan = MasterPlan.create!({name: master_plan_data[:name], project_id: project.id, client_id: client_id, created_by_id: user_id, is_readonly: true})
                   master_plan_data[:master_plan_items].each do |item_data|
                     item_data[:master_plan_id] = master_plan.id
-                    website = Website.where('name like ?', item_data[:website_name]).first
-                    Rails.logger.error "Not found website named #{item_data[:website_name]}" if website.nil?
-                    item_data[:website_id] = website.id if website
+                    medium = Website.where('name like ?', item_data[:medium_name]).first
+                    Rails.logger.error "Not found medium named #{item_data[:medium_name]}" if medium.nil?
+                    item_data[:medium_id] = medium.id if medium
                     MasterPlanItem.create!(item_data)
                   end
 
@@ -45,14 +45,14 @@ module Tida
               mp[:name] = title #TODO add unique name
             end
 
-            def get_website_name(row, website_name)
+            def get_medium_name(row, medium_name)
               return row[2].gsub(/\s+/, ';').split(';')[0] unless row[2].nil?
-              website_name
+              medium_name
             end
 
-            def get_master_plan_item(mp, website_name, row)
+            def get_master_plan_item(mp, medium_name, row)
               mpi = {}
-              mpi[:website_name] = website_name
+              mpi[:medium_name] = medium_name
               mpi[:channel_name] = row[3]
               mpi[:position_name] = row[4]
               mpi[:material_format] = row[5]

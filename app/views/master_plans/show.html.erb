@@ -3,7 +3,7 @@
 <%= render_page_title "<strong>#{@master_plan.project.client.name}</strong> #{@master_plan.project.name}: #{@master_plan.name}" do |toolbar|
   toolbar << {
     name: render_icon_and_text_content('icon-calendar', 'Spot Plan'),
-    url: spot_plan_path(website_id: @selected_website_id),
+    url: spot_plan_path(medium_id: @selected_medium_id),
     options: {
       class: 'button button-primary',
       'data-skip-pjax' => true,
@@ -25,7 +25,7 @@ end %>
   </li>
 </ul>
 
-<% if @candidate_websites && @candidate_websites.length > 0 %>
+<% if @candidate_media && @candidate_media.length > 0 %>
 
 <article>
   <div class="padding">
@@ -35,20 +35,20 @@ end %>
     </div>
 
     <ul class="nav nav-tabs">
-      <% @candidate_websites.each do |website| %>
-      <% if website.id == @selected_website_id.to_i %>
+      <% @candidate_media.each do |medium| %>
+      <% if medium.id == @selected_medium_id.to_i %>
       <li class="active">
       <% else %>
       <li>
       <% end %>
-        <%= link_to website.name, master_plan_path(website_id: website.id) %>
+        <%= link_to medium.name, master_plan_path(medium_id: medium.id) %>
       </li>
       <% end %>
     </ul>
   </div>
 </article>
 
-<%= render partial: 'master_plan_items_grid', locals: {master_plan_items: @master_plan_items_grid, selected_website_id: @selected_website_id} %>
+<%= render partial: 'master_plan_items_grid', locals: {master_plan_items: @master_plan_items_grid, selected_medium_id: @selected_medium_id} %>
 
 <% end %>
 

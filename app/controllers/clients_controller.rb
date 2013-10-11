@@ -31,35 +31,43 @@ class ClientsController < ApplicationController
     @client = Client.find(params[:id])
   end
 
+  def medium_policies
+    @client = Client.find params[:id]
+
+    respond_to do |format|
+      format.html # show.html.erb
+    end
+  end
+
   def discounts
     @client = Client.find(params[:id])
 
     if request.post?
-      params[:website_ids].each_with_index do |website_id, index|
-        website_discount = 1
+      params[:medium_ids].each_with_index do |medium_id, index|
+        medium_discount = 1
         company_discount = 1
-        website_bonus_ratio = 0
+        medium_bonus_ratio = 0
         company_bonus_ratio = 0
 
-        website_discount = params[:website_discounts][index]
+        medium_discount = params[:medium_discounts][index]
         company_discount = params[:company_discounts][index]
-        website_bonus_ratio = params[:website_bonus_ratios][index]
+        medium_bonus_ratio = params[:medium_bonus_ratios][index]
         company_bonus_ratio = params[:company_bonus_ratios][index]
 
-        client_discount = @client.discounts.where(website_id: website_id).first
+        client_discount = @client.discounts.where(medium_id: medium_id).first
         if client_discount
-          client_discount.website_discount = website_discount
+          client_discount.medium_discount = medium_discount
           client_discount.company_discount = company_discount
-          client_discount.website_bonus_ratio = website_bonus_ratio
+          client_discount.medium_bonus_ratio = medium_bonus_ratio
           client_discount.company_bonus_ratio = company_bonus_ratio
           client_discount.save!
         else
           @client.discounts << ClientDiscount.new({
             client_id: @client.id,
-            website_id: website_id,
-            website_discount: website_discount,
+            medium_id: medium_id,
+            medium_discount: medium_discount,
             company_discount: company_discount,
-            website_bonus_ratio: website_bonus_ratio,
+            medium_bonus_ratio: medium_bonus_ratio,
             company_bonus_ratio: company_bonus_ratio
             })
         end

@@ -1,8 +1,0 @@
-<%= render_page_title "#{t('model.create', model: Website.model_name.human)} <small>#{t('simple_form.required.text') }</small>" do |toolbar|
-  toolbar << {
-    name: "#{t('labels.back_to')}#{t('model.list', :model => Website.model_name.human)}",
-    url: websites_path,
-    options: {class: 'button'}
-  }
-  end %>
-<%= render 'form' %>

@@ -1,0 +1,27 @@
+
+<%= simple_form_for(@medium_policy , :html => {:class => 'form-horizontal' }) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+            
+    <%= f.input :medium_id %>
+          
+    <%= f.input :client_id %>
+          
+    <%= f.input :channel_id %>
+          
+    <%= f.input :medium_discount %>
+          
+    <%= f.input :company_discount %>
+          
+    <%= f.input :medium_bonus_ratio %>
+          
+    <%= f.input :company_bonus_ratio %>
+          
+    <%= f.input :cpm_discount %>
+                    </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: 'button button-primary' %>
+  </div>
+<% end %>

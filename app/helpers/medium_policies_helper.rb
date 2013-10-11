@@ -1,0 +1,2 @@
+module MediumPoliciesHelper
+end

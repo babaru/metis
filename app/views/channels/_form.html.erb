@@ -3,9 +3,9 @@
   <%= f.error_notification %>
 
   <div class="form-inputs">
-    <%= f.input :website_id, as: :hidden %>
+    <%= f.input :medium_id, as: :hidden %>
     <%= f.input :name %>
-    <%= f.input :channel_group_id, collection: ChannelGroup.where(website_id: @website.id).map {|v| [v.name, v.id] } %>
+    <%= f.input :channel_group_id, collection: ChannelGroup.where(medium_id: @medium.id).map {|v| [v.name, v.id] } %>
   </div>
 
   <div class="form-actions">

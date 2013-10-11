@@ -4,7 +4,7 @@ zh-CN:
       user: 用户
       client: 客户
       project: 项目
-      website: 网站
+      medium: 媒体
       channel: 频道
       channel_group: 频道分组
       spot: 媒介点位
@@ -40,20 +40,20 @@ zh-CN:
         est_total_imp: 预计总展示数
         est_total_clicks: 预计总点击数
         net_cost: 净价
-      website:
+      medium:
         name: 名称
         url: 地址
         logo: Logo
       channel:
         name: 名称
-        website: 所属网站
+        medium: 所属媒体
         channel_group: 所属分组
       channel_group:
         name: 名称
-        website: 所属网站
+        medium: 所属媒体
       spot:
         channel: 所在频道
-        website: 所属网站
+        medium: 所属媒体
         spot_category: 刊例分类
         name: 位置名称
         price: 价格

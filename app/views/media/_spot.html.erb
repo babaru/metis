@@ -1,13 +1,13 @@
-<%= render_page_title "#{@website.name}#{t('model.list', model: Spot.model_name.human)}" do |toolbar|
+<%= render_page_title "#{@medium.name}#{t('model.list', model: Spot.model_name.human)}" do |toolbar|
   toolbar << {
     name: render_icon_and_text_content('icon-plus-sign', t('model.create', :model => Spot.model_name.human)),
-    url: new_website_spot_path(@website),
+    url: new_medium_spot_path(@medium),
     options: {class: 'button button-primary'}
   }
 
   toolbar << {
     name: render_icon_and_text_content('icon-signin', t('model.import', model: Spot.model_name.human)),
-    url: website_data_file_upload_path(@website, 'spot'),
+    url: medium_data_file_upload_path(@medium, 'spot'),
     options: {class: 'button button-success'}
   }
 end %>
@@ -15,8 +15,8 @@ end %>
 <article>
   <div class="padding">
     <ul class="nav nav-tabs">
-      <li class="active"><%= link_to render_icon_and_text_content('icon-trello', Spot.model_name.human), website_data_path(@website, :spot) %></li>
-      <li><%= link_to render_icon_and_text_content('icon-sitemap', Channel.model_name.human), website_data_path(@website, :channel) %></li>
+      <li class="active"><%= link_to render_icon_and_text_content('icon-trello', Spot.model_name.human), medium_data_path(@medium, :spot) %></li>
+      <li><%= link_to render_icon_and_text_content('icon-sitemap', Channel.model_name.human), medium_data_path(@medium, :channel) %></li>
     </ul>
   </div>
 </article>
@@ -27,7 +27,7 @@ end %>
       <div class="grid-row">
         <div class="cell6"></div>
         <div class="cell6">
-          <%= form_tag website_data_search_path(@website, 'spot'), method: :post, remote: true, class: 'navbar-search pull-right spots-search-form' do %>
+          <%= form_tag medium_data_search_path(@medium, 'spot'), method: :post, remote: true, class: 'navbar-search pull-right spots-search-form' do %>
             <%= text_field_tag :keywords, nil, placeholder: '输入关键字', class: 'search-query' %>
             <%= button_tag '搜索', class: 'button' %>
           <% end %>

@@ -14,11 +14,11 @@ class MasterPlansController < ApplicationController
   # GET /master_plans/1.json
   def show
     @master_plan = MasterPlan.find(params[:id])
-    @candidate_websites = @master_plan.candidate_websites
-    @selected_website_id = @candidate_websites.first.id if @candidate_websites.count > 0
-    @selected_website_id = params[:website_id] if params[:website_id]
-    if @selected_website_id
-      @master_plan_items_grid = initialize_grid(MasterPlanItem.where("master_plan_id=#{@master_plan.id} and website_id=#{@selected_website_id}").order('created_at'))
+    @candidate_media = @master_plan.candidate_media
+    @selected_medium_id = @candidate_media.first.id if @candidate_media.count > 0
+    @selected_medium_id = params[:medium_id] if params[:medium_id]
+    if @selected_medium_id
+      @master_plan_items_grid = initialize_grid(MasterPlanItem.where("master_plan_id=#{@master_plan.id} and medium_id=#{@selected_medium_id}").order('created_at'))
     end
 
     respond_to do |format|
@@ -29,9 +29,9 @@ class MasterPlansController < ApplicationController
 
   def choose_spots
     @master_plan = MasterPlan.find(params[:id])
-    @websites = Website.all
+    @media = Medium.all
     @spots_filter = SpotsFilter.new params
-    @spots_grid = initialize_grid(Spot.where(@spots_filter.spots_query_clause), name: 'candidates_grid') if @spots_filter.selected_website
+    @spots_grid = initialize_grid(Spot.where(@spots_filter.spots_query_clause), name: 'candidates_grid') if @spots_filter.selected_medium
 
     respond_to do |format|
       format.html
@@ -45,7 +45,7 @@ class MasterPlansController < ApplicationController
       counts = params[:count]
       spot_ids = params[:spot_id]
       is_on_houses = params[:is_on_house]
-      website_id = params[:website_id]
+      medium_id = params[:medium_id]
       channel_id = params[:channel_id]
       counts.each_with_index do |item, index|
         next if item.nil? || item.strip == ''
@@ -55,7 +55,7 @@ class MasterPlansController < ApplicationController
           is_on_house: is_on_houses.nil? ? false : is_on_houses.include?(spot_ids[index]),
           client_id: @master_plan.client_id,
           project_id: @master_plan.project_id,
-          website_id: website_id,
+          medium_id: medium_id,
           channel_id: channel_id
           })
       end
@@ -133,10 +133,10 @@ class MasterPlansController < ApplicationController
 
   def spot_plan
     @master_plan = MasterPlan.find params[:id]
-    @candidate_websites = @master_plan.candidate_websites
-    @selected_website_id = @candidate_websites.first.id if @candidate_websites.count > 0
-    @selected_website_id = params[:website_id] if params[:website_id]
-    @master_plan_items = MasterPlanItem.where('master_plan_id=? and website_id=?', @master_plan.id, @selected_website_id).order('is_on_house, created_at')
+    @candidate_media = @master_plan.candidate_media
+    @selected_medium_id = @candidate_media.first.id if @candidate_media.count > 0
+    @selected_medium_id = params[:medium_id] if params[:medium_id]
+    @master_plan_items = MasterPlanItem.where('master_plan_id=? and medium_id=?', @master_plan.id, @selected_medium_id).order('is_on_house, created_at')
     @working_version = params[:wv]
     @working_version = @master_plan.working_version if params[:wv].nil?
 

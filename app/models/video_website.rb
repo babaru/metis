@@ -1,3 +1,0 @@
-class VideoWebsite < Website
-
-end

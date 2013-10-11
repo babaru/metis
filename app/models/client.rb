@@ -18,8 +18,8 @@ class Client < ActiveRecord::Base
 
   def method_missing(m, *args, &block)
     Rails.logger.debug m.class
-    if [:website_discount, :company_discount, :website_bonus_ratio, :company_bonus_ratio].include?(m)
-      result = discounts.where(website_id: args[0]).first
+    if [:medium_discount, :company_discount, :medium_bonus_ratio, :company_bonus_ratio].include?(m)
+      result = discounts.where(medium_id: args[0]).first
       return 0 unless result
       return result.send(m)
     end
