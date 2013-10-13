@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131011072018) do
+ActiveRecord::Schema.define(:version => 20131012013120) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -156,13 +156,14 @@ ActiveRecord::Schema.define(:version => 20131011072018) do
     t.integer  "medium_id"
     t.integer  "client_id"
     t.integer  "channel_id"
-    t.decimal  "medium_discount",     :precision => 8, :scale => 2, :default => 1.0
-    t.decimal  "company_discount",    :precision => 8, :scale => 2, :default => 1.0
-    t.decimal  "medium_bonus_ratio",  :precision => 8, :scale => 2, :default => 0.0
-    t.decimal  "company_bonus_ratio", :precision => 8, :scale => 2, :default => 0.0
-    t.decimal  "cpm_discount",        :precision => 8, :scale => 2, :default => 1.0
-    t.datetime "created_at",                                                         :null => false
-    t.datetime "updated_at",                                                         :null => false
+    t.decimal  "medium_discount",      :precision => 8, :scale => 2, :default => 1.0
+    t.decimal  "company_discount",     :precision => 8, :scale => 2, :default => 1.0
+    t.decimal  "medium_bonus_ratio",   :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "company_bonus_ratio",  :precision => 8, :scale => 2, :default => 0.0
+    t.datetime "created_at",                                                          :null => false
+    t.datetime "updated_at",                                                          :null => false
+    t.decimal  "medium_cpm_discount",  :precision => 8, :scale => 2, :default => 1.0
+    t.decimal  "company_cpm_discount", :precision => 8, :scale => 2, :default => 1.0
   end
 
   add_index "medium_policies", ["channel_id"], :name => "index_medium_policies_on_channel_id"

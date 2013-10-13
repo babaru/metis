@@ -5,6 +5,7 @@
  *= require icon_grid
  *= require filter
  *= require spot_plan
+ *= require master_plan
  */
 
 html {

@@ -5,13 +5,13 @@ class MediumPolicy < ActiveRecord::Base
 
   attr_accessible :medium_discount, :company_discount,
     :medium_bonus_ratio, :company_bonus_ratio,
-    :cpm_discount,
+    :medium_cpm_discount, :company_cpm_discount,
     :client, :client_id,
     :medium, :medium_id,
     :channel, :channel_id
 end
 
-%w(medium_discount company_discount medium_bonus_ratio company_bonus_ratio cpm_discount).each do |name|
+%w(medium_discount company_discount medium_bonus_ratio company_bonus_ratio medium_cpm_discount company_cpm_discount).each do |name|
 MediumPolicy.instance_eval %Q(
   def #{name}(medium_id, client_id)
     mp = MediumPolicy.find_by_medium_id_and_client_id(medium_id, client_id)

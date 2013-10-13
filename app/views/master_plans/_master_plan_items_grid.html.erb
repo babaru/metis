@@ -37,8 +37,8 @@
   end
 
   g.column name: t('activerecord.attributes.client.discounts') do |master_plan_item|
-    content_tag(:div, [content_tag(:span, "#{master_plan_item.master_plan.project.client.medium_discount(master_plan_item.spot.medium_id, {view: true})} 折", class: 'label label-warning'),
-      content_tag(:span, "#{master_plan_item.master_plan.project.client.company_discount(master_plan_item.spot.medium_id, {view: true})} 折", class: 'label label-success')].join(' ').html_safe, class: 'discounts', :style => master_plan_item.is_on_house ? 'display: none;' : '') if master_plan_item.spot_id
+    content_tag(:div, [content_tag(:span, "#{MediumPolicy.medium_discount(master_plan_item.spot.medium_id, master_plan_item.client_id)}", class: 'label label-warning'),
+      content_tag(:span, "#{MediumPolicy.company_discount(master_plan_item.spot.medium_id, master_plan_item.client_id)}", class: 'label label-success')].join(' ').html_safe, class: 'discounts', :style => master_plan_item.is_on_house ? 'display: none;' : '') if master_plan_item.spot_id
   end
 
   g.column name: t('activerecord.attributes.master_plan_item.net_cost') do |master_plan_item|

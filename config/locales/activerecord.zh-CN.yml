@@ -12,6 +12,7 @@ zh-CN:
       role: 身份
       master_plan: Master Plan
       client_discount: 客户媒体政策
+      medium_policy: 媒体政策
     attributes:
       user:
         name: 用户名
@@ -64,3 +65,10 @@ zh-CN:
           day: 按天/轮
           cpm: 按CPM
           cpc: 按CPC
+      medium_policy:
+        medium_discount: 媒体折扣
+        company_discount: 公司折扣
+        medium_bonus_ratio: 媒体配送比例
+        company_bonus_ratio: 公司配送比例
+        medium_cpm_discount: 媒体CPM购买折扣
+        company_cpm_discount: 公司CPM购买折扣

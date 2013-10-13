@@ -7,34 +7,34 @@ class MasterPlan < ActiveRecord::Base
   attr_accessible :name, :project_id, :created_by_id, :client_id, :is_dirty,
     :is_readonly
 
-  def contract_price(medium_id = nil)
+  def medium_contract_price(medium_id = nil)
     sum = 0
     condition = {is_on_house: false}
     condition[:medium_id] = medium_id if medium_id
     items.where(condition).each do |item|
-      sum += (item.spot.price * item.count * client.company_discount(item.spot.medium_id)) if item.spot_id
+      sum += (item.spot.price * item.count * MediumPolicy.company_discount(item.spot.medium_id, client_id)) if item.spot_id
     end
     sum
   end
 
-  def cost(medium_id = nil)
+  def company_contract_price(medium_id = nil)
     sum = 0
     condition = {is_on_house: false}
     condition[:medium_id] = medium_id if medium_id
     items.where(condition).each do |item|
-      sum += (item.spot.price * item.count * client.medium_discount(item.spot.medium_id)) if item.spot_id
+      sum += (item.spot.price * item.count * MediumPolicy.medium_discount(item.spot.medium_id, client_id)) if item.spot_id
     end
     sum
   end
 
   def profit(medium_id = nil)
-    contract_price(medium_id) - cost(medium_id)
+    medium_contract_price(medium_id) - company_contract_price(medium_id)
   end
 
   def medium_contract_prices()
     result = {}
     candidate_media.each do |medium|
-      result[medium.id] = contract_price(medium.id)
+      result[medium.id] = medium_contract_price(medium.id)
     end
     result
   end
@@ -51,7 +51,7 @@ class MasterPlan < ActiveRecord::Base
     return 0 unless medium_id
     total_price = 0
     items.joins('left join spots on spot_id=spots.id').where("is_on_house=0 and spots.medium_id=#{medium_id}").each do |item|
-      total_price += item.spot.price * item.count * item.client.company_discount(item.spot.medium_id)
+      total_price += item.spot.price * item.count * MediumPolicy.company_discount(item.spot.medium_id, item.client_id)
     end
 
     on_house_amount = 0

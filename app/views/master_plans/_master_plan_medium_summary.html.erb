@@ -1,0 +1,24 @@
+<table class="plan-summary">
+  <tr>
+    <th>合同额(媒体-公司)</th>
+    <th>预估利润(<%= @selected_medium.name %>)</th>
+    <th>配送比例(实际-<%= @selected_medium.name %>-公司)</th>
+  </tr>
+  <tr>
+    <td>
+      <div class="label-group master-plan-value-group">
+        <span class="item medium"><%= number_to_currency(@master_plan.medium_contract_price(@selected_medium_id), unit: '￥', precision: 0) %></span>
+        <span class="item company"><%= number_to_currency(@master_plan.company_contract_price(@selected_medium_id), unit: '￥', precision: 0) %></span>
+      </div>
+    </td>
+    <td><%= number_to_currency(@master_plan.profit(@selected_medium_id), unit: '￥', precision: 0) %></td>
+    <td>
+      <div class="label-group master-plan-value-group">
+        <span class="item reality"><%= @master_plan.reality_bonus_ratio(@selected_medium_id) %></span>
+        <span class="item medium"><%= @master_plan.medium_bonus_ratio(@selected_medium_id) %></span>
+        <span class="item company"><%= @master_plan.company_bonus_ratio(@selected_medium_id) %></span>
+      </div>
+    </td>
+  </tr>
+</table>
+

@@ -30,9 +30,7 @@ end %>
 <article>
   <div class="padding">
 
-    <div class="well master-plan-summary">
-      <%= render partial: 'master_plan_summary' %>
-    </div>
+    <%= render partial: 'master_plan_summary' %>
 
     <ul class="nav nav-tabs">
       <% @candidate_media.each do |medium| %>
@@ -45,6 +43,9 @@ end %>
       </li>
       <% end %>
     </ul>
+
+    <%= render partial: 'master_plan_medium_summary' %>
+
   </div>
 </article>
 

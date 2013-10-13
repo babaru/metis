@@ -34,8 +34,49 @@ class ClientsController < ApplicationController
   def medium_policies
     @client = Client.find params[:id]
 
-    respond_to do |format|
-      format.html # show.html.erb
+    if request.post?
+      params[:medium_ids].each_with_index do |medium_id, index|
+        medium_discount = 1
+        company_discount = 1
+        medium_bonus_ratio = 0
+        company_bonus_ratio = 0
+        medium_cpm_discount = 1
+        company_cpm_discount = 1
+
+        medium_discount = params[:medium_discounts][index]
+        company_discount = params[:company_discounts][index]
+        medium_bonus_ratio = params[:medium_bonus_ratios][index]
+        company_bonus_ratio = params[:company_bonus_ratios][index]
+        medium_cpm_discount = params[:medium_cpm_discounts][index]
+        company_cpm_discount = params[:company_cpm_discounts][index]
+
+        @medium_policy = MediumPolicy.find_by_medium_id_and_client_id(medium_id, @client.id)
+        if @medium_policy
+          @medium_policy.medium_discount = medium_discount
+          @medium_policy.company_discount = company_discount
+          @medium_policy.medium_bonus_ratio = medium_bonus_ratio
+          @medium_policy.company_bonus_ratio = company_bonus_ratio
+          @medium_policy.medium_cpm_discount = medium_cpm_discount
+          @medium_policy.company_cpm_discount = company_cpm_discount
+          @medium_policy.save!
+        else
+          @medium_policy = MediumPolicy.create!({
+            client_id: @client.id,
+            medium_id: medium_id,
+            medium_discount: medium_discount,
+            company_discount: company_discount,
+            medium_bonus_ratio: medium_bonus_ratio,
+            company_bonus_ratio: company_bonus_ratio,
+            medium_cpm_discount: medium_cpm_discount,
+            company_cpm_discount: company_cpm_discount
+            })
+        end
+      end
+
+      respond_to do |format|
+        format.html # show.html.erb
+        format.json { render json: @medium_policy }
+      end
     end
   end
 

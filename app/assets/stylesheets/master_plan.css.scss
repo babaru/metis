@@ -1,0 +1,41 @@
+@import 'variables';
+
+.plan-summary {
+  width: 100%;
+  margin-bottom: 10px;
+  th, td {
+    padding: 3px 10px;
+    text-align: left;
+    border-left: 2px solid $borderColor;
+  }
+
+  th {
+    color: #999;
+  }
+
+  td {
+    font-size: 16px;
+  }
+}
+
+.label-group {
+  .item {
+    display: inline-block;
+    padding: 5px;
+  }
+}
+
+.master-plan-value-group {
+  .medium {
+    background: #9B59B6;
+    color: white;
+  }
+
+  .company {
+    background: #2980B9;
+    color: white;
+  }
+
+  .reality {
+  }
+}

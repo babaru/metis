@@ -20,6 +20,7 @@ class MasterPlansController < ApplicationController
     if @selected_medium_id
       @master_plan_items_grid = initialize_grid(MasterPlanItem.where("master_plan_id=#{@master_plan.id} and medium_id=#{@selected_medium_id}").order('created_at'))
     end
+    @selected_medium = Medium.find @selected_medium_id if @selected_medium_id
 
     respond_to do |format|
       format.html
