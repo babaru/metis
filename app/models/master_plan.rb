@@ -112,7 +112,8 @@ class MasterPlan < ActiveRecord::Base
   def as_json(options={})
     item = super(options)
     item[:budget] = number_to_currency(self.project.budget, precision: 0, unit: '')
-    item[:contract_price] = number_to_currency(self.contract_price, precision: 0, unit: '')
+    item[:medium_contract_price] = number_to_currency(self.medium_contract_price, precision: 0, unit: '')
+    item[:company_contract_price] = number_to_currency(self.company_contract_price, precision: 0, unit: '')
     item[:profit] = number_to_currency(self.profit, precision: 0, unit: '')
     item[:medium_contract_prices] = self.medium_contract_prices
     item[:medium_profits] = self.medium_profits

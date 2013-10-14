@@ -20,7 +20,7 @@
   end
 
   g.column name: '数量' do |spot|
-    [text_field_tag('count[]', nil, class: 'spot-day-count-text-field'), spot.count_unit].join(' ').html_safe
+    text_field_tag('count[]', nil, class: 'spot-day-count-text-field')
   end
 
   g.column name: '配送？' do |spot|
