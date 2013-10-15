@@ -1,10 +1,10 @@
 #encoding: utf-8
-class MediasController < ApplicationController
+class MediaController < ApplicationController
   # GET /media
   # GET /media.json
   def index
-    @media_grid = initialize_grid(Media)
-    @media = Media.all
+    @media_grid = initialize_grid(Medium)
+    @media = Medium.all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -21,7 +21,7 @@ class MediasController < ApplicationController
   # GET /media/new
   # GET /media/new.json
   def new
-    @medium = Media.new
+    @medium = Medium.new
 
     respond_to do |format|
       format.html # new.html.erb
@@ -31,17 +31,17 @@ class MediasController < ApplicationController
 
   # GET /media/1/edit
   def edit
-    @medium = Media.find(params[:id])
+    @medium = Medium.find(params[:id])
   end
 
   # POST /media
   # POST /media.json
   def create
-    @medium = Media.new(params[:medium])
+    @medium = Medium.new(params[:medium])
 
     respond_to do |format|
       if @medium.save
-        format.html { redirect_to media_path(), notice: 'Media was successfully created.' }
+        format.html { redirect_to media_path(), notice: 'Medium was successfully created.' }
         format.json { render json: @medium, status: :created, location: @medium }
       else
         format.html { render action: "new" }
@@ -53,11 +53,11 @@ class MediasController < ApplicationController
   # PATCH/PUT /media/1
   # PATCH/PUT /media/1.json
   def update
-    @medium = Media.find(params[:id])
+    @medium = Medium.find(params[:id])
 
     respond_to do |format|
       if @medium.update_attributes(params[:medium])
-        format.html { redirect_to media_path(), notice: 'Media was successfully updated.' }
+        format.html { redirect_to media_path(), notice: 'Medium was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -69,7 +69,7 @@ class MediasController < ApplicationController
   # DELETE /media/1
   # DELETE /media/1.json
   def destroy
-    @medium = Media.find(params[:id])
+    @medium = Medium.find(params[:id])
     @medium.destroy
 
     respond_to do |format|
@@ -80,7 +80,7 @@ class MediasController < ApplicationController
 
   def upload_data_file
     @data_type = params[:data_type]
-    @medium = Media.find params[:id]
+    @medium = Medium.find params[:id]
 
     if @data_type == 'spot'
       @upload_file = SpotDataFile.new
@@ -146,7 +146,7 @@ class MediasController < ApplicationController
   end
 
   def search
-    @medium = Media.find params[:id]
+    @medium = Medium.find params[:id]
     @data_type = params[:data_type]
 
     if request.post?
