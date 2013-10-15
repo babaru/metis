@@ -13,6 +13,7 @@ zh-CN:
       master_plan: Master Plan
       client_discount: 客户媒体政策
       medium_policy: 媒体政策
+      net_cost_spot: 净价点位
     attributes:
       user:
         name: 用户名
@@ -43,6 +44,7 @@ zh-CN:
         net_cost: 净价
       medium:
         name: 名称
+        type: 类型
         url: 地址
         logo: Logo
       channel:
@@ -53,18 +55,22 @@ zh-CN:
         name: 名称
         medium: 所属媒体
       spot:
-        channel: 所在频道
-        medium: 所属媒体
-        spot_category: 刊例分类
+        channel_id: 所在频道
+        medium_id: 所属媒体
+        spot_category_id: 刊例分类
         name: 位置名称
         price: 价格
         spec: 规格
         remark: 备注
         unit: 价格单位
+        type: 类型
         unit_type:
           day: 按天/轮
           cpm: 按CPM
           cpc: 按CPC
+      spot_category:
+        name: 名称
+        description: 说明
       medium_policy:
         medium_discount: 媒体折扣
         company_discount: 公司折扣

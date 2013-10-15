@@ -28,6 +28,13 @@ module Tida
               sz: FONT_SIZE,
               font_name: FONT_NAME,
               b: true,
+              alignment: {horizontal: :center, vertical: :bottom},
+              border: {style: :thin, color: "00", edges: [:left, :top, :right]}
+            })
+            table_header_calendar_cell = styles.add_style({
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: true,
               alignment: {horizontal: :center, vertical: :center},
               border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]}
             })
@@ -35,13 +42,58 @@ module Tida
               sz: FONT_SIZE,
               font_name: FONT_NAME,
               b: true,
-              alignment: {horizontal: :center, vertical: :center},
-              border: {style: :thin, color: "00", edges: [:left, :top, :bottom]}
+              alignment: {horizontal: :center, vertical: :bottom},
+              border: {style: :thin, color: "00", edges: [:left, :top]}
               })
             table_header_last_cell = styles.add_style({
               sz: FONT_SIZE,
               font_name: FONT_NAME,
               b: true,
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:right, :top, :bottom]}
+              })
+
+            table_header_cell2 = styles.add_style({
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: true,
+              alignment: {horizontal: :center, vertical: :top},
+              border: {style: :thin, color: "00", edges: [:left, :bottom, :right]}
+            })
+            table_header_calendar_cell2 = styles.add_style({
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: true,
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]}
+            })
+            table_header_calendar_weekend_cell2 = styles.add_style({
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: true,
+              bg_color: "DDDDDD",
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]}
+            })
+            table_header_first_cell2 = styles.add_style({
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: true,
+              alignment: {horizontal: :center, vertical: :top},
+              border: {style: :thin, color: "00", edges: [:left, :bottom]}
+              })
+            table_header_last_cell2 = styles.add_style({
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: true,
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:right, :top, :bottom]}
+              })
+            table_header_last_weekend_cell2 = styles.add_style({
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: true,
+              bg_color: "DDDDDD",
               alignment: {horizontal: :center, vertical: :center},
               border: {style: :thin, color: "00", edges: [:right, :top, :bottom]}
               })
@@ -182,41 +234,71 @@ module Tida
 
               table_headers = [
                 nil,
-                "Media Type\r\n媒体类型",
-                "Site\r\n网站",
-                "Channel\r\n频道",
-                "Position\r\n点位",
-                "Material Format\r\n素材尺寸格式",
-                "PV Tracking\r\nPV监测",
-                "Click Tracking\r\nClick监测",
-                "Link to Office Site\r\n可否外链",
-                "MR Deadline\r\n素材提交时间",
-                "Est. Imp/day\r\n预估曝光/天",
-                "Est. Clicks/day\r\n预估点击/天",
-                "Est. Total Imp\r\n预估曝光量",
-                "Est. Total Clicks\r\n预估点击数",
-                "Est. CTR\r\n预估点击率",
-                "Est. CPC\r\n预估点击成本",
-                "Est. CPM\r\n预估千次曝光成本",
-                "Est. Days\r\n投放日数",
-                "Est. CPM\r\n量",
+                "Media Type",
+                "Site",
+                "Channel",
+                "Position",
+                "Material Format",
+                "PV Tracking",
+                "Click Tracking",
+                "Link to Office Site",
+                "MR Deadline",
+                "Est. Imp/day",
+                "Est. Clicks/day",
+                "Est. Total Imp",
+                "Est. Total Clicks",
+                "Est. CTR",
+                "Est. CPC",
+                "Est. CPM",
+                "Est. Days",
+                "Est. CPM",
                 "Leads",
-                "Unit Rate Card\r\n单位刊例价",
-                "Discount\r\n折扣",
-                "Nest Cost\r\n净价",
-                "Total Rate Card\r\n总刊例价"
+                "Unit Rate Card",
+                "Discount",
+                "Nest Cost",
+                "Total Rate Card"
               ]
 
-              table_calendar_days = []
-              table_headers.length.times {|n| table_calendar_days << nil}
+              table_calendar_days = [
+                nil,
+                "媒体类型",
+                "网站",
+                "频道",
+                "点位",
+                "素材尺寸格式",
+                "PV监测",
+                "Click监测",
+                "可否外链",
+                "素材提交时间",
+                "预估曝光/天",
+                "预估点击/天",
+                "预估曝光量",
+                "预估点击数",
+                "预估点击率",
+                "预估点击成本",
+                "预估千次曝光成本",
+                "投放日数",
+                "量",
+                "",
+                "单位刊例价",
+                "折扣",
+                "净价",
+                "总刊例价"
+              ]
+
+              # table_headers.length.times {|n| table_calendar_days << nil}
+
+              description_column_count = table_headers.length - 2
 
               calendar_column_index = table_headers.length
 
               months = master_plan.project.months
               days = master_plan.project.days
 
-              Rails.logger.debug "months: #{months}"
-              Rails.logger.debug "days: #{days}"
+              # Rails.logger.debug "months: #{months}"
+              # Rails.logger.debug "days: #{days}"
+
+              table_calendar_days_header_styles = [nil, table_header_first_cell2, Array.new(description_column_count, table_header_cell2)].flatten
 
               month_segs = []
               total_day_count = 0
@@ -228,12 +310,42 @@ module Tida
                   if m_index == 0
                     if day && day > 0
                       table_headers << nil if index + 1 < days[key].length
-                      table_calendar_days << (index + 1)
+                      day_number = index + 1
+                      table_calendar_days << day_number
+                      date = Date.new(month[:year], month[:month], day_number)
+                      if date.wday == 0 || date.wday == 6
+                        if m_index == months.length - 1 && index == days[key].length - 1 # last cell
+                          table_calendar_days_header_styles << table_header_last_weekend_cell2
+                        else
+                          table_calendar_days_header_styles << table_header_calendar_weekend_cell2
+                        end
+                      else
+                        if m_index == months.length - 1 && index == days[key].length - 1 # last cell
+                          table_calendar_days_header_styles << table_header_last_cell2
+                        else
+                          table_calendar_days_header_styles << table_header_calendar_cell2
+                        end
+                      end
                       col_count += 1 if index + 1 < days[key].length && index > 0
                     end
                   else
                     table_headers << nil if index > 0
-                    table_calendar_days << (index + 1)
+                    day_number = index + 1
+                    table_calendar_days << day_number
+                    date = Date.new(month[:year], month[:month], day_number)
+                      if date.wday == 0 || date.wday == 6
+                        if m_index == months.length - 1 && index == days[key].length - 1 # last cell
+                          table_calendar_days_header_styles << table_header_last_weekend_cell2
+                        else
+                          table_calendar_days_header_styles << table_header_calendar_weekend_cell2
+                        end
+                      else
+                        if m_index == months.length - 1 && index == days[key].length - 1 # last cell
+                          table_calendar_days_header_styles << table_header_last_cell2
+                        else
+                          table_calendar_days_header_styles << table_header_calendar_cell2
+                        end
+                      end
                     col_count += 1 if day > 0 && index > 0
                   end
                 end
@@ -241,22 +353,27 @@ module Tida
                 total_day_count += days[key].length
               end
 
-              Rails.logger.debug("total_day_count: #{total_day_count}")
+              # Rails.logger.debug("total_day_count: #{total_day_count}")
 
-              table_header_styles = [nil, table_header_first_cell, Array.new(table_headers.length - 3, table_header_cell), table_header_last_cell].flatten
+              table_header_styles = [nil, table_header_first_cell, Array.new(description_column_count, table_header_cell), Array.new(table_headers.length - 3 - description_column_count, table_header_calendar_cell), table_header_last_cell].flatten
               row = sheet.add_row(table_headers, style: table_header_styles)
-              row.height = 18
+              row.height = 20
 
-              row = sheet.add_row(table_calendar_days, style: table_header_styles)
-              row.height = 40
+              row = sheet.add_row(table_calendar_days, style: table_calendar_days_header_styles)
+              row.height = 20
 
               0.upto(calendar_column_index - 1) do |n|
-                sheet.merge_cells("#{get_column_name(n)}#{row.index}:#{get_column_name(n)}#{row.index + 1}")
+                # sheet.merge_cells("#{get_column_name(n)}#{row.index}:#{get_column_name(n)}#{row.index + 1}")
               end
 
-              month_segs.each do |seg|
-                sheet.merge_cells("#{get_column_name(calendar_column_index)}#{row.index}:#{get_column_name(calendar_column_index + seg)}#{row.index}")
-                calendar_column_index = calendar_column_index + seg + 1
+              month_segs.each_with_index do |seg, index|
+                if index == 0
+                  sheet.merge_cells("#{get_column_name(calendar_column_index)}#{row.index}:#{get_column_name(calendar_column_index + seg + 1)}#{row.index}")
+                  calendar_column_index = calendar_column_index + seg + 2
+                else
+                  sheet.merge_cells("#{get_column_name(calendar_column_index)}#{row.index}:#{get_column_name(calendar_column_index + seg)}#{row.index}")
+                  calendar_column_index = calendar_column_index + seg + 1
+                end
               end
 
               # Fill records
@@ -266,7 +383,7 @@ module Tida
 
               sub_total_rows = []
 
-              master_plan.candidate_mediums.each do |medium|
+              master_plan.candidate_media.each do |medium|
                 master_plan.items.where(medium_id: medium.id).order('is_on_house').each do |item|
                   if item.is_on_house?
                     row = fill_data_row(sheet, item, months, days, center_cell, on_house_left_cell, on_house_center_cell, currency_on_house_cell, number_on_house_cell, old_cell)
@@ -275,7 +392,7 @@ module Tida
                   end
                 end
                 sheet.merge_cells("#{get_column_name(2)}#{start_index}:#{get_column_name(2)}#{row.index + 1}")
-                row = fill_sub_total_row(sheet, master_plan.bonus_ratio(medium.id), start_index, row.index + 1, total_day_count, center_cell, sub_total_cell, sub_total_on_house_cell)
+                row = fill_sub_total_row(sheet, master_plan.company_bonus_ratio(medium.id), start_index, row.index + 1, total_day_count, center_cell, sub_total_cell, sub_total_on_house_cell)
                 sub_total_rows << row.index + 1
                 start_index = row.index + 2
               end

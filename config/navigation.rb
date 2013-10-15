@@ -45,11 +45,6 @@ SimpleNavigation::Configuration.run do |navigation|
         media.item "page_medium_#{item.id}".to_sym, item.name, medium_channels_path(item.id), highlights_on: ::Regexp.new("media/#{item.id}")
       end
     end
-    primary.item :page_spots, t('navigation.spots'), nil, link: {icon: 'icon-book'} do |spots|
-      Medium.all.each do |medium|
-        spots.item "page_medium_#{medium.id}_spots".to_sym, medium.name, spots_path(medium_id: medium), highlights_on: ::Regexp.new("medium_id=#{medium.id}")
-      end
-    end
   end
 
 end

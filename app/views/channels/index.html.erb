@@ -3,12 +3,14 @@
     name: render_icon_and_text_content('icon-plus-sign', t('model.create', :model => Channel.model_name.human)),
     url: new_medium_channel_path(@medium),
     options: {class: 'button button-primary'}
-  }
+  } if can?(:manage, Channel)
 end %>
 
 <ul class="nav nav-tabs">
   <li><%= link_to render_icon_and_text_content('icon-trello', ChannelGroup.model_name.human), medium_channel_groups_path(@medium) %></li>
   <li class="active"><%= link_to render_icon_and_text_content('icon-sitemap', Channel.model_name.human), medium_channels_path(@medium) %></li>
+  <li><%= link_to render_icon_and_text_content('icon-folder-close', SpotCategory.model_name.human), medium_spot_categories_path(@medium) %></li>
+  <li><%= link_to render_icon_and_text_content('icon-asterisk', Spot.model_name.human), medium_spots_path(@medium) %></li>
 </ul>
 
 <%= render partial: 'channels_grid' %>

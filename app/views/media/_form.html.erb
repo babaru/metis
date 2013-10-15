@@ -4,6 +4,7 @@
 
   <div class="form-inputs">
     <%= f.input :name %>
+    <%= f.input :type, collection: [['一般网站媒体', 'Medium'], ['视频网站媒体', 'VideoMedium']], as: :radio %>
     <%= f.input :url %>
     <%= f.input :logo, as: :file %>
   </div>

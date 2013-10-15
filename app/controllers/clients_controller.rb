@@ -31,6 +31,10 @@ class ClientsController < ApplicationController
     @client = Client.find(params[:id])
   end
 
+  def view_medium_policies
+    @client = Client.find params[:id]
+  end
+
   def medium_policies
     @client = Client.find params[:id]
 
@@ -80,48 +84,6 @@ class ClientsController < ApplicationController
     end
   end
 
-  def discounts
-    @client = Client.find(params[:id])
-
-    if request.post?
-      params[:medium_ids].each_with_index do |medium_id, index|
-        medium_discount = 1
-        company_discount = 1
-        medium_bonus_ratio = 0
-        company_bonus_ratio = 0
-
-        medium_discount = params[:medium_discounts][index]
-        company_discount = params[:company_discounts][index]
-        medium_bonus_ratio = params[:medium_bonus_ratios][index]
-        company_bonus_ratio = params[:company_bonus_ratios][index]
-
-        client_discount = @client.discounts.where(medium_id: medium_id).first
-        if client_discount
-          client_discount.medium_discount = medium_discount
-          client_discount.company_discount = company_discount
-          client_discount.medium_bonus_ratio = medium_bonus_ratio
-          client_discount.company_bonus_ratio = company_bonus_ratio
-          client_discount.save!
-        else
-          @client.discounts << ClientDiscount.new({
-            client_id: @client.id,
-            medium_id: medium_id,
-            medium_discount: medium_discount,
-            company_discount: company_discount,
-            medium_bonus_ratio: medium_bonus_ratio,
-            company_bonus_ratio: company_bonus_ratio
-            })
-        end
-      end
-      @client.save!
-
-      respond_to do |format|
-        format.html # show.html.erb
-        format.json { render json: @client }
-      end
-    end
-  end
-
   # GET /clients/new
   # GET /clients/new.json
   def new
@@ -145,13 +107,27 @@ class ClientsController < ApplicationController
     @client = Client.new(params[:client])
 
     respond_to do |format|
-      if @client.save
+      Client.transaction do
+        @client.save!
+        Medium.all.each do |medium|
+          MediumPolicy.create!({
+            medium_id: medium.id,
+            client_id: @client.id,
+            medium_discount: 1,
+            company_discount: 1,
+            medium_bonus_ratio: 0,
+            company_bonus_ratio: 0,
+            medium_cpm_discount: 1,
+            company_cpm_discount: 1
+            }) unless MediumPolicy.exists?(client_id: @client.id, medium_id: medium.id)
+        end
         format.html { redirect_to client_path(@client), notice: 'Client was successfully created.' }
         format.json { render json: @client, status: :created, location: @client }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @client.errors, status: :unprocessable_entity }
       end
+      # else
+        # format.html { render action: "new" }
+        # format.json { render json: @client.errors, status: :unprocessable_entity }
+      # end
     end
   end
 

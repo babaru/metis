@@ -1,14 +1,14 @@
 <%= grid(@spots_grid, :show_filters => :always) do |g|
 
-  g.column name: t('activerecord.attributes.spot.medium') do |spot|
+  g.column name: t('activerecord.attributes.spot.medium_id') do |spot|
     spot.medium.name
   end
 
-  g.column name: t('activerecord.attributes.spot.channel') do |spot|
+  g.column name: t('activerecord.attributes.spot.channel_id') do |spot|
     spot.channel.name
   end
 
-  g.column name: t('activerecord.attributes.spot.spot_category') do |spot|
+  g.column name: t('activerecord.attributes.spot.spot_category_id') do |spot|
     spot.spot_category.name
   end
 
@@ -32,11 +32,13 @@
     spot.remark
   end
 
-  g.column :html => {class: 'buttons'} do |spot|
-    link_to(render_icon_content('icon-edit'), edit_spot_path(spot), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
-  end
+  if can?(:manage, Spot)
+    g.column :html => {class: 'buttons'} do |spot|
+      link_to(render_icon_content('icon-edit'), edit_spot_path(spot), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
+    end
 
-  g.column :html => {class: 'buttons'} do |spot|
-    link_to(render_icon_content('icon-trash'), spot_path(spot), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete'))
+    g.column :html => {class: 'buttons'} do |spot|
+      link_to(render_icon_content('icon-trash'), spot_path(spot), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete'))
+    end
   end
 end -%>

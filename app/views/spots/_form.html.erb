@@ -3,17 +3,16 @@
   <%= f.error_notification %>
 
   <div class="form-inputs">
-
-    <%= f.input :medium_id %>
-
-    <%= f.input :channel_id %>
-
+    <%= f.input :medium_id, as: :hidden %>
+    <%= f.input :spot_category_id, collection: SpotCategory.where(medium_id: @spot.medium_id) %>
+    <%= f.input :channel_id, collection: Channel.where(medium_id: @spot.medium_id) %>
     <%= f.input :name %>
-
+    <%= f.input :type, collection: [['一般点位', 'Spot'], ['净价点位', 'NetCostSpot']], as: :radio %>
     <%= f.input :price %>
-
+    <%= f.input :unit %>
     <%= f.input :spec %>
-                    </div>
+    <%= f.input :remark %>
+  </div>
 
   <div class="form-actions">
     <%= f.button :submit, class: 'button button-primary' %>

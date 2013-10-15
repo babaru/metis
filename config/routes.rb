@@ -10,8 +10,9 @@ Metis::Application.routes.draw do
   get 'clients/:id/assigned_users' => 'clients#assigned_users', as: :client_assigned_users
   get 'clients/:id/assign' => 'clients#assign', as: :manage_client_assignment
   match 'clients/:id/medium_policies' => 'clients#medium_policies', as: :client_medium_policies
+  get 'clients/:id/view_medium_policies' => 'clients#view_medium_policies', as: :view_client_medium_policies
 
-  match 'media/:id/data_type/:data_type/search' => 'media#search', as: :website_data_search
+  # match 'media/:id/data_type/:data_type/search' => 'media#search', as: :website_data_search
   match 'projects/:id/assign' => 'projects#assign', as: :assign_project
 
   # get 'media/:website_id/channel_groups' => 'channel_groups#index'
@@ -29,12 +30,12 @@ Metis::Application.routes.draw do
   post 'master_plan_items/:id/modify' => 'master_plan_items#modify', as: :modify_master_plan_item
   match 'clients/:id/upload_spot_plan_excel_file' => 'clients#upload_spot_plan_excel_file', as: :upload_spot_plan_excel_file
 
-  get 'spots/apps' => 'spots#apps'
+  # get 'spots/apps' => 'spots#apps'
 
   resources :media, :channels, :spots, :channel_groups, :spot_categories, :master_plans, :master_plan_items, :spot_plan_items
 
   resources :media do
-    resources :channels, :channel_groups, :spots
+    resources :channels, :channel_groups, :spots, :spot_categories
   end
 
   resources :channel_groups do

@@ -1,7 +1,7 @@
 <%= render_page_title "#{t('model.edit', model: Spot.model_name.human)} <small>#{t('simple_form.required.text') }</small>" do |toolbar|
   toolbar << {
     name: "#{t('labels.back_to')}#{t('model.list', :model => Spot.model_name.human)}",
-    url: medium_data_path(@medium, 'spot'),,
+    url: medium_spots_path(medium_id: @spot.medium_id, spot_category_id: @spot.spot_category_id),
     options: {class: 'button'}
   }
   end %>

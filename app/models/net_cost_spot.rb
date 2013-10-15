@@ -1,0 +1,2 @@
+class NetCostSpot < Spot
+end

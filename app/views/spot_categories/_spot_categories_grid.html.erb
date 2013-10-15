@@ -1,0 +1,21 @@
+<%= grid(@spot_categories_grid, :show_filters => :always) do |g|
+  g.column name: t('activerecord.attributes.spot_category.name') do |spot_category|
+    link_to spot_category.name, spot_category_url(spot_category)
+  end
+
+  g.column name: t('activerecord.attributes.spot_category.description') do |spot_category|
+    truncate(spot_category.description, length: 100)
+  end
+
+  if can?(:manage, SpotCategory)
+
+    g.column :html => {class: 'buttons'} do |spot_category|
+      link_to(render_icon_content('icon-edit'), edit_spot_category_path(spot_category), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
+    end
+
+    g.column :html => {class: 'buttons'} do |spot_category|
+      link_to(render_icon_content('icon-trash'), spot_category_path(spot_category), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete'))
+    end
+
+  end
+end -%>

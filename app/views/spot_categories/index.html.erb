@@ -1,18 +1,16 @@
-<%= render_page_title "#{t('model.list', model: SpotCategory.model_name.human)}" do |toolbar|
+<%= render_page_title "<strong>#{@medium.name}</strong> #{t('model.list', model: SpotCategory.model_name.human)}" do |toolbar|
   toolbar << {
     name: render_icon_and_text_content('icon-plus-sign', t('model.create', :model => SpotCategory.model_name.human)),
-    url: new_spot_category_path,
+    url: new_medium_spot_category_path(@medium),
     options: {class: 'button button-primary'}
-  }
+  } if can?(:manage, SpotCategory)
 end %>
 
-<%= grid(@spot_categories_grid, :show_filters => :always) do |g|
+<ul class="nav nav-tabs">
+  <li><%= link_to render_icon_and_text_content('icon-trello', ChannelGroup.model_name.human), medium_channel_groups_path(@medium) %></li>
+  <li><%= link_to render_icon_and_text_content('icon-sitemap', Channel.model_name.human), medium_channels_path(@medium) %></li>
+  <li class="active"><%= link_to render_icon_and_text_content('icon-folder-close', SpotCategory.model_name.human), medium_spot_categories_path(@medium) %></li>
+  <li><%= link_to render_icon_and_text_content('icon-asterisk', Spot.model_name.human), medium_spots_path(@medium) %></li>
+</ul>
 
-  g.column :html => {class: 'buttons'} do |spot_category|
-    link_to(render_icon_content('icon-edit'), edit_spot_category_path(spot_category), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
-  end
-
-  g.column :html => {class: 'buttons'} do |spot_category|
-    link_to(render_icon_content('icon-trash'), spot_category_path(spot_category), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete'))
-  end
-end -%>
+<%= render partial: 'spot_categories_grid' %>

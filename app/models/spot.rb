@@ -3,9 +3,15 @@ class Spot < ActiveRecord::Base
   belongs_to :medium
   belongs_to :channel
   belongs_to :spot_category
-  has_and_belongs_to_many :spot_contracts
 
-  attr_accessible :name, :price, :spec, :unit, :remark, :medium_id, :channel_id, :spot_category_id
+  validates :name, presence: true
+  validates :medium_id, presence: true
+  validates :channel_id, presence: true
+  validates :spot_category_id, presence: true
+  validates :price, presence: true
+  validates :unit, presence: true
+
+  attr_accessible :name, :price, :spec, :unit, :remark, :medium_id, :channel_id, :spot_category_id, :type
 
   def self.find_or_create_by_data!(data)
     spot = Spot.find_by_name_and_channel_id(data[:name], data[:channel_id])

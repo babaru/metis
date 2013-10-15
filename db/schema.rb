@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131012013120) do
+ActiveRecord::Schema.define(:version => 20131015220016) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -286,6 +286,7 @@ ActiveRecord::Schema.define(:version => 20131012013120) do
     t.integer  "spot_category_id"
     t.string   "unit_type"
     t.integer  "medium_id"
+    t.string   "type"
   end
 
   add_index "spots", ["channel_id"], :name => "index_spots_on_channel_id"

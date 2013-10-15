@@ -22,6 +22,7 @@ class MediaController < ApplicationController
   # GET /media/new.json
   def new
     @medium = Medium.new
+    @medium.type = 'Medium'
 
     respond_to do |format|
       format.html # new.html.erb
@@ -40,13 +41,28 @@ class MediaController < ApplicationController
     @medium = Medium.new(params[:medium])
 
     respond_to do |format|
-      if @medium.save
+      Medium.transaction do
+        @medium.save!
+      # if @medium.save
+        Client.all.each do |client|
+          MediumPolicy.create!({
+            medium_id: @medium.id,
+            client_id: client.id,
+            medium_discount: 1,
+            company_discount: 1,
+            medium_bonus_ratio: 0,
+            company_bonus_ratio: 0,
+            medium_cpm_discount: 1,
+            company_cpm_discount: 1
+            }) unless MediumPolicy.exists?(client_id: client.id, medium_id: @medium.id)
+        end
         format.html { redirect_to media_path(), notice: 'Medium was successfully created.' }
         format.json { render json: @medium, status: :created, location: @medium }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @medium.errors, status: :unprocessable_entity }
       end
+      # else
+        # format.html { render action: "new" }
+        # format.json { render json: @medium.errors, status: :unprocessable_entity }
+      # end
     end
   end
 

@@ -11,6 +11,7 @@ class SpotsController < ApplicationController
     if @spot_category
       @spots_grid = initialize_grid(Spot.where(medium_id: @medium.id, spot_category_id: @spot_category.id))
     end
+    @spot_category_id = @spot_category.id if @spot_category
 
     respond_to do |format|
       format.html # index.html.erb
@@ -40,7 +41,10 @@ class SpotsController < ApplicationController
   # GET /spots/new.json
   def new
     @spot = Spot.new
-    @medium = Medium.find params[:medium_id]
+    @medium_id = params[:medium_id]
+    @spot.medium_id = @medium_id
+    @spot.spot_category_id = params[:spot_category_id]
+    @spot.type = 'Spot'
 
     respond_to do |format|
       format.html # new.html.erb
@@ -51,6 +55,7 @@ class SpotsController < ApplicationController
   # GET /spots/1/edit
   def edit
     @spot = Spot.find(params[:id])
+    @medium = @spot.medium
   end
 
   # POST /spots
@@ -60,7 +65,7 @@ class SpotsController < ApplicationController
 
     respond_to do |format|
       if @spot.save
-        format.html { redirect_to spot_path(@spot), notice: 'Spot was successfully created.' }
+        format.html { redirect_to medium_spots_path(medium_id: @spot.medium_id, spot_category_id: @spot.spot_category_id), notice: 'Spot was successfully created.' }
         format.json { render json: @spot, status: :created, location: @spot }
       else
         format.html { render action: "new" }
@@ -76,7 +81,7 @@ class SpotsController < ApplicationController
 
     respond_to do |format|
       if @spot.update_attributes(params[:spot])
-        format.html { redirect_to spot_path(@spot), notice: 'Spot was successfully updated.' }
+        format.html { redirect_to medium_spots_path(medium_id: @spot.medium_id, spot_category_id: @spot.spot_category_id), notice: 'Spot was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -89,10 +94,12 @@ class SpotsController < ApplicationController
   # DELETE /spots/1.json
   def destroy
     @spot = Spot.find(params[:id])
+    @medium_id = @spot.medium_id
+    @spot_category_id = @spot.spot_category_id
     @spot.destroy
 
     respond_to do |format|
-      format.html { redirect_to spots_url }
+      format.html { redirect_to medium_spots_path(medium_id: @medium_id, spot_category_id: @spot_category_id) }
       format.json { head :no_content }
     end
   end

@@ -1,4 +1,16 @@
+<article>
+  <div class="padding">
+    <ul class="nav nav-pills">
+      <% @spot_categories.each do |spot_category| %>
+      <% if @spot_category.id == spot_category.id %>
+      <li class="active">
+      <% else %>
+      <li>
+      <% end %>
+        <%= link_to spot_category.name, medium_spots_path(medium_id: @medium, spot_category_id: spot_category) %>
+      </li>
+      <% end %>
+    </ul>
+  </div>
+</article>
 
-<ul class="nav nav-tabs">
-  <%= render partial: 'spot_category_nav', collection: @spot_categories %>
-</ul>

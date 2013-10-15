@@ -2,7 +2,8 @@ class SpotCategoriesController < ApplicationController
   # GET /spot_categories
   # GET /spot_categories.json
   def index
-    @spot_categories_grid = initialize_grid(SpotCategory)
+    @medium = Medium.find params[:medium_id]
+    @spot_categories_grid = initialize_grid(SpotCategory.where(medium_id: params[:medium_id]))
 
     respond_to do |format|
       format.html # index.html.erb
@@ -14,6 +15,7 @@ class SpotCategoriesController < ApplicationController
   # GET /spot_categories/1.json
   def show
     @spot_category = SpotCategory.find(params[:id])
+    @medium = @spot_category.medium
 
     respond_to do |format|
       format.html # show.html.erb
@@ -24,7 +26,9 @@ class SpotCategoriesController < ApplicationController
   # GET /spot_categories/new
   # GET /spot_categories/new.json
   def new
+    @medium = Medium.find params[:medium_id]
     @spot_category = SpotCategory.new
+    @spot_category.medium_id = params[:medium_id]
 
     respond_to do |format|
       format.html # new.html.erb
@@ -35,6 +39,7 @@ class SpotCategoriesController < ApplicationController
   # GET /spot_categories/1/edit
   def edit
     @spot_category = SpotCategory.find(params[:id])
+    @medium = @spot_category.medium
   end
 
   # POST /spot_categories
@@ -44,7 +49,7 @@ class SpotCategoriesController < ApplicationController
 
     respond_to do |format|
       if @spot_category.save
-        format.html { redirect_to spot_category_path(@spot_category), notice: 'Spot category was successfully created.' }
+        format.html { redirect_to medium_spot_categories_path(@spot_category.medium_id), notice: 'Spot category was successfully created.' }
         format.json { render json: @spot_category, status: :created, location: @spot_category }
       else
         format.html { render action: "new" }
@@ -60,7 +65,7 @@ class SpotCategoriesController < ApplicationController
 
     respond_to do |format|
       if @spot_category.update_attributes(params[:spot_category])
-        format.html { redirect_to spot_category_path(@spot_category), notice: 'Spot category was successfully updated.' }
+        format.html { redirect_to medium_spot_categories_path(@spot_category.medium_id), notice: 'Spot category was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -73,10 +78,11 @@ class SpotCategoriesController < ApplicationController
   # DELETE /spot_categories/1.json
   def destroy
     @spot_category = SpotCategory.find(params[:id])
+    @medium_id = @spot_category.medium_id
     @spot_category.destroy
 
     respond_to do |format|
-      format.html { redirect_to spot_categories_url }
+      format.html { redirect_to medium_spot_categories_path(@medium_id) }
       format.json { head :no_content }
     end
   end
