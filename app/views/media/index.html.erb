@@ -8,6 +8,6 @@ end %>
 
 <div class="icon-grid">
   <% @media.each do |medium| %>
-  <%= link_to content_tag(:span, medium.name), medium_path(medium), 'logo-url' => medium.logo.url(:thumb) %>
+  <%= link_to content_tag(:span, medium.name), medium_path(medium), 'logo-url' => medium.logo.url(:thumb), 'data-editable' => can?(:manage, Medium) %>
   <% end %>
 </div>

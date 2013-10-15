@@ -24,11 +24,15 @@ class User < ActiveRecord::Base
   end
 
   def viewable_clients
-    return clients if has_role?(:admin)
+    # return clients if has_role?(:admin)
 
     result = []
     assigned_clients.each {|c| result << c}
     assigned_projects.each {|p| result << p.client unless result.include? p.client}
+
+    if has_role?(:admin)
+      clients.each {|c| result << c unless result.include? c}
+    end
     result
   end
 
