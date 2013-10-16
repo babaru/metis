@@ -3,7 +3,7 @@
     [hidden_field_tag("spot_id[]", spot.id), hidden_field_tag(:medium_id, spot.medium_id), hidden_field_tag(:channel_id, spot.channel_id)].join(' ').html_safe
   end
 
-  g.column name: t('activerecord.attributes.spot.spot_category') do |spot|
+  g.column name: t('activerecord.attributes.spot.spot_category_id') do |spot|
     spot.spot_category.name
   end
 
@@ -24,7 +24,7 @@
   end
 
   g.column name: '配送？' do |spot|
-    check_box_tag 'is_on_house[]', spot.id
+    check_box_tag 'is_on_house[]', spot.id unless spot.is_a?(NetCostSpot)
   end
 end -%>
 

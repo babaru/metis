@@ -70,6 +70,10 @@ class MasterPlanItem < ActiveRecord::Base
       self.client_name = self.client.name if self.client_id
       self.medium_name = self.medium.name if self.medium_id
       self.channel_name = self.channel.name if self.channel_id
+      self.medium_discount = self.spot.medium_discount(self.client_id) if self.spot_id
+      self.company_discount = self.spot.company_discount(self.client_id) if self.spot_id
+      self.medium_bonus_ratio = self.spot.medium_bonus_ratio(self.client_id) if self.spot_id
+      self.company_bonus_ratio = self.spot.company_bonus_ratio(self.client_id) if self.spot_id
     else
     end
   end

@@ -53,4 +53,28 @@ class Spot < ActiveRecord::Base
 
     Tida::Metis::SpotPriceUnitType.spot_price_unit_types.unknown
   end
+
+  def medium_discount(client_id)
+    value = MediumPolicy.medium_discount(self.medium_id, client_id)
+    return 1 unless value
+    value
+  end
+
+  def company_discount(client_id)
+    value = MediumPolicy.company_discount(self.medium_id, client_id)
+    return 1 unless value
+    value
+  end
+
+  def medium_bonus_ratio(client_id)
+    value = MediumPolicy.medium_bonus_ratio(self.medium_id, client_id)
+    return 0 unless value
+    value
+  end
+
+  def company_bonus_ratio(client_id)
+    value = MediumPolicy.company_bonus_ratio(self.medium_id, client_id)
+    return 0 unless value
+    value
+  end
 end

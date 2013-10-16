@@ -37,17 +37,17 @@
   end
 
   g.column name: t('activerecord.attributes.client.discounts') do |master_plan_item|
-    content_tag(:div, [content_tag(:span, "#{MediumPolicy.medium_discount(master_plan_item.spot.medium_id, master_plan_item.client_id)}", class: 'label label-warning'),
-      content_tag(:span, "#{MediumPolicy.company_discount(master_plan_item.spot.medium_id, master_plan_item.client_id)}", class: 'label label-success')].join(' ').html_safe, class: 'discounts', :style => master_plan_item.is_on_house ? 'display: none;' : '') if master_plan_item.spot_id
+    content_tag(:div, [content_tag(:span, "#{master_plan_item.medium_discount}", class: 'label label-warning'),
+      content_tag(:span, "#{master_plan_item.company_discount}", class: 'label label-success')].join(' ').html_safe, class: 'discounts', :style => master_plan_item.is_on_house ? 'display: none;' : '') if master_plan_item.spot_id
   end
 
   g.column name: t('activerecord.attributes.master_plan_item.net_cost') do |master_plan_item|
-    content_tag(:div, [content_tag(:span, number_to_currency(master_plan_item.client.medium_discount(master_plan_item.spot.medium_id) * master_plan_item.spot.price * master_plan_item.count, precision: 0, unit: ''), class: 'label label-warning'),
-      content_tag(:span, number_to_currency(master_plan_item.client.company_discount(master_plan_item.spot.medium_id) * master_plan_item.spot.price * master_plan_item.count, precision: 0, unit: ''), class: 'label label-success')].join(' ').html_safe, class: 'discounts', :style => master_plan_item.is_on_house ? 'display: none;' : '') if master_plan_item.spot_id
+    content_tag(:div, [content_tag(:span, number_to_currency(master_plan_item.medium_discount * master_plan_item.unit_rate_card * master_plan_item.count, precision: 0, unit: ''), class: 'label label-warning'),
+      content_tag(:span, number_to_currency(master_plan_item.company_discount * master_plan_item.unit_rate_card * master_plan_item.count, precision: 0, unit: ''), class: 'label label-success')].join(' ').html_safe, class: 'discounts', :style => master_plan_item.is_on_house ? 'display: none;' : '')
   end
 
   g.column do |master_plan_item|
-    master_plan_item.is_on_house ? link_to(render_icon_and_text_content('icon-truck', '配送'), '#', 'data-id' => master_plan_item.id, 'data-value' => false, 'data-medium-id' => selected_medium_id, class: 'master_plan_item_is_on_house button button-success', 'data-skip-pjax' => true) : link_to(render_icon_and_text_content('icon-truck', '配送'), '#', 'data-id' => master_plan_item.id, 'data-medium-id' => selected_medium_id, class: 'master_plan_item_is_on_house button', 'data-value' => true, 'data-skip-pjax' => true)
+    master_plan_item.is_on_house ? link_to(render_icon_and_text_content('icon-truck', '配送'), '#', 'data-id' => master_plan_item.id, 'data-value' => false, 'data-medium-id' => selected_medium_id, class: 'master_plan_item_is_on_house button button-success', 'data-skip-pjax' => true) : link_to(render_icon_and_text_content('icon-truck', '配送'), '#', 'data-id' => master_plan_item.id, 'data-medium-id' => selected_medium_id, class: 'master_plan_item_is_on_house button', 'data-value' => true, 'data-skip-pjax' => true) if master_plan_item.spot_id && !master_plan_item.spot.is_a?(NetCostSpot)
   end
 
   g.column :html => {class: 'buttons'} do |master_plan_item|
