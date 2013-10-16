@@ -8,8 +8,8 @@ describe "medium_policies/index" do
     ])
   end
 
-  it "renders a list of medium_policies" do
-    render
-    # Run the generator again with the --webrat flag if you want to use webrat matchers
-  end
+  # it "renders a list of medium_policies" do
+  #   render
+  #   # Run the generator again with the --webrat flag if you want to use webrat matchers
+  # end
 end

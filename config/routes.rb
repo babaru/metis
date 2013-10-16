@@ -32,7 +32,7 @@ Metis::Application.routes.draw do
 
   # get 'spots/apps' => 'spots#apps'
 
-  resources :media, :channels, :spots, :channel_groups, :spot_categories, :master_plans, :master_plan_items, :spot_plan_items
+  resources :media, :channels, :spots, :channel_groups, :spot_categories, :master_plans, :master_plan_items, :spot_plan_items, :medium_policies
 
   resources :media do
     resources :channels, :channel_groups, :spots, :spot_categories
