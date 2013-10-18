@@ -34,9 +34,27 @@ SimpleNavigation::Configuration.run do |navigation|
   navigation.items do |primary|
     primary.item :page_dashboard, t('navigation.dashboard'), dashboard_path, link: {icon: 'icon-dashboard'}, :highlights_on => /dashboard/
     primary.item :page_clients, t('navigation.clients'), nil, link: {icon: 'icon-user'} do |clients|
-      clients.item :page_clients, t('navigation.clients_list'), clients_path, link: {icon: 'icon-list'}, highlights_on: ::Regexp.new("clients$")
+      clients.item :page_clients, t('navigation.clients_list'), clients_path, highlights_on: ::Regexp.new("clients$")
       current_user.viewable_clients.each do |client|
-        clients.item "page_client_#{client.id}".to_sym, client.name, client_path(client), highlights_on: ::Regexp.new("clients/#{client.id}")
+        clients.item "page_client_#{client.id}".to_sym, client.name, nil, highlights_on: ::Regexp.new("clients/#{client.id}") do |client_items|
+          client_items.item "page_client_#{client.id}_item_projects".to_sym,
+            t('model.list', model: Project.model_name.human),
+            client_projects_path(client),
+            link: {icon: 'icon-folder-close'},
+            highlights_on: ::Regexp.new("clients/#{client.id}/projects")
+
+          client_items.item "page_client_#{client.id}_item_assigns".to_sym,
+            t('model.manager', model: ClientAssignment.model_name.human),
+            manage_client_assignments_path(client),
+            link: {icon: 'icon-male'},
+            highlights_on: ::Regexp.new("clients/#{client.id}/assigns")
+
+          client_items.item "page_client_#{client.id}_item_medium_policies".to_sym,
+            t('model.manager', model: MediumPolicy.model_name.human),
+            manage_client_medium_policies_path(client),
+            link: {icon: 'icon-file-text'},
+            highlights_on: ::Regexp.new("clients/#{client.id}/medium_policies")
+        end
       end
     end
     primary.item :page_media, t('navigation.media'), nil, link: {icon: 'icon-globe'} do |media|

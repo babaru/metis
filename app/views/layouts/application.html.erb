@@ -114,9 +114,9 @@
           </li>
         </ul>
       </div>
-      <%= render_navigation renderer: :top_navigation_bar, expand_all: true %>
+      <%= render_navigation renderer: :navigation_bar, expand_all: true %>
       <div id="main" class="clearfix">
-        <%= render_navigation renderer: :sub_navigation_bar, expand_all: true %>
+
         <div class="content">
           <%= render partial: 'shared/components/notification' %>
           <%= yield %>

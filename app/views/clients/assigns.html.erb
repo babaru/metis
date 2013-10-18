@@ -1,0 +1,15 @@
+<%= render_page_title "<strong>#{@client.name}</strong> #{t('model.manager', model: ClientAssignment.model_name.human)}" %>
+
+<%= simple_form_for(@client, url: save_client_assignments_path(@client), method: :post, html: {class: 'form-horizontal'}) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.association :assigned_users,
+    :collection => User.all_the_other_users(@client.created_by).collect{|u| [u.email, u.id] },
+    :as => :check_boxes %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, "保存#{ClientAssignment.model_name.human}", class: 'button button-primary' %>
+  </div>
+<% end %>

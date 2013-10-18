@@ -11,7 +11,8 @@ zh-CN:
       spot_category: 刊例分类
       role: 身份
       master_plan: Master Plan
-      client_discount: 客户媒体政策
+      client_assignment: 客户执行人员
+      project_assignment: 项目执行人员
       medium_policy: 媒体政策
       net_cost_spot: 净价点位
     attributes:
@@ -23,13 +24,14 @@ zh-CN:
         roles: 用户身份
       client:
         name: 名称
-        discounts: 媒体政策 / 客户政策
+        assigned_users: 执行人员列表
       project:
         name: 名称
         budget: 预算
         started_at: 开始日期
         ended_at: 结束日期
         assigned_to: 项目分配给
+        assigned_users: 执行人员列表
       master_plan:
         name: 名称
         updated_at: 最后修改时间

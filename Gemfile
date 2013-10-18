@@ -34,7 +34,7 @@ group :assets do
 end
 
 # gem 'tida_template', path: '/Users/apple/Projects/tida/src/tida_template'
-gem 'tida_template', '>= 0.2.8'
+gem 'tida_template', '>= 0.2.9'
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
@@ -74,3 +74,6 @@ gem "rvm-capistrano"
 # To use debugger
 # gem 'debugger'
 #
+
+gem 'whenever'
+gem 'backup'

@@ -20,6 +20,7 @@ zh-CN:
     export: "导出%{model}"
     remove: "移除%{model}"
     upload: "上传%{model}"
+    manager: "%{model}管理"
   labels:
     welcome: '欢迎'
     duration: "时间区段"

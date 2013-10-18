@@ -27,41 +27,49 @@ class ClientsController < ApplicationController
     end
   end
 
-  def assign
+  def assigns
     @client = Client.find(params[:id])
   end
 
-  def view_medium_policies
-    @client = Client.find params[:id]
+  def save_assignments
+    @client = Client.find(params[:id])
+    if request.post?
+      respond_to do |format|
+      if @client.update_attributes(params[:client])
+        format.html { redirect_to manage_client_assignments_path(@client), notice: "#{ClientAssignment.model_name.human}保存成功！" }
+        format.json { head :no_content }
+      else
+        format.html { render action: "assigns" }
+        format.json { render json: @client.errors, status: :unprocessable_entity }
+      end
+    end
+    end
   end
 
   def medium_policies
     @client = Client.find params[:id]
+  end
 
+  def save_medium_policies
+    @client = Client.find params[:id]
     if request.post?
       params[:medium_ids].each_with_index do |medium_id, index|
         medium_discount = 1
         company_discount = 1
         medium_bonus_ratio = 0
         company_bonus_ratio = 0
-        medium_cpm_discount = 1
-        company_cpm_discount = 1
 
-        medium_discount = params[:medium_discounts][index]
-        company_discount = params[:company_discounts][index]
-        medium_bonus_ratio = params[:medium_bonus_ratios][index]
-        company_bonus_ratio = params[:company_bonus_ratios][index]
-        medium_cpm_discount = params[:medium_cpm_discounts][index]
-        company_cpm_discount = params[:company_cpm_discounts][index]
+        medium_discount = params[:medium_discounts][index].to_f if params[:medium_discounts][index]
+        company_discount = params[:company_discounts][index].to_f if params[:company_discounts][index]
+        medium_bonus_ratio = params[:medium_bonus_ratios][index].to_f if params[:medium_bonus_ratios][index]
+        company_bonus_ratio = params[:company_bonus_ratios][index].to_f if params[:company_bonus_ratios][index]
 
         @medium_policy = MediumPolicy.find_by_medium_id_and_client_id(medium_id, @client.id)
         if @medium_policy
-          @medium_policy.medium_discount = medium_discount
-          @medium_policy.company_discount = company_discount
+          @medium_policy.medium_discount = medium_discount / 10.0
+          @medium_policy.company_discount = company_discount / 10.0
           @medium_policy.medium_bonus_ratio = medium_bonus_ratio
           @medium_policy.company_bonus_ratio = company_bonus_ratio
-          @medium_policy.medium_cpm_discount = medium_cpm_discount
-          @medium_policy.company_cpm_discount = company_cpm_discount
           @medium_policy.save!
         else
           @medium_policy = MediumPolicy.create!({
@@ -70,15 +78,13 @@ class ClientsController < ApplicationController
             medium_discount: medium_discount,
             company_discount: company_discount,
             medium_bonus_ratio: medium_bonus_ratio,
-            company_bonus_ratio: company_bonus_ratio,
-            medium_cpm_discount: medium_cpm_discount,
-            company_cpm_discount: company_cpm_discount
+            company_bonus_ratio: company_bonus_ratio
             })
         end
       end
 
       respond_to do |format|
-        format.html # show.html.erb
+        format.html { redirect_to manage_client_medium_policies_path(@client), notice: "#{MediumPolicy.model_name.human}保存成功！" }
         format.json { render json: @medium_policy }
       end
     end

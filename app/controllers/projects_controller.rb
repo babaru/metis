@@ -3,6 +3,7 @@ class ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.json
   def index
+    @client = Client.find params[:client_id]
     @projects_grid = initialize_grid(Project.where(client_id: params[:client_id]))
 
     respond_to do |format|
@@ -18,8 +19,25 @@ class ProjectsController < ApplicationController
     @master_plans_grid = initialize_grid(MasterPlan.where(project_id: @project))
   end
 
-  def assign
+  def assigns
     @project = Project.find params[:id]
+    @client = @project.client
+  end
+
+  def save_assignments
+    if request.post?
+      @project = Project.find(params[:id])
+
+      respond_to do |format|
+        if @project.update_attributes(params[:project])
+          format.html { redirect_to client_projects_path(@project.client_id), notice: "保存#{ProjectAssignment}成功！" }
+          format.json { head :no_content }
+        else
+          format.html { render action: "assigns" }
+          format.json { render json: @project.errors, status: :unprocessable_entity }
+        end
+      end
+    end
   end
 
   # GET /projects/new

@@ -1,6 +1,6 @@
 module Tida
   module Renderers
-    class TopNavigationBarRenderer < ::SimpleNavigation::Renderer::Base
+    class NavigationBarRenderer < ::SimpleNavigation::Renderer::Base
       def render(item_container)
         list_content = item_container.items.inject([]) do |list, item|
           list << item_content(item)
@@ -72,7 +72,12 @@ module Tida
           content << content_tag(:i, nil, class: icon) if icon
           content << content_tag(:span, sub_item.name)
           li_content = link_to(content.join(' '), sub_item.url, options)
-          list << content_tag(:li, li_content)
+
+          if include_sub_navigation?(sub_item)
+            list << render_sub_navigation(sub_item)
+          else
+            list << content_tag(:li, li_content)
+          end
         end.join
         sub_list = content_tag(:ul, sub_list_content)
         inner_container = content_tag(:div, sub_list, class: 'accordion-inner')

@@ -19,8 +19,8 @@
     project.assigned_to.email if project.assigned_to
   end
 
-  g.column do |project|
-    link_to(render_icon_and_text_content('icon-flag', '分配项目'), assign_project_path(id: project), class: 'button-warning button') if can? :manage, :project
+  g.column :html => {class: 'buttons'} do |project|
+    link_to(render_icon_content('icon-user'), manage_project_assignments_path(id: project), rel: 'tooltip', title: '分配项目', class: 'button-inverse button') if can? :manage, :project
   end
 
   g.column :html => {class: 'buttons'} do |project|

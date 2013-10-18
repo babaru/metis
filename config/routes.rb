@@ -7,13 +7,13 @@ Metis::Application.routes.draw do
 
   match 'spots/upload' => 'spots#upload', as: :upload_spots
 
-  get 'clients/:id/assigned_users' => 'clients#assigned_users', as: :client_assigned_users
-  get 'clients/:id/assign' => 'clients#assign', as: :manage_client_assignment
-  match 'clients/:id/medium_policies' => 'clients#medium_policies', as: :client_medium_policies
-  get 'clients/:id/view_medium_policies' => 'clients#view_medium_policies', as: :view_client_medium_policies
+  get 'clients/:id/assigns' => 'clients#assigns', as: :manage_client_assignments
+  post 'clients/:id/save_assignments' => 'clients#save_assignments', as: :save_client_assignments
+  get 'clients/:id/medium_policies' => 'clients#medium_policies', as: :manage_client_medium_policies
+  post 'clients/:id/save_medium_policies' => 'clients#save_medium_policies', as: :save_client_medium_policies
 
-  # match 'media/:id/data_type/:data_type/search' => 'media#search', as: :website_data_search
-  match 'projects/:id/assign' => 'projects#assign', as: :assign_project
+  get 'projects/:id/assigns' => 'projects#assigns', as: :manage_project_assignments
+  post 'projects/:id/save_assignments' => 'projects#save_assignments', as: :save_project_assignments
 
   # get 'media/:website_id/channel_groups' => 'channel_groups#index'
   # get 'media/:website_id/channels' => 'channels#index'
