@@ -6,4 +6,4 @@
   }
 end %>
 
-<%= render partial: 'shared/icon_grid', locals: {items: @clients.collect {|client| {name: client.name, url: client_path(client), icon: client.logo.url(:thumb)}}, editable: can?(:manage, Client) } %>
+<%= render partial: 'shared/icon_grid', locals: {items: @clients.collect {|client| {name: client.name, url: client_projects_path(client), icon: client.logo.url(:thumb)}}, editable: can?(:manage, Client) } %>

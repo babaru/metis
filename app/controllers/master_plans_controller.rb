@@ -18,7 +18,7 @@ class MasterPlansController < ApplicationController
     @selected_medium_id = @candidate_media.first.id if @candidate_media.count > 0
     @selected_medium_id = params[:medium_id] if params[:medium_id]
     if @selected_medium_id
-      @master_plan_items_grid = initialize_grid(MasterPlanItem.where("master_plan_id=#{@master_plan.id} and medium_id=#{@selected_medium_id}").order('created_at'))
+      @master_plan_items_grid = initialize_grid(MasterPlanItem.where("master_plan_id=#{@master_plan.id} and medium_id=#{@selected_medium_id}").order('is_on_house, created_at'))
     end
     @selected_medium = Medium.find @selected_medium_id if @selected_medium_id
 

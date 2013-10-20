@@ -13,7 +13,7 @@ end %>
     <%= link_to render_icon_and_text_content('icon-check-sign', '挑选点位'), choose_spots_path(@master_plan) %>
   </li>
   <li>
-    <%= link_to render_icon_and_text_content('icon-shopping-cart', "查看已选点位 <span class=\"badge\">#{@master_plan.items.count}</span>".html_safe), master_plan_path(@master_plan) %>
+    <%= link_to render_icon_and_text_content('icon-shopping-cart', "查看已选点位 <span class=\"badge\">#{@master_plan.items.count}</span>".html_safe), client_project_master_plan_path(@master_plan) %>
   </li>
 </ul>
 

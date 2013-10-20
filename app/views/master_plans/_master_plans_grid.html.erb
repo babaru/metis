@@ -1,6 +1,6 @@
 <%= grid(@master_plans_grid, :show_filters => :always) do |g|
   g.column name: t('activerecord.attributes.master_plan.name') do |master_plan|
-    link_to content_tag(:strong, master_plan.name), master_plan_path(master_plan)
+    link_to content_tag(:strong, master_plan.name), client_project_master_plan_path(master_plan.client_id, master_plan.project_id, master_plan)
   end
 
   g.column name: t('activerecord.attributes.master_plan.updated_at') do |master_plan|

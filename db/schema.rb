@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131018074306) do
+ActiveRecord::Schema.define(:version => 20131020083605) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -98,7 +98,6 @@ ActiveRecord::Schema.define(:version => 20131018074306) do
     t.integer  "est_cpm"
     t.integer  "cpc"
     t.decimal  "unit_rate_card",           :precision => 10, :scale => 3, :default => 0.0
-    t.decimal  "net_cost",                 :precision => 10, :scale => 3, :default => 0.0
     t.decimal  "total_rate_card",          :precision => 10, :scale => 3, :default => 0.0
     t.decimal  "medium_discount",          :precision => 8,  :scale => 2, :default => 1.0
     t.decimal  "company_discount",         :precision => 8,  :scale => 2, :default => 1.0
@@ -110,6 +109,11 @@ ActiveRecord::Schema.define(:version => 20131018074306) do
     t.string   "unit_rate_card_unit"
     t.integer  "unit_rate_card_unit_type",                                :default => 0
     t.integer  "medium_id"
+    t.decimal  "reality_company_net_cost", :precision => 10, :scale => 3, :default => 0.0
+    t.decimal  "reality_medium_net_cost",  :precision => 10, :scale => 3, :default => 0.0
+    t.string   "reality_spot_name"
+    t.decimal  "reality_medium_discount",  :precision => 8,  :scale => 2, :default => 1.0
+    t.decimal  "reality_company_discount", :precision => 8,  :scale => 2, :default => 1.0
   end
 
   add_index "master_plan_items", ["channel_id"], :name => "index_master_plan_items_on_channel_id"
@@ -122,14 +126,19 @@ ActiveRecord::Schema.define(:version => 20131018074306) do
   create_table "master_plans", :force => true do |t|
     t.integer  "project_id"
     t.integer  "created_by_id"
-    t.datetime "created_at",                                                     :null => false
-    t.datetime "updated_at",                                                     :null => false
+    t.datetime "created_at",                                                                 :null => false
+    t.datetime "updated_at",                                                                 :null => false
     t.string   "name"
     t.string   "type"
-    t.decimal  "discount",      :precision => 2, :scale => 0
+    t.decimal  "discount",                 :precision => 2,  :scale => 0
     t.integer  "client_id"
-    t.boolean  "is_readonly",                                 :default => false
-    t.boolean  "is_dirty",                                    :default => true
+    t.boolean  "is_readonly",                                             :default => false
+    t.boolean  "is_dirty",                                                :default => true
+    t.decimal  "reality_medium_net_cost",  :precision => 10, :scale => 3, :default => 0.0
+    t.decimal  "reality_company_net_cost", :precision => 10, :scale => 3, :default => 0.0
+    t.string   "project_name"
+    t.string   "client_name"
+    t.string   "created_by_name"
   end
 
   add_index "master_plans", ["client_id"], :name => "index_master_plans_on_client_id"
@@ -151,6 +160,24 @@ ActiveRecord::Schema.define(:version => 20131018074306) do
   end
 
   add_index "media", ["created_by_id"], :name => "index_media_on_created_by_id"
+
+  create_table "medium_master_plans", :force => true do |t|
+    t.integer  "master_plan_id"
+    t.string   "master_plan_name"
+    t.integer  "medium_id"
+    t.string   "medium_name"
+    t.decimal  "reality_medium_net_cost",  :precision => 10, :scale => 3, :default => 0.0
+    t.decimal  "reality_company_net_cost", :precision => 10, :scale => 3, :default => 0.0
+    t.decimal  "medium_discount",          :precision => 8,  :scale => 2, :default => 1.0
+    t.decimal  "company_discount",         :precision => 8,  :scale => 2, :default => 1.0
+    t.decimal  "reality_medium_discount",  :precision => 8,  :scale => 2, :default => 1.0
+    t.decimal  "reality_company_discount", :precision => 8,  :scale => 2, :default => 1.0
+    t.datetime "created_at",                                                               :null => false
+    t.datetime "updated_at",                                                               :null => false
+  end
+
+  add_index "medium_master_plans", ["master_plan_id"], :name => "index_medium_master_plans_on_master_plan_id"
+  add_index "medium_master_plans", ["medium_id"], :name => "index_medium_master_plans_on_medium_id"
 
   create_table "medium_policies", :force => true do |t|
     t.integer  "medium_id"

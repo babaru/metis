@@ -10,7 +10,7 @@ class MasterPlanItem < ActiveRecord::Base
   before_create :copy_useful_attributes
 
   attr_accessible :count,
-    :spot, :spot_id, :spot_name,
+    :spot, :spot_id, :spot_name, :reality_spot_name,
     :master_plan, :master_plan_id, :master_plan_name,
     :project, :project_id, :project_name,
     :client, :client_id, :client_name,
@@ -31,7 +31,7 @@ class MasterPlanItem < ActiveRecord::Base
     :est_cpm,
     :cpc,
     :unit_rate_card, :unit_rate_card_unit, :unit_rate_card_unit_type,
-    :net_cost,
+    :reality_medium_net_cost, :reality_company_net_cost,
     :total_rate_card,
     :medium_discount,
     :company_discount,
@@ -47,9 +47,10 @@ class MasterPlanItem < ActiveRecord::Base
 
   def as_json(options={})
     item = super(options)
-    item['medium_name'] = self.spot.medium.name
-    item['channel_name'] = self.spot.channel.name
-    item['spot_name'] = self.spot.name
+    item['medium_name'] = self.medium_name
+    item['channel_name'] = self.channel_name
+    item['spot_name'] = self.spot_name
+    item['reality_spot_name'] = self.reality_spot_name
     item['ideal_count'] = self.count
     item['reality_count'] = self.reality_count
     item['est_total_imp'] = self.est_total_imp
@@ -62,6 +63,7 @@ class MasterPlanItem < ActiveRecord::Base
   def copy_useful_attributes
     if self.new_record?
       self.spot_name = self.spot.name if self.spot_id
+      self.reality_spot_name = self.spot.name if self.spot_id
       self.unit_rate_card = self.spot.price if self.spot_id
       self.unit_rate_card_unit = self.spot.unit if self.spot_id
       self.unit_rate_card_unit_type = self.spot.unit_type if self.spot_id
@@ -74,6 +76,8 @@ class MasterPlanItem < ActiveRecord::Base
       self.company_discount = self.spot.company_discount(self.client_id) if self.spot_id
       self.medium_bonus_ratio = self.spot.medium_bonus_ratio(self.client_id) if self.spot_id
       self.company_bonus_ratio = self.spot.company_bonus_ratio(self.client_id) if self.spot_id
+      self.reality_medium_net_cost = self.medium_discount * self.unit_rate_card * self.count
+      self.reality_company_net_cost = self.company_discount * self.unit_rate_card * self.count
     else
     end
   end

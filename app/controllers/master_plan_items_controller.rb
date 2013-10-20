@@ -63,6 +63,15 @@ class MasterPlanItemsController < ApplicationController
         @master_plan_item.est_total_imp = @master_plan_item.est_imp * @master_plan_item.count if @master_plan_item.est_imp
         @master_plan_item.est_total_clicks = @master_plan_item.est_clicks * @master_plan_item.count if @master_plan_item.est_clicks
         @master_plan_item.est_ctr = @master_plan_item.est_clicks.to_f / @master_plan_item.est_imp.to_f if @master_plan_item.est_clicks && @master_plan_item.est_imp
+
+        unless @master_plan_item.medium_net_cost
+          @master_plan_item.medium_net_cost = @master_plan_item.unit_rate_card * @master_plan_item.count * @master_plan_item.medium_discount
+        end
+
+        unless @master_plan_item.company_net_cost
+          @master_plan_item.company_net_cost = @master_plan_item.unit_rate_card * @master_plan_item.count * @master_plan_item.company_discount
+        end
+
         @master_plan_item.save!
       end
 

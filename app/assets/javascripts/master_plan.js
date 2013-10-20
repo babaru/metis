@@ -11,7 +11,7 @@ $(document).ready(function() {
             $('#master-plan-summary .budget').text(this.model.get('budget'));
             $('#master-plan-summary .contract_price').text(
                 accounting.formatMoney(
-                    this.model.get('website_contract_prices')[$('#selected-website-id-value').text()],
+                    this.model.get('medium_contract_prices')[$('#selected-medium-id-value').text()],
                     {
                         symbol: '元',
                         format: '%v%s'
@@ -26,7 +26,7 @@ $(document).ready(function() {
                 + ')');
             $('#master-plan-summary .profit').text(
                 accounting.formatMoney(
-                    this.model.get('website_profits')[$('#selected-website-id-value').text()],
+                    this.model.get('medium_profits')[$('#selected-medium-id-value').text()],
                     {
                         symbol: '元',
                         format: '%v%s'
@@ -39,9 +39,9 @@ $(document).ready(function() {
                         format: '%v%s'
                     })
                 + ')');
-            $('#master-plan-summary .reality_bonus_ratio').text(this.model.get('reality_bonus_ratios')[$('#selected-website-id-value').text()]);
-            $('#master-plan-summary .website_bonus_ratio').text(this.model.get('website_bonus_ratios')[$('#selected-website-id-value').text()]);
-            $('#master-plan-summary .company_bonus_ratio').text(this.model.get('company_bonus_ratios')[$('#selected-website-id-value').text()]);
+            $('#master-plan-summary .reality_bonus_ratio').text(this.model.get('reality_bonus_ratios')[$('#selected-medium-id-value').text()]);
+            $('#master-plan-summary .medium_bonus_ratio').text(this.model.get('medium_bonus_ratios')[$('#selected-medium-id-value').text()]);
+            $('#master-plan-summary .company_bonus_ratio').text(this.model.get('company_bonus_ratios')[$('#selected-medium-id-value').text()]);
             return this;
         }
     });

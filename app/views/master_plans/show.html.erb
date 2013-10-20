@@ -2,7 +2,7 @@
 
 <%= render_page_title "<strong>#{@master_plan.project.client.name}</strong> #{@master_plan.project.name}: #{@master_plan.name}" do |toolbar|
   toolbar << {
-    name: render_icon_and_text_content('icon-calendar', 'Spot Plan'),
+    name: render_icon_and_text_content('icon-chevron-right', 'Spot Plan'),
     url: spot_plan_path(medium_id: @selected_medium_id),
     options: {
       class: 'button button-primary',
@@ -10,7 +10,7 @@
       style: 'margin: 10px 0px;'}
   }
   toolbar << {
-    name: "#{t('labels.back_to')}#{@master_plan.project.name}#{t('model.show', :model => Project.model_name.human)}",
+    name: "#{t('labels.back_to')} #{@master_plan.project.name}#{t('model.list', :model => MasterPlan.model_name.human)}",
     url: project_path(@master_plan.project_id),
     options: {class: 'button'}
   }
@@ -21,7 +21,7 @@ end %>
     <%= link_to '挑选点位', choose_spots_path(@master_plan) %>
   </li>
   <li class="active">
-    <%= link_to render_icon_and_text_content('icon-shopping-cart', "查看已选点位 <span class=\"badge badge-success\">#{@master_plan.items.count}</span>".html_safe), master_plan_path(@master_plan) %>
+    <%= link_to render_icon_and_text_content('icon-shopping-cart', "查看已选点位 <span class=\"badge\">#{@master_plan.items.count}</span>".html_safe), client_project_master_plan_path(@master_plan) %>
   </li>
 </ul>
 
@@ -39,7 +39,13 @@ end %>
       <% else %>
       <li>
       <% end %>
-        <%= link_to medium.name, master_plan_path(medium_id: medium.id) %>
+        <%= link_to(
+          [
+            content_tag(:span, medium.name),
+            content_tag(:span, @master_plan.spots_count(medium.id), class: 'badge')
+          ].join(' ').html_safe,
+          client_project_master_plan_path(medium_id: medium.id)
+        )%>
       </li>
       <% end %>
     </ul>

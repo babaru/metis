@@ -4,8 +4,17 @@ class MasterPlan < ActiveRecord::Base
   belongs_to :project
   belongs_to :created_by, class_name: 'User', foreign_key: :created_by_id
   has_many :items, class_name: 'MasterPlanItem', dependent: :destroy
-  attr_accessible :name, :project_id, :created_by_id, :client_id, :is_dirty,
-    :is_readonly
+  attr_accessible :name,
+    :project_id,
+    :project_name,
+    :created_by_id,
+    :created_by_name,
+    :client_id,
+    :client_name,
+    :is_dirty,
+    :is_readonly,
+    :reality_medium_net_cost,
+    :reality_company_net_cost
 
   def medium_contract_price(medium_id = nil)
     sum = 0
@@ -47,28 +56,6 @@ class MasterPlan < ActiveRecord::Base
     result
   end
 
-  def reality_bonus_ratio(medium_id)
-    return 0 unless medium_id
-    total_price = 0
-    items.joins('left join spots on spot_id=spots.id').where("is_on_house=0 and spots.medium_id=#{medium_id}").each do |item|
-      total_price += item.spot.price * item.count * MediumPolicy.company_discount(item.spot.medium_id, item.client_id)
-    end
-
-    on_house_amount = 0
-    items.joins('left join spots on spot_id=spots.id').where("is_on_house=1 and spots.medium_id=#{medium_id}").each do |item|
-      on_house_amount += item.spot.price * item.count
-    end
-    (on_house_amount.to_f / total_price.to_f).to_f.round(2)
-  end
-
-  def reality_bonus_ratios()
-    result = {}
-    candidate_media.each do |medium|
-      result[medium.id] = reality_bonus_ratio(medium.id)
-    end
-    result
-  end
-
   def medium_bonus_ratio(medium_id)
     self.client.medium_bonus_ratio(medium_id)
   end
@@ -83,6 +70,11 @@ class MasterPlan < ActiveRecord::Base
 
   def company_bonus_ratios()
     candidate_media.inject([]) {|list, medium| list << company_bonus_ratio(medium.id)}
+  end
+
+  def spots_count(medium_id = nil)
+    return self.items.count unless medium_id
+    self.items.where('medium_id=?', medium_id).count
   end
 
   def working_version
@@ -117,7 +109,7 @@ class MasterPlan < ActiveRecord::Base
     item[:profit] = number_to_currency(self.profit, precision: 0, unit: '')
     item[:medium_contract_prices] = self.medium_contract_prices
     item[:medium_profits] = self.medium_profits
-    item[:reality_bonus_ratios] = self.reality_bonus_ratios
+    # item[:reality_bonus_ratios] = self.reality_bonus_ratios
     item[:medium_bonus_ratios] = self.medium_bonus_ratios
     item[:company_bonus_ratios] = self.company_bonus_ratios
     item

@@ -39,3 +39,16 @@
   .reality {
   }
 }
+
+.value {
+  padding: 3px;
+  &.medium {
+    background: #9B59B6;
+    color: white;
+  }
+
+  &.company {
+    background: #2980B9;
+    color: white;
+  }
+}

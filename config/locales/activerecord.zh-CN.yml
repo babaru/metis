@@ -44,6 +44,7 @@ zh-CN:
         est_total_imp: 预计总展示数
         est_total_clicks: 预计总点击数
         net_cost: 净价
+        medium_policy: 媒体政策
       medium:
         name: 名称
         type: 类型

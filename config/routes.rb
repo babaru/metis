@@ -18,9 +18,9 @@ Metis::Application.routes.draw do
   # get 'media/:website_id/channel_groups' => 'channel_groups#index'
   # get 'media/:website_id/channels' => 'channels#index'
 
-  get 'master_plans/:id/choose_spots' => 'master_plans#choose_spots', as: :choose_spots
-  get 'master_plans/:id/spot_plan' => 'master_plans#spot_plan', as: :spot_plan
-  # get 'spot_plan'=> 'master_plan_items#index', as: :spot_plan
+  get 'clients/:client_id/projects/:project_id/master_plans/:id/choose_spots' => 'master_plans#choose_spots', as: :choose_spots
+  get 'clients/:client_id/projects/:project_id/master_plans/:id/spot_plan' => 'master_plans#spot_plan', as: :spot_plan
+
   match 'master_plans/:id/generate_spot_plan' => 'master_plans#generate_spot_plan', as: :generate_spot_plan
   # match 'spot_plan/generate' => 'spot_plan_items#generate', as: :generate_spot_plan
   match 'master_plans/:id/save_spot_plan' => 'master_plans#save_spot_plan', as: :save_spot_plan
@@ -47,7 +47,9 @@ Metis::Application.routes.draw do
   end
 
   resources :clients do
-    resources :projects
+    resources :projects do
+      resources :master_plans
+    end
   end
 
   resources :projects do

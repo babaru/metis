@@ -1,3 +1,9 @@
+.master-plan-item-row {
+  .is_on_house {
+    color: red !important;
+  }
+}
+
 #spot-plan-table {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -31,10 +37,6 @@
       &.spot_name {
         text-align: left;
         font-weight: bold;
-      }
-
-      .is_on_house {
-        color: red;
       }
     }
 
