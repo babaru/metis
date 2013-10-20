@@ -30,6 +30,8 @@ Metis::Application.routes.draw do
   post 'master_plan_items/:id/modify' => 'master_plan_items#modify', as: :modify_master_plan_item
   match 'clients/:id/upload_spot_plan_excel_file' => 'clients#upload_spot_plan_excel_file', as: :upload_spot_plan_excel_file
 
+  post 'master_plans/:id/modify' => 'master_plans#modify', as: :modify_master_plan
+
   # get 'spots/apps' => 'spots#apps'
 
   resources :media, :channels, :spots, :channel_groups, :spot_categories, :master_plans, :master_plan_items, :spot_plan_items, :medium_policies

@@ -51,8 +51,8 @@
   end
 
   g.column name: t('activerecord.attributes.master_plan_item.medium_policy') do |master_plan_item|
-    content_tag(:div, [content_tag(:span, "#{master_plan_item.medium_discount}", class: 'medium value'),
-      content_tag(:span, "#{master_plan_item.company_discount}", class: 'company value')].join(' ').html_safe, class: 'discounts', :style => master_plan_item.is_on_house ? 'display: none;' : '') if master_plan_item.spot_id
+    content_tag(:div, [content_tag(:span, "#{master_plan_item.reality_medium_discount}", class: 'medium value'),
+      content_tag(:span, "#{master_plan_item.reality_company_discount}", class: 'company value')].join(' ').html_safe, class: 'discounts', :style => master_plan_item.is_on_house ? 'display: none;' : '') if master_plan_item.spot_id
   end
 
   g.column name: t('activerecord.attributes.master_plan_item.net_cost') do |master_plan_item|
@@ -60,23 +60,23 @@
       :div,
       [
         link_to(
-          number_with_precision(master_plan_item.reality_medium_net_cost, precision: 0),
+          number_with_precision(master_plan_item.medium_net_cost, precision: 0),
           '#',
           class: 'editable-field medium value',
           'data-type' => 'text',
           'data-pk' => master_plan_item.id,
-          'data-name' => 'medium_net_cost',
+          'data-name' => 'reality_medium_net_cost',
           'data-url' => modify_master_plan_item_path(master_plan_item),
           'data-original-title' => '修改价格',
           'data-skip-pjax' => true
         ),
         link_to(
-          number_with_precision(master_plan_item.reality_company_net_cost, precision: 0),
+          number_with_precision(master_plan_item.company_net_cost, precision: 0),
           '#',
           class: 'editable-field company value',
           'data-type' => 'text',
           'data-pk' => master_plan_item.id,
-          'data-name' => 'company_net_cost',
+          'data-name' => 'reality_company_net_cost',
           'data-url' => modify_master_plan_item_path(master_plan_item),
           'data-original-title' => '修改价格',
           'data-skip-pjax' => true

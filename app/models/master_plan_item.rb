@@ -32,11 +32,8 @@ class MasterPlanItem < ActiveRecord::Base
     :cpc,
     :unit_rate_card, :unit_rate_card_unit, :unit_rate_card_unit_type,
     :reality_medium_net_cost, :reality_company_net_cost,
-    :total_rate_card,
-    :medium_discount,
-    :company_discount,
-    :medium_bonus_ratio,
-    :company_bonus_ratio
+    :original_medium_discount, :reality_medium_discount,
+    :original_company_discount, :reality_company_discount
 
   def reality_count(version = nil)
     version = self.master_plan.working_version if version.nil?
@@ -58,6 +55,30 @@ class MasterPlanItem < ActiveRecord::Base
     item
   end
 
+  def medium_net_cost
+    return 0 if is_on_house?
+    return reality_medium_net_cost if reality_medium_net_cost
+    theoritical_medium_net_cost
+  end
+
+  def theoritical_medium_net_cost
+    unit_rate_card * count * reality_medium_discount
+  end
+
+  def company_net_cost
+    return 0 if is_on_house?
+    return reality_company_net_cost if reality_company_net_cost
+    theoritical_company_net_cost
+  end
+
+  def theoritical_company_net_cost
+    unit_rate_card * count * reality_company_discount
+  end
+
+  def total_rate_card
+    unit_rate_card * count
+  end
+
   private
 
   def copy_useful_attributes
@@ -72,12 +93,10 @@ class MasterPlanItem < ActiveRecord::Base
       self.client_name = self.client.name if self.client_id
       self.medium_name = self.medium.name if self.medium_id
       self.channel_name = self.channel.name if self.channel_id
-      self.medium_discount = self.spot.medium_discount(self.client_id) if self.spot_id
-      self.company_discount = self.spot.company_discount(self.client_id) if self.spot_id
-      self.medium_bonus_ratio = self.spot.medium_bonus_ratio(self.client_id) if self.spot_id
-      self.company_bonus_ratio = self.spot.company_bonus_ratio(self.client_id) if self.spot_id
-      self.reality_medium_net_cost = self.medium_discount * self.unit_rate_card * self.count
-      self.reality_company_net_cost = self.company_discount * self.unit_rate_card * self.count
+      self.reality_medium_discount = self.spot.medium_discount(self.client_id) if self.spot_id
+      self.reality_company_discount = self.spot.company_discount(self.client_id) if self.spot_id
+      self.original_medium_discount = self.spot.medium_discount(self.client_id) if self.spot_id
+      self.original_company_discount = self.spot.company_discount(self.client_id) if self.spot_id
     else
     end
   end

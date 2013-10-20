@@ -28,6 +28,37 @@ class MasterPlansController < ApplicationController
     end
   end
 
+  def modify
+    if request.post?
+      @master_plan = MasterPlan.find params["id"]
+      if @master_plan
+        if params['name'] == 'medium_net_cost_per_medium'
+          medium_id = params['selected_medium_id']
+          mmp = @master_plan.medium_master_plans.where(medium_id: medium_id).first
+          if mmp
+            mmp.reality_medium_net_cost = params['value']
+            mmp.save!
+          end
+        elsif params['name'] == 'company_net_cost_per_medium'
+          medium_id = params['selected_medium_id']
+          mmp = @master_plan.medium_master_plans.where(medium_id: medium_id).first
+          if mmp
+            mmp.reality_company_net_cost = params['value']
+            mmp.save!
+          end
+        else
+          @master_plan.send "#{params['name']}=", params["value"]
+        end
+        @master_plan.save!
+      end
+
+      respond_to do |format|
+        format.json { render json: @master_plan, status: :ok }
+        format.html { redirect_to client_project_master_plan_path(id: @master_plan, client_id: @master_plan.client_id, project_id: @master_plan.project_id), notice: 'Master plan was successfully updated.'}
+      end
+    end
+  end
+
   def choose_spots
     @master_plan = MasterPlan.find(params[:id])
     @media = Medium.all
@@ -50,20 +81,23 @@ class MasterPlansController < ApplicationController
       channel_id = params[:channel_id]
       counts.each_with_index do |item, index|
         next if item.nil? || item.strip == ''
-        @master_plan.items << MasterPlanItem.new({
-          spot_id: spot_ids[index],
-          count: item,
-          is_on_house: is_on_houses.nil? ? false : is_on_houses.include?(spot_ids[index]),
-          client_id: @master_plan.client_id,
-          project_id: @master_plan.project_id,
-          medium_id: medium_id,
-          channel_id: channel_id
-          })
+        spot = Spot.find(spot_ids[index])
+        if spot
+          @master_plan.items << MasterPlanItem.new({
+            spot_id: spot.id,
+            count: item,
+            is_on_house: is_on_houses.nil? ? false : is_on_houses.include?(spot_ids[index]),
+            client_id: @master_plan.client_id,
+            project_id: @master_plan.project_id,
+            medium_id: spot.medium_id,
+            channel_id: spot.channel_id
+            })
+        end
       end
       @master_plan.save!
 
       respond_to do |format|
-        format.html {redirect_to master_plan_path(@master_plan), notice: 'Master plan was successfully saved.'}
+        format.html {redirect_to client_project_master_plan_path(id: @master_plan, client_id: @master_plan.client_id, project_id: @master_plan.project_id), notice: 'Master plan was successfully saved.'}
       end
     end
   end

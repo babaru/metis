@@ -7,6 +7,10 @@
     spot.spot_category.name
   end
 
+  g.column name: t('activerecord.attributes.spot.channel_id') do |spot|
+    spot.channel.name
+  end
+
   g.column name: t('activerecord.attributes.spot.name') do |spot|
     content_tag :strong, spot.name
   end

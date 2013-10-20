@@ -8,40 +8,45 @@ $(document).ready(function() {
             this.model.on('change', this.render, this);
         },
         render: function() {
-            $('#master-plan-summary .budget').text(this.model.get('budget'));
-            $('#master-plan-summary .contract_price').text(
-                accounting.formatMoney(
-                    this.model.get('medium_contract_prices')[$('#selected-medium-id-value').text()],
-                    {
-                        symbol: '元',
-                        format: '%v%s'
-                    })
-                + ' (' +
-                accounting.formatMoney(
-                    this.model.get('contract_price') ,
-                    {
-                        symbol: '元',
-                        format: '%v%s'
-                    })
-                + ')');
-            $('#master-plan-summary .profit').text(
-                accounting.formatMoney(
-                    this.model.get('medium_profits')[$('#selected-medium-id-value').text()],
-                    {
-                        symbol: '元',
-                        format: '%v%s'
-                    })
-                + ' (' +
-                accounting.formatMoney(
-                    this.model.get('profit'),
-                    {
-                        symbol: '元',
-                        format: '%v%s'
-                    })
-                + ')');
-            $('#master-plan-summary .reality_bonus_ratio').text(this.model.get('reality_bonus_ratios')[$('#selected-medium-id-value').text()]);
-            $('#master-plan-summary .medium_bonus_ratio').text(this.model.get('medium_bonus_ratios')[$('#selected-medium-id-value').text()]);
-            $('#master-plan-summary .company_bonus_ratio').text(this.model.get('company_bonus_ratios')[$('#selected-medium-id-value').text()]);
+            // $('#master-plan-summary .project-budget').text(
+            //     accounting.formatMoney(
+            //         this.model.get('budget'),
+            //         {
+            //             symbol: '￥',
+            //             format: '%s %v',
+            //             precision: 0
+            //         })
+            //     );
+            // $('#master-plan-summary .medium-net-cost').text(
+            //     accounting.formatMoney(
+            //         this.model.get('medium_net_cost'),
+            //         {
+            //             symbol: '￥',
+            //             format: '%s %v',
+            //             precision: 0
+            //         })
+            //     );
+            // $('#master-plan-summary .company-net-cost').text(
+            //     accounting.formatMoney(
+            //         this.model.get('company_net_cost'),
+            //         {
+            //             symbol: '￥',
+            //             format: '%s %v',
+            //             precision: 0
+            //         })
+            //     );
+            // $('#master-plan-summary .profit').text(
+            //     accounting.formatMoney(
+            //         this.model.get('profit'),
+            //         {
+            //             symbol: '￥',
+            //             format: '%s %v',
+            //             precision: 0
+            //         })
+            //     );
+            // $('#master-plan-summary .reality_bonus_ratio').text(this.model.get('reality_bonus_ratios')[$('#selected-medium-id-value').text()]);
+            // $('#master-plan-summary .medium_bonus_ratio').text(this.model.get('medium_bonus_ratios')[$('#selected-medium-id-value').text()]);
+            // $('#master-plan-summary .company_bonus_ratio').text(this.model.get('company_bonus_ratios')[$('#selected-medium-id-value').text()]);
             return this;
         }
     });

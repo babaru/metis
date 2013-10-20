@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131020083605) do
+ActiveRecord::Schema.define(:version => 20131020212532) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -74,10 +74,10 @@ ActiveRecord::Schema.define(:version => 20131020083605) do
   create_table "master_plan_items", :force => true do |t|
     t.integer  "spot_id"
     t.integer  "master_plan_id"
-    t.integer  "count",                                                   :default => 0
-    t.datetime "created_at",                                                                 :null => false
-    t.datetime "updated_at",                                                                 :null => false
-    t.boolean  "is_on_house",                                             :default => false
+    t.integer  "count",                                                    :default => 0
+    t.datetime "created_at",                                                                  :null => false
+    t.datetime "updated_at",                                                                  :null => false
+    t.boolean  "is_on_house",                                              :default => false
     t.integer  "client_id"
     t.integer  "project_id"
     t.integer  "channel_id"
@@ -85,35 +85,32 @@ ActiveRecord::Schema.define(:version => 20131020083605) do
     t.string   "channel_name"
     t.string   "spot_name"
     t.string   "material_format"
-    t.boolean  "pv_tracking",                                             :default => false
-    t.boolean  "click_tracking",                                          :default => false
-    t.boolean  "link_to_official_site",                                   :default => false
+    t.boolean  "pv_tracking",                                              :default => false
+    t.boolean  "click_tracking",                                           :default => false
+    t.boolean  "link_to_official_site",                                    :default => false
     t.string   "mr_deadline"
     t.integer  "est_total_imp"
     t.integer  "est_total_clicks"
     t.integer  "est_imp"
     t.integer  "est_clicks"
-    t.decimal  "est_ctr",                  :precision => 8,  :scale => 4
+    t.decimal  "est_ctr",                   :precision => 8,  :scale => 4
     t.integer  "est_cpc"
     t.integer  "est_cpm"
     t.integer  "cpc"
-    t.decimal  "unit_rate_card",           :precision => 10, :scale => 3, :default => 0.0
-    t.decimal  "total_rate_card",          :precision => 10, :scale => 3, :default => 0.0
-    t.decimal  "medium_discount",          :precision => 8,  :scale => 2, :default => 1.0
-    t.decimal  "company_discount",         :precision => 8,  :scale => 2, :default => 1.0
-    t.decimal  "medium_bonus_ratio",       :precision => 8,  :scale => 2, :default => 0.0
-    t.decimal  "company_bonus_ratio",      :precision => 8,  :scale => 2, :default => 0.0
+    t.decimal  "unit_rate_card",            :precision => 10, :scale => 3, :default => 0.0
+    t.decimal  "original_medium_discount",  :precision => 8,  :scale => 2, :default => 1.0
+    t.decimal  "original_company_discount", :precision => 8,  :scale => 2, :default => 1.0
     t.string   "client_name"
     t.string   "project_name"
     t.string   "master_plan_name"
     t.string   "unit_rate_card_unit"
-    t.integer  "unit_rate_card_unit_type",                                :default => 0
+    t.integer  "unit_rate_card_unit_type",                                 :default => 0
     t.integer  "medium_id"
-    t.decimal  "reality_company_net_cost", :precision => 10, :scale => 3, :default => 0.0
-    t.decimal  "reality_medium_net_cost",  :precision => 10, :scale => 3, :default => 0.0
+    t.decimal  "reality_company_net_cost",  :precision => 20, :scale => 3
+    t.decimal  "reality_medium_net_cost",   :precision => 20, :scale => 3
     t.string   "reality_spot_name"
-    t.decimal  "reality_medium_discount",  :precision => 8,  :scale => 2, :default => 1.0
-    t.decimal  "reality_company_discount", :precision => 8,  :scale => 2, :default => 1.0
+    t.decimal  "reality_medium_discount",   :precision => 8,  :scale => 2, :default => 1.0
+    t.decimal  "reality_company_discount",  :precision => 8,  :scale => 2, :default => 1.0
   end
 
   add_index "master_plan_items", ["channel_id"], :name => "index_master_plan_items_on_channel_id"
@@ -134,8 +131,8 @@ ActiveRecord::Schema.define(:version => 20131020083605) do
     t.integer  "client_id"
     t.boolean  "is_readonly",                                             :default => false
     t.boolean  "is_dirty",                                                :default => true
-    t.decimal  "reality_medium_net_cost",  :precision => 10, :scale => 3, :default => 0.0
-    t.decimal  "reality_company_net_cost", :precision => 10, :scale => 3, :default => 0.0
+    t.decimal  "reality_medium_net_cost",  :precision => 20, :scale => 3
+    t.decimal  "reality_company_net_cost", :precision => 20, :scale => 3
     t.string   "project_name"
     t.string   "client_name"
     t.string   "created_by_name"
@@ -166,14 +163,10 @@ ActiveRecord::Schema.define(:version => 20131020083605) do
     t.string   "master_plan_name"
     t.integer  "medium_id"
     t.string   "medium_name"
-    t.decimal  "reality_medium_net_cost",  :precision => 10, :scale => 3, :default => 0.0
-    t.decimal  "reality_company_net_cost", :precision => 10, :scale => 3, :default => 0.0
-    t.decimal  "medium_discount",          :precision => 8,  :scale => 2, :default => 1.0
-    t.decimal  "company_discount",         :precision => 8,  :scale => 2, :default => 1.0
-    t.decimal  "reality_medium_discount",  :precision => 8,  :scale => 2, :default => 1.0
-    t.decimal  "reality_company_discount", :precision => 8,  :scale => 2, :default => 1.0
-    t.datetime "created_at",                                                               :null => false
-    t.datetime "updated_at",                                                               :null => false
+    t.decimal  "reality_medium_net_cost",  :precision => 20, :scale => 3
+    t.decimal  "reality_company_net_cost", :precision => 20, :scale => 3
+    t.datetime "created_at",                                              :null => false
+    t.datetime "updated_at",                                              :null => false
   end
 
   add_index "medium_master_plans", ["master_plan_id"], :name => "index_medium_master_plans_on_master_plan_id"

@@ -4,6 +4,8 @@ class MasterPlan < ActiveRecord::Base
   belongs_to :project
   belongs_to :created_by, class_name: 'User', foreign_key: :created_by_id
   has_many :items, class_name: 'MasterPlanItem', dependent: :destroy
+  has_many :medium_master_plans
+
   attr_accessible :name,
     :project_id,
     :project_name,
@@ -16,39 +18,43 @@ class MasterPlan < ActiveRecord::Base
     :reality_medium_net_cost,
     :reality_company_net_cost
 
-  def medium_contract_price(medium_id = nil)
-    sum = 0
-    condition = {is_on_house: false}
-    condition[:medium_id] = medium_id if medium_id
-    items.where(condition).each do |item|
-      sum += (item.spot.price * item.count * MediumPolicy.company_discount(item.spot.medium_id, client_id)) if item.spot_id
-    end
-    sum
+  def medium_master_plan(medium_id)
+    medium_master_plans.where(medium_id: medium_id).first
   end
 
-  def company_contract_price(medium_id = nil)
-    sum = 0
-    condition = {is_on_house: false}
-    condition[:medium_id] = medium_id if medium_id
-    items.where(condition).each do |item|
-      sum += (item.spot.price * item.count * MediumPolicy.medium_discount(item.spot.medium_id, client_id)) if item.spot_id
-    end
-    sum
+  def medium_net_cost(medium_id = nil)
+    return medium_master_plan(medium_id).medium_net_cost if medium_id
+    return reality_medium_net_cost if reality_medium_net_cost
+    medium_master_plans.inject(0) {|sum, item| sum += item.medium_net_cost }
+  end
+
+  def company_net_cost(medium_id = nil)
+    return medium_master_plan(medium_id).company_net_cost if medium_id
+    return reality_company_net_cost if reality_company_net_cost
+    medium_master_plans.inject(0) {|sum, item| sum += item.company_net_cost }
   end
 
   def profit(medium_id = nil)
-    medium_contract_price(medium_id) - company_contract_price(medium_id)
+    medium_net_cost(medium_id) - company_net_cost(medium_id)
   end
 
-  def medium_contract_prices()
+  def medium_net_costs_per_medium()
     result = {}
     candidate_media.each do |medium|
-      result[medium.id] = medium_contract_price(medium.id)
+      result[medium.id] = medium_net_cost(medium.id)
     end
     result
   end
 
-  def medium_profits()
+  def company_net_costs_per_medium()
+    result = {}
+    candidate_media.each do |medium|
+      result[medium.id] = company_net_cost(medium.id)
+    end
+    result
+  end
+
+  def profits_per_medium()
     result = {}
     candidate_media.each do |medium|
       result[medium.id] = profit(medium.id)
@@ -56,20 +62,50 @@ class MasterPlan < ActiveRecord::Base
     result
   end
 
-  def medium_bonus_ratio(medium_id)
-    self.client.medium_bonus_ratio(medium_id)
+  def reality_bonus_ratio(medium_id)
+    return 0 unless medium_id
+    total_price = 0
+    items.where("is_on_house=0 and medium_id=?", medium_id).each do |item|
+      total_price += item.theoritical_company_net_cost
+    end
+
+    on_house_amount = 0
+    items.where("is_on_house=1 and medium_id=?", medium_id).each do |item|
+      on_house_amount += item.total_rate_card
+    end
+    (on_house_amount.to_f / total_price.to_f).to_f.round(2)
   end
 
-  def medium_bonus_ratios()
-    candidate_media.inject([]) {|list, medium| list << medium_bonus_ratio(medium.id)}
+  def reality_bonus_ratios_per_medium()
+    result = {}
+    candidate_media.each do |medium|
+      result[medium.id] = reality_bonus_ratio(medium.id)
+    end
+    result
+  end
+
+  def medium_bonus_ratio(medium_id)
+    MediumPolicy.medium_bonus_ratio(medium_id, client_id)
+  end
+
+  def medium_bonus_ratios_per_medium()
+    result = {}
+    candidate_media.each do |medium|
+      result[medium.id] = medium_bonus_ratio(medium.id)
+    end
+    result
   end
 
   def company_bonus_ratio(medium_id)
-    self.client.company_bonus_ratio(medium_id)
+    MediumPolicy.company_bonus_ratio(medium_id, client_id)
   end
 
-  def company_bonus_ratios()
-    candidate_media.inject([]) {|list, medium| list << company_bonus_ratio(medium.id)}
+  def company_bonus_ratios_per_medium()
+    result = {}
+    candidate_media.each do |medium|
+      result[medium.id] = company_bonus_ratio(medium.id)
+    end
+    result
   end
 
   def spots_count(medium_id = nil)
@@ -103,15 +139,16 @@ class MasterPlan < ActiveRecord::Base
 
   def as_json(options={})
     item = super(options)
-    item[:budget] = number_to_currency(self.project.budget, precision: 0, unit: '')
-    item[:medium_contract_price] = number_to_currency(self.medium_contract_price, precision: 0, unit: '')
-    item[:company_contract_price] = number_to_currency(self.company_contract_price, precision: 0, unit: '')
-    item[:profit] = number_to_currency(self.profit, precision: 0, unit: '')
-    item[:medium_contract_prices] = self.medium_contract_prices
-    item[:medium_profits] = self.medium_profits
-    # item[:reality_bonus_ratios] = self.reality_bonus_ratios
-    item[:medium_bonus_ratios] = self.medium_bonus_ratios
-    item[:company_bonus_ratios] = self.company_bonus_ratios
+    item[:budget] = self.project.budget
+    item[:medium_net_cost] = self.medium_net_cost
+    item[:company_net_cost] = self.company_net_cost
+    item[:profit] = self.profit
+    item[:medium_net_costs_per_medium] = self.medium_net_costs_per_medium
+    item[:company_net_costs_per_medium] = self.company_net_costs_per_medium
+    item[:profits_per_medium] = self.profits_per_medium
+    item[:reality_bonus_ratios_per_medium] = self.reality_bonus_ratios_per_medium
+    item[:medium_bonus_ratios_per_medium] = self.medium_bonus_ratios_per_medium
+    item[:company_bonus_ratios_per_medium] = self.company_bonus_ratios_per_medium
     item
   end
 end

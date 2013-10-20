@@ -124,10 +124,12 @@ class MasterPlanItemsController < ApplicationController
   def destroy
     @master_plan_item = MasterPlanItem.find(params[:id])
     master_plan_id = @master_plan_item.master_plan_id
+    client_id = @master_plan_item.client_id
+    project_id = @master_plan_item.project_id
     @master_plan_item.destroy
 
     respond_to do |format|
-      format.html { redirect_to master_plan_path(master_plan_id) }
+      format.html { redirect_to client_project_master_plan_path(client_id: client_id, project_id: project_id, id: master_plan_id) }
       format.json { head :no_content }
     end
   end

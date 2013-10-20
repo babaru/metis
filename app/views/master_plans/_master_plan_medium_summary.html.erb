@@ -1,14 +1,47 @@
 <table class="plan-summary">
   <tr>
-    <th>合同额(媒体-公司)</th>
+    <th>合同额(<%= @selected_medium.name %>-公司)</th>
+    <th>折扣(<%= @selected_medium.name %>-公司)</th>
     <th>预估利润(<%= @selected_medium.name %>)</th>
     <th>配送比例(实际-<%= @selected_medium.name %>-公司)</th>
   </tr>
   <tr>
     <td>
       <div class="label-group master-plan-value-group">
-        <span class="item medium"><%= number_to_currency(@master_plan.medium_contract_price(@selected_medium_id), unit: '￥', precision: 0) %></span>
-        <span class="item company"><%= number_to_currency(@master_plan.company_contract_price(@selected_medium_id), unit: '￥', precision: 0) %></span>
+        <span class="item medium">
+          <%= link_to(
+            number_with_precision(@master_plan.medium_net_cost(@selected_medium_id), precision: 0),
+            '#',
+            class: 'editable-field medium value',
+            'data-type' => 'text',
+            'data-pk' => @master_plan.id,
+            'data-name' => 'medium_net_cost_per_medium',
+            'data-param' => "{'selected_medium_id': #{@selected_medium_id}}",
+            'data-url' => modify_master_plan_path(@master_plan),
+            'data-original-title' => '修改媒体报价',
+            'data-skip-pjax' => true
+          ) %>
+        </span>
+        <span class="item company">
+          <%= link_to(
+            number_with_precision(@master_plan.company_net_cost(@selected_medium_id), precision: 0),
+            '#',
+            class: 'editable-field company value',
+            'data-type' => 'text',
+            'data-pk' => @master_plan.id,
+            'data-name' => 'company_net_cost_per_medium',
+            'data-param' => "{'selected_medium_id': #{@selected_medium_id}}",
+            'data-url' => modify_master_plan_path(@master_plan),
+            'data-original-title' => '修改公司报价',
+            'data-skip-pjax' => true
+          ) %>
+        </span>
+      </div>
+    </td>
+    <td>
+      <div class="label-group master-plan-value-group">
+        <span class="item medium"><%= MediumPolicy.medium_discount(@selected_medium_id, @master_plan.client_id) %></span>
+        <span class="item company"><%= MediumPolicy.company_discount(@selected_medium_id, @master_plan.client_id) %></span>
       </div>
     </td>
     <td><%= number_to_currency(@master_plan.profit(@selected_medium_id), unit: '￥', precision: 0) %></td>
