@@ -1,0 +1,58 @@
+<table class="table table-bordered table-striped">
+  <tr>
+    <th><%= t("activerecord.attributes.master_plan_item.spot_name") %></th>
+    <th><%= t("activerecord.attributes.master_plan_item.channel_name") %></th>
+    <th><%= t("activerecord.attributes.master_plan_item.count") %></th>
+    <th><%= t("activerecord.attributes.master_plan_item.is_on_house") %></th>
+    <th></th>
+  </tr>
+  <% @pool.pool.map do |key, list| %>
+  <tr>
+    <td colspan="3">
+      <strong><%= Medium.find(key).name %></strong>
+    </td>
+  </tr>
+  <% list.map do |key2, item| %>
+  <tr>
+    <td>
+      <%= item[:spot_name] %>
+    </td>
+    <td>
+      <%= item[:channel_name] %>
+    </td>
+    <td>
+      <%= link_to(
+        item[:count],
+        '?',
+        class: 'editable-field',
+        'data-type' => 'text',
+        'data-pk' => item[:spot_id],
+        'data-name' => "count",
+        'data-url' => modify_cart_path(@master_plan),
+        'data-original-title' => t('activerecord.attributes.master_plan_item.count'),
+        'data-skip-pjax' => true,
+        'data-params' => "{medium_id: #{item[:medium_id]}, spot_id: #{item[:spot_id]}, count: #{item[:count]}, is_on_house: #{item[:is_on_house]}}"
+      ) %>
+    </td>
+    <td>
+      <%= link_to(
+        item[:is_on_house].to_s == 'true' ? '配送' : '购买',
+        '?',
+        class: 'editable-field',
+        'data-type' => 'select',
+        'data-pk' => item[:spot_id],
+        'data-name' => "is_on_house",
+        'data-url' => modify_cart_path(@master_plan),
+        'data-original-title' => t('activerecord.attributes.master_plan_item.is_on_house'),
+        'data-skip-pjax' => true,
+        'data-params' => "{medium_id: #{item[:medium_id]}, spot_id: #{item[:spot_id]}, count: #{item[:count]}, is_on_house: #{item[:is_on_house]}}",
+        'data-source' => "[{value: 'false', text:'购买'}, {value: 'true', text: '配送'}]"
+      ) %>
+    </td>
+    <td class="buttons">
+      <%= link_to(render_icon_content('icon-trash'), remove_from_cart_path(id: @master_plan, key: key2, medium_id: item[:medium_id]), method: :post, confirm: t('confirms.delete'), class: 'button button-danger', remote: true) %>
+    </td>
+  </tr>
+  <% end %>
+  <% end %>
+</table>

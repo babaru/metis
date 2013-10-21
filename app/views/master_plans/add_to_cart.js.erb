@@ -1,0 +1,7 @@
+$('.spot-day-count-text-field').val(null);
+$(':checkbox').removeAttr('checked');
+$('.cart-panel').html('<%= escape_javascript(render partial: 'cart') %>');
+
+$('html,body').animate({
+  scrollTop: $('.cart-panel').offset().top
+}, 1000);

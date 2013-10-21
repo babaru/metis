@@ -19,7 +19,7 @@ end %>
 
 <% if @spot_picker.selected_medium %>
 
-<%= simple_form_for(:selected_spots, url: add_to_cart_path(@master_plan), html: {class: 'no-padding no-border form-horizontal', id: 'candidates-list-form'}) do |f| %>
+<%= simple_form_for(:selected_spots, url: add_to_cart_path(@master_plan), html: {class: 'no-padding no-border form-horizontal', id: 'candidates-list-form'}, method: :post, remote: true) do |f| %>
 
 <%= render partial: 'shared/spot_picker/spot_candidates_grid', locals: {spots: @spots_grid} if @spots_grid %>
 
@@ -40,6 +40,15 @@ end %>
 <% end %>
 <% end %>
 
-<% @cart.shopping_cart_items.each do |item| %>
-<%= item.item[:spot].name %>
-<% end %>
+<%= render_article_title '已选点位' %>
+
+<div class='cart-panel' style="padding: 15px; padding-top: 10px; padding-bottom: 10px; margin: 0px;">
+<%= render partial: 'cart' %>
+</div>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $('.editable-field').editable();
+});
+</script>

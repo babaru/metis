@@ -61,7 +61,7 @@ class MasterPlansController < ApplicationController
 
   def choose_spots
     @master_plan = MasterPlan.find(params[:id])
-    @cart = ShoppingCart.default_cart(current_user.id, @master_plan.id)
+    @pool = Tida::Metis::SpotCandidate::Pool.new session
     @media = Medium.all
     @spot_picker = Tida::Metis::SpotPicker.new params
     @spots_grid = initialize_grid(Spot.where(@spot_picker.spots_query_clause), name: 'spot_candidates_grid') if @spot_picker.selected_medium
@@ -74,7 +74,7 @@ class MasterPlansController < ApplicationController
 
   def add_to_cart
     @master_plan = MasterPlan.find params[:id]
-    @cart = ShoppingCart.default_cart(current_user.id, @master_plan.id)
+    @pool = Tida::Metis::SpotCandidate::Pool.new session
     if request.post?
       counts = params[:counts]
       is_on_houses = params[:is_on_houses]
@@ -83,11 +83,49 @@ class MasterPlansController < ApplicationController
         next if item.nil? || item.strip == ''
         spot_id = spot_ids[index]
         spot = Spot.find spot_id
-        @cart.add(spot, spot.medium_id, item) if spot
+        is_on_house = is_on_houses.nil? ? false : is_on_houses.include?(spot_ids[index])
+        @pool.add(spot, item.to_i, is_on_house) if spot
       end
 
       respond_to do |format|
-        format.html { redirect_to choose_spots_path(id: @master_plan, client_id: @master_plan.client_id, project_id: @master_plan.project_id), notice: '添加到购物栏成功'}
+        format.js
+        # format.html { redirect_to choose_spots_path(id: @master_plan, client_id: @master_plan.client_id, project_id: @master_plan.project_id), notice: '添加到购物栏成功'}
+      end
+    end
+  end
+
+  def modify_cart
+    @pool = Tida::Metis::SpotCandidate::Pool.new session
+    if request.post?
+      medium_id = params[:medium_id]
+      spot_id = params[:spot_id]
+      count = params[:count].to_i
+      is_on_house = params[:is_on_house] == 'true' ? true : false
+      new_count = count
+      new_is_on_house = is_on_house
+      new_count = params['value'].to_i if params['name'] == 'count'
+      new_is_on_house = params['value'] == 'true' ? true : false if params['name'] == 'is_on_house'
+
+      @pool.change(medium_id, spot_id, is_on_house, new_count, new_is_on_house)
+
+      respond_to do |format|
+        format.json { head :no_content }
+      end
+    end
+  end
+
+  def remove_from_cart
+    @pool = Tida::Metis::SpotCandidate::Pool.new session
+    @master_plan = MasterPlan.find params[:id]
+    if request.post?
+      medium_id = params[:medium_id]
+      key = params[:key]
+
+      @pool.remove(medium_id, key)
+
+      respond_to do |format|
+        format.js
+        # format.html { redirect_to choose_spots_path(id: @master_plan, client_id: @master_plan.client_id, project_id: @master_plan.project_id), notice: '添加到购物栏成功'}
       end
     end
   end

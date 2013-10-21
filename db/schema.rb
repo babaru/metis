@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131021073108) do
+ActiveRecord::Schema.define(:version => 20131021054554) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -229,27 +229,6 @@ ActiveRecord::Schema.define(:version => 20131021073108) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
-
-  create_table "shopping_cart_items", :force => true do |t|
-    t.integer  "owner_id"
-    t.string   "owner_type"
-    t.integer  "quantity"
-    t.integer  "item_id"
-    t.string   "item_type"
-    t.float    "price"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  create_table "shopping_carts", :force => true do |t|
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
-    t.integer  "master_plan_id"
-    t.integer  "user_id"
-  end
-
-  add_index "shopping_carts", ["master_plan_id"], :name => "index_shopping_carts_on_master_plan_id"
-  add_index "shopping_carts", ["user_id"], :name => "index_shopping_carts_on_user_id"
 
   create_table "spot_categories", :force => true do |t|
     t.string   "name"

@@ -36,6 +36,8 @@ zh-CN:
         name: 名称
         updated_at: 最后修改时间
       master_plan_item:
+        spot_name: 媒体点位
+        channel_name: 频道
         count: 数量
         is_on_house: 是否配送
         est_imp: 预估日展示数

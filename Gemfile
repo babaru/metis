@@ -33,8 +33,8 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
-# gem 'tida_template', path: '/Users/apple/Projects/tida/src/tida_template'
-gem 'tida_template', '>= 0.2.9'
+gem 'tida_template', path: '/Users/apple/Projects/tida/src/tida_template'
+# gem 'tida_template', '>= 0.3.0'
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
@@ -56,8 +56,8 @@ gem 'cancan'
 
 gem 'axlsx'
 
-gem 'acts_as_shopping_cart', '~> 0.1.6'
-gem 'cells'
+# gem 'acts_as_shopping_cart', '~> 0.1.6'
+# gem 'cells'
 
 # To use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.0.0'

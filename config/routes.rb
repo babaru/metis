@@ -20,6 +20,8 @@ Metis::Application.routes.draw do
 
   get 'clients/:client_id/projects/:project_id/master_plans/:id/choose_spots' => 'master_plans#choose_spots', as: :choose_spots
   post 'master_plans/:id/add_to_cart' => 'master_plans#add_to_cart', as: :add_to_cart
+  post 'master_plans/:id/modify_cart' => 'master_plans#modify_cart', as: :modify_cart
+  post 'master_plans/:id/remove_from_cart' => 'master_plans#remove_from_cart', as: :remove_from_cart
   get 'clients/:client_id/projects/:project_id/master_plans/:id/spot_plan' => 'master_plans#spot_plan', as: :spot_plan
 
   match 'master_plans/:id/generate_spot_plan' => 'master_plans#generate_spot_plan', as: :generate_spot_plan
