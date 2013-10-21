@@ -174,6 +174,7 @@ class MasterPlansController < ApplicationController
     @master_plan_items = MasterPlanItem.where('master_plan_id=? and medium_id=?', @master_plan.id, @selected_medium_id).order('is_on_house, created_at')
     @working_version = params[:wv]
     @working_version = @master_plan.working_version if params[:wv].nil?
+    @selected_medium = Medium.find @selected_medium_id if @selected_medium_id
 
     @months = @master_plan.project.months
     @days = @master_plan.project.days

@@ -60,7 +60,7 @@ SimpleNavigation::Configuration.run do |navigation|
     primary.item :page_media, t('navigation.media'), nil, link: {icon: 'icon-globe'} do |media|
       media.item :page_media, t('navigation.media_list'), media_path, link: {icon: 'icon-list'}, highlights_on: ::Regexp.new("media$")
       Medium.all.each do |item|
-        media.item "page_medium_#{item.id}".to_sym, item.name, medium_channels_path(item.id), highlights_on: ::Regexp.new("media/#{item.id}")
+        media.item "page_medium_#{item.id}".to_sym, item.name, medium_spots_path(item.id), highlights_on: ::Regexp.new("media/#{item.id}")
       end
     end
   end
