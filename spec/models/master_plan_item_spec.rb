@@ -54,14 +54,14 @@ describe MasterPlanItem, '#create' do
   end
 
   it 'copy medium policy' do
-    expect(new_master_plan_item.medium_discount).to eq(spot.medium_discount(client.id))
-    expect(new_master_plan_item.company_discount).to eq(spot.company_discount(client.id))
-    expect(new_master_plan_item.medium_bonus_ratio).to eq(spot.medium_bonus_ratio(client.id))
-    expect(new_master_plan_item.company_bonus_ratio).to eq(spot.company_bonus_ratio(client.id))
+    expect(new_master_plan_item.reality_medium_discount).to eq(spot.medium_discount(client.id))
+    expect(new_master_plan_item.reality_company_discount).to eq(spot.company_discount(client.id))
+    expect(new_master_plan_item.original_medium_discount).to eq(spot.medium_discount(client.id))
+    expect(new_master_plan_item.original_company_discount).to eq(spot.company_discount(client.id))
 
-    expect(net_cost_spot_master_plan_item.medium_discount).to eq(1)
-    expect(net_cost_spot_master_plan_item.company_discount).to eq(1)
-    expect(net_cost_spot_master_plan_item.medium_bonus_ratio).to eq(0)
-    expect(net_cost_spot_master_plan_item.company_bonus_ratio).to eq(0)
+    expect(net_cost_spot_master_plan_item.reality_medium_discount).to eq(1)
+    expect(net_cost_spot_master_plan_item.reality_company_discount).to eq(1)
+    expect(net_cost_spot_master_plan_item.original_medium_discount).to eq(1)
+    expect(net_cost_spot_master_plan_item.original_company_discount).to eq(1)
   end
 end

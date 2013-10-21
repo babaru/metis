@@ -19,6 +19,7 @@ Metis::Application.routes.draw do
   # get 'media/:website_id/channels' => 'channels#index'
 
   get 'clients/:client_id/projects/:project_id/master_plans/:id/choose_spots' => 'master_plans#choose_spots', as: :choose_spots
+  post 'master_plans/:id/add_to_cart' => 'master_plans#add_to_cart', as: :add_to_cart
   get 'clients/:client_id/projects/:project_id/master_plans/:id/spot_plan' => 'master_plans#spot_plan', as: :spot_plan
 
   match 'master_plans/:id/generate_spot_plan' => 'master_plans#generate_spot_plan', as: :generate_spot_plan
@@ -35,6 +36,8 @@ Metis::Application.routes.draw do
   # get 'spots/apps' => 'spots#apps'
 
   resources :media, :channels, :spots, :channel_groups, :spot_categories, :master_plans, :master_plan_items, :spot_plan_items, :medium_policies
+
+  resources :shopping_cart_items
 
   resources :media do
     resources :channels, :channel_groups, :spots, :spot_categories

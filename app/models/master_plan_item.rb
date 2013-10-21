@@ -91,8 +91,8 @@ class MasterPlanItem < ActiveRecord::Base
       self.master_plan_name = self.master_plan.name if self.master_plan_id
       self.project_name = self.project.name if self.project_id
       self.client_name = self.client.name if self.client_id
-      self.medium_name = self.medium.name if self.medium_id
-      self.channel_name = self.channel.name if self.channel_id
+      self.medium_name = self.spot.medium.name if self.spot_id
+      self.channel_name = self.spot.channel.name if self.spot_id
       self.reality_medium_discount = self.spot.medium_discount(self.client_id) if self.spot_id
       self.reality_company_discount = self.spot.company_discount(self.client_id) if self.spot_id
       self.original_medium_discount = self.spot.medium_discount(self.client_id) if self.spot_id

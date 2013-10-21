@@ -1,0 +1,2 @@
+class ComboProject < Project
+end

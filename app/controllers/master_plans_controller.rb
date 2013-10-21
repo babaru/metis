@@ -61,13 +61,34 @@ class MasterPlansController < ApplicationController
 
   def choose_spots
     @master_plan = MasterPlan.find(params[:id])
+    @cart = ShoppingCart.default_cart(current_user.id, @master_plan.id)
     @media = Medium.all
-    @spots_filter = SpotsFilter.new params
-    @spots_grid = initialize_grid(Spot.where(@spots_filter.spots_query_clause), name: 'candidates_grid') if @spots_filter.selected_medium
+    @spot_picker = Tida::Metis::SpotPicker.new params
+    @spots_grid = initialize_grid(Spot.where(@spot_picker.spots_query_clause), name: 'spot_candidates_grid') if @spot_picker.selected_medium
 
     respond_to do |format|
       format.html
       format.json { render json: @master_plan }
+    end
+  end
+
+  def add_to_cart
+    @master_plan = MasterPlan.find params[:id]
+    @cart = ShoppingCart.default_cart(current_user.id, @master_plan.id)
+    if request.post?
+      counts = params[:counts]
+      is_on_houses = params[:is_on_houses]
+      spot_ids = params[:spot_ids]
+      counts.each_with_index do |item, index|
+        next if item.nil? || item.strip == ''
+        spot_id = spot_ids[index]
+        spot = Spot.find spot_id
+        @cart.add(spot, spot.medium_id, item) if spot
+      end
+
+      respond_to do |format|
+        format.html { redirect_to choose_spots_path(id: @master_plan, client_id: @master_plan.client_id, project_id: @master_plan.project_id), notice: '添加到购物栏成功'}
+      end
     end
   end
 

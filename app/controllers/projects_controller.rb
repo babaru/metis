@@ -16,7 +16,7 @@ class ProjectsController < ApplicationController
   # GET /projects/1.json
   def show
     @project = Project.find params[:id]
-    @master_plans_grid = initialize_grid(MasterPlan.where(project_id: @project))
+    @master_plan = @project.master_plans.order('created_at DESC').first
   end
 
   def assigns
