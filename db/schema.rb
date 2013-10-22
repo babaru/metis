@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131021054554) do
+ActiveRecord::Schema.define(:version => 20131022080313) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -111,12 +111,14 @@ ActiveRecord::Schema.define(:version => 20131021054554) do
     t.string   "reality_spot_name"
     t.decimal  "reality_medium_discount",   :precision => 8,  :scale => 2, :default => 1.0
     t.decimal  "reality_company_discount",  :precision => 8,  :scale => 2, :default => 1.0
+    t.integer  "medium_master_plan_id"
   end
 
   add_index "master_plan_items", ["channel_id"], :name => "index_master_plan_items_on_channel_id"
   add_index "master_plan_items", ["client_id"], :name => "index_master_plan_items_on_client_id"
   add_index "master_plan_items", ["master_plan_id"], :name => "index_master_plan_items_on_master_plan_id"
   add_index "master_plan_items", ["medium_id"], :name => "index_master_plan_items_on_medium_id"
+  add_index "master_plan_items", ["medium_master_plan_id"], :name => "index_master_plan_items_on_medium_master_plan_id"
   add_index "master_plan_items", ["project_id"], :name => "index_master_plan_items_on_project_id"
   add_index "master_plan_items", ["spot_id"], :name => "index_master_plan_items_on_spot_id"
 
@@ -167,6 +169,7 @@ ActiveRecord::Schema.define(:version => 20131021054554) do
     t.decimal  "reality_company_net_cost", :precision => 20, :scale => 3
     t.datetime "created_at",                                              :null => false
     t.datetime "updated_at",                                              :null => false
+    t.string   "type"
   end
 
   add_index "medium_master_plans", ["master_plan_id"], :name => "index_medium_master_plans_on_master_plan_id"
@@ -204,15 +207,17 @@ ActiveRecord::Schema.define(:version => 20131021054554) do
     t.integer  "created_by_id"
     t.datetime "started_at"
     t.datetime "ended_at"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
     t.string   "budget_unit"
     t.integer  "budget"
     t.string   "type"
+    t.integer  "current_master_plan_id"
   end
 
   add_index "projects", ["client_id"], :name => "index_projects_on_client_id"
   add_index "projects", ["created_by_id"], :name => "index_projects_on_created_by_id"
+  add_index "projects", ["current_master_plan_id"], :name => "index_projects_on_current_master_plan_id"
 
   create_table "role_assignments", :force => true do |t|
     t.integer  "user_id"

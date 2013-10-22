@@ -19,7 +19,7 @@
           <ul class="dropdown-menu">
             <% if can? :manage, :user %>
             <li>
-              <%= link_to(render_icon_and_text_content('icon-group', t("model.list", model: User.model_name.human)), users_path) %>
+              <%= link_to(icon_text('icon-group', t("model.list", model: User.model_name.human)), users_path) %>
             </li>
             <% end %>
             <li>

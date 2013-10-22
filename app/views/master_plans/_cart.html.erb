@@ -6,13 +6,33 @@
     <th><%= t("activerecord.attributes.master_plan_item.is_on_house") %></th>
     <th></th>
   </tr>
-  <% @pool.pool.map do |key, list| %>
+  <% @pool.get_pool_keys.each do |medium_id| %>
   <tr>
-    <td colspan="3">
-      <strong><%= Medium.find(key).name %></strong>
+    <td>
+      <strong>
+        <%= @pool.get_options(medium_id)[:medium_name] %></strong> <%= @pool.get_options(medium_id)[:is_combo] ? content_tag(:span, '打包价', class: 'label label-warning') : '' %>
+      <% unless @pool.get_options(medium_id)[:is_combo] %>
+      <%= link_to(icon_text('icon-gift', '打包'),
+        go_combo_path(id: @master_plan, medium_id: medium_id, is_combo: true),
+        class: 'button button-warning', method: :post, remote: true) %>
+      <% else %>
+      <%= link_to(icon_text('icon-folder-open', '不打包'),
+        go_combo_path(id: @master_plan, medium_id: medium_id, is_combo: false),
+        class: 'button button-inverse', method: :post, remote: true) if @pool.get_options(medium_id)[:is_combo] %>
+      <% end %>
+    </td>
+    <td></td>
+    <td>
+
+    </td>
+    <td>
+
+    </td>
+    <td class="buttons">
+      <%= link_to(icon('icon-trash'), remove_medium_from_cart_path(id: @master_plan, medium_id: medium_id), method: :post, confirm: t('confirms.delete'), class: 'button button-danger', remote: true) %>
     </td>
   </tr>
-  <% list.map do |key2, item| %>
+  <% @pool.get_items(medium_id).map do |key, item| %>
   <tr>
     <td>
       <%= item[:spot_name] %>
@@ -50,7 +70,7 @@
       ) %>
     </td>
     <td class="buttons">
-      <%= link_to(render_icon_content('icon-trash'), remove_from_cart_path(id: @master_plan, key: key2, medium_id: item[:medium_id]), method: :post, confirm: t('confirms.delete'), class: 'button button-danger', remote: true) %>
+      <%= link_to(icon('icon-trash'), remove_from_cart_path(id: @master_plan, key: key, medium_id: item[:medium_id]), method: :post, confirm: t('confirms.delete'), class: 'button button-danger', remote: true) %>
     </td>
   </tr>
   <% end %>

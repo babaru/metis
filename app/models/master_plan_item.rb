@@ -16,6 +16,7 @@ class MasterPlanItem < ActiveRecord::Base
     :client, :client_id, :client_name,
     :medium, :medium_id, :medium_name,
     :channel, :channel_id, :channel_name,
+    :medium_master_plan_id,
     :is_on_house,
     :material_format,
     :pv_tracking,
@@ -77,6 +78,17 @@ class MasterPlanItem < ActiveRecord::Base
 
   def total_rate_card
     unit_rate_card * count
+  end
+
+  def self.create_by_data!(data)
+    item = MasterPlanItem.find_by_master_plan_id_and_spot_id_and_is_on_house(data[:master_plan_id], data[:spot_id], data[:is_on_house])
+    if item
+      item.count += data[:count]
+      item.save!
+    else
+      item = MasterPlanItem.create!(data)
+    end
+    item
   end
 
   private

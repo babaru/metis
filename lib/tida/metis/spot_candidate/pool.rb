@@ -15,7 +15,8 @@ module Tida
           if item
             item[:count] += count
           else
-            medium_pool[key] = {spot_id: spot.id, spot_name: spot.name, channel_name: spot.channel.name, medium_id: spot.medium_id, medium_name: spot.medium.name, count: count, is_on_house: is_on_house}
+            medium_pool[key] = {spot_id: spot.id, spot_name: spot.name, channel_id: spot.channel_id, channel_name: spot.channel.name, medium_id: spot.medium_id, medium_name: spot.medium.name, count: count, is_on_house: is_on_house}
+            get_medium_options(spot.medium_id)[:medium_name] = spot.medium.name unless get_medium_options(spot.medium_id)[:medium_name]
           end
           medium_pool[key]
         end
@@ -23,7 +24,9 @@ module Tida
         def remove(medium_id, key)
           medium_pool = get_medium_pool(medium_id)
           medium_pool.delete(key)
-          @pool.delete(medium_id.to_s) if medium_pool.count == 0
+          if medium_pool.count == 0
+            @pool.delete(medium_id)
+          end
         end
 
         def change(medium_id, spot_id, is_on_house, new_count, new_is_on_house)
@@ -47,12 +50,61 @@ module Tida
           medium_pool[new_key]
         end
 
+        def remove_medium(medium_id)
+          @pool.delete(medium_id.to_i)
+        end
+
+        def clear()
+          @pool.clear
+        end
+
+        def go_combo(medium_id, is_combo)
+          medium_options = get_medium_options(medium_id)
+          medium_options[:is_combo] = is_combo
+        end
+
+        def get_options(medium_id)
+          get_medium_options(medium_id)
+        end
+
+        def get_items(medium_id)
+          get_medium_pool(medium_id)
+        end
+
+        def get_pool_keys()
+          list = []
+          pool.map {|k, v| list << k}
+          list
+        end
+
+        def count
+          amount = 0
+          pool.map do |medium_id, entry|
+            amount += entry[:pool].length if entry[:pool]
+          end
+          amount
+        end
+
         private
 
-        def get_medium_pool(medium_id)
-          key = medium_id.to_s
+        def get_medium_entry(medium_id)
+          key = medium_id.to_i
           @pool[key] = {} unless @pool[key]
+          @pool[key][:options] = {} unless @pool[key][:options]
+          @pool[key][:options][:medium_id] = medium_id unless @pool[key][:options][:is_combo]
+          @pool[key][:options][:is_combo] = false unless @pool[key][:options][:is_combo]
+          @pool[key][:pool] = {} unless @pool[key][:pool]
           @pool[key]
+        end
+
+        def get_medium_pool(medium_id)
+          entry = get_medium_entry(medium_id)
+          entry[:pool]
+        end
+
+        def get_medium_options(medium_id)
+          entry = get_medium_entry(medium_id)
+          entry[:options]
         end
 
         def get_item(medium_id, key)

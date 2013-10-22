@@ -1,21 +1,21 @@
 <%= render_page_title "客户 <strong>#{@client.name}</strong>".html_safe do |toolbar|
   toolbar << {
-    name: render_icon_and_text_content('icon-plus', t('model.add', model: Project.model_name.human)),
+    name: icon_text('icon-plus', t('model.add', model: Project.model_name.human)),
     url: new_client_project_path(@client),
     options: {class: 'button button-success'}
   }
   toolbar << {
-    name: render_icon_and_text_content('icon-male', '管理项目执行人员'),
+    name: icon_text('icon-male', '管理项目执行人员'),
     url: manage_client_assignment_path(@client),
     options: {class: 'button button-primary'}
   } if can? :manage, Client
   toolbar << {
-    name: render_icon_and_text_content('icon-book', '管理媒体政策'),
+    name: icon_text('icon-book', '管理媒体政策'),
     url: client_medium_policies_path(@client),
     options: {class: 'button button-primary'}
   } if can? :manage, Client
   toolbar << {
-    name: render_icon_and_text_content('icon-book', '查看媒体政策'),
+    name: icon_text('icon-book', '查看媒体政策'),
     url: view_client_medium_policies_path(@client),
     options: {class: 'button button-primary'}
   } unless can? :manage, Client

@@ -1,6 +1,6 @@
 <%= render_page_title "#{t('model.list', model: MediumPolicy.model_name.human)}" do |toolbar|
   toolbar << {
-    name: render_icon_and_text_content('icon-plus-sign', t('model.create', :model => MediumPolicy.model_name.human)),
+    name: icon_text('icon-plus-sign', t('model.create', :model => MediumPolicy.model_name.human)),
     url: new_medium_policy_path,
     options: {class: 'button button-primary'}
   }
@@ -9,10 +9,10 @@ end %>
 <%= grid(@medium_policies_grid, :show_filters => :always) do |g|
 
   g.column :html => {class: 'buttons'} do |medium_policy|
-    link_to(render_icon_content('icon-edit'), edit_medium_policy_path(medium_policy), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
+    link_to(icon('icon-edit'), edit_medium_policy_path(medium_policy), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
   end
 
   g.column :html => {class: 'buttons'} do |medium_policy|
-    link_to(render_icon_content('icon-trash'), medium_policy_path(medium_policy), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete'))
+    link_to(icon('icon-trash'), medium_policy_path(medium_policy), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete'))
   end
 end -%>

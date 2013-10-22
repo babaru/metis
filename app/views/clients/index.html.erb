@@ -1,6 +1,6 @@
 <%= render_page_title "#{t('model.list', model: Client.model_name.human)}" do |toolbar|
   toolbar << {
-    name: render_icon_and_text_content('icon-plus-sign', t('model.create', :model => Client.model_name.human)),
+    name: icon_text('icon-plus-sign', t('model.create', :model => Client.model_name.human)),
     url: new_client_path,
     options: {class: 'button button-primary'}
   }

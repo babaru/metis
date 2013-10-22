@@ -34,11 +34,11 @@
 
   if can?(:manage, Spot)
     g.column :html => {class: 'buttons'} do |spot|
-      link_to(render_icon_content('icon-edit'), edit_spot_path(spot), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
+      link_to(icon('icon-edit'), edit_spot_path(spot), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
     end
 
     g.column :html => {class: 'buttons'} do |spot|
-      link_to(render_icon_content('icon-trash'), spot_path(spot), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete'))
+      link_to(icon('icon-trash'), spot_path(spot), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete'))
     end
   end
 end -%>

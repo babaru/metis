@@ -11,11 +11,11 @@
   if can?(:manage, Channel)
 
   g.column :html => {class: 'buttons'} do |channel|
-    link_to(render_icon_content('icon-edit'), edit_channel_path(channel), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
+    link_to(icon('icon-edit'), edit_channel_path(channel), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
   end
 
   g.column :html => {class: 'buttons'} do |channel|
-    link_to(render_icon_content('icon-trash'), channel_path(channel), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete'))
+    link_to(icon('icon-trash'), channel_path(channel), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete'))
   end
 
   end

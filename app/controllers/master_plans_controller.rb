@@ -6,7 +6,7 @@ class MasterPlansController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @master_plans_grid }
+      format.json { head :no_content }
     end
   end
 
@@ -118,42 +118,90 @@ class MasterPlansController < ApplicationController
     @pool = Tida::Metis::SpotCandidate::Pool.new session
     @master_plan = MasterPlan.find params[:id]
     if request.post?
-      medium_id = params[:medium_id]
+      medium_id = params[:medium_id].to_i
       key = params[:key]
-
       @pool.remove(medium_id, key)
 
       respond_to do |format|
         format.js
-        # format.html { redirect_to choose_spots_path(id: @master_plan, client_id: @master_plan.client_id, project_id: @master_plan.project_id), notice: '添加到购物栏成功'}
       end
     end
   end
 
-  def candidates
+  def remove_medium_from_cart
+    @pool = Tida::Metis::SpotCandidate::Pool.new session
     @master_plan = MasterPlan.find params[:id]
     if request.post?
-      counts = params[:count]
-      spot_ids = params[:spot_id]
-      is_on_houses = params[:is_on_house]
-      medium_id = params[:medium_id]
-      channel_id = params[:channel_id]
-      counts.each_with_index do |item, index|
-        next if item.nil? || item.strip == ''
-        spot = Spot.find(spot_ids[index])
-        if spot
-          @master_plan.items << MasterPlanItem.new({
-            spot_id: spot.id,
-            count: item,
-            is_on_house: is_on_houses.nil? ? false : is_on_houses.include?(spot_ids[index]),
-            client_id: @master_plan.client_id,
-            project_id: @master_plan.project_id,
-            medium_id: spot.medium_id,
-            channel_id: spot.channel_id
-            })
-        end
+      medium_id = params[:medium_id].to_i
+      @pool.remove_medium(medium_id)
+
+      respond_to do |format|
+        format.js
       end
-      @master_plan.save!
+    end
+  end
+
+  def clear_cart
+    @pool = Tida::Metis::SpotCandidate::Pool.new session
+    @master_plan = MasterPlan.find params[:id]
+    if request.post?
+      @pool.clear
+
+      respond_to do |format|
+        format.js
+      end
+    end
+  end
+
+  def go_combo
+    @pool = Tida::Metis::SpotCandidate::Pool.new session
+    @master_plan = MasterPlan.find params[:id]
+    if request.post?
+      medium_id = params[:medium_id]
+      is_combo = params[:is_combo] == 'true' ? true : false
+
+      @pool.go_combo(medium_id, is_combo)
+
+      respond_to do |format|
+        format.js
+      end
+    end
+  end
+
+  def save_candidates_to_master_plan
+    @master_plan = MasterPlan.find params[:id]
+    @pool = Tida::Metis::SpotCandidate::Pool.new session
+    if request.post?
+      MasterPlan.transaction do
+        @pool.get_pool_keys.each do |pool_key|
+          pool_options = @pool.get_options(pool_key)
+          pool_items = @pool.get_items(pool_key)
+
+          medium_master_plan = MediumMasterPlan.create_by_data!({
+            medium_id: pool_options[:medium_id],
+            medium_name: pool_options[:medium_name],
+            master_plan_id: @master_plan.id,
+            master_plan_name: @master_plan.name,
+            is_combo: pool_options[:is_combo]
+            })
+
+          pool_items.map do |k, item|
+            MasterPlanItem.create_by_data!({
+              spot_id: item[:spot_id],
+              master_plan_id: @master_plan.id,
+              medium_master_plan_id: medium_master_plan.id,
+              count: item[:count],
+              is_on_house: item[:is_on_house],
+              client_id: @master_plan.client_id,
+              project_id: @master_plan.project_id,
+              medium_id: item[:medium_id],
+              channel_id: item[:channel_id]
+            })
+          end
+        end
+
+        @pool.clear
+      end
 
       respond_to do |format|
         format.html {redirect_to client_project_master_plan_path(id: @master_plan, client_id: @master_plan.client_id, project_id: @master_plan.project_id), notice: 'Master plan was successfully saved.'}

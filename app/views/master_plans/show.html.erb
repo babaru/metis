@@ -1,59 +1,76 @@
-<div>
-
-<%= render_page_title "<strong>#{@master_plan.project.client.name}</strong> #{@master_plan.project.name}: #{@master_plan.name}" do |toolbar|
+<%= render_page_title "<strong>#{@master_plan.project.client.name}</strong> #{@master_plan.project.name}" do |toolbar|
   toolbar << {
-    name: render_icon_and_text_content('icon-chevron-right', 'Spot Plan'),
+    name: icon_text('icon-chevron-left', '挑选点位'),
+    url: choose_spots_path(@master_plan),
+    options: {class: 'button button-warning'}
+  }
+
+  toolbar << {
+    name: icon_text('icon-chevron-right', 'Spot Plan'),
     url: spot_plan_path(medium_id: @selected_medium_id),
     options: {
       class: 'button button-primary',
-      'data-skip-pjax' => true,
-      style: 'margin: 10px 0px;'}
-  }
-  toolbar << {
-    name: "#{t('labels.back_to')} #{@master_plan.project.name}#{t('model.list', :model => MasterPlan.model_name.human)}",
-    url: project_path(@master_plan.project_id),
-    options: {class: 'button'}
+      'data-skip-pjax' => true}
   }
 end %>
 
-<ul class="nav nav-tabs">
-  <li>
-    <%= link_to '挑选点位', choose_spots_path(@master_plan) %>
-  </li>
-  <li class="active">
-    <%= link_to render_icon_and_text_content('icon-shopping-cart', "查看已选点位 <span class=\"badge\">#{@master_plan.items.count}</span>".html_safe), client_project_master_plan_path(@master_plan) %>
-  </li>
-</ul>
+<div class="padding">
+  Master Plan <i class="icon-chevron-right"></i>
+  <select>
+    <% @master_plan.project.master_plans.each do |master_plan| %>
+    <% if master_plan.id == @master_plan.id %>
+    <option selected="true" value="<%= master_plan.id %>"><%= master_plan.name %></option>
+    <% else %>
+    <option value="<%= master_plan.id %>"><%= master_plan.name %></option>
+    <% end %>
+    <% end %>
+  </select>
+  <div class="button-group">
+    <a class="button dropdown-toggle" data-toggle="dropdown" href="#">
+      <i class="icon-wrench"></i> 操作 <i class="icon-caret-down"></i>
+    </a>
+    <ul class="dropdown-menu">
+      <li>
+        <%= link_to icon_text('icon-star', '设为当前Master Plan'), set_current_master_plan_path(id: @master_plan.project_id, master_plan_id: @master_plan.id), method: :post %>
+      </li>
+      <li>
+        <%= link_to icon_text('icon-plus-sign', '新建Master Plan'), set_current_master_plan_path(id: @master_plan.project_id, master_plan_id: @master_plan.id), method: :post %>
+      </li>
+    </ul>
+  </div>
+</div>
+
 
 <% if @candidate_media && @candidate_media.length > 0 %>
 
-<article>
-  <div class="padding">
+<div class="padding">
 
-    <%= render partial: 'master_plan_summary' %>
+  <%= render partial: 'master_plan_summary' %>
 
-    <ul class="nav nav-tabs">
-      <% @candidate_media.each do |medium| %>
-      <% if medium.id == @selected_medium_id.to_i %>
-      <li class="active">
-      <% else %>
-      <li>
-      <% end %>
-        <%= link_to(
-          [
-            content_tag(:span, medium.name),
-            content_tag(:span, @master_plan.spots_count(medium.id), class: 'badge')
-          ].join(' ').html_safe,
-          client_project_master_plan_path(medium_id: medium.id)
-        )%>
-      </li>
-      <% end %>
-    </ul>
+  <ul class="nav nav-tabs">
+    <% @candidate_media.each do |medium| %>
+    <% if medium.id == @selected_medium_id.to_i %>
+    <li class="active">
+    <% else %>
+    <li>
+    <% end %>
+      <%= link_to(
+        [
+          content_tag(:span, medium.name),
+          content_tag(:span, [
+            content_tag(:i, nil, class: 'icon-gift'),
+            '打包价'
+            ].join(' ').html_safe, class: 'badge badge-warning')
+        ].join(' ').html_safe,
+        client_project_master_plan_path(medium_id: medium.id)
+      )%>
+    </li>
+    <% end %>
+  </ul>
 
-    <%= render partial: 'master_plan_medium_summary' %>
+  <%= render partial: 'master_plan_medium_summary' %>
 
-  </div>
-</article>
+</div>
 
 <%= render partial: 'master_plan_items_grid', locals: {master_plan_items: @master_plan_items_grid, selected_medium_id: @selected_medium_id} %>
 

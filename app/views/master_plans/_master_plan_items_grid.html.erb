@@ -85,11 +85,11 @@
   end
 
   g.column :html => {class: 'buttons'} do |master_plan_item|
-    master_plan_item.is_on_house ? link_to(render_icon_content('icon-dollar'), '#', 'data-id' => master_plan_item.id, 'data-value' => false, 'data-medium-id' => selected_medium_id, class: 'master_plan_item_is_on_house button button-inverse', 'data-skip-pjax' => true, rel: 'tooltip', title: '转成购买') : link_to(render_icon_content('icon-thumbs-up'), '#', 'data-id' => master_plan_item.id, 'data-medium-id' => selected_medium_id, class: 'master_plan_item_is_on_house button', 'data-value' => true, 'data-skip-pjax' => true, rel: 'tooltip', title: '转成配送') if master_plan_item.spot_id && !master_plan_item.spot.is_a?(NetCostSpot)
+    master_plan_item.is_on_house ? link_to(icon('icon-dollar'), '#', 'data-id' => master_plan_item.id, 'data-value' => false, 'data-medium-id' => selected_medium_id, class: 'master_plan_item_is_on_house button button-inverse', 'data-skip-pjax' => true, rel: 'tooltip', title: '转成购买') : link_to(icon('icon-thumbs-up'), '#', 'data-id' => master_plan_item.id, 'data-medium-id' => selected_medium_id, class: 'master_plan_item_is_on_house button', 'data-value' => true, 'data-skip-pjax' => true, rel: 'tooltip', title: '转成配送') if master_plan_item.spot_id && !master_plan_item.spot.is_a?(NetCostSpot)
   end
 
   g.column :html => {class: 'buttons'} do |master_plan_item|
-    link_to(render_icon_content('icon-remove'), master_plan_item_path(master_plan_item), :method => :delete, :confirm => t("confirms.delete"), :class => 'button icon button-danger', :rel => 'tooltip', :title => t('buttons.delete'), "data-skip-pjax" => true)
+    link_to(icon('icon-remove'), master_plan_item_path(master_plan_item), :method => :delete, :confirm => t("confirms.delete"), :class => 'button icon button-danger', :rel => 'tooltip', :title => t('buttons.delete'), "data-skip-pjax" => true)
   end
 end -%>
 

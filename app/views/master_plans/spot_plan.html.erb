@@ -2,7 +2,7 @@
 
 <%= render_page_title "<strong>#{@master_plan.project.client.name}</strong> #{@master_plan.project.name}: #{@master_plan.name}" do |toolbar|
   toolbar << {
-    name: render_icon_and_text_content('icon-chevron-left', 'Master Plan'),
+    name: icon_text('icon-chevron-left', 'Master Plan'),
     url: client_project_master_plan_path(@master_plan),
     options: {class: 'button button-primary'}
   }

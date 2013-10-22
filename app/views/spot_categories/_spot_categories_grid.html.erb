@@ -10,11 +10,11 @@
   if can?(:manage, SpotCategory)
 
     g.column :html => {class: 'buttons'} do |spot_category|
-      link_to(render_icon_content('icon-edit'), edit_spot_category_path(spot_category), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
+      link_to(icon('icon-edit'), edit_spot_category_path(spot_category), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
     end
 
     g.column :html => {class: 'buttons'} do |spot_category|
-      link_to(render_icon_content('icon-trash'), spot_category_path(spot_category), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete'))
+      link_to(icon('icon-trash'), spot_category_path(spot_category), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete'))
     end
 
   end

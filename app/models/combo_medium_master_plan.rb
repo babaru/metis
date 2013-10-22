@@ -1,0 +1,2 @@
+class ComboMediumMasterPlan < MediumMasterPlan
+end

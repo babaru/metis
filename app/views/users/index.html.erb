@@ -1,6 +1,6 @@
 <%= render_page_title "#{t('model.list', model: User.model_name.human)}" do |toolbar|
   toolbar << {
-    name: render_icon_and_text_content('icon-plus-sign', t('model.create', :model => User.model_name.human)),
+    name: icon_text('icon-plus-sign', t('model.create', :model => User.model_name.human)),
     url: new_user_path,
     options: {class: 'button button-primary'}
   }
@@ -17,10 +17,10 @@ end %>
   end
 
   g.column :html => {class: 'buttons'} do |user|
-    link_to(render_icon_content('icon-edit'), edit_user_path(user), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
+    link_to(icon('icon-edit'), edit_user_path(user), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
   end
 
   g.column :html => {class: 'buttons'} do |user|
-    link_to(render_icon_content('icon-trash'), user_path(user), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete'))
+    link_to(icon('icon-trash'), user_path(user), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete'))
   end
 end -%>
