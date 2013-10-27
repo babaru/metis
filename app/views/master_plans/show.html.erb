@@ -7,7 +7,7 @@
 
   toolbar << {
     name: icon_text('icon-chevron-right', 'Spot Plan'),
-    url: spot_plan_path(medium_id: @selected_medium_id),
+    url: spot_plan_path(medium_id: @selected_medium_master_plan.medium_id),
     options: {
       class: 'button button-primary'
     }
@@ -36,10 +36,10 @@ end %>
         <%= link_to icon_text('icon-star', '设为默认Master Plan'), set_current_master_plan_path(id: @master_plan.project_id, master_plan_id: @master_plan.id), method: :post %>
       </li>
       <li>
-        <%= link_to icon_text('icon-plus-sign', '新建Master Plan'), set_current_master_plan_path(id: @master_plan.project_id, master_plan_id: @master_plan.id), method: :post %>
+        <%= link_to icon_text('icon-plus-sign', '新建Master Plan'), nil %>
       </li>
       <li>
-        <%= link_to icon_text('icon-trash', '删除Master Plan'), master_plan_path(id: @master_plan.id), method: :delete, confirm: t('confirms.delete') %>
+        <%= link_to icon_text('icon-trash', '删除Master Plan'), nil %>
       </li>
     </ul>
   </div>
