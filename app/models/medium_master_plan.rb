@@ -1,6 +1,7 @@
 class MediumMasterPlan < ActiveRecord::Base
   belongs_to :master_plan
   belongs_to :medium
+  has_many :master_plan_items
   attr_accessible :reality_medium_net_cost, :reality_company_net_cost,
     :reality_medium_discount, :reality_company_discount,
     :original_medium_discount, :original_company_discount,
@@ -36,6 +37,19 @@ class MediumMasterPlan < ActiveRecord::Base
 
   def profit
     company_net_cost - medium_net_cost
+  end
+
+  def bonus_ratio
+    total_price = 0
+    master_plan_items.where("is_on_house=0").each do |item|
+      total_price += item.company_net_cost
+    end
+
+    on_house_amount = 0
+    master_plan_items.where("is_on_house=1").each do |item|
+      on_house_amount += item.total_rate_card
+    end
+    (on_house_amount.to_f / total_price.to_f).to_f.round(2)
   end
 
   def self.create_by_data!(data)

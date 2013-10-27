@@ -13,7 +13,7 @@
             '打包价'
             ].join(' ').html_safe, class: 'badge badge-warning') if medium_master_plan.is_combo?)
         ].join(' ').html_safe,
-        client_project_master_plan_path(medium_id: medium_master_plan.medium_id)
+        spot_plan_path(medium_id: medium_master_plan.medium_id)
       )%>
     </li>
   <% end %>

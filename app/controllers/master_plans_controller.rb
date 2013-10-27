@@ -29,37 +29,6 @@ class MasterPlansController < ApplicationController
     end
   end
 
-  def modify
-    if request.post?
-      @master_plan = MasterPlan.find params["id"]
-      if @master_plan
-        if params['name'] == 'medium_net_cost_per_medium'
-          medium_id = params['selected_medium_id']
-          mmp = @master_plan.medium_master_plans.where(medium_id: medium_id).first
-          if mmp
-            mmp.reality_medium_net_cost = params['value']
-            mmp.save!
-          end
-        elsif params['name'] == 'company_net_cost_per_medium'
-          medium_id = params['selected_medium_id']
-          mmp = @master_plan.medium_master_plans.where(medium_id: medium_id).first
-          if mmp
-            mmp.reality_company_net_cost = params['value']
-            mmp.save!
-          end
-        else
-          @master_plan.send "#{params['name']}=", params["value"]
-        end
-        @master_plan.save!
-      end
-
-      respond_to do |format|
-        format.json { render json: @master_plan, status: :ok }
-        format.html { redirect_to client_project_master_plan_path(id: @master_plan, client_id: @master_plan.client_id, project_id: @master_plan.project_id), notice: 'Master plan was successfully updated.'}
-      end
-    end
-  end
-
   def choose_spots
     @master_plan = MasterPlan.find(params[:id])
     @pool = Tida::Metis::SpotCandidate::Pool.new session
@@ -276,13 +245,15 @@ class MasterPlansController < ApplicationController
 
   def spot_plan
     @master_plan = MasterPlan.find params[:id]
-    @candidate_media = @master_plan.candidate_media
-    @selected_medium_id = @candidate_media.first.id if @candidate_media.count > 0
-    @selected_medium_id = params[:medium_id] if params[:medium_id]
-    @master_plan_items = MasterPlanItem.where('master_plan_id=? and medium_id=?', @master_plan.id, @selected_medium_id).order('is_on_house, created_at')
-    @working_version = params[:wv]
-    @working_version = @master_plan.working_version if params[:wv].nil?
-    @selected_medium = Medium.find @selected_medium_id if @selected_medium_id
+    if @master_plan.medium_master_plans.count > 0
+      if params[:medium_id]
+        @selected_medium_master_plan = @master_plan.medium_master_plans.where(medium_id: params[:medium_id]).first
+      end
+      @selected_medium_master_plan = @master_plan.medium_master_plans.first unless @selected_medium_master_plan
+      @master_plan_items = MasterPlanItem.where(master_plan_id: @master_plan.id, medium_id: @selected_medium_master_plan.medium_id).order('is_on_house, created_at')
+      @working_version = params[:wv]
+      @working_version = @master_plan.working_version if params[:wv].nil?
+    end
 
     @months = @master_plan.project.months
     @days = @master_plan.project.days

@@ -14,6 +14,7 @@ Metis::Application.routes.draw do
 
   get 'projects/:id/assigns' => 'projects#assigns', as: :manage_project_assignments
   post 'projects/:id/save_assignments' => 'projects#save_assignments', as: :save_project_assignments
+  post 'projects/:id/set_current_master_plan' => 'projects#set_current_master_plan', as: :set_current_master_plan
 
   # get 'media/:website_id/channel_groups' => 'channel_groups#index'
   # get 'media/:website_id/channels' => 'channels#index'
@@ -31,8 +32,6 @@ Metis::Application.routes.draw do
   post 'medium_master_plans/:id/out_of_combo' => 'medium_master_plans#out_of_combo', as: :medium_master_plan_out_of_combo
   post 'medium_master_plans/:id/modify' => 'medium_master_plans#modify', as: :modify_medium_master_plan
 
-  post 'projects/:id/set_current_master_plan' => 'projects#set_current_master_plan', as: :set_current_master_plan
-
   get 'clients/:client_id/projects/:project_id/master_plans/:id/spot_plan' => 'master_plans#spot_plan', as: :spot_plan
 
   match 'master_plans/:id/generate_spot_plan' => 'master_plans#generate_spot_plan', as: :generate_spot_plan
@@ -44,7 +43,7 @@ Metis::Application.routes.draw do
   post 'master_plan_items/:id/modify' => 'master_plan_items#modify', as: :modify_master_plan_item
   match 'clients/:id/upload_spot_plan_excel_file' => 'clients#upload_spot_plan_excel_file', as: :upload_spot_plan_excel_file
 
-  post 'master_plans/:id/modify' => 'master_plans#modify', as: :modify_master_plan
+  # post 'master_plans/:id/modify' => 'master_plans#modify', as: :modify_master_plan
 
   # get 'spots/apps' => 'spots#apps'
 

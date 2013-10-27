@@ -90,15 +90,15 @@ $(document).ready(function() {
             this.model.on('change', this.render, this);
         },
         render: function() {
-            $('#master-plan-item' + this.model.get('id') + ' .medium_name').text(this.model.get('medium_name'));
-            $('#master-plan-item' + this.model.get('id') + ' .channel_name').text(this.model.get('channel_name'));
-            if (this.model.get('is_on_house') == true) {
-                $('#master-plan-item' + this.model.get('id') + ' .spot_name').html($('<span>').text(this.model.get('reality_spot_name')).addClass('is_on_house'));
-            } else {
-                $('#master-plan-item' + this.model.get('id') + ' .spot_name').html($('<span>').text(this.model.get('reality_spot_name')));
-            }
+            // $('#master-plan-item' + this.model.get('id') + ' .medium_name').text(this.model.get('medium_name'));
+            // $('#master-plan-item' + this.model.get('id') + ' .channel_name').text(this.model.get('channel_name'));
+            // if (this.model.get('is_on_house') == true) {
+                // $('#master-plan-item' + this.model.get('id') + ' .spot_name').html($('<span>').text(this.model.get('reality_spot_name')).addClass('is_on_house'));
+            // } else {
+                // $('#master-plan-item' + this.model.get('id') + ' .spot_name').html($('<span>').text(this.model.get('reality_spot_name')));
+            // }
 
-            $('#master-plan-item' + this.model.get('id') + ' .ideal_count').text(this.model.get('ideal_count'));
+            // $('#master-plan-item' + this.model.get('id') + ' .ideal_count').text(this.model.get('ideal_count'));
             $('#master-plan-item' + this.model.get('id') + ' .reality_count').text(this.model.get('reality_count'));
 
             if (this.model.get('ideal_count') < this.model.get('reality_count')) {

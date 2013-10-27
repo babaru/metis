@@ -9,32 +9,37 @@
     name: icon_text('icon-chevron-right', 'Spot Plan'),
     url: spot_plan_path(medium_id: @selected_medium_id),
     options: {
-      class: 'button button-primary',
-      'data-skip-pjax' => true}
-  }
+      class: 'button button-primary'
+    }
+  } if @master_plan.medium_master_plans.count > 0
 end %>
 
 <div class="padding">
   项目所有历史 Master Plan <i class="icon-chevron-right"></i>
-  <select>
-    <% @master_plan.project.master_plans.each do |master_plan| %>
-    <% if master_plan.id == @master_plan.id %>
-    <option selected="true" value="<%= master_plan.id %>"><%= master_plan.name %></option>
-    <% else %>
-    <option value="<%= master_plan.id %>"><%= master_plan.name %></option>
-    <% end %>
-    <% end %>
-  </select>
+  <div class="button-group">
+    <a class="button dropdown-toggle" data-toggle="dropdown" href="#">
+      <%= @master_plan.name %> <i class="icon-caret-down"></i>
+    </a>
+    <ul class="dropdown-menu">
+      <% @master_plan.project.master_plans.each do |master_plan| %>
+      <li><%= link_to master_plan.name, client_project_master_plan_path(id: master_plan) %></li>
+      <% end %>
+    </ul>
+  </div>
+
   <div class="button-group">
     <a class="button dropdown-toggle" data-toggle="dropdown" href="#">
       <i class="icon-wrench"></i> 操作 <i class="icon-caret-down"></i>
     </a>
     <ul class="dropdown-menu">
       <li>
-        <%= link_to icon_text('icon-star', '设为当前Master Plan'), set_current_master_plan_path(id: @master_plan.project_id, master_plan_id: @master_plan.id), method: :post %>
+        <%= link_to icon_text('icon-star', '设为默认Master Plan'), set_current_master_plan_path(id: @master_plan.project_id, master_plan_id: @master_plan.id), method: :post %>
       </li>
       <li>
         <%= link_to icon_text('icon-plus-sign', '新建Master Plan'), set_current_master_plan_path(id: @master_plan.project_id, master_plan_id: @master_plan.id), method: :post %>
+      </li>
+      <li>
+        <%= link_to icon_text('icon-trash', '删除Master Plan'), master_plan_path(id: @master_plan.id), method: :delete, confirm: t('confirms.delete') %>
       </li>
     </ul>
   </div>
@@ -47,8 +52,8 @@ end %>
 
 <div class="padding">
   <div class="button-group">
-    <%= link_to '改成打包价', medium_master_plan_get_combo_path(@selected_medium_master_plan), class: 'button button-warning', method: :post unless @selected_medium_master_plan.is_a?(ComboMediumMasterPlan) %>
-    <%= link_to '改回正常报价', medium_master_plan_out_of_combo_path(@selected_medium_master_plan), class: 'button button-inverse', method: :post if @selected_medium_master_plan.is_a?(ComboMediumMasterPlan) %>
+    <%= link_to '改成打包价', medium_master_plan_get_combo_path(@selected_medium_master_plan), class: 'button button-warning', method: :post unless @selected_medium_master_plan.is_combo? %>
+    <%= link_to '改回正常报价', medium_master_plan_out_of_combo_path(@selected_medium_master_plan), class: 'button button-inverse', method: :post if @selected_medium_master_plan.is_combo? %>
   </div>
 </div>
 

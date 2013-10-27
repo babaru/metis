@@ -40,6 +40,20 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def set_current_master_plan
+    @project = Project.find(params[:id])
+    if request.post?
+      @project.current_master_plan_id = params[:master_plan_id]
+      @project.save!
+
+      respond_to do |format|
+        if @project.update_attributes(params[:project])
+          format.html { redirect_to client_project_master_plan_path(client_id: @project.client_id, project_id: @project.id, id: @project.current_master_plan_id), notice: "设置缺省MasterPlan成功！" }
+        end
+      end
+    end
+  end
+
   # GET /projects/new
   # GET /projects/new.json
   def new

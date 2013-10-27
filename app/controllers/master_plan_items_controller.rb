@@ -5,27 +5,13 @@ class MasterPlanItemsController < ApplicationController
   # GET /master_plan_items.json
   def index
     @master_plan = MasterPlan.find params[:master_plan_id]
-    @candidate_media = @master_plan.candidate_media
-    @selected_medium_id = @candidate_media.first.id if @candidate_media.count > 0
-    @selected_medium_id = params[:medium_id] if params[:medium_id]
-    @master_plan_items = MasterPlanItem.where('master_plan_id=? and medium_id=?', params[:master_plan_id], @selected_medium_id).order('is_on_house, created_at')
-    # @working_version = params[:wv]
-    # @working_version = @master_plan.working_version if params[:wv].nil?
-
-    # @months = @master_plan.project.months
-    # @days = @master_plan.project.days
-
-    # if @months.length > 0
-    #   @selected_month = @months.first[:month].to_i
-    #   @selected_year = @months.first[:year].to_i
-    # end
-    # @selected_month = params[:m].to_i if params[:m]
-    # @selected_year = params[:y].to_i if params[:y]
-
-    # @selected_days = []
-    # if @selected_month && @selected_year
-    #   @selected_days = @days["#{@selected_year}#{sprintf('%02d', @selected_month)}"]
-    # end
+    if @master_plan.medium_master_plans.count > 0
+      if params[:medium_id]
+        @selected_medium_master_plan = @master_plan.medium_master_plans.where(medium_id: params[:medium_id]).first
+      end
+      @selected_medium_master_plan = @master_plan.medium_master_plans.first unless @selected_medium_master_plan
+      @master_plan_items = @selected_medium_master_plan.master_plan_items.order('is_on_house, created_at')
+    end
 
     respond_to do |format|
       format.html # index.html.erb

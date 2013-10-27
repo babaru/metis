@@ -36,11 +36,13 @@
 
   <% @master_plan_items.each do |master_plan_item| %>
   <tr class="master-plan-item-row" id="master-plan-item<%= master_plan_item.id %>">
-    <td class="medium_name"><%= master_plan_item.spot.medium.name %></td>
-    <td class="channel_name"></td>
-    <td class="spot_name"></td>
-    <td class="ideal_count"></td>
-    <td class="reality_count"></td>
+    <td class="medium_name"><%= master_plan_item.medium_name %></td>
+    <td class="channel_name"><%= master_plan_item.channel_name %></td>
+    <td class="spot_name">
+      <%= content_tag(:span, master_plan_item.spot_name, class: master_plan_item.is_on_house? ? 'is_on_house' : '') %>
+    </td>
+    <td class="ideal_count"><%= master_plan_item.count %></td>
+    <td class="reality_count"><%= content_tag(:span, master_plan_item.reality_count, class: 'reality_count') %></td>
     <% 1.upto(31) do |n| %>
     <% if @selected_days.length >= n && @selected_days[n - 1] && @selected_days[n - 1] > 0 %>
     <%= content_tag :td, content_tag(:span, '', class: "empty-spot-plan-item", 'data-placed-at' => "#{@selected_year}-#{sprintf('%02d', @selected_month)}-#{sprintf '%02d', n}"), class: "spot-plan-item-cell spot-plan-item-cell#{@selected_year}#{sprintf('%02d', @selected_month)}#{sprintf '%02d', n} #{Time.new(@selected_year, @selected_month, n).strftime('%a').downcase}" %>
@@ -53,7 +55,7 @@
 
 </table>
 
-<%= content_tag :span, @selected_medium_id, class: 'hide', id: 'selected-medium-id-value' %>
+<%= content_tag :span, @selected_medium_master_plan.medium_id, class: 'hide', id: 'selected-medium-id-value' %>
 <%= content_tag :span, @master_plan.id, class: 'hide', id: 'master-plan-id-value' %>
 <%= content_tag :span, @working_version, class: 'hide', id: 'working-version-value' %>
 

@@ -2,6 +2,7 @@ class MasterPlanItem < ActiveRecord::Base
   belongs_to :client
   belongs_to :project
   belongs_to :master_plan
+  belongs_to :medium_master_plan
   belongs_to :spot
   belongs_to :medium
   belongs_to :channel
@@ -58,22 +59,22 @@ class MasterPlanItem < ActiveRecord::Base
 
   def medium_net_cost
     return 0 if is_on_house?
-    return reality_medium_net_cost if reality_medium_net_cost
+    return reality_medium_net_cost if reality_medium_net_cost && medium_master_plan.is_combo?
     theoritical_medium_net_cost
   end
 
   def theoritical_medium_net_cost
-    unit_rate_card * count * reality_medium_discount
+    unit_rate_card * count * original_medium_discount
   end
 
   def company_net_cost
     return 0 if is_on_house?
-    return reality_company_net_cost if reality_company_net_cost
+    return reality_company_net_cost if reality_company_net_cost && medium_master_plan.is_combo?
     theoritical_company_net_cost
   end
 
   def theoritical_company_net_cost
-    unit_rate_card * count * reality_company_discount
+    unit_rate_card * count * original_company_discount
   end
 
   def total_rate_card
@@ -92,12 +93,12 @@ class MasterPlanItem < ActiveRecord::Base
   end
 
   def medium_discount
-    return reality_medium_discount if reality_medium_discount
+    return reality_medium_discount if reality_medium_discount && medium_master_plan.is_combo?
     original_medium_discount
   end
 
   def company_discount
-    return reality_company_discount if reality_company_discount
+    return reality_company_discount if reality_company_discount && medium_master_plan.is_combo?
     original_company_discount
   end
 
