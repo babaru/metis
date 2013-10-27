@@ -1,0 +1,2 @@
+module MediumMasterPlansHelper
+end

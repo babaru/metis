@@ -32,9 +32,9 @@ SimpleNavigation::Configuration.run do |navigation|
 
   # Define the primary navigation
   navigation.items do |primary|
-    primary.item :page_dashboard, t('navigation.dashboard'), dashboard_path, link: {icon: 'icon-dashboard'}, :highlights_on => /dashboard/
-    primary.item :page_clients, t('navigation.clients'), nil, link: {icon: 'icon-user'} do |clients|
-      clients.item :page_clients, t('navigation.clients_list'), clients_path, highlights_on: ::Regexp.new("clients$")
+    primary.item :page_dashboard, t('dashboard'), dashboard_path, link: {icon: 'icon-dashboard'}, :highlights_on => /dashboard/
+    primary.item :page_clients, Client.model_name.human, nil, link: {icon: 'icon-briefcase'} do |clients|
+      clients.item :page_client_list, t('model.list', model: Client.model_name.human), clients_path, link: {icon: 'icon-list'}, highlights_on: ::Regexp.new("clients$")
       current_user.viewable_clients.each do |client|
         clients.item "page_client_#{client.id}".to_sym, client.name, nil, highlights_on: ::Regexp.new("clients/#{client.id}") do |client_items|
           client_items.item "page_client_#{client.id}_item_projects".to_sym,
@@ -57,10 +57,16 @@ SimpleNavigation::Configuration.run do |navigation|
         end
       end
     end
-    primary.item :page_media, t('navigation.media'), nil, link: {icon: 'icon-globe'} do |media|
-      media.item :page_media, t('navigation.media_list'), media_path, link: {icon: 'icon-list'}, highlights_on: ::Regexp.new("media$")
+    primary.item :page_spots, Spot.model_name.human, nil, link: {icon: 'icon-map-marker'} do |media|
+      media.item :page_media, t('model.list', model: Medium.model_name.human), media_path, link: {icon: 'icon-list'}, highlights_on: ::Regexp.new("media$")
       Medium.all.each do |item|
         media.item "page_medium_#{item.id}".to_sym, item.name, medium_spots_path(item.id), highlights_on: ::Regexp.new("media/#{item.id}")
+      end
+    end
+
+    if can? :manage, User
+      primary.item :page_users, User.model_name.human, nil, link: {icon: 'icon-user'} do |users|
+        users.item :page_user_list, t('model.list', model: User.model_name.human), users_path, link: {icon: 'icon-list'}, highlights_on: ::Regexp.new("users$")
       end
     end
   end

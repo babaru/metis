@@ -1,0 +1,20 @@
+<ul class="nav nav-tabs">
+  <% @master_plan.medium_master_plans.each do |medium_master_plan| %>
+    <% if medium_master_plan.medium_id == @selected_medium_master_plan.medium_id %>
+    <li class="active">
+    <% else %>
+    <li>
+    <% end %>
+      <%= link_to(
+        [
+          content_tag(:span, medium_master_plan.medium_name),
+          (content_tag(:span, [
+            content_tag(:i, nil, class: 'icon-gift'),
+            '打包价'
+            ].join(' ').html_safe, class: 'badge badge-warning') if medium_master_plan.is_a?(ComboMediumMasterPlan))
+        ].join(' ').html_safe,
+        client_project_master_plan_path(medium_id: medium_master_plan.medium_id)
+      )%>
+    </li>
+  <% end %>
+</ul>

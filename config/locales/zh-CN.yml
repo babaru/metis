@@ -1,4 +1,5 @@
 zh-CN:
+  dashboard: 控制台
   retrieve: 撷取%{model}
   retrieve:
     data: 撷取数据

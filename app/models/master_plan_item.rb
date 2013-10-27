@@ -91,6 +91,16 @@ class MasterPlanItem < ActiveRecord::Base
     item
   end
 
+  def medium_discount
+    return reality_medium_discount if reality_medium_discount
+    original_medium_discount
+  end
+
+  def company_discount
+    return reality_company_discount if reality_company_discount
+    original_company_discount
+  end
+
   private
 
   def copy_useful_attributes

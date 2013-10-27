@@ -1,8 +1,0 @@
-<%= render_page_title "#{t('model.create', model: ShoppingCartItem.model_name.human)} <small>#{t('simple_form.required.text') }</small>" do |toolbar|
-  toolbar << {
-    name: "#{t('labels.back_to')}#{t('model.list', :model => ShoppingCartItem.model_name.human)}",
-    url: shopping_cart_items_path,
-    options: {class: 'button'}
-  }
-  end %>
-<%= render 'form' %>

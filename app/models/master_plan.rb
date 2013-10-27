@@ -4,7 +4,7 @@ class MasterPlan < ActiveRecord::Base
   belongs_to :project
   belongs_to :created_by, class_name: 'User', foreign_key: :created_by_id
   has_many :items, class_name: 'MasterPlanItem', dependent: :destroy
-  has_many :medium_master_plans
+  has_many :medium_master_plans, dependent: :destroy
 
   attr_accessible :name,
     :project_id,

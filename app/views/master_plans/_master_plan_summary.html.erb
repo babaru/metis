@@ -1,42 +1,43 @@
-<table class="plan-summary" id="master-plan-summary">
-  <tr>
-    <th style="width:25%;">项目预算</th>
-    <th>合同额(媒体-公司)</th>
-    <th style="width:25%;">预估利润</th>
-  </tr>
-  <tr>
-    <td><span class="project-budget"><%= number_to_currency(@master_plan.project.budget, unit: '￥', precision: 0) %></span></td>
-    <td>
-      <div class="label-group master-plan-value-group">
-        <span class="item medium medium-net-cost">
-          <%= link_to(
-            number_with_precision(@master_plan.medium_net_cost, precision: 0),
-            '#',
-            class: 'editable-field medium value',
-            'data-type' => 'text',
-            'data-pk' => @master_plan.id,
-            'data-name' => 'reality_medium_net_cost',
-            'data-url' => modify_master_plan_path(@master_plan),
-            'data-original-title' => '修改媒体报价',
-            'data-skip-pjax' => true
-          ) %>
-        </span>
-        <span class="item company company-net-cost">
-          <%= link_to(
-            number_with_precision(@master_plan.company_net_cost, precision: 0),
-            '#',
-            class: 'editable-field company value',
-            'data-type' => 'text',
-            'data-pk' => @master_plan.id,
-            'data-name' => 'reality_company_net_cost',
-            'data-url' => modify_master_plan_path(@master_plan),
-            'data-original-title' => '修改公司报价',
-            'data-skip-pjax' => true
-          ) %>
-        </span>
-      </div>
-    </td>
-    <td><span class="profit"><%= number_to_currency(@master_plan.profit, unit: '￥', precision: 0) %></span> </td>
-  </tr>
-</table>
-
+<div class="padding">
+  <table class="plan-summary" id="master-plan-summary">
+    <tr>
+      <th style="width:25%;">项目预算</th>
+      <th>合同额(媒体-公司)</th>
+      <th style="width:25%;">预估利润</th>
+    </tr>
+    <tr>
+      <td><span class="project-budget"><%= number_to_currency(@master_plan.project.budget, unit: '￥', precision: 0) %></span></td>
+      <td>
+        <div class="label-group master-plan-value-group">
+          <span class="item medium medium-net-cost">
+            <%= link_to(
+              number_with_precision(@master_plan.medium_net_cost, precision: 0),
+              '#',
+              class: 'editable-field medium value',
+              'data-type' => 'text',
+              'data-pk' => @master_plan.id,
+              'data-name' => 'reality_medium_net_cost',
+              'data-url' => modify_master_plan_path(@master_plan),
+              'data-original-title' => '修改媒体报价',
+              'data-skip-pjax' => true
+            ) %>
+          </span>
+          <span class="item company company-net-cost">
+            <%= link_to(
+              number_with_precision(@master_plan.company_net_cost, precision: 0),
+              '#',
+              class: 'editable-field company value',
+              'data-type' => 'text',
+              'data-pk' => @master_plan.id,
+              'data-name' => 'reality_company_net_cost',
+              'data-url' => modify_master_plan_path(@master_plan),
+              'data-original-title' => '修改公司报价',
+              'data-skip-pjax' => true
+            ) %>
+          </span>
+        </div>
+      </td>
+      <td><span class="profit"><%= number_to_currency(@master_plan.profit, unit: '￥', precision: 0) %></span> </td>
+    </tr>
+  </table>
+</div>

@@ -1,0 +1,82 @@
+<table class="plan-summary">
+  <tr>
+    <th style="width:25%;">合同额(<%= @selected_medium_master_plan.medium_name %>-公司)</th>
+    <th>折扣(<%= @selected_medium_master_plan.medium_name %>-公司)</th>
+    <th style="width:25%;">预估利润(<%= @selected_medium_master_plan.medium_name %>)</th>
+    <th style="width:25%;">配送比例(实际-<%= @selected_medium_master_plan.medium_name %>-公司)</th>
+  </tr>
+  <tr>
+    <td>
+      <div class="label-group master-plan-value-group">
+        <span class="item medium">
+          <%= number_with_precision(@selected_medium_master_plan.medium_net_cost, precision: 0) unless @selected_medium_master_plan.is_combo? %>
+          <%= link_to(
+            number_with_precision(@selected_medium_master_plan.medium_net_cost, precision: 0),
+            '#',
+            class: 'inline-editable-field medium value',
+            'data-type' => 'text',
+            'data-pk' => @selected_medium_master_plan.id,
+            'data-name' => 'reality_medium_net_cost',
+            'data-url' => modify_medium_master_plan_path(@selected_medium_master_plan),
+            'data-original-title' => '修改媒体报价',
+            'data-skip-pjax' => true
+          ) if @selected_medium_master_plan.is_combo? %>
+        </span>
+        <span class="item company">
+          <%= number_with_precision(@selected_medium_master_plan.company_net_cost, precision: 0) unless @selected_medium_master_plan.is_combo? %>
+          <%= link_to(
+            number_with_precision(@selected_medium_master_plan.company_net_cost, precision: 0),
+            '#',
+            class: 'inline-editable-field company value',
+            'data-type' => 'text',
+            'data-pk' => @selected_medium_master_plan.id,
+            'data-name' => 'reality_company_net_cost',
+            'data-url' => modify_medium_master_plan_path(@selected_medium_master_plan),
+            'data-original-title' => '修改公司报价',
+            'data-skip-pjax' => true
+          ) if @selected_medium_master_plan.is_combo? %>
+        </span>
+      </div>
+    </td>
+    <td>
+      <div class="label-group master-plan-value-group">
+        <span class="item medium">
+          <%= number_with_precision(@selected_medium_master_plan.medium_discount, precision: 2) unless @selected_medium_master_plan.is_combo? %>
+          <%= link_to(
+            number_with_precision(@selected_medium_master_plan.medium_discount, precision: 2),
+            '#',
+            class: 'inline-editable-field medium value',
+            'data-type' => 'text',
+            'data-pk' => @selected_medium_master_plan.id,
+            'data-name' => 'reality_medium_discount',
+            'data-url' => modify_medium_master_plan_path(@selected_medium_master_plan),
+            'data-original-title' => '修改媒体折扣',
+            'data-skip-pjax' => true
+          ) if @selected_medium_master_plan.is_combo? %>
+        </span>
+        <span class="item company">
+          <%= number_with_precision(@selected_medium_master_plan.company_discount, precision: 2) unless @selected_medium_master_plan.is_combo? %>
+          <%= link_to(
+            number_with_precision(@selected_medium_master_plan.company_discount, precision: 2),
+            '#',
+            class: 'inline-editable-field company value',
+            'data-type' => 'text',
+            'data-pk' => @selected_medium_master_plan.id,
+            'data-name' => 'reality_company_discount',
+            'data-url' => modify_medium_master_plan_path(@selected_medium_master_plan),
+            'data-original-title' => '修改公司折扣',
+            'data-skip-pjax' => true
+          ) if @selected_medium_master_plan.is_combo? %></span>
+      </div>
+    </td>
+    <td><%= number_to_currency(@selected_medium_master_plan.profit, unit: '￥', precision: 0) %></td>
+    <td>
+      <div class="label-group master-plan-value-group">
+        <span class="item reality"><%= @master_plan.reality_bonus_ratio(@selected_medium_master_plan.medium_id) %></span>
+        <span class="item medium"><%= @master_plan.medium_bonus_ratio(@selected_medium_master_plan.medium_id) %></span>
+        <span class="item company"><%= @master_plan.company_bonus_ratio(@selected_medium_master_plan.medium_id) %></span>
+      </div>
+    </td>
+  </tr>
+</table>
+

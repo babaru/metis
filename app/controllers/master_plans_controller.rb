@@ -14,13 +14,14 @@ class MasterPlansController < ApplicationController
   # GET /master_plans/1.json
   def show
     @master_plan = MasterPlan.find(params[:id])
-    @candidate_media = @master_plan.candidate_media
-    @selected_medium_id = @candidate_media.first.id if @candidate_media.count > 0
-    @selected_medium_id = params[:medium_id] if params[:medium_id]
-    if @selected_medium_id
-      @master_plan_items_grid = initialize_grid(MasterPlanItem.where("master_plan_id=#{@master_plan.id} and medium_id=#{@selected_medium_id}").order('is_on_house, created_at'))
+
+    if @master_plan.medium_master_plans.count > 0
+      if params[:medium_id]
+        @selected_medium_master_plan = @master_plan.medium_master_plans.where(medium_id: params[:medium_id]).first
+      end
+      @selected_medium_master_plan = @master_plan.medium_master_plans.first unless @selected_medium_master_plan
+      @master_plan_items_grid = initialize_grid(MasterPlanItem.where("master_plan_id=#{@master_plan.id} and medium_id=#{@selected_medium_master_plan.medium_id}").order('is_on_house, created_at'))
     end
-    @selected_medium = Medium.find @selected_medium_id if @selected_medium_id
 
     respond_to do |format|
       format.html

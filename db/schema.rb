@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131022080313) do
+ActiveRecord::Schema.define(:version => 20131027060601) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -165,11 +165,15 @@ ActiveRecord::Schema.define(:version => 20131022080313) do
     t.string   "master_plan_name"
     t.integer  "medium_id"
     t.string   "medium_name"
-    t.decimal  "reality_medium_net_cost",  :precision => 20, :scale => 3
-    t.decimal  "reality_company_net_cost", :precision => 20, :scale => 3
-    t.datetime "created_at",                                              :null => false
-    t.datetime "updated_at",                                              :null => false
+    t.decimal  "reality_medium_net_cost",   :precision => 20, :scale => 3
+    t.decimal  "reality_company_net_cost",  :precision => 20, :scale => 3
+    t.datetime "created_at",                                                                :null => false
+    t.datetime "updated_at",                                                                :null => false
     t.string   "type"
+    t.decimal  "reality_medium_discount",   :precision => 8,  :scale => 2, :default => 1.0
+    t.decimal  "reality_company_discount",  :precision => 8,  :scale => 2, :default => 1.0
+    t.decimal  "original_medium_discount",  :precision => 8,  :scale => 2, :default => 1.0
+    t.decimal  "original_company_discount", :precision => 8,  :scale => 2, :default => 1.0
   end
 
   add_index "medium_master_plans", ["master_plan_id"], :name => "index_medium_master_plans_on_master_plan_id"

@@ -15,7 +15,7 @@
 end %>
 
 <div class="padding">
-  Master Plan <i class="icon-chevron-right"></i>
+  项目所有历史 Master Plan <i class="icon-chevron-right"></i>
   <select>
     <% @master_plan.project.master_plans.each do |master_plan| %>
     <% if master_plan.id == @master_plan.id %>
@@ -41,39 +41,20 @@ end %>
 </div>
 
 
-<% if @candidate_media && @candidate_media.length > 0 %>
+<% if @master_plan.medium_master_plans.count > 0 %>
+<%= render partial: 'master_plan_summary' %>
+<%= render partial: 'medium_master_plan_navs' %>
 
 <div class="padding">
-
-  <%= render partial: 'master_plan_summary' %>
-
-  <ul class="nav nav-tabs">
-    <% @candidate_media.each do |medium| %>
-    <% if medium.id == @selected_medium_id.to_i %>
-    <li class="active">
-    <% else %>
-    <li>
-    <% end %>
-      <%= link_to(
-        [
-          content_tag(:span, medium.name),
-          content_tag(:span, [
-            content_tag(:i, nil, class: 'icon-gift'),
-            '打包价'
-            ].join(' ').html_safe, class: 'badge badge-warning')
-        ].join(' ').html_safe,
-        client_project_master_plan_path(medium_id: medium.id)
-      )%>
-    </li>
-    <% end %>
-  </ul>
-
-  <%= render partial: 'master_plan_medium_summary' %>
-
+  <div class="button-group">
+    <%= link_to '改成打包价', medium_master_plan_get_combo_path(@selected_medium_master_plan), class: 'button button-warning', method: :post unless @selected_medium_master_plan.is_a?(ComboMediumMasterPlan) %>
+    <%= link_to '改回正常报价', medium_master_plan_out_of_combo_path(@selected_medium_master_plan), class: 'button button-inverse', method: :post if @selected_medium_master_plan.is_a?(ComboMediumMasterPlan) %>
+  </div>
 </div>
 
-<%= render partial: 'master_plan_items_grid', locals: {master_plan_items: @master_plan_items_grid, selected_medium_id: @selected_medium_id} %>
 
+<%= render partial: 'medium_master_plan_summary' %>
+<%= render partial: 'medium_master_plan_items_grid' %>
 <% end %>
 
 </div>
