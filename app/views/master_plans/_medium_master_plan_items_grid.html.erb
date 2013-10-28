@@ -10,7 +10,7 @@
 
   g.column name: t('activerecord.attributes.spot.name') do |master_plan_item|
     link_to(
-      content_tag(:strong, master_plan_item.reality_spot_name),
+      content_tag(:strong, master_plan_item.position_name),
       '#',
       class: (master_plan_item.is_on_house ? 'is_on_house editable-field' : 'editable-field'),
       'data-type' => 'text',

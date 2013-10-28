@@ -27,6 +27,7 @@ Metis::Application.routes.draw do
   post 'master_plans/:id/remove_medium_from_cart' => 'master_plans#remove_medium_from_cart', as: :remove_medium_from_cart
   post 'master_plans/:id/clear_cart' => 'master_plans#clear_cart', as: :clear_cart
   post 'master_plans/:id/save_candidates' => 'master_plans#save_candidates_to_master_plan', as: :save_candidates_to_master_plan
+  post 'master_plans/:id/clone' => 'master_plans#clone_master_plan', as: :clone_master_plan
 
   post 'medium_master_plans/:id/get_combo' => 'medium_master_plans#get_combo', as: :medium_master_plan_get_combo
   post 'medium_master_plans/:id/out_of_combo' => 'medium_master_plans#out_of_combo', as: :medium_master_plan_out_of_combo
@@ -34,10 +35,8 @@ Metis::Application.routes.draw do
 
   get 'clients/:client_id/projects/:project_id/master_plans/:id/spot_plan' => 'master_plans#spot_plan', as: :spot_plan
 
-  match 'master_plans/:id/generate_spot_plan' => 'master_plans#generate_spot_plan', as: :generate_spot_plan
-  # match 'spot_plan/generate' => 'spot_plan_items#generate', as: :generate_spot_plan
-  match 'master_plans/:id/save_spot_plan' => 'master_plans#save_spot_plan', as: :save_spot_plan
-  # match 'spot_plan/save' => 'master_plans#save_version', as: :save_spot_plan
+  post 'master_plans/:id/generate_spot_plan' => 'master_plans#generate_spot_plan', as: :generate_spot_plan
+  post 'master_plans/:id/confirm' => 'master_plans#confirm_spot_plan', as: :confirm_spot_plan
   match 'spot_plan_items/:id/modify_placed_at' => 'spot_plan_items#modify_placed_at', as: :modify_placed_at
 
   post 'master_plan_items/:id/modify' => 'master_plan_items#modify', as: :modify_master_plan_item

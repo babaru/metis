@@ -24,7 +24,7 @@ end %>
           <ul class="dropdown-menu">
             <% @months.each do |m| %>
             <li>
-              <%= link_to "#{m[:year]}年#{m[:month]}月", spot_plan_path(medium_id: @selected_medium_master_plan.medium_id, y: m[:year], m: m[:month], wv: @working_version) %>
+              <%= link_to "#{m[:year]}年#{m[:month]}月", spot_plan_path(medium_id: @selected_medium_master_plan.medium_id, y: m[:year], m: m[:month], version: @spot_plan_version) %>
             </li>
             <% end %>
           </ul>
@@ -32,8 +32,20 @@ end %>
       </div>
       <div class="cell6">
         <div class="button-group pull-right">
-          <%= link_to icon_text('icon-thumbs-up', '确认排期表'), save_spot_plan_path(id: @master_plan), method: :post, class: 'button button-success' if @master_plan.is_dirty? %>
-          <%= link_to icon_text('icon-download-alt', '下载排期表文件'), generate_spot_plan_path(id: @master_plan), method: :post, class: 'button button-inverse' %>
+          <div class="button-group">
+          <a class="button dropdown-toggle" data-toggle="dropdown" href="#">
+            <i class="icon-bookmark"></i> <%= @spot_plan_version.to_i > 0 ? "版本#{@spot_plan_version}" : "初始版本" %> <i class="icon-caret-down"></i>
+          </a>
+          <ul class="dropdown-menu">
+            <% @master_plan.spot_plan_version.downto(0) do |n| %>
+            <li>
+              <%= link_to n > 0 ? "版本#{n}" : "初始版本", spot_plan_path(medium_id: @selected_medium_master_plan.medium_id, y: @selected_year, m: @selected_month, version: n) %>
+            </li>
+            <% end %>
+          </ul>
+        </div>
+          <%= link_to icon_text('icon-thumbs-up', '确认排期表'), confirm_spot_plan_path(@master_plan), method: :post, class: 'button button-success' if @master_plan.is_dirty? %>
+          <%= link_to icon_text('icon-download-alt', '下载排期表文件'), generate_spot_plan_path(id: @master_plan, version: @spot_plan_version), method: :post, class: 'button button-inverse' %>
         </div>
       </div>
     </div>

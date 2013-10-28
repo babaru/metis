@@ -9,7 +9,7 @@ class MediumMasterPlan < ActiveRecord::Base
     :master_plan_id, :master_plan_name,
     :type
 
-  before_create :copy_mandatory_attributes
+  before_create :copy_name_attributes, :copy_discount_attributes
 
   def medium_net_cost
     sum = 0
@@ -75,7 +75,13 @@ class MediumMasterPlan < ActiveRecord::Base
 
   private
 
-  def copy_mandatory_attributes
+  def copy_name_attributes
+    self.medium_name = self.medium.name unless self.medium_name
+    self.master_plan_name = self.master_plan.name unless self.master_plan_name
+  end
 
+  def copy_discount_attributes
+    self.original_medium_discount = MediumPolicy.medium_discount(self.medium_id, self.master_plan.client_id) unless self.original_medium_discount
+    self.original_company_discount = MediumPolicy.company_discount(self.medium_id, self.master_plan.client_id) unless self.original_company_discount
   end
 end

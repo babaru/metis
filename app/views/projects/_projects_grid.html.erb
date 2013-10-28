@@ -12,7 +12,7 @@
   end
 
   g.column name: t('activerecord.attributes.project.budget') do |project|
-    "#{number_to_currency(project.budget, precision: 0, unit: '')} #{project.budget_unit}"
+    content_tag(:strong, number_to_currency(project.budget, precision: 0, unit: '￥'))
   end
 
   g.column name: t('activerecord.attributes.project.assigned_to') do |project|

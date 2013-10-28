@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131028023707) do
+ActiveRecord::Schema.define(:version => 20131028060545) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -97,20 +97,20 @@ ActiveRecord::Schema.define(:version => 20131028023707) do
     t.integer  "est_cpc"
     t.integer  "est_cpm"
     t.integer  "cpc"
-    t.decimal  "unit_rate_card",            :precision => 10, :scale => 3, :default => 0.0
-    t.decimal  "original_medium_discount",  :precision => 8,  :scale => 2, :default => 1.0
-    t.decimal  "original_company_discount", :precision => 8,  :scale => 2, :default => 1.0
+    t.decimal  "unit_rate_card",            :precision => 10, :scale => 3
+    t.decimal  "original_medium_discount",  :precision => 8,  :scale => 2
+    t.decimal  "original_company_discount", :precision => 8,  :scale => 2
     t.string   "client_name"
     t.string   "project_name"
     t.string   "master_plan_name"
     t.string   "unit_rate_card_unit"
-    t.integer  "unit_rate_card_unit_type",                                 :default => 0
+    t.integer  "unit_rate_card_unit_type"
     t.integer  "medium_id"
     t.decimal  "reality_company_net_cost",  :precision => 20, :scale => 3
     t.decimal  "reality_medium_net_cost",   :precision => 20, :scale => 3
     t.string   "reality_spot_name"
-    t.decimal  "reality_medium_discount",   :precision => 8,  :scale => 2, :default => 1.0
-    t.decimal  "reality_company_discount",  :precision => 8,  :scale => 2, :default => 1.0
+    t.decimal  "reality_medium_discount",   :precision => 8,  :scale => 2
+    t.decimal  "reality_company_discount",  :precision => 8,  :scale => 2
     t.integer  "medium_master_plan_id"
   end
 
@@ -129,7 +129,6 @@ ActiveRecord::Schema.define(:version => 20131028023707) do
     t.datetime "updated_at",                                                                 :null => false
     t.string   "name"
     t.string   "type"
-    t.decimal  "discount",                 :precision => 2,  :scale => 0
     t.integer  "client_id"
     t.boolean  "is_readonly",                                             :default => false
     t.boolean  "is_dirty",                                                :default => true
@@ -138,6 +137,7 @@ ActiveRecord::Schema.define(:version => 20131028023707) do
     t.string   "project_name"
     t.string   "client_name"
     t.string   "created_by_name"
+    t.integer  "spot_plan_version",                                       :default => 0
   end
 
   add_index "master_plans", ["client_id"], :name => "index_master_plans_on_client_id"
@@ -167,13 +167,13 @@ ActiveRecord::Schema.define(:version => 20131028023707) do
     t.string   "medium_name"
     t.decimal  "reality_medium_net_cost",   :precision => 20, :scale => 3
     t.decimal  "reality_company_net_cost",  :precision => 20, :scale => 3
-    t.datetime "created_at",                                                                :null => false
-    t.datetime "updated_at",                                                                :null => false
+    t.datetime "created_at",                                               :null => false
+    t.datetime "updated_at",                                               :null => false
     t.string   "type"
-    t.decimal  "reality_medium_discount",   :precision => 8,  :scale => 2, :default => 1.0
-    t.decimal  "reality_company_discount",  :precision => 8,  :scale => 2, :default => 1.0
-    t.decimal  "original_medium_discount",  :precision => 8,  :scale => 2, :default => 1.0
-    t.decimal  "original_company_discount", :precision => 8,  :scale => 2, :default => 1.0
+    t.decimal  "reality_medium_discount",   :precision => 8,  :scale => 2
+    t.decimal  "reality_company_discount",  :precision => 8,  :scale => 2
+    t.decimal  "original_medium_discount",  :precision => 8,  :scale => 2
+    t.decimal  "original_company_discount", :precision => 8,  :scale => 2
   end
 
   add_index "medium_master_plans", ["master_plan_id"], :name => "index_medium_master_plans_on_master_plan_id"
@@ -213,10 +213,11 @@ ActiveRecord::Schema.define(:version => 20131028023707) do
     t.datetime "ended_at"
     t.datetime "created_at",             :null => false
     t.datetime "updated_at",             :null => false
-    t.string   "budget_unit"
     t.integer  "budget"
     t.string   "type"
     t.integer  "current_master_plan_id"
+    t.string   "client_name"
+    t.string   "created_by_name"
   end
 
   add_index "projects", ["client_id"], :name => "index_projects_on_client_id"

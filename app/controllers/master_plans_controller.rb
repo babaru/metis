@@ -179,39 +179,15 @@ class MasterPlansController < ApplicationController
     end
   end
 
-  # GET /master_plans/new
-  # GET /master_plans/new.json
-  def new
-    @project = Project.find params[:project_id]
-    @master_plan = MasterPlan.new
-    @master_plan.project_id = @project.id
-    @master_plan.client_id = @project.client_id
-    @master_plan.created_by_id = current_user.id
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @master_plan }
-    end
-  end
-
-  # GET /master_plans/1/edit
-  def edit
-    @master_plan = MasterPlan.find(params[:id])
-  end
-
   # POST /master_plans
   # POST /master_plans.json
   def create
-    @master_plan = MasterPlan.new(params[:master_plan])
+    @project = Project.find(params[:master_plan][:project_id])
+    @master_plan = @project.add_master_plan(params[:master_plan], current_user)
 
     respond_to do |format|
-      if @master_plan.save
-        format.html { redirect_to master_plan_path(@master_plan), notice: 'Master plan was successfully created.' }
-        format.json { render json: @master_plan, status: :created, location: @master_plan }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @master_plan.errors, status: :unprocessable_entity }
-      end
+      format.html { redirect_to client_project_master_plan_path(id: @master_plan, client_id: @master_plan.client_id, project_id: @master_plan.project_id), notice: 'Master Plan创建成功.' }
+      format.json { render json: @master_plan, status: :created, location: @master_plan }
     end
   end
 
@@ -235,10 +211,11 @@ class MasterPlansController < ApplicationController
   # DELETE /master_plans/1.json
   def destroy
     @master_plan = MasterPlan.find(params[:id])
-    @master_plan.destroy
+    @project = @master_plan.project
+    @project.remove_master_plan(@master_plan, current_user)
 
     respond_to do |format|
-      format.html { redirect_to master_plans_url }
+      format.html { redirect_to client_project_master_plan_path(id: @project.current_master_plan_id, project_id: @project.id, client_id: @project.client_id) }
       format.json { head :no_content }
     end
   end
@@ -251,8 +228,8 @@ class MasterPlansController < ApplicationController
       end
       @selected_medium_master_plan = @master_plan.medium_master_plans.first unless @selected_medium_master_plan
       @master_plan_items = MasterPlanItem.where(master_plan_id: @master_plan.id, medium_id: @selected_medium_master_plan.medium_id).order('is_on_house, created_at')
-      @working_version = params[:wv]
-      @working_version = @master_plan.working_version if params[:wv].nil?
+      @spot_plan_version = params[:version]
+      @spot_plan_version = @master_plan.spot_plan_version if params[:version].nil?
     end
 
     @months = @master_plan.project.months
@@ -277,18 +254,32 @@ class MasterPlansController < ApplicationController
   end
 
   def generate_spot_plan
+    @master_plan = MasterPlan.find params[:id]
+    @spot_plan_version = params[:version]
+    @spot_plan_version = @master_plan.spot_plan_version if params[:version].nil?
     if request.post?
-      file = Tida::Metis::ExcelGenerators::SpotPlans::CaratGenerator.new(params[:id]).generate()
+      file = Tida::Metis::ExcelGenerators::SpotPlans::CaratGenerator.new(params[:id]).generate(@spot_plan_version)
       send_file file, :type=>"application/vnd.ms-excel", :x_sendfile=>true
     end
   end
 
-  def save_spot_plan
+  def confirm_spot_plan
     @master_plan = MasterPlan.find(params[:id])
     if request.post?
-      @master_plan.save_version!
+      @master_plan.confirm!
       respond_to do |format|
-        format.html { redirect_to spot_plan_path(master_plan_id: @master_plan), notice: 'This version spot plan was successfully save.' }
+        format.html { redirect_to spot_plan_path(id: @master_plan.id, client_id: @master_plan.client_id, project_id: @master_plan.project_id), notice: '这个版本的排期表已被确认.' }
+      end
+    end
+  end
+
+  def clone_master_plan
+    @master_plan = MasterPlan.find params[:id]
+    if request.post?
+      @new_master_plan = @master_plan.project.clone_master_plan(@master_plan, current_user)
+
+      respond_to do |format|
+        format.html { redirect_to client_project_master_plan_path(id: @new_master_plan, project_id: @new_master_plan.project_id, client_id: @new_master_plan.client_id), notice: 'MasterPlan 已成功复制.' }
       end
     end
   end

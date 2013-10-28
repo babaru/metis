@@ -36,10 +36,13 @@ end %>
         <%= link_to icon_text('icon-star', '设为默认Master Plan'), set_current_master_plan_path(id: @master_plan.project_id, master_plan_id: @master_plan.id), method: :post %>
       </li>
       <li>
-        <%= link_to icon_text('icon-plus-sign', '新建Master Plan'), nil %>
+        <%= link_to icon_text('icon-copy', '克隆当前Master Plan'), clone_master_plan_path(@master_plan), method: :post %>
       </li>
       <li>
-        <%= link_to icon_text('icon-trash', '删除Master Plan'), nil %>
+        <%= link_to icon_text('icon-plus-sign', '新建Master Plan'), master_plans_path({master_plan: {project_id: @master_plan.project_id, client_id: @master_plan.client_id}}), method: :post %>
+      </li>
+      <li>
+        <%= link_to icon_text('icon-trash', '删除Master Plan'), master_plan_path(@master_plan), method: :delete, confirm: t('confirms.delete') %>
       </li>
     </ul>
   </div>

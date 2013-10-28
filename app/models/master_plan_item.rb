@@ -38,7 +38,7 @@ class MasterPlanItem < ActiveRecord::Base
     :original_company_discount, :reality_company_discount
 
   def reality_count(version = nil)
-    version = self.master_plan.working_version if version.nil?
+    version = self.master_plan.spot_plan_version if version.nil?
     result = MasterPlanItem.connection.select_all("select sum(count) as reality_count from spot_plan_items where version=#{version} and master_plan_item_id=#{self.id} and placed_at>='#{master_plan.project.started_at.utc.strftime('%Y-%m-%d %H:%M:%S')}' and placed_at<='#{master_plan.project.ended_at.utc.strftime('%Y-%m-%d %H:%M:%S')}'")
     return result[0]['reality_count'] if result.length > 0 && result[0]['reality_count']
     0
@@ -102,25 +102,26 @@ class MasterPlanItem < ActiveRecord::Base
     original_company_discount
   end
 
+  def position_name
+    return reality_spot_name if reality_spot_name
+    spot_name
+  end
+
   private
 
   def copy_useful_attributes
-    if self.new_record?
-      self.spot_name = self.spot.name if self.spot_id
-      self.reality_spot_name = self.spot.name if self.spot_id
-      self.unit_rate_card = self.spot.price if self.spot_id
-      self.unit_rate_card_unit = self.spot.unit if self.spot_id
-      self.unit_rate_card_unit_type = self.spot.unit_type if self.spot_id
-      self.master_plan_name = self.master_plan.name if self.master_plan_id
-      self.project_name = self.project.name if self.project_id
-      self.client_name = self.client.name if self.client_id
-      self.medium_name = self.spot.medium.name if self.spot_id
-      self.channel_name = self.spot.channel.name if self.spot_id
-      self.reality_medium_discount = self.spot.medium_discount(self.client_id) if self.spot_id
-      self.reality_company_discount = self.spot.company_discount(self.client_id) if self.spot_id
-      self.original_medium_discount = self.spot.medium_discount(self.client_id) if self.spot_id
-      self.original_company_discount = self.spot.company_discount(self.client_id) if self.spot_id
-    else
-    end
+    self.spot_name = self.spot.name unless self.spot_name
+    self.reality_spot_name = self.spot.name unless self.spot_name
+    self.unit_rate_card = self.spot.price unless self.unit_rate_card
+    self.unit_rate_card_unit = self.spot.unit unless self.unit_rate_card_unit
+    self.unit_rate_card_unit_type = self.spot.unit_type unless self.unit_rate_card_unit_type
+    self.material_format = self.spot.spec unless self.material_format
+    self.master_plan_name = self.master_plan.name unless master_plan_name
+    self.project_name = self.project.name unless project_name
+    self.client_name = self.client.name unless client_name
+    self.medium_name = self.spot.medium.name unless medium_name
+    self.channel_name = self.spot.channel.name unless channel_name
+    self.original_medium_discount = MediumPolicy.medium_discount(self.medium_id, self.client_id) unless original_medium_discount
+    self.original_company_discount = MediumPolicy.company_discount(self.medium_id, self.client_id) unless original_company_discount
   end
 end

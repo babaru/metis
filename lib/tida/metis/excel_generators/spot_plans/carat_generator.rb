@@ -19,7 +19,7 @@ module Tida
             @master_plan_id = master_plan_id
           end
 
-          def generate()
+          def generate(version)
             master_plan = MasterPlan.find self.master_plan_id
             ap = ::Axlsx::Package.new
 
@@ -216,7 +216,7 @@ module Tida
               fg_color: "FF0000"
             })
 
-            ap.workbook.add_worksheet name: master_plan.name do |sheet|
+            ap.workbook.add_worksheet name: 'Spot Plan' do |sheet|
 
               # Fill Global Header
 
@@ -386,9 +386,9 @@ module Tida
               master_plan.medium_master_plans.each do |medium_master_plan|
                 medium_master_plan.master_plan_items.order('is_on_house').each do |item|
                   if item.is_on_house?
-                    row = fill_data_row(sheet, item, months, days, center_cell, on_house_left_cell, on_house_center_cell, currency_on_house_cell, number_on_house_cell, old_cell)
+                    row = fill_data_row(sheet, item, months, days, center_cell, on_house_left_cell, on_house_center_cell, currency_on_house_cell, number_on_house_cell, old_cell, version)
                   else
-                    row = fill_data_row(sheet, item, months, days, center_cell, left_cell, center_cell, currency_cell, number_cell, old_cell)
+                    row = fill_data_row(sheet, item, months, days, center_cell, left_cell, center_cell, currency_cell, number_cell, old_cell, version)
                   end
                 end
                 sheet.merge_cells("#{get_column_name(2)}#{start_index}:#{get_column_name(2)}#{row.index + 1}")
@@ -462,12 +462,12 @@ module Tida
             row
           end
 
-          def fill_data_row(sheet, master_plan_item, months, days, medium_name_cell, left_cell, center_cell, currency_cell, number_cell, old_cell)
-            spot_plan_item_cells, spot_plan_item_cells_styles = get_spot_plan_item_cells(master_plan_item, months, days, center_cell, old_cell)
+          def fill_data_row(sheet, master_plan_item, months, days, medium_name_cell, left_cell, center_cell, currency_cell, number_cell, old_cell, version)
+            spot_plan_item_cells, spot_plan_item_cells_styles = get_spot_plan_item_cells(master_plan_item, months, days, center_cell, old_cell, version)
             sheet.add_row([nil, '网站',
               master_plan_item.medium_name,
               master_plan_item.channel_name,
-              master_plan_item.spot_name,
+              master_plan_item.position_name,
               master_plan_item.material_format,
               Array.new(4, nil),
               master_plan_item.est_imp,
@@ -488,14 +488,14 @@ module Tida
                 Array.new(6, center_cell), currency_cell, center_cell, currency_cell, currency_cell, spot_plan_item_cells_styles].flatten)
           end
 
-          def get_spot_plan_item_cells(master_plan_item, months, days, normal_style, old_cell_style)
+          def get_spot_plan_item_cells(master_plan_item, months, days, normal_style, old_cell_style, version)
             cells = []
             styles = []
             months.each_with_index do |month, m_index|
               key = "#{month[:year]}#{sprintf('%02d', month[:month])}"
               days[key].each_with_index do |day, index|
                 if day && day > 0
-                  spi = SpotPlanItem.in_version(master_plan_item.id, master_plan_item.master_plan.working_version).where(placed_at: Time.parse("#{month[:year]}-#{sprintf('%02d', month[:month])}-#{sprintf('%02d', index + 1)}")).first
+                  spi = SpotPlanItem.in_version(master_plan_item.id, version).where(placed_at: Time.parse("#{month[:year]}-#{sprintf('%02d', month[:month])}-#{sprintf('%02d', index + 1)}")).first
                   if spi
                     if spi.new_spot_plan_item_id
                       cells << nil
