@@ -52,7 +52,7 @@ end %>
       remote: true,
       class: 'button button-inverse'
     }
-  } if @pool.count > 0
+  }
  end %>
 
 <div class='cart-panel' style="padding: 15px; padding-top: 10px; padding-bottom: 10px; margin: 0px;">
@@ -63,7 +63,7 @@ end %>
   <div class="grid-row">
     <div class="cell6"></div>
     <div class="cell6" style="padding-right:15px; padding-bottom: 15px;">
-      <%= link_to icon_text('icon-save', '保存点位到Master Plan'), save_candidates_to_master_plan_path(@master_plan), class: 'button button-success pull-right', method: :post if @pool.count > 0 %>
+      <%= link_to icon_text('icon-save', '保存点位到Master Plan'), save_candidates_to_master_plan_path(@master_plan), class: 'button button-success pull-right', method: :post %>
     </div>
   </div>
 </div>
