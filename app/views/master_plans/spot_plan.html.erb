@@ -1,4 +1,4 @@
-<%= render_page_title "<strong>#{@master_plan.project.client.name}</strong> #{@master_plan.project.name}: #{@master_plan.name}" do |toolbar|
+<%= render_page_title "<strong>#{@master_plan.project.client.name}</strong> #{@master_plan.project.name}" do |toolbar|
   toolbar << {
     name: icon_text('icon-chevron-left', 'Master Plan'),
     url: client_project_master_plan_path(id: @master_plan, medium_id: @selected_medium_master_plan.medium_id),
@@ -6,6 +6,12 @@
   }
 
 end %>
+
+<div class="padding">
+  <div class="panel">
+    Master Plan: <%= @master_plan.name %>
+  </div>
+</div>
 
 <%= render partial: 'master_plan_summary' %>
 
