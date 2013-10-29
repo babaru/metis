@@ -13,7 +13,6 @@ class MasterPlansController < ApplicationController
   # GET /master_plans/1
   # GET /master_plans/1.json
   def show
-    logger.debug "SESSION: #{session[:spot_picker]}"
     @master_plan = MasterPlan.find(params[:id])
 
     if @master_plan.medium_master_plans.count > 0

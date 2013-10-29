@@ -1,6 +1,6 @@
 default_run_options[:pty] = true
 set :application, "Metis.Tida"
-set :repository,  "git@gitcafe.com:babaru/metis.git"
+set :repository,  "git@github.com:babaru/metis.git"
 set :domain, "112.124.62.108"
 
 set :rvm_ruby_string, '2.0.0-head'

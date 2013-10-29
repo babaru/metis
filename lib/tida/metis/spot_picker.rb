@@ -67,8 +67,6 @@ module Tida
 
           @spots_query_clause = where_clause.join(' and ')
         end
-
-        Rails.logger.debug "Session: #{session[:spot_picker]}"
       end
     end
   end

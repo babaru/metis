@@ -1,7 +1,7 @@
 <%= render_page_title "<strong>#{@master_plan.project.client.name}</strong> #{@master_plan.project.name}" do |toolbar|
   toolbar << {
     name: icon_text('icon-chevron-left', '挑选点位'),
-    url: choose_spots_path(@master_plan, session[:spot_picker]),
+    url: choose_spots_path({id: @master_plan.id, client_id: @master_plan.client_id, project_id: @master_plan.project_id}.merge(session[:spot_picker])),
     options: {class: 'button button-warning'}
   }
 

@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   layout :layout_by_resource
+  before_filter :initialize_sessions
 
   protected
 
@@ -11,5 +12,9 @@ class ApplicationController < ActionController::Base
     else
       "application"
     end
+  end
+
+  def initialize_sessions
+    session[:spot_picker] = {} unless session[:spot_picker]
   end
 end
