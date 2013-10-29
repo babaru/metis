@@ -4,8 +4,8 @@ $(document).ready(function() {
         // fadeSpeed: 100,
         // filter: function($obj) {},
         // above: 'auto',
-        preventDoubleContext: false
-        // compress: false
+        preventDoubleContext: false,
+        compress: false
     });
 
     MasterPlanItem = Backbone.Model.extend({
@@ -42,24 +42,29 @@ $(document).ready(function() {
     MasterPlan = Backbone.Model.extend({urlRoot: '/master_plans'});
     var master_plan = new MasterPlan({id: $('#master-plan-id-value').text()});
     var spot_plan_version = $('#spot-plan-version-value').text();
+    var selected_year = $('#selected-year-value').text();
+    var selected_month = $('#selected-month-value').text();
+    var medium_id = $('#selected-medium-id-value').text();
     var all_spot_plan_items = new SpotPlanItems();
     master_plan.fetch({
         success: function() {
-            var master_plan_items = new MasterPlanItems(null, {url: '/master_plan_items.json?master_plan_id=' + master_plan.get('id') + '&medium_id=' + $('#selected-medium-id-value').text()});
+            console.log('fetch master plan: ' + master_plan.get('id'));
+            var master_plan_items = new MasterPlanItems(null, {url: '/master_plan_items.json?master_plan_id=' + master_plan.get('id') + '&medium_id=' + medium_id});
             master_plan_items.fetch({
                 success: function() {
-
+                    console.log('fetch master plan items');
                     _.each(master_plan_items.models, function(model) {
+                        console.log('fetch master plan item: ' + model.get('id'));
                         var view = new MasterPlanItemView({model: model});
                         view.render();
 
-                        var spot_plan_items = new SpotPlanItems(null, {url: '/spot_plan_items.json?master_plan_item_id=' + model.get('id') + '&version=' + spot_plan_version});
+                        var spot_plan_items = new SpotPlanItems(null, {url: '/spot_plan_items.json?master_plan_item_id=' + model.get('id') + '&version=' + spot_plan_version + '&m=' + selected_month + '&y=' + selected_year});
                         spot_plan_items.fetch({
                             success: function() {
                                 model.setSpotPlanItems(spot_plan_items);
                                 _.each(spot_plan_items.models, function(s_model) {
                                     s_model.setMasterPlanItem(model);
-                                    s_model.on('change', function() { model.fetch(); }, model);
+                                    s_model.listenTo(model, 'change', function() { model.fetch(); });
                                     var spot_plan_item_view = new SpotPlanItemView({model: s_model});
                                     spot_plan_item_view.render();
                                 });
@@ -71,7 +76,7 @@ $(document).ready(function() {
                                             new_spot_plan_item.setMasterPlanItem(model);
                                             var spot_plan_item_view = new SpotPlanItemView({model: new_spot_plan_item});
                                             spot_plan_item_view.render();
-                                            new_spot_plan_item.on('change', function() { model.fetch(); }, model);
+                                            new_spot_plan_item.listenTo(model, 'change', function() { model.fetch(); });
                                             model.getSpotPlanItems().push(new_spot_plan_item);
                                             model.fetch();
                                         }
@@ -87,11 +92,11 @@ $(document).ready(function() {
 
     MasterPlanItemView = Backbone.View.extend({
         initialize: function() {
-            this.model.on('change', this.render, this);
+            this.listenTo(this.model, 'change', this.render);
         },
         render: function() {
+            console.log('render master plan item view: ' + this.model.get('id'));
             $('#master-plan-item' + this.model.get('id') + ' .reality_count').text(this.model.get('reality_count'));
-
             if (this.model.get('ideal_count') < this.model.get('reality_count')) {
                 $('#master-plan-item' + this.model.get('id') + ' .reality_count').removeClass('warning').addClass('warning');
             } else {
@@ -105,9 +110,10 @@ $(document).ready(function() {
         tagName: 'span',
         template: _.template('<span><%= count %></span>'),
         initialize: function() {
-            this.model.on('change', this.render, this);
+            this.listenTo(this.model, 'change', this.render);
         },
         render: function() {
+            console.log('render spot plan item view: ' + this.model.get('id'));
             var m = this.model;
             var v = this.$el;
             var that = this;
@@ -146,7 +152,7 @@ $(document).ready(function() {
                                     spi.setMasterPlanItem(m.getMasterPlanItem());
                                     var spot_plan_item_view = new SpotPlanItemView({model: spi});
                                     spot_plan_item_view.render();
-                                    spi.on('change', function() { m.getMasterPlanItem().fetch(); }, m.getMasterPlanItem());
+                                    spi.listenTo(m.getMasterPlanItem(), 'change', function() { m.getMasterPlanItem().fetch(); });
                                     m.getMasterPlanItem().getSpotPlanItems().push(spi);
                                 }
                             });

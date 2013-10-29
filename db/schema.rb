@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131028060545) do
+ActiveRecord::Schema.define(:version => 20131029022918) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -281,27 +281,15 @@ ActiveRecord::Schema.define(:version => 20131028060545) do
     t.integer  "master_plan_item_id"
     t.datetime "placed_at"
     t.integer  "count"
-    t.boolean  "is_enabled"
-    t.integer  "created_by_id"
     t.datetime "created_at",                           :null => false
     t.datetime "updated_at",                           :null => false
     t.integer  "version",               :default => 0
     t.integer  "new_spot_plan_item_id"
-    t.integer  "client_id"
-    t.integer  "project_id"
-    t.integer  "spot_id"
-    t.integer  "master_plan_id"
-    t.integer  "channel_id"
     t.string   "date_id"
-    t.integer  "medium_id"
   end
 
-  add_index "spot_plan_items", ["channel_id"], :name => "index_spot_plan_items_on_channel_id"
-  add_index "spot_plan_items", ["client_id"], :name => "index_spot_plan_items_on_client_id"
-  add_index "spot_plan_items", ["master_plan_id"], :name => "index_spot_plan_items_on_master_plan_id"
-  add_index "spot_plan_items", ["medium_id"], :name => "index_spot_plan_items_on_medium_id"
-  add_index "spot_plan_items", ["project_id"], :name => "index_spot_plan_items_on_project_id"
-  add_index "spot_plan_items", ["spot_id"], :name => "index_spot_plan_items_on_spot_id"
+  add_index "spot_plan_items", ["master_plan_item_id"], :name => "index_spot_plan_items_on_master_plan_item_id"
+  add_index "spot_plan_items", ["new_spot_plan_item_id"], :name => "index_spot_plan_items_on_new_spot_plan_item_id"
 
   create_table "spots", :force => true do |t|
     t.integer  "channel_id"

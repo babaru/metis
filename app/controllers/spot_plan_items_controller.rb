@@ -5,7 +5,9 @@ class SpotPlanItemsController < ApplicationController
     @master_plan_item = MasterPlanItem.find params[:master_plan_item_id]
     @spot_plan_version = params[:version]
     @spot_plan_version = @master_plan_item.master_plan.spot_plan_version if params[:version].nil?
-    @spot_plan_items = SpotPlanItem.where(master_plan_item_id: params[:master_plan_item_id], version: @spot_plan_version).order('placed_at')
+    @selected_month = params[:m]
+    @selected_year = params[:y]
+    @spot_plan_items = SpotPlanItem.where(master_plan_item_id: params[:master_plan_item_id], version: @spot_plan_version, placed_at: [Time.parse("#{@selected_year}-#{@selected_month}-01")..Time.parse("#{@selected_year}-#{@selected_month.to_i + 1}-01")]).order('placed_at')
 
     respond_to do |format|
       format.html # index.html.erb
@@ -51,8 +53,8 @@ class SpotPlanItemsController < ApplicationController
 
     SpotPlanItem.transaction do
       @spot_plan_item = SpotPlanItem.create_by_data!(data)
-      @spot_plan_item.master_plan.is_dirty = true
-      @spot_plan_item.master_plan.save!
+      @spot_plan_item.master_plan_item.master_plan.is_dirty = true
+      @spot_plan_item.master_plan_item.master_plan.save!
     end
 
     respond_to do |format|
@@ -67,8 +69,8 @@ class SpotPlanItemsController < ApplicationController
 
     SpotPlanItem.transaction do
       @spot_plan_item.update_attributes!(params[:spot_plan_item])
-      @spot_plan_item.master_plan.is_dirty = true
-      @spot_plan_item.master_plan.save!
+      @spot_plan_item.master_plan_item.master_plan.is_dirty = true
+      @spot_plan_item.master_plan_item.master_plan.save!
       respond_to do |format|
         format.html { redirect_to spot_plan_item_path(@spot_plan_item), notice: 'Spot plan item was successfully updated.' }
         format.json { head :no_content }
@@ -94,8 +96,8 @@ class SpotPlanItemsController < ApplicationController
       SpotPlanItem.transaction do
         new_placed_at = params[:spot_plan_item][:placed_at]
         @new_spot_plan_item = @spot_plan_item.change_placed_at!(Time.parse(new_placed_at))
-        @spot_plan_item.master_plan.is_dirty = true
-        @spot_plan_item.master_plan.save!
+        @spot_plan_item.master_plan_item.master_plan.is_dirty = true
+        @spot_plan_item.master_plan_item.master_plan.save!
         respond_to do |format|
           format.json { render json: @new_spot_plan_item }
         end
