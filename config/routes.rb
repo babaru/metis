@@ -46,7 +46,9 @@ Metis::Application.routes.draw do
 
   # get 'spots/apps' => 'spots#apps'
 
-  resources :media, :channels, :spots, :channel_groups, :spot_categories, :master_plans, :master_plan_items, :spot_plan_items, :medium_policies
+  resources :media, :channels, :spots, :channel_groups, :spot_categories,
+    :master_plans, :master_plan_items, :spot_plan_items, :medium_policies,
+    :medium_master_plans
 
   resources :shopping_cart_items
 

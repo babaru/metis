@@ -73,6 +73,19 @@ class MediumMasterPlan < ActiveRecord::Base
     false
   end
 
+  def as_json(options={})
+    item = super(options)
+    item[:bonus_ratio] = self.bonus_ratio
+    item[:medium_net_cost] = self.medium_net_cost
+    item[:company_net_cost] = self.company_net_cost
+    item[:profit] = self.profit
+    item[:medium_discount] = self.medium_discount
+    item[:company_discount] = self.company_discount
+    item[:medium_bonus_ratio] = MediumPolicy.medium_bonus_ratio(self.medium_id, self.master_plan.client_id)
+    item[:company_bonus_ratio] = MediumPolicy.company_bonus_ratio(self.medium_id, self.master_plan.client_id)
+    item
+  end
+
   private
 
   def copy_name_attributes

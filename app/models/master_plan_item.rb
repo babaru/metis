@@ -46,14 +46,10 @@ class MasterPlanItem < ActiveRecord::Base
 
   def as_json(options={})
     item = super(options)
-    item['medium_name'] = self.medium_name
-    item['channel_name'] = self.channel_name
-    item['spot_name'] = self.spot_name
-    item['reality_spot_name'] = self.reality_spot_name
     item['ideal_count'] = self.count
     item['reality_count'] = self.reality_count
-    item['est_total_imp'] = self.est_total_imp
-    item['est_total_clicks'] = self.est_total_clicks
+    item['medium_net_cost'] = self.medium_net_cost
+    item['company_net_cost'] = self.company_net_cost
     item
   end
 

@@ -6,9 +6,9 @@ module Tida
               :sp_selected_medium_id,
               spot_picker.selected_medium.name,
               {
-                sp_selected_spot_category_id: spot_picker.selected_spot_category.nil? ? nil : spot_picker.selected_spot_category.id,
-                sp_selected_channel_id: spot_picker.selected_channel.nil? ? nil : spot_picker.selected_channel.id,
-                sp_selected_unit_type: spot_picker.selected_unit_type.nil? ? nil : spot_picker.selected_unit_type
+                sp_selected_spot_category_id: nil,
+                sp_selected_channel_id: nil,
+                sp_selected_unit_type: nil
               }
             ) if spot_picker.selected_medium
       end
@@ -50,6 +50,11 @@ module Tida
       end
 
       def spot_picker_selected_items(key_name, link_name, opt)
+        params.delete(:sp_selected_medium_id)
+        params.delete(:sp_selected_channel_id)
+        params.delete(:sp_selected_spot_category_id)
+        params.delete(:sp_selected_unit_type)
+
         options = {}
         options = params.merge options
         opt.map {|k, v| options[k] = v if v}

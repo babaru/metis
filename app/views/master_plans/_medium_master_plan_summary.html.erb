@@ -1,5 +1,5 @@
 <div class="padding">
-  <table class="plan-summary">
+  <table class="plan-summary" id="medium-master-plan-summary">
     <tr>
       <th style="width:25%;">合同额(<%= @selected_medium_master_plan.medium_name %>-公司)</th>
       <th>折扣(<%= @selected_medium_master_plan.medium_name %>-公司)</th>
@@ -10,11 +10,11 @@
       <td>
         <div class="label-group master-plan-value-group">
           <span class="item medium">
-            <%= number_with_precision(@selected_medium_master_plan.medium_net_cost, precision: 0) unless @selected_medium_master_plan.is_combo? %>
+            <%= content_tag(:span, number_with_precision(@selected_medium_master_plan.medium_net_cost, precision: 0), class: 'medium-net-cost') unless @selected_medium_master_plan.is_combo? %>
             <%= link_to(
               number_with_precision(@selected_medium_master_plan.medium_net_cost, precision: 0),
               '#',
-              class: 'inline-editable-field medium value',
+              class: 'inline-editable-field medium value medium-net-cost',
               'data-type' => 'text',
               'data-pk' => @selected_medium_master_plan.id,
               'data-name' => 'reality_medium_net_cost',
@@ -24,11 +24,11 @@
             ) if @selected_medium_master_plan.is_combo? %>
           </span>
           <span class="item company">
-            <%= number_with_precision(@selected_medium_master_plan.company_net_cost, precision: 0) unless @selected_medium_master_plan.is_combo? %>
+            <%= content_tag(:span, number_with_precision(@selected_medium_master_plan.company_net_cost, precision: 0), class: 'company-net-cost') unless @selected_medium_master_plan.is_combo? %>
             <%= link_to(
               number_with_precision(@selected_medium_master_plan.company_net_cost, precision: 0),
               '#',
-              class: 'inline-editable-field company value',
+              class: 'inline-editable-field company value company-net-cost',
               'data-type' => 'text',
               'data-pk' => @selected_medium_master_plan.id,
               'data-name' => 'reality_company_net_cost',
@@ -42,11 +42,11 @@
       <td>
         <div class="label-group master-plan-value-group">
           <span class="item medium">
-            <%= number_with_precision(@selected_medium_master_plan.medium_discount, precision: 2) unless @selected_medium_master_plan.is_combo? %>
+            <%= content_tag(:span, number_with_precision(@selected_medium_master_plan.medium_discount, precision: 2), class: 'medium-discount') unless @selected_medium_master_plan.is_combo? %>
             <%= link_to(
               number_with_precision(@selected_medium_master_plan.medium_discount, precision: 2),
               '#',
-              class: 'inline-editable-field medium value',
+              class: 'inline-editable-field medium value medium-discount',
               'data-type' => 'text',
               'data-pk' => @selected_medium_master_plan.id,
               'data-name' => 'reality_medium_discount',
@@ -56,11 +56,11 @@
             ) if @selected_medium_master_plan.is_combo? %>
           </span>
           <span class="item company">
-            <%= number_with_precision(@selected_medium_master_plan.company_discount, precision: 2) unless @selected_medium_master_plan.is_combo? %>
+            <%= content_tag(:span, number_with_precision(@selected_medium_master_plan.company_discount, precision: 2), class: 'company-discount') unless @selected_medium_master_plan.is_combo? %>
             <%= link_to(
               number_with_precision(@selected_medium_master_plan.company_discount, precision: 2),
               '#',
-              class: 'inline-editable-field company value',
+              class: 'inline-editable-field company value company-discount',
               'data-type' => 'text',
               'data-pk' => @selected_medium_master_plan.id,
               'data-name' => 'reality_company_discount',
@@ -70,15 +70,16 @@
             ) if @selected_medium_master_plan.is_combo? %></span>
         </div>
       </td>
-      <td><strong><%= number_to_currency(@selected_medium_master_plan.profit, unit: '￥', precision: 0) %></strong></td>
+      <td><%= content_tag(:span, number_to_currency(@selected_medium_master_plan.profit, unit: '￥', precision: 0), class: 'profit') %></td>
       <td>
         <div class="label-group master-plan-value-group">
-          <span class="item reality"><%= @selected_medium_master_plan.bonus_ratio %></span>
-          <span class="item medium"><%= MediumPolicy.medium_bonus_ratio(@selected_medium_master_plan.medium_id, @master_plan.client_id) %></span>
-          <span class="item company"><%= MediumPolicy.company_bonus_ratio(@selected_medium_master_plan.medium_id, @master_plan.client_id) %></span>
+          <span class="item reality bonus-ratio"><%= @selected_medium_master_plan.bonus_ratio %></span>
+          <span class="item medium medium-bonus-ratio"><%= MediumPolicy.medium_bonus_ratio(@selected_medium_master_plan.medium_id, @master_plan.client_id) %></span>
+          <span class="item company company-bonus-ratio"><%= MediumPolicy.company_bonus_ratio(@selected_medium_master_plan.medium_id, @master_plan.client_id) %></span>
         </div>
       </td>
     </tr>
   </table>
 </div>
 
+<%= content_tag :span, @selected_medium_master_plan.id, class: 'hide', id: 'medium-master-plan-id-value' %>

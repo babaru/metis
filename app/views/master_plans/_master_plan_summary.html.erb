@@ -6,7 +6,7 @@
       <th style="width:25%;">预估利润</th>
     </tr>
     <tr>
-      <td><span class="project-budget"><strong><%= number_to_currency(@master_plan.project.budget, unit: '￥', precision: 0) %></strong></span></td>
+      <td><span class="project-budget"><%= number_to_currency(@master_plan.project.budget, unit: '￥', precision: 0) %></span></td>
       <td>
         <div class="label-group master-plan-value-group">
           <span class="item medium medium-net-cost">
@@ -17,7 +17,8 @@
           </span>
         </div>
       </td>
-      <td><span class="profit"><strong><%= number_to_currency(@master_plan.profit, unit: '￥', precision: 0) %></strong></span></td>
+      <td><span class="profit"><%= number_to_currency(@master_plan.profit, unit: '￥', precision: 0) %></span></td>
     </tr>
   </table>
 </div>
+<%= content_tag :span, @master_plan.id, class: 'hide', id: 'master-plan-id-value' %>

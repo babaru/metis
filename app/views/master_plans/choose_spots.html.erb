@@ -4,12 +4,6 @@
     url: client_project_master_plan_path(@master_plan),
     options: {class: 'button button-primary'}
   }
-
-  toolbar << {
-    name: "#{t('labels.back_to')}#{@master_plan.project.name}#{t('model.show', :model => Project.model_name.human)}",
-    url: project_path(@master_plan.project_id),
-    options: {class: 'button'}
-  }
 end %>
 
 <div class="padding">
@@ -50,7 +44,8 @@ end %>
     options: {
       method: :post,
       remote: true,
-      class: 'button button-inverse'
+      class: 'button button-inverse clear-candidate-button',
+      style: @pool.count > 0 ? '': 'display:none;'
     }
   }
  end %>
@@ -63,7 +58,12 @@ end %>
   <div class="grid-row">
     <div class="cell6"></div>
     <div class="cell6" style="padding-right:15px; padding-bottom: 15px;">
-      <%= link_to icon_text('icon-save', '保存点位到Master Plan'), save_candidates_to_master_plan_path(@master_plan), class: 'button button-success pull-right', method: :post %>
+      <%= link_to(
+            icon_text('icon-save', '保存点位到Master Plan'),
+            save_candidates_to_master_plan_path(@master_plan),
+            class: 'button button-success pull-right save-candidate-button',
+            method: :post,
+            style: @pool.count > 0 ? '': 'display:none;') %>
     </div>
   </div>
 </div>

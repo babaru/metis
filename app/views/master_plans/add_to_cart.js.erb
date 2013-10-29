@@ -2,6 +2,14 @@ $('.spot-day-count-text-field').val(null);
 $(':checkbox').removeAttr('checked');
 $('.cart-panel').html('<%= escape_javascript(render partial: 'cart') %>');
 
+<% if @pool.count > 0 %>
+$('.clear-candidate-button').show();
+$('.save-candidate-button').show();
+<% else %>
+$('.clear-candidate-button').hide();
+$('.save-candidate-button').hide();
+<% end %>
+
 $('html,body').animate({
   scrollTop: $('.cart-panel').offset().top
 }, 1000);

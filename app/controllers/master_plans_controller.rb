@@ -13,6 +13,7 @@ class MasterPlansController < ApplicationController
   # GET /master_plans/1
   # GET /master_plans/1.json
   def show
+    logger.debug "SESSION: #{session[:spot_picker]}"
     @master_plan = MasterPlan.find(params[:id])
 
     if @master_plan.medium_master_plans.count > 0
@@ -20,7 +21,9 @@ class MasterPlansController < ApplicationController
         @selected_medium_master_plan = @master_plan.medium_master_plans.where(medium_id: params[:medium_id]).first
       end
       @selected_medium_master_plan = @master_plan.medium_master_plans.first unless @selected_medium_master_plan
-      @master_plan_items_grid = initialize_grid(MasterPlanItem.where("master_plan_id=#{@master_plan.id} and medium_id=#{@selected_medium_master_plan.medium_id}").order('is_on_house, created_at'))
+      @master_plan_items_grid = initialize_grid(
+        MasterPlanItem.where("master_plan_id=#{@master_plan.id} and medium_id=#{@selected_medium_master_plan.medium_id}").order('is_on_house, created_at'),
+        name: 'medium_master_plan_items_grid')
     end
 
     respond_to do |format|
@@ -33,7 +36,7 @@ class MasterPlansController < ApplicationController
     @master_plan = MasterPlan.find(params[:id])
     @pool = Tida::Metis::SpotCandidate::Pool.new session
     @media = Medium.all
-    @spot_picker = Tida::Metis::SpotPicker.new params
+    @spot_picker = Tida::Metis::SpotPicker.new params, session
     @spots_grid = initialize_grid(Spot.where(@spot_picker.spots_query_clause), name: 'spot_candidates_grid') if @spot_picker.selected_medium
 
     respond_to do |format|
