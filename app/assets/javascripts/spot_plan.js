@@ -64,21 +64,28 @@ $(document).ready(function() {
                                 model.setSpotPlanItems(spot_plan_items);
                                 _.each(spot_plan_items.models, function(s_model) {
                                     s_model.setMasterPlanItem(model);
-                                    s_model.listenTo(model, 'change', function() { model.fetch(); });
+                                    s_model.on('change', function() { model.fetch(); }, model);
                                     var spot_plan_item_view = new SpotPlanItemView({model: s_model});
                                     spot_plan_item_view.render();
                                 });
 
                                 $('#master-plan-item' + model.get('id') + ' .empty-spot-plan-item').unbind('click').click(function() {
+                                    console.log(this);
+                                    $(this).text(1).parent().css('background-color', 'yellow');
+                                    var v = $(this).parent();
                                     var new_spot_plan_item = new SpotPlanItem({master_plan_item_id: model.get('id'), count: 1, placed_at: $(this).data('placed-at'), master_plan_item_id: model.get('id'), version: spot_plan_version});
                                     new_spot_plan_item.save(null, {
                                         success: function() {
                                             new_spot_plan_item.setMasterPlanItem(model);
                                             var spot_plan_item_view = new SpotPlanItemView({model: new_spot_plan_item});
                                             spot_plan_item_view.render();
-                                            new_spot_plan_item.listenTo(model, 'change', function() { model.fetch(); });
+                                            new_spot_plan_item.on('change', function() { model.fetch(); }, model);
                                             model.getSpotPlanItems().push(new_spot_plan_item);
-                                            model.fetch();
+                                            model.fetch({
+                                                success: function() {
+                                                    v.animate({'background-color': 'transparent'}, 500);
+                                                }
+                                            });
                                         }
                                     });
                                 });
@@ -108,15 +115,32 @@ $(document).ready(function() {
 
     SpotPlanItemView = Backbone.View.extend({
         tagName: 'span',
-        template: _.template('<span><%= count %></span>'),
+        template: _.template('<span class="count-value"><%= count %></span>'),
         initialize: function() {
-            this.listenTo(this.model, 'change', this.render);
+            this.on('change', this.render, this.model);
         },
+
+        events: {
+            'click': 'clickSpotPlanItem'
+        },
+
+        clickSpotPlanItem: function(e) {
+            var cell = $('#master-plan-item' + this.model.get('master_plan_item_id') + ' .spot-plan-item-cell' + this.model.get('date_token'));
+            $('.count-value', this.$el).text(this.model.get('count') + 1);
+            cell.css('background-color', 'yellow');
+            this.model.save('count', this.model.get('count') + 1, {
+                success: function() {
+                    cell.animate({'background-color': 'transparent'}, 500);
+                }
+            });
+        },
+
         render: function() {
             console.log('render spot plan item view: ' + this.model.get('id'));
             var m = this.model;
             var v = this.$el;
             var that = this;
+            var cell = $('#master-plan-item' + this.model.get('master_plan_item_id') + ' .spot-plan-item-cell' + this.model.get('date_token'));
             this.$el.html(this.template(this.model.attributes));
             this.$el.addClass('spot-plan-item');
             this.$el.attr('id', 'spot_plan_item_' + this.model.get('id'));
@@ -127,12 +151,7 @@ $(document).ready(function() {
                 this.$el.find('span').addClass('old_cell').text('');
             }
 
-            var cell = $('#master-plan-item' + this.model.get('master_plan_item_id') + ' .spot-plan-item-cell' + this.model.get('date_token'));
             cell.html(this.el);
-
-            this.$el.unbind('click').click(function() {
-                handleClickSpotPlanItem(m);
-            });
 
             context.attach('#spot_plan_item_' + this.model.get('id'), [
             {
@@ -152,7 +171,7 @@ $(document).ready(function() {
                                     spi.setMasterPlanItem(m.getMasterPlanItem());
                                     var spot_plan_item_view = new SpotPlanItemView({model: spi});
                                     spot_plan_item_view.render();
-                                    spi.listenTo(m.getMasterPlanItem(), 'change', function() { m.getMasterPlanItem().fetch(); });
+                                    spi.on('change', function() { m.getMasterPlanItem().fetch(); }, m.getMasterPlanItem());
                                     m.getMasterPlanItem().getSpotPlanItems().push(spi);
                                 }
                             });
@@ -170,8 +189,11 @@ $(document).ready(function() {
                     $('#spot_plan_item_count').val(m.get('count'));
                     $('#spot-plan-item-modify-count-modal form').attr('action', '/spot_plan_items/' + m.get('id') + '.json');
                     $('#spot-plan-item-modify-count-modal').off('ajax:success').on('ajax:success', function(data) {
-                        $('#spot-plan-item-modify-count-modal').modal('hide');
-                        m.fetch();
+                        m.fetch({
+                            success: function() {
+                                $('#spot-plan-item-modify-count-modal').modal('hide');
+                            }
+                        });
                     })
                     $('#spot-plan-item-modify-count-modal').modal();
                 }
@@ -202,10 +224,6 @@ $(document).ready(function() {
         }
     })
 });
-
-function handleClickSpotPlanItem(spot_plan_item) {
-    spot_plan_item.save('count', spot_plan_item.get('count') + 1);
-}
 
 function bindEmptySpotPlanItemCellEvent(model, placed_at, date_token) {
     $('#master-plan-item' + model.get('id') + ' .spot-plan-item-cell' + date_token + ' .empty-spot-plan-item').unbind('click').click(function() {
