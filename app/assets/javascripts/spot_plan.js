@@ -205,6 +205,7 @@ $(document).ready(function() {
                     var master_plan_item_id = m.get('master_plan_item_id');
                     var placed_at = m.get('placed_at');
                     var date_token = m.get('date_token');
+                    v.html('').css('background-color', 'yellow');
                     m.destroy({
                         success: function(model, response) {
                             var master_plan_item = new MasterPlanItem({id: master_plan_item_id});
@@ -213,6 +214,8 @@ $(document).ready(function() {
                                     var master_plan_item_view = new MasterPlanItemView({model: master_plan_item});
                                     master_plan_item_view.render();
                                     resetSpotPlanItemCell(master_plan_item, placed_at, date_token);
+
+                                    v.animate({'background-color': 'transparent'}, 500);
                                 }
                             });
                         }
