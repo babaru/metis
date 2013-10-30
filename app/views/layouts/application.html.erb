@@ -9,8 +9,45 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <div id="main-container">
     <header>
+      <nav class="navbar navbar-fixed-top" role="navigation">
+
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"><span><%= Settings.app.name %></span></a>
+        </div>
+
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+          <%= render_navigation renderer: :global_menu, expand_all: true %>
+
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">欢迎，乔文婷 <%= fa_icon 'caret-down' %></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li><a href="#">Separated link</a></li>
+                <li role="presentation" class="divider"></li>
+                <li class="dropdown">
+                  <a href="#">More Actions <%= fa_icon 'angle-right caret' %></a>
+                  <ul class="dropdown-menu right">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li><a href="#">Separated link</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </nav>
       <div id="logo" class="pull-left"></div>
       <ul id="user-menu-panel" class="pull-right clearfix">
         <%- if user_signed_in? %>
@@ -32,28 +69,16 @@
         <% end -%>
       </ul>
     </header>
-    <div id="main-content">
-      <%= render_navigation renderer: :navigation_bar, expand_all: true %>
-      <div id="main" class="clearfix">
 
-        <div class="content">
-          <%= render partial: 'shared/components/notification' %>
-          <%= yield %>
-        </div>
+      <div id="main">
+        <%= render partial: 'shared/components/notification' %>
+        <%= yield %>
       </div>
-    </div>
 
     <footer>
       <span class="copyright">tida &copy; 2013 All Rights Reserved.</span>
     </footer>
-  </div>
 
-  <div id="pjax-loading-dialog" class="modal hide fade in pjax-loading-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-body">
-      <%= image_tag 'ajax-loader.gif' %> <p>正在载入，请稍等...</p>
-    </div>
-  </div>
-  <%= yield :anything_else %>
   <%= stylesheet_link_tag "retina", :media => "all" %>
 </body>
 </html>

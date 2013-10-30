@@ -21,11 +21,11 @@ end
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
-  gem 'bootstrap-sass', '~> 2.3.2.1'
-  gem 'font-awesome-rails', '~> 3.2.1.3'
+  gem 'bootstrap-sass', '~> 3.0.0.0.rc'
+
   gem 'bootstrap-datetimepicker-rails'
   gem 'bootstrap-x-editable-rails'
-  gem "pjax_rails"
+  # gem "pjax_rails"
   gem 'backbone-rails'
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem 'therubyracer', :platforms => :ruby
@@ -33,8 +33,10 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
+gem 'font-awesome-rails', '~> 4.0'
+
 # gem 'tida_template', path: '/Users/apple/Projects/tida/src/tida_template'
-gem 'tida_template', '>= 0.3.2'
+# gem 'tida_template', '>= 0.3.2'
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'

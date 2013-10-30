@@ -1,7 +1,6 @@
 /*
- *= require jquery.ui.all
- *= require wice_grid
- *= require tida_template
+ *= require nebulas
+
  *= require icon_grid
  *= require filter
  *= require spot_plan
@@ -9,6 +8,7 @@
  */
 
 html, body {
+  font-family: Helvetica, Tahoma, Arial, "Hiragino Sans GB", "冬青黑体简体中文", STXihei, "华文细黑", "Microsoft YaHei", "微软雅黑", SimSun, "宋体", Heiti, "黑体", sans-serif;
   width: 100%; height: 100%;
   overflow-x: hidden;
 }
