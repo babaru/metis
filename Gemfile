@@ -58,7 +58,7 @@ gem 'cancan'
 gem 'axlsx'
 
 # gem 'acts_as_shopping_cart', '~> 0.1.6'
-# gem 'cells'
+gem 'cells'
 
 # To use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.0.0'

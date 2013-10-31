@@ -60,6 +60,12 @@ body {
           > .dropdown-menu {
             margin: 0px;
 
+            &:before,
+            &:after {
+              content: '' !important;
+              border: none !important;
+            }
+
             > li {
               > a {
                 padding-top: $tiny-space;

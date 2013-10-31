@@ -53,6 +53,9 @@ GEM
       net-sftp (>= 2.0.0)
       net-ssh (>= 2.0.14)
       net-ssh-gateway (>= 1.1.0)
+    cells (3.8.8)
+      actionpack (>= 3.0)
+      railties (>= 3.0)
     celluloid (0.15.2)
       timers (~> 1.1.0)
     chronic (0.10.2)
@@ -275,6 +278,7 @@ DEPENDENCIES
   bootstrap-x-editable-rails
   cancan
   capistrano
+  cells
   coffee-rails (~> 3.2.1)
   devise
   factory_girl

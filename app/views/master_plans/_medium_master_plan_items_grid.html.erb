@@ -139,7 +139,7 @@
       ].join(' ').html_safe, class: 'discounts', :style => master_plan_item.is_on_house ? 'display: none;' : '')
   end
 
-  g.column :html => {class: 'buttons'} do |master_plan_item|
+  g.column html: {class: 'btn-cell'} do |master_plan_item|
     [
       link_to(
         icon('icon-dollar'),
@@ -147,7 +147,7 @@
         'data-id' => master_plan_item.id,
         'data-value' => false,
         'data-medium-id' => @selected_medium_master_plan.medium_id,
-        class: 'master_plan_item_is_on_house purchase button button-inverse',
+        class: 'master_plan_item_is_on_house purchase btn btn-inverse',
         rel: 'tooltip',
         title: '转成购买',
         style: master_plan_item.is_on_house? ? '' : 'display:none;'),
@@ -156,7 +156,7 @@
         '#',
         'data-id' => master_plan_item.id,
         'data-medium-id' => @selected_medium_master_plan.medium_id,
-        class: 'master_plan_item_is_on_house on_house button',
+        class: 'master_plan_item_is_on_house on_house btn',
         'data-value' => true,
         rel: 'tooltip',
         title: '转成配送',
@@ -164,7 +164,7 @@
     ].join('').html_safe if master_plan_item.spot_id && !master_plan_item.spot.is_a?(NetCostSpot)
   end
 
-  g.column :html => {class: 'buttons'} do |master_plan_item|
-    link_to(icon('icon-remove'), master_plan_item_path(master_plan_item), :method => :delete, :confirm => t("confirms.delete"), :class => 'button icon button-danger', :rel => 'tooltip', :title => t('buttons.delete'), "data-skip-pjax" => true)
+  g.column html: { class: 'btn-cell' } do |master_plan_item|
+    link_to(icon('icon-remove'), master_plan_item_path(master_plan_item), :method => :delete, :confirm => t("confirms.delete"), :class => 'btn btn-danger', :rel => 'tooltip', :title => t('buttons.delete'))
   end
 end -%>

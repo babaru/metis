@@ -1,0 +1,25 @@
+.page-title {
+  @extend .row-fluid;
+  padding: 0 0 $small-space 0;
+
+  h3 {
+    margin-bottom: 0px;
+    margin-top: 0px;
+    display: inline-block;
+  }
+
+  .btn-group + h3 {
+    margin-left: $small-space;
+  }
+
+  .btn {
+    top: -4px;
+  }
+
+  .toolbar {
+    .btn {
+      top: auto;
+    }
+    margin: 4px 0px;
+  }
+}

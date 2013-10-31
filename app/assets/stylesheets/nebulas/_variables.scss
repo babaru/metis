@@ -32,14 +32,14 @@ $large-space:     25px;
 
 // Accent colors
 // -------------------------
-// $blue:                  #049cdb !default;
-// $blueDark:              #0064cd !default;
-// $green:                 #46a546 !default;
-// $red:                   #9d261d !default;
-// $yellow:                #ffc40d !default;
-// $orange:                #f89406 !default;
-// $pink:                  #c3325f !default;
-// $purple:                #7a43b6 !default;
+$blue:                  $logo-blue;
+$blueDark:              darken($logo-blue, 30%);
+$green:                 #68b359;
+$red:                   #cc4b41;
+$yellow:                #ffd557;
+$orange:                #f8a32d;
+$pink:                  #db6e90;
+$purple:                #a885cc;
 
 
 // Scaffolding
@@ -68,7 +68,7 @@ $baseLineHeight:        18px;
 // $altFontFamily:         $serifFontFamily !default;
 
 // $headingsFontFamily:    inherit !default; // empty to use BS default, $baseFontFamily
-// $headingsFontWeight:    bold !default;    // instead of browser default, bold
+$headingsFontWeight:    normal;    // instead of browser default, bold
 // $headingsColor:         inherit !default; // empty to use BS default, $textColor
 
 
@@ -84,9 +84,9 @@ $baseLineHeight:        18px;
 // $paddingSmall:          2px 10px !default;  // 26px
 // $paddingMini:           0px 6px !default;   // 22px
 
-$baseBorderRadius:      2px;
-$borderRadiusLarge:     4px;
-$borderRadiusSmall:     1px;
+$baseBorderRadius:      3px;
+$borderRadiusLarge:     6px;
+$borderRadiusSmall:     2px;
 
 
 // Tables
@@ -98,23 +98,23 @@ $borderRadiusSmall:     1px;
 
 // Buttons
 // -------------------------
-// $btnBackground:                     $white !default;
+$btnBackground:                     #eee;
 // $btnBackgroundHighlight:            darken($white, 10%) !default;
 // $btnBorder:                         #ccc !default;
 
 // $btnPrimaryBackground:              $linkColor !default;
 // $btnPrimaryBackgroundHighlight:     adjust-hue($btnPrimaryBackground, 20%) !default;
 
-// $btnInfoBackground:                 #5bc0de !default;
+$btnInfoBackground:                 $blueDark;
 // $btnInfoBackgroundHighlight:        #2f96b4 !default;
 
-// $btnSuccessBackground:              #62c462 !default;
+$btnSuccessBackground:              $green;
 // $btnSuccessBackgroundHighlight:     #51a351 !default;
 
-// $btnWarningBackground:              lighten($orange, 15%) !default;
+$btnWarningBackground:              $orange;
 // $btnWarningBackgroundHighlight:     $orange !default;
 
-// $btnDangerBackground:               #ee5f5b !default;
+$btnDangerBackground:               $red;
 // $btnDangerBackgroundHighlight:      #bd362f !default;
 
 // $btnInverseBackground:              #444 !default;

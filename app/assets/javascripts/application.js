@@ -4,7 +4,7 @@
 //= require jquery.remotipart
 //= require jquery.pjax
 //= require wice_grid
-
+//= require nebulas
 //= require icon_grid
 //= require bootstrap-contextmenu
 //= require backbone-rails
