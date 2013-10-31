@@ -35,6 +35,7 @@ end
 
 # gem 'tida_template', path: '/Users/apple/Projects/tida/src/tida_template'
 gem 'tida_template', '>= 0.3.2'
+gem 'json',             '~> 1.8.1'
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'

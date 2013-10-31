@@ -60,7 +60,6 @@ class ProjectsController < ApplicationController
     @project = Project.new
     @project.client_id = params[:client_id]
     @project.created_by_id = current_user.id
-    @project.budget_unit = '元'
 
     respond_to do |format|
       format.html # new.html.erb
@@ -78,7 +77,6 @@ class ProjectsController < ApplicationController
   def create
     @project = Project.new(params[:project])
     @project.assigned_users << current_user
-    @project.budget_unit = '元'
 
     respond_to do |format|
       if @project.save
@@ -95,7 +93,6 @@ class ProjectsController < ApplicationController
   # PATCH/PUT /projects/1.json
   def update
     @project = Project.find(params[:id])
-    @project.budget_unit = '元'
 
     respond_to do |format|
       if @project.update_attributes(params[:project])
