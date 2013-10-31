@@ -56,10 +56,6 @@
   @include button-background($btnInverseBackground);
 }
 
-.btn-group + .btn-group {
-  margin: 0;
-}
-
 .btn-group {
   > .btn-group {
     &:first-child {

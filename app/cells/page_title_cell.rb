@@ -1,6 +1,8 @@
 class PageTitleCell < Cell::Rails
 
-  def show
+  def show(args)
+    @page_title = args[:data]
+
     render
   end
 
