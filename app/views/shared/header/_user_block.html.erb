@@ -1,0 +1,19 @@
+<ul class="nav navbar-nav navbar-right">
+  <%- if user_signed_in? %>
+  <li class="dropdown">
+    <a href="#" class="dropdown-toggle"><%= t("labels.welcome")%>, <strong><%= current_user.email %></strong> <%= fa_icon 'caret-down' %></a>
+    <ul class="dropdown-menu">
+      <% if can? :manage, :user %>
+      <li>
+        <%= link_to(icon_text('icon-group', t("model.list", model: User.model_name.human)), users_path) %>
+      </li>
+      <% end %>
+      <li>
+        <%= link_to(t("buttons.sign_out"), destroy_user_session_path, :method=>'delete') %>
+      </li>
+    </ul>
+  </li>
+  <% else %>
+  <li><%= link_to t("buttons.sign_in"), :user_session %></li>
+  <% end -%>
+</ul>

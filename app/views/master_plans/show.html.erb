@@ -2,22 +2,22 @@
   toolbar << {
     name: icon_text('icon-chevron-left', '挑选点位'),
     url: choose_spots_path({id: @master_plan.id, client_id: @master_plan.client_id, project_id: @master_plan.project_id}.merge(session[:spot_picker])),
-    options: {class: 'button button-warning'}
+    options: {class: 'btn btn-warning'}
   }
 
   toolbar << {
     name: icon_text('icon-chevron-right', 'Spot Plan'),
     url: spot_plan_path(medium_id: @selected_medium_master_plan.medium_id),
     options: {
-      class: 'button button-primary'
+      class: 'btn btn-primary'
     }
   } if @master_plan.medium_master_plans.count > 0
 end %>
 
 <div class="padding">
   项目所有历史 Master Plan <i class="icon-chevron-right"></i>
-  <div class="button-group">
-    <a class="button dropdown-toggle" data-toggle="dropdown" href="#">
+  <div class="btn-group">
+    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
       <%= @master_plan.name %> <i class="icon-caret-down"></i>
     </a>
     <ul class="dropdown-menu">
@@ -27,8 +27,8 @@ end %>
     </ul>
   </div>
 
-  <div class="button-group">
-    <a class="button dropdown-toggle" data-toggle="dropdown" href="#">
+  <div class="btn-group">
+    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
       <i class="icon-wrench"></i> 操作 <i class="icon-caret-down"></i>
     </a>
     <ul class="dropdown-menu">
@@ -54,9 +54,9 @@ end %>
 <%= render partial: 'medium_master_plan_navs' %>
 
 <div class="padding">
-  <div class="button-group">
-    <%= link_to '改成打包价', medium_master_plan_get_combo_path(@selected_medium_master_plan), class: 'button button-warning', method: :post unless @selected_medium_master_plan.is_combo? %>
-    <%= link_to '改回正常报价', medium_master_plan_out_of_combo_path(@selected_medium_master_plan), class: 'button button-inverse', method: :post if @selected_medium_master_plan.is_combo? %>
+  <div class="btn-group">
+    <%= link_to '改成打包价', medium_master_plan_get_combo_path(@selected_medium_master_plan), class: 'btn btn-warning', method: :post unless @selected_medium_master_plan.is_combo? %>
+    <%= link_to '改回正常报价', medium_master_plan_out_of_combo_path(@selected_medium_master_plan), class: 'btn btn-inverse', method: :post if @selected_medium_master_plan.is_combo? %>
   </div>
 </div>
 

@@ -3,13 +3,13 @@
     name: icon_text('icon-plus', t('model.create', model: MasterPlan.model_name.human)),
     url: new_project_master_plan_path(@project),
     options: {
-      class: 'button button-success'
+      class: 'btn btn-success'
     }
   }
   toolbar << {
     name: "#{t('labels.back_to')}#{t('model.list', :model => Project.model_name.human)}",
     url: url_for(:back),
-    options: {class: 'button'}
+    options: {class: 'btn'}
   }
 end %>
 

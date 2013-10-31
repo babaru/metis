@@ -1,55 +1,25 @@
-$linkColor: $logo-blue;
-
-$navbar-background-color: $dark-gray-blue;
-$navbar-fore-color: white;
-$navbar-fore-hover-color: white;
 $navbar-highlight-color: $logo-blue;
 
 body {
-  font-size: 12px !important;
-  font-family: Helvetica, Tahoma, Arial, "Hiragino Sans GB", "冬青黑体简体中文",
-      STXihei, "华文细黑", "Microsoft YaHei", "微软雅黑",
-      SimSun, "宋体", Heiti, "黑体", sans-serif !important;
-}
-
-a {
-  text-decoration: none !important;
-
-  &:hover {
-    text-decoration: underline !important;
-  }
+  padding-top: 50px;
 }
 
 .nav {
-  .caret {
-    border-top-color: $navbar-fore-color;
-    border-bottom-color: $navbar-fore-color;
-    &:hover {
-      border-top-color: $navbar-fore-hover-color;
-      border-bottom-color: $navbar-fore-hover-color;
-    }
-  }
 
   .open {
     > a, > a:hover, > a:focus {
-      background-color: $navbar-background-color;
-      color: $navbar-fore-hover-color;
+      // background-color: $navbar-background-color;
+      // color: $navbar-fore-hover-color;
     }
   }
 }
 
 @mixin navbar-highlight-link {
-  background-color: $navbar-background-color;
   @include box-shadow(0px -5px 0px $navbar-highlight-color inset);
   text-decoration: none !important;
-  color: $navbar-fore-hover-color;
 }
 
 .navbar {
-  min-height: 40px; height: 40px;
-  margin-bottom: 10px;
-  background-color: $navbar-background-color;
-  color: $navbar-fore-hover-color;
   border: none;
 
   .navbar-nav {
@@ -58,13 +28,6 @@ a {
 
     > li {
       > a {
-        padding: 0px;
-        line-height: 40px;
-        width: 100px; height: 40px;
-        text-align: center;
-        outline: none;
-        color: $navbar-fore-color;
-
         &:hover, &:focus {
           @include navbar-highlight-link;
         }

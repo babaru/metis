@@ -1,0 +1,22 @@
+.page-title {
+  @extend .row;
+  margin-bottom: $small-space;
+  h3 {
+    font: {
+      weight: normal;
+    }
+    line-height: 50px;
+    height: 50px;
+    padding: 0px; margin: 0px;
+  }
+
+  .toolbar {
+    @extend .pull-right;
+    @extend .btn-group;
+    padding: 15px 0px 0px 0px;
+    .button {
+      height: 30px;
+      line-height: 30px;
+    }
+  }
+}
