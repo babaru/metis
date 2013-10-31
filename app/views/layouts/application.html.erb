@@ -9,51 +9,15 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <div id="main-container">
-    <header>
-      <div id="logo" class="pull-left"></div>
-      <ul id="user-menu-panel" class="pull-right clearfix">
-        <%- if user_signed_in? %>
-        <li class="dropdown">
-          <a href="javascript:void(0);" class="dropdown-toggle"><%= t("labels.welcome")%>, <strong><%= current_user.email %></strong> <b class="caret"></b></a>
-          <ul class="dropdown-menu">
-            <% if can? :manage, :user %>
-            <li>
-              <%= link_to(icon_text('icon-group', t("model.list", model: User.model_name.human)), users_path) %>
-            </li>
-            <% end %>
-            <li>
-              <%= link_to(t("buttons.sign_out"), destroy_user_session_path, :method=>'delete') %>
-            </li>
-          </ul>
-        </li>
-        <% else %>
-        <li><%= link_to t("buttons.sign_in"), :user_session %></li>
-        <% end -%>
-      </ul>
-    </header>
-    <div id="main-content">
-      <%= render_navigation renderer: :navigation_bar, expand_all: true %>
-      <div id="main" class="clearfix">
 
-        <div class="content">
-          <%= render partial: 'shared/components/notification' %>
-          <%= yield %>
-        </div>
-      </div>
-    </div>
+  <%= render partial: 'shared/scaffold/header' %>
 
-    <footer>
-      <span class="copyright">tida &copy; 2013 All Rights Reserved.</span>
-    </footer>
+  <div id="main">
+    <%= render partial: 'shared/components/notification' %>
+    <%= yield %>
   </div>
 
-  <div id="pjax-loading-dialog" class="modal hide fade in pjax-loading-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-body">
-      <%= image_tag 'ajax-loader.gif' %> <p>正在载入，请稍等...</p>
-    </div>
-  </div>
-  <%= yield :anything_else %>
-  <%= stylesheet_link_tag "retina", :media => "all" %>
+  <%= render partial: 'shared/scaffold/footer' %>
+
 </body>
 </html>
