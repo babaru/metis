@@ -1,11 +1,11 @@
 <%= simple_form_for(:spot_plan_item, url: spot_plan_items_path, method: :put, remote: true, html: {id: 'spot-plan-item-modify-count-form', class: 'form-horizontal' }) do |f| %>
   <div class="modal-body">
     <div class="form-inputs">
-      <%= f.input :count, as: :integer %>
+      <%= f.input :count, as: :integer, label: '数量' %>
     </div>
   </div>
   <div class="modal-footer">
-    <button class="button" data-dismiss="modal" aria-hidden="true">关闭</button>
-    <%= f.button :submit, '确定', class: 'button button-primary' %>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    <%= f.button :submit, '确定', class: 'btn btn-primary' %>
   </div>
 <% end %>

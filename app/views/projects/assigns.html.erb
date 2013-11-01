@@ -1,4 +1,24 @@
-<%= render_page_title "<strong>#{@client.name}</strong> #{t('model.manager', model: ClientAssignment.model_name.human)}" %>
+<div class="narrow-center-page">
+
+<%= render_cell(:page_title, :show, data:{name: "<strong>#{@client.name}</strong> #{t('model.manager', model: ClientAssignment.model_name.human)}",
+  toolbar: {
+    left:
+    [
+      render_cell(:button, :show, data:
+      {
+        name: fa_icon('level-up rotate-270'),
+        url: client_projects_path(@client.id),
+        options:
+        {
+          class: 'btn',
+          rel: 'tooltip',
+          title: "#{t('labels.back_to')}#{t('model.list', :model => Project.model_name.human)}",
+        }
+      })
+    ]
+  }
+})
+%>
 
 <%= simple_form_for(@project, url: save_project_assignments_path(@client), method: :post, html: {class: 'form-horizontal'}) do |f| %>
   <%= f.error_notification %>
@@ -10,6 +30,8 @@
   </div>
 
   <div class="form-actions">
-    <%= f.button :submit, class: 'button button-primary' %>
+    <%= f.button :submit, class: 'btn btn-primary' %>
   </div>
 <% end %>
+
+</div>

@@ -1,70 +1,116 @@
-<%= render_page_title "<strong>#{@master_plan.project.client.name}</strong> #{@master_plan.project.name}" do |toolbar|
-  toolbar << {
-    name: icon_text('icon-chevron-left', 'Master Plan'),
-    url: client_project_master_plan_path(id: @master_plan, medium_id: @selected_medium_master_plan.medium_id),
-    options: {class: 'button button-primary'}
+<%= render_cell(:page_title, :show,
+  data:
+  {
+    name: "<strong>#{@master_plan.project.client.name}</strong> #{@master_plan.project.name}",
+    toolbar: {
+      left:
+      [
+        render_cell(:button, :show, data:
+        {
+          name: fa_icon('level-up rotate-270'),
+          url: client_project_master_plan_path(id: @master_plan, medium_id: @selected_medium_master_plan.medium_id),
+          options:
+          {
+            class: 'btn',
+            rel: 'tooltip',
+            title: "#{t('labels.back_to')} Master Plan #{@master_plan.name}",
+          }
+        })
+      ]
+    }
   }
-
-end %>
-
-<div class="padding">
-  <div class="panel">
-    Master Plan: <%= @master_plan.name %>
-  </div>
-</div>
+)
+%>
 
 <%= render partial: 'master_plan_summary' %>
-
 <%= render partial: 'medium_master_plan_spot_plan_navs' %>
-
 <%= render partial: 'medium_master_plan_summary' %>
 
-<div class="padding">
-  <div class="grid">
-    <div class="grid-row">
-      <div class="cell6">
-        <div class="button-group">
-          <a class="button dropdown-toggle" data-toggle="dropdown" href="#">
-            <i class="icon-calendar"></i> <%= "#{@selected_year}年#{@selected_month}月" %> <i class="icon-caret-down"></i>
-          </a>
-          <ul class="dropdown-menu">
-            <% @months.each do |m| %>
-            <li>
-              <%= link_to "#{m[:year]}年#{m[:month]}月", spot_plan_path(medium_id: @selected_medium_master_plan.medium_id, y: m[:year], m: m[:month], version: @spot_plan_version) %>
-            </li>
-            <% end %>
-          </ul>
-        </div>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span6">
+      <div class="btn-toolbar">
+        <%= render_cell(:button, :show,
+          data:
+          {
+            type: 'dropdown',
+            name: fa_icon('empty-calendar', text: "#{@selected_year}年#{@selected_month}月"),
+            options: {class: 'btn'},
+            items: @months.inject([]){|list, m| list << {name: "#{m[:year]}年#{m[:month]}月", url: spot_plan_path(medium_id: @selected_medium_master_plan.medium_id, y: m[:year], m: m[:month], version: @spot_plan_version)}}
+          }
+        )
+        %>
       </div>
-      <div class="cell6">
-        <div class="button-group pull-right">
-          <div class="button-group">
-          <a class="button dropdown-toggle" data-toggle="dropdown" href="#">
-            <i class="icon-bookmark"></i> <%= @spot_plan_version.to_i > 0 ? "版本#{@spot_plan_version}" : "初始版本" %> <i class="icon-caret-down"></i>
-          </a>
-          <ul class="dropdown-menu">
-            <% @master_plan.spot_plan_version.downto(0) do |n| %>
-            <li>
-              <%= link_to n > 0 ? "版本#{n}" : "初始版本", spot_plan_path(medium_id: @selected_medium_master_plan.medium_id, y: @selected_year, m: @selected_month, version: n) %>
-            </li>
-            <% end %>
-          </ul>
-        </div>
-          <%= link_to icon_text('icon-thumbs-up', '确认排期表'), confirm_spot_plan_path(@master_plan), method: :post, class: 'button button-success' if @master_plan.is_dirty? %>
-          <%= link_to icon_text('icon-download-alt', '下载排期表文件'), generate_spot_plan_path(id: @master_plan, version: @spot_plan_version), method: :post, class: 'button button-inverse' %>
-        </div>
+    </div>
+    <div class="span6">
+      <div class="btn-toolbar pull-right">
+        <%= render_cell(:button, :show,
+          data:
+          {
+            type: 'dropdown',
+            name: fa_icon('bookmark', text: (@spot_plan_version.to_i > 0 ? "版本#{@spot_plan_version}" : "初始版本")),
+            options: {class: 'btn'},
+            items: (@master_plan.spot_plan_version..1).inject([]){|list, n| list << {name: (n > 0 ? "版本#{n}" : "初始版本"), url: spot_plan_path(medium_id: @selected_medium_master_plan.medium_id, y: @selected_year, m: @selected_month, version: n)}}
+          }
+        )
+        %>
+        <%= render_cell(:button, :show,
+          data:
+          {
+            name: fa_icon('thumbs-up', text: "排期表客户已确认"),
+            url: confirm_spot_plan_path(@master_plan),
+            options:
+            {
+              class: 'btn btn-success',
+              method: :post
+            }
+          }
+        ) if @master_plan.is_dirty?
+        %>
+        <%= render_cell(:button, :show,
+          data:
+          {
+            name: fa_icon('download-alt', text: "下载排期表文件"),
+            url: generate_spot_plan_path(id: @master_plan, version: @spot_plan_version),
+            options:
+            {
+              class: 'btn btn-info',
+              method: :post
+            }
+          }
+        )
+        %>
       </div>
     </div>
   </div>
-
-  <%= render partial: 'spot_plan_items_grid' %>
 </div>
 
-<div id="context-menu">
-  <ul class="dropdown-menu" role="menu">
-    <li><a tabindex="-1" href="#" class="modify_count" data-skip-pjax="true">调整数量</a></li>
-  </ul>
-</div>
+<%= render partial: 'spot_plan_items_grid' %>
+
+<%= content_tag :span, @selected_medium_master_plan.medium_id, class: 'hide', id: 'selected-medium-id-value' %>
+<%= content_tag :span, @master_plan.id, class: 'hide', id: 'master-plan-id-value' %>
+<%= content_tag :span, @spot_plan_version, class: 'hide', id: 'spot-plan-version-value' %>
+<%= content_tag :span, @selected_month, class: 'hide', id: 'selected-month-value' %>
+<%= content_tag :span, @selected_year, class: 'hide', id: 'selected-year-value' %>
+
+<%= render_cell(:modal_window, :show,
+  data:
+  {
+    name: "spot-plan-item-modify-count-modal",
+    title: "调整投放数量",
+    content: render(partial: 'spot_plan_item_modify_count_form')
+  }
+)
+%>
+<%= render_cell(:modal_window, :show,
+  data:
+  {
+   name: "spot-plan-item-modify-placed-at-modal",
+   title: "调整投放日期",
+   content: render(partial: 'spot_plan_item_modify_placed_at_form')
+  }
+)
+%>
 
 <% content_for :js do %>
 <% javascript_include_tag "spot_plan" %>

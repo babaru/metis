@@ -119,3 +119,10 @@ body {
     }
   }
 }
+
+.nav-tabs {
+  margin-bottom: $small-space;
+  > .btn-toolbar {
+    padding: 0px; margin: 0px;
+  }
+}

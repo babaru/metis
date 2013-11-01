@@ -25,6 +25,13 @@ class MasterPlansController < ApplicationController
         name: 'medium_master_plan_items_grid')
     end
 
+    @choose_spots_path_params =
+    {
+      id: @master_plan.id,
+      client_id: @master_plan.client_id,
+      project_id: @master_plan.project_id
+    }.merge(session[:spot_picker])
+
     respond_to do |format|
       format.html
       format.json { render json: @master_plan }
@@ -176,7 +183,13 @@ class MasterPlansController < ApplicationController
       end
 
       respond_to do |format|
-        format.html {redirect_to client_project_master_plan_path(id: @master_plan, client_id: @master_plan.client_id, project_id: @master_plan.project_id), notice: 'Master plan was successfully saved.'}
+        format.html {
+          redirect_to client_project_master_plan_path(
+            {
+              id: @master_plan,
+              client_id: @master_plan.client_id,
+              project_id: @master_plan.project_id
+            }), notice: 'Master Plan 保存成功.'}
       end
     end
   end

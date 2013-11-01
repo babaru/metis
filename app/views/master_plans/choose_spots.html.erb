@@ -1,15 +1,36 @@
-<%= render_page_title "<strong>#{@master_plan.client.name}</strong> #{@master_plan.project.name}: 挑选点位" do |toolbar|
-  toolbar << {
-    name: icon_text('icon-chevron-right', 'Master Plan'),
-    url: client_project_master_plan_path(@master_plan),
-    options: {class: 'button button-primary'}
-  }
-end %>
+<%= render_cell(:page_title, :show,
+  data:
+  {
+    name: "<strong>#{@master_plan.client.name}</strong> #{@master_plan.project.name}: 挑选点位",
+    toolbar:
+    {
+      left:
+      [
+        render_cell(:button, :show,
+          data:
+          {
+            name: fa_icon('level-up rotate-270'),
+            url: client_project_master_plan_path(@master_plan),
+            options:
+            {
+              class: 'btn',
+              rel: 'tooltip',
+              title: '回到 Master Plan'
+            }
+          }
+        )
+      ],
+      right:
+      [
 
-<div class="padding">
-  <div class="panel">
-    Master Plan: <%= @master_plan.name %>
-  </div>
+      ]
+    }
+  }
+)
+%>
+
+<div class="well">
+  Master Plan: <%= @master_plan.name %>
 </div>
 
 <%= render partial: 'shared/spot_picker/spot_picker', locals: {media: @media, spot_picker: @spot_picker} %>
@@ -20,52 +41,62 @@ end %>
 
 <%= render partial: 'shared/spot_picker/spot_candidates_grid', locals: {spots: @spots_grid} if @spots_grid %>
 
-<article style="width:100%;">
-  <div class="padding">
-    <div class="grid">
-      <div class="grid-row">
-        <div class="cell6">
-        </div>
-        <div class="cell6">
-          <%= f.submit "添加", class: 'button button-success pull-right', wrapper: false %>
-        </div>
-      </div>
-    </div>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span6"></div>
+    <div class="span6"><%= f.submit "添加", class: 'btn btn-success pull-right', wrapper: false %></div>
   </div>
-</article>
-
-<% end %>
-<% end %>
-
-<%= render_article_title "已选点位" do |toolbar|
-  toolbar << {
-    name: icon_text('icon-trash', '清空已选点位'),
-    url: clear_cart_path(@master_plan),
-    options: {
-      method: :post,
-      remote: true,
-      class: 'button button-inverse clear-candidate-button',
-      style: @pool.count > 0 ? '': 'display:none;'
-    }
-  }
- end %>
-
-<div class='cart-panel' style="padding: 15px; padding-top: 10px; padding-bottom: 10px; margin: 0px;">
-<%= render partial: 'cart' %>
 </div>
 
-<div class="grid">
-  <div class="grid-row">
-    <div class="cell6"></div>
-    <div class="cell6" style="padding-right:15px; padding-bottom: 15px;">
-      <%= link_to(
-            icon_text('icon-save', '保存点位到Master Plan'),
-            save_candidates_to_master_plan_path(@master_plan),
-            class: 'button button-success pull-right save-candidate-button',
-            method: :post,
-            style: @pool.count > 0 ? '': 'display:none;') %>
-    </div>
-  </div>
+
+<% end %>
+<% end %>
+
+<hr />
+
+<%= render_cell(:section_title, :show,
+  data:
+  {
+    name: '已选媒体刊例',
+    toolbar:
+    {
+      right:
+      [
+        render_cell(:button, :show,
+          data:
+          {
+            name: fa_icon('trash', text:'清空已选点位'),
+            url: clear_cart_path(@master_plan),
+            options:
+            {
+              method: :post,
+              remote: true,
+              class: 'btn btn-inverse clear-candidate-button',
+              style: @pool.count > 0 ? '': 'display:none;'
+            }
+          }
+        ),
+        render_cell(:button, :show,
+          data:
+          {
+            name: fa_icon('save', text: '保存点位到Master Plan'),
+            url: save_candidates_to_master_plan_path(@master_plan),
+            options:
+            {
+              class: 'btn btn-success pull-right save-candidate-button',
+              method: :post,
+              style: @pool.count > 0 ? '': 'display:none;'
+            }
+          }
+        )
+      ]
+    }
+  }
+)
+%>
+
+<div class='cart-panel'>
+<%= render partial: 'cart' %>
 </div>
 
 <script type="text/javascript">

@@ -17,11 +17,6 @@ class Project < ActiveRecord::Base
     return false
   end
 
-  def assigned_to
-    return assigned_users.first if assigned_users.count > 0
-    nil
-  end
-
   def months
     (started_at.to_datetime..ended_at.to_datetime).map {|m| {year: m.year, month: m.month}}.uniq
   end

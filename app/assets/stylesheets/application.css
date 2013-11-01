@@ -3,37 +3,11 @@
  *= require wice_grid
  *= require nebulas
  *= require icon_grid
- *= require filter
- *= require spot_plan
- *= require master_plan_summary
  */
-
-html, body {
-  width: 100%; height: 100%;
-  overflow-x: hidden;
-}
 
 #spot-candidates-panel {
   overflow-y: auto;
   bottom: 50px;
-}
-
-.pjax-loading-dialog.fade, .pjax-loading-dialog.fade.in {
-  -webkit-transition: opacity .2s linear, none;
-  -moz-transition: opacity .2s linear, none;
-  -ms-transition: opacity .2s linear, none;
-  -o-transition: opacity .2s linear, none;
-  transition: opacity .2s linear, none;
-  top: 50%;
-}
-
-.pjax-loading-dialog .modal-body {
-  padding-top: 20px;
-  text-align: center;
-}
-
-.pjax-loading-dialog .modal-body p {
-  padding-top: 10px;
 }
 
 .spot-day-count-text-field {
@@ -44,24 +18,7 @@ html, body {
   line-height: 30px;
 }
 
-.well {
-  padding: 9px;
-  margin-bottom: 10px;
-  color: #999;
-}
-
-.well h4 {
-  font-size: 16px;
-  font-weight: bold;
-  line-height: 24px;
-  margin: 5px 0px;
-  color: #333;
-}
 
 td input {
   margin-bottom: 0px !important;
-}
-
-.red {
-  color: red;
 }

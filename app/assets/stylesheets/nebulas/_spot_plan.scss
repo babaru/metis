@@ -12,21 +12,13 @@
   -ms-user-select: none;
   user-select: none;
 
-  th {
-    text-align: center;
-  }
-
   .master-plan-item-row {
     td {
-      padding: 0px; margin: 0px;
-      text-align: center;
+      vertical-align: center;
 
-      &.sun {
-        background: #ddd;
-      }
-
+      &.sun,
       &.sat {
-        background: #ddd;
+        background: lighten($orange, 30%);
       }
 
       &.warning {
@@ -40,13 +32,9 @@
       }
     }
 
-    .spot-plan-item-cell, .disabled {
-      border-left: 1px solid #ccc;
-      border-bottom: 1px solid #ccc;
-    }
-
     .spot-plan-item-cell {
       cursor: pointer;
+      padding: 0px;
 
       span {
         display: block;
@@ -56,37 +44,32 @@
         text-align: center;
 
         &.old_cell {
-          background: yellow;
+          background: $yellow;
         }
       }
     }
 
     .disabled {
       cursor: crosshair;
-    }
-
-    .dirty {
-      background: orange;
+      background: $grayLighter;
     }
   }
 
   .spot-plan-calendar-month-row {
-    height: 30px;
-    background: #179ac8;
     text-align: right;
-    padding: 0px 10px;
-    font: {
-      size: 21px;
-      weight: bold;
-    }
-    color: white;
+    font-weight: bold;
     td {
-      padding: 0px;
-      background: #179ac8;
+      padding: $tiny-space 0px;
+      background: $grayLighter;
       text-align: center;
 
       &.disabled {
-        color: #60b7d6;
+        color: $grayLight;
+      }
+
+      &.sun,
+      &.sat {
+        background: lighten($orange, 30%);
       }
     }
   }
@@ -98,18 +81,14 @@
       text-align: center;
       color: #ccc;
 
-      &.sun {
-        background: #ddd;
-        color: white;
-      }
-
+      &.sun,
       &.sat {
-        background: #ddd;
+        background: lighten($orange, 20%);
         color: white;
       }
 
-      &.calendar-item {
-        color: #888;
+      &.disabled {
+        background: $grayLighter;
       }
     }
   }

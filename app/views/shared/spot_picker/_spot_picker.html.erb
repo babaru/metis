@@ -1,5 +1,5 @@
-<div style="padding: 15px; padding-top: 0px; padding-bottom: 10px; margin: 0px;">
-  <table class='filter'>
+<div>
+  <table class='table picker'>
     <%= render partial: 'shared/spot_picker/selected_items', locals: {spot_picker: spot_picker} %>
     <%= render partial: 'shared/spot_picker/medium_candidates', locals: {spot_picker: spot_picker, media: media} %>
     <%= render partial: 'shared/spot_picker/channel_candidates', locals: {spot_picker: spot_picker} if spot_picker.selected_medium %>

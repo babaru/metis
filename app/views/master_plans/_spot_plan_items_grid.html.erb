@@ -1,4 +1,4 @@
-<table id="spot-plan-table" class="table table-ordered table-striped">
+<table id="spot-plan-table" class="table table-bordered table-striped">
   <tr>
     <th>网站</th>
     <th>频道</th>
@@ -12,21 +12,25 @@
     <td colspan="5"></td>
     <% 1.upto(31) do |n| %>
     <% if n > Time.days_in_month(@selected_month, @selected_year) %>
-    <td>&nbsp;</td>
+    <td class="disabled">&nbsp;</td>
     <% else %>
+    <% if @selected_days.length >= n && @selected_days[n - 1] && @selected_days[n - 1] > 0 %>
     <%= content_tag :td, t("weekdays.#{Time.new(@selected_year, @selected_month, n).strftime('%a').downcase}"), class: Time.new(@selected_year, @selected_month, n).strftime('%a').downcase %>
+    <% else %>
+    <%= content_tag :td, t("weekdays.#{Time.new(@selected_year, @selected_month, n).strftime('%a').downcase}"), class: 'disabled' %>
+    <% end %>
     <% end %>
     <% end %>
   </tr>
 
   <tr class="spot-plan-calendar-month-row">
-    <td colspan="5"><%= @selected_month %>月</td>
+    <td colspan="5"><%= @selected_year %>年 <%= @selected_month %>月</td>
     <% 1.upto(31) do |n| %>
     <% if n > Time.days_in_month(@selected_month, @selected_year) %>
     <td>&nbsp;</td>
     <% else %>
     <% if @selected_days.length >= n && @selected_days[n - 1] && @selected_days[n - 1] > 0 %>
-    <%= content_tag :td, n %>
+    <%= content_tag :td, n, class: Time.new(@selected_year, @selected_month, n).strftime('%a').downcase %>
     <% else %>
     <%= content_tag :td, n, class: 'disabled' %>
     <% end %>
@@ -54,15 +58,3 @@
   <% end %>
 
 </table>
-
-<%= content_tag :span, @selected_medium_master_plan.medium_id, class: 'hide', id: 'selected-medium-id-value' %>
-<%= content_tag :span, @master_plan.id, class: 'hide', id: 'master-plan-id-value' %>
-<%= content_tag :span, @spot_plan_version, class: 'hide', id: 'spot-plan-version-value' %>
-<%= content_tag :span, @selected_month, class: 'hide', id: 'selected-month-value' %>
-<%= content_tag :span, @selected_year, class: 'hide', id: 'selected-year-value' %>
-
-
-<% content_for :anything_else do %>
-<%= render_modal_window name: "spot-plan-item-modify-count-modal", title: "调整投放数量", modal_content: 'spot_plan_item_modify_count_form' %>
-<%= render_modal_window name: "spot-plan-item-modify-placed-at-modal", title: "调整投放日期", modal_content: 'spot_plan_item_modify_placed_at_form' %>
-<% end %>

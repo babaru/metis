@@ -1,20 +1,19 @@
-@import 'variables';
 
 .plan-summary {
   width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: $small-space;
   th, td {
-    padding: 3px 10px;
+    padding: 2px $small-space;
     text-align: left;
-    border-left: 2px solid $borderColor;
+    border-left: 1px solid $tableBorder;
   }
 
   th {
-    color: #999;
+    font-weight: normal;
   }
 
   td {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .profit, .project-budget {
@@ -25,18 +24,18 @@
 .label-group {
   .item {
     display: inline-block;
-    padding: 5px;
+    padding: 3px;
   }
 }
 
 .master-plan-value-group {
   .medium {
-    background: #9B59B6;
+    background: $blueDark;
     color: white;
   }
 
   .company {
-    background: #2980B9;
+    background: $pink;
     color: white;
   }
 
@@ -47,12 +46,12 @@
 .value {
   padding: 3px;
   &.medium {
-    background: #9B59B6;
+    background: $blueDark;
     color: white;
   }
 
   &.company {
-    background: #2980B9;
+    background: $pink;
     color: white;
   }
 }

@@ -2,57 +2,54 @@
   data:
   {
     name: "<strong>#{@master_plan.project.client.name}</strong> #{@master_plan.project.name}",
-    right_group:
-    [
-      render_cell(:button, :show,
-        data:
-        {
-          name: @master_plan.name,
-          options: { class: 'btn'},
-          type: 'dropdown',
-          items:
-          [
-            @master_plan.project.master_plans.inject([]){|list, item| list << {name: fa_icon(item.id == @master_plan.id ? 'sign-blank' : 'unchecked', text: item.name), url: client_project_master_plan_path(id:item)}},
-            {divider: true},
-            {name: fa_icon('star', text: '设为默认Master Plan'), url: set_current_master_plan_path(id: @master_plan.project_id, master_plan_id: @master_plan.id), options: {method: :post}},
-            {name: fa_icon('copy', text: '克隆当前Master Plan'), url: clone_master_plan_path(@master_plan), options: {method: :post}},
-            {name: fa_icon('plus-sign', text: '新建Master Plan'), url: master_plans_path({master_plan: {project_id: @master_plan.project_id, client_id: @master_plan.client_id}}), options: {method: :post}},
-            {name: fa_icon('trash', text: '删除Master Plan'), url: master_plan_path(@master_plan), options: {method: :delete, confirm: t('confirms.delete')}}
-          ].flatten
-        }
-      ),
-
-      render_cell(:button_group, :show,
-        data:
-        [
+    toolbar:
+    {
+      right:
+      [
+        render_cell(:button, :show,
+          data:
           {
-            name: fa_icon('chevron-left', text: '挑选点位'),
-            url: choose_spots_path({id: @master_plan.id, client_id: @master_plan.client_id, project_id: @master_plan.project_id}.merge(session[:spot_picker])),
+            name: @master_plan.name,
+            options: { class: 'btn'},
+            type: 'dropdown',
+            items:
+            [
+              @master_plan.project.master_plans.inject([]){|list, item| list << {name: fa_icon(item.id == @master_plan.id ? 'sign-blank' : 'unchecked', text: item.name), url: client_project_master_plan_path(id:item)}},
+              {divider: true},
+              {name: fa_icon('star', text: '设为默认Master Plan'), url: set_current_master_plan_path(id: @master_plan.project_id, master_plan_id: @master_plan.id), options: {method: :post}},
+              {name: fa_icon('copy', text: '克隆当前Master Plan'), url: clone_master_plan_path(@master_plan), options: {method: :post}},
+              {name: fa_icon('plus-sign', text: '新建Master Plan'), url: master_plans_path({master_plan: {project_id: @master_plan.project_id, client_id: @master_plan.client_id}}), options: {method: :post}},
+              {name: fa_icon('trash', text: '删除Master Plan'), url: master_plan_path(@master_plan), options: {method: :delete, confirm: t('confirms.delete')}}
+            ].flatten
+          }
+        ),
+
+        render_cell(:button, :show,
+          data:
+          {
+            name: fa_icon('compass', text: '挑选点位'),
+            url: choose_spots_path(@choose_spots_path_params),
             options: { class: 'btn btn-warning' }
-          },
-          ({
-            name: fa_icon('chevron-right', text: 'Spot Plan'),
+          }
+        ),
+
+        (render_cell(:button, :show,
+          data:
+          {
+            name: fa_icon('calendar', text: 'Spot Plan'),
             url: spot_plan_path(medium_id: @selected_medium_master_plan.medium_id),
             options: { class: 'btn btn-primary' }
-          } if @master_plan.medium_master_plans.count > 0)
-        ]
-      )
-    ]
+          }
+        ) if @master_plan.medium_master_plans.count > 0)
+      ]
+    }
   }
-) %>
+)
+%>
 
 <% if @master_plan.medium_master_plans.count > 0 %>
 <%= render partial: 'master_plan_summary' %>
 <%= render partial: 'medium_master_plan_navs' %>
-
-<div class="padding">
-  <div class="btn-group">
-    <%= link_to '改成打包价', medium_master_plan_get_combo_path(@selected_medium_master_plan), class: 'btn btn-warning', method: :post unless @selected_medium_master_plan.is_combo? %>
-    <%= link_to '改回正常报价', medium_master_plan_out_of_combo_path(@selected_medium_master_plan), class: 'btn btn-inverse', method: :post if @selected_medium_master_plan.is_combo? %>
-  </div>
-</div>
-
-
 <%= render partial: 'medium_master_plan_summary' %>
 <%= render partial: 'medium_master_plan_items_grid' %>
 <% end %>

@@ -3,7 +3,7 @@ zh-CN:
     "yes": '是的'
     "no": '不用'
     required:
-      text: '带星号的为必填项'
+      text: '带*星号的为必填项'
       mark: '*'
       # You can uncomment the line below if you need to overwrite the whole required html.
       # When using html, text and mark won't be used.

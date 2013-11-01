@@ -3,25 +3,29 @@
 <head>
   <title><%= Settings.app.name %></title>
   <link rel="shortcut icon" href="/assets/favicon.ico" />
-  <%= stylesheet_link_tag :single, :media => "all" %>
+  <%= stylesheet_link_tag :application, :media => "all" %>
   <%= yield :js %>
   <%= csrf_meta_tags %>
 </head>
-  <body>
-    <div id="main-container">
-      <header>
-        <h1></h1>
-        <div id="logo"></div>
-      </header>
-
-      <div id="main-content" class="clearfix">
-        <div class="content">
-          <%= yield %>
+  <body id="login" class="session">
+    <div id="main">
+      <div id="content">
+        <header>
+          <h1><%= Settings.app.name %></h1>
+        </header>
+        <div class="container-fluid">
+          <div class="row-fluid">
+            <div class="span2">
+              <div class="logo"></div>
+            </div>
+            <div class="span10">
+              <%= yield %>
+            </div>
+          </div>
         </div>
       </div>
-      <footer>
-        tida &copy; 2013 All Rights Reserved. <br><a href="http://www.miit.gov.cn/" target="blank">苏ICP备13009122号-1</a>
-      </footer>
     </div>
+
+    <%= render partial: 'shared/scaffold/footer' %>
   </body>
 </html>
