@@ -1,249 +1,297 @@
 $(document).ready(function() {
+    attach_context_menu('.spot-plan-item');
 
-    context.init({
-        // fadeSpeed: 100,
-        // filter: function($obj) {},
-        // above: 'auto',
-        preventDoubleContext: false,
-        compress: false
+    $('.spot-plan-item').on('click', function() {
+        click_spot_plan_item($(this), null);
     });
-
-    MasterPlanItem = Backbone.Model.extend({
-        urlRoot: '/master_plan_items',
-        spot_plan_items: null,
-        setSpotPlanItems: function(items) {
-            this.spot_plan_items = items;
-        },
-        getSpotPlanItems: function() {
-            return this.spot_plan_items;
-        }
-    });
-
-    MasterPlanItems = Backbone.Collection.extend({
-        urlRoot: '/master_plan_items',
-        model: MasterPlanItem
-    });
-
-    SpotPlanItem = Backbone.Model.extend({
-        urlRoot: '/spot_plan_items',
-        master_plan_item: null,
-        setMasterPlanItem: function(item) {
-            this.master_plan_item = item;
-        },
-        getMasterPlanItem: function() {
-            return this.master_plan_item;
-        }
-    });
-
-    SpotPlanItems = Backbone.Collection.extend({
-        model: SpotPlanItem
-    });
-
-    MasterPlan = Backbone.Model.extend({urlRoot: '/master_plans'});
-    var master_plan = new MasterPlan({id: $('#master-plan-id-value').text()});
-    var spot_plan_version = $('#spot-plan-version-value').text();
-    var selected_year = $('#selected-year-value').text();
-    var selected_month = $('#selected-month-value').text();
-    var medium_id = $('#selected-medium-id-value').text();
-    var all_spot_plan_items = new SpotPlanItems();
-    master_plan.fetch({
-        success: function() {
-            console.log('fetch master plan: ' + master_plan.get('id'));
-            var master_plan_items = new MasterPlanItems(null, {url: '/master_plan_items.json?master_plan_id=' + master_plan.get('id') + '&medium_id=' + medium_id});
-            master_plan_items.fetch({
-                success: function() {
-                    console.log('fetch master plan items');
-                    _.each(master_plan_items.models, function(model) {
-                        console.log('fetch master plan item: ' + model.get('id'));
-                        var view = new MasterPlanItemView({model: model});
-                        view.render();
-
-                        var spot_plan_items = new SpotPlanItems(null, {url: '/spot_plan_items.json?master_plan_item_id=' + model.get('id') + '&version=' + spot_plan_version + '&m=' + selected_month + '&y=' + selected_year});
-                        spot_plan_items.fetch({
-                            success: function() {
-                                model.setSpotPlanItems(spot_plan_items);
-                                _.each(spot_plan_items.models, function(s_model) {
-                                    s_model.setMasterPlanItem(model);
-                                    s_model.on('change', function() { model.fetch(); }, model);
-                                    var spot_plan_item_view = new SpotPlanItemView({model: s_model});
-                                    spot_plan_item_view.render();
-                                });
-
-                                $('#master-plan-item' + model.get('id') + ' .empty-spot-plan-item').unbind('click').click(function() {
-                                    console.log(this);
-                                    $(this).text(1).parent().css('background-color', 'yellow');
-                                    var v = $(this).parent();
-                                    var new_spot_plan_item = new SpotPlanItem({master_plan_item_id: model.get('id'), count: 1, placed_at: $(this).data('placed-at'), master_plan_item_id: model.get('id'), version: spot_plan_version});
-                                    new_spot_plan_item.save(null, {
-                                        success: function() {
-                                            new_spot_plan_item.setMasterPlanItem(model);
-                                            var spot_plan_item_view = new SpotPlanItemView({model: new_spot_plan_item});
-                                            spot_plan_item_view.render();
-                                            new_spot_plan_item.on('change', function() { model.fetch(); }, model);
-                                            model.getSpotPlanItems().push(new_spot_plan_item);
-                                            model.fetch({
-                                                success: function() {
-                                                    v.animate({'background-color': 'transparent'}, 500);
-                                                }
-                                            });
-                                        }
-                                    });
-                                });
-                            }
-                        });
-                    });
-                }
-            });
-        }
-    });
-
-    MasterPlanItemView = Backbone.View.extend({
-        initialize: function() {
-            this.model.on('change', this.render, this);
-        },
-        render: function() {
-            console.log('render master plan item view: ' + this.model.get('id'));
-            $('#master-plan-item' + this.model.get('id') + ' .reality_count').text(this.model.get('reality_count'));
-            if (this.model.get('ideal_count') < this.model.get('reality_count')) {
-                $('#master-plan-item' + this.model.get('id') + ' .reality_count').removeClass('warning').addClass('warning');
-            } else {
-                $('#master-plan-item' + this.model.get('id') + ' .reality_count').removeClass('warning');
-            }
-            return this;
-        }
-    });
-
-    SpotPlanItemView = Backbone.View.extend({
-        tagName: 'span',
-        template: _.template('<span class="count-value"><%= count %></span>'),
-        initialize: function() {
-            this.model.on('change', this.render, this);
-        },
-
-        events: {
-            'click': 'clickSpotPlanItem'
-        },
-
-        clickSpotPlanItem: function(e) {
-            var cell = $('#master-plan-item' + this.model.get('master_plan_item_id') + ' .spot-plan-item-cell' + this.model.get('date_token'));
-            $('.count-value', this.$el).text(this.model.get('count') + 1);
-            cell.css('background-color', 'yellow');
-            this.model.save('count', this.model.get('count') + 1, {
-                success: function() {
-                    cell.animate({'background-color': 'transparent'}, 500);
-                }
-            });
-        },
-
-        render: function() {
-            console.log('render spot plan item view: ' + this.model.get('id'));
-            var m = this.model;
-            var v = this.$el;
-            var that = this;
-            var cell = $('#master-plan-item' + this.model.get('master_plan_item_id') + ' .spot-plan-item-cell' + this.model.get('date_token'));
-            this.$el.html(this.template(this.model.attributes));
-            this.$el.addClass('spot-plan-item');
-            this.$el.attr('id', 'spot_plan_item_' + this.model.get('id'));
-            if (this.model.get('new_spot_plan_item_id') > 0) {
-                this.$el.find('span').text('');
-            }
-            if (this.model.get('is_old_spot_plan_item') == true) {
-                this.$el.find('span').addClass('old_cell').text('');
-            }
-
-            cell.html(this.el);
-
-            context.attach('#spot_plan_item_' + this.model.get('id'), [
-            {
-                text: '调整日期',
-                action: function(e) {
-                    e.preventDefault();
-                    $('#spot_plan_item_placed_at').parent().data('datetimepicker').setDate(new Date(m.get('placed_at')));
-                    $('#spot-plan-item-modify-placed-at-modal form').attr('action', '/spot_plan_items/' + m.get('id') + '/modify_placed_at.json');
-                    $('#spot-plan-item-modify-placed-at-modal').off('ajax:success').on('ajax:success', function(event, data, status, xhr) {
-                        $('#spot-plan-item-modify-placed-at-modal').modal('hide');
-                        m.fetch();
-                        var spi = m.getMasterPlanItem().getSpotPlanItems().findWhere({"id": data["id"]})
-                        if (spi == undefined) {
-                            spi = new SpotPlanItem({id: data['id']});
-                            spi.fetch({
-                                success: function() {
-                                    spi.setMasterPlanItem(m.getMasterPlanItem());
-                                    var spot_plan_item_view = new SpotPlanItemView({model: spi});
-                                    spot_plan_item_view.render();
-                                    spi.on('change', function() { m.getMasterPlanItem().fetch(); }, spot_plan_item_view);
-                                    m.getMasterPlanItem().getSpotPlanItems().push(spi);
-                                }
-                            });
-                        } else {
-                            spi.fetch();
-                        }
-                    })
-                    $('#spot-plan-item-modify-placed-at-modal').modal();
-                }
-            },
-            {
-                text: '调整数量',
-                action: function(e) {
-                    e.preventDefault();
-                    $('#spot_plan_item_count').val(m.get('count'));
-                    $('#spot-plan-item-modify-count-modal form').attr('action', '/spot_plan_items/' + m.get('id') + '.json');
-                    $('#spot-plan-item-modify-count-modal').off('ajax:success').on('ajax:success', function(data) {
-                        m.fetch({
-                            success: function() {
-                                $('#spot-plan-item-modify-count-modal').modal('hide');
-                            }
-                        });
-                    })
-                    $('#spot-plan-item-modify-count-modal').modal();
-                }
-            },
-            {
-                text: '清空',
-                action: function(e) {
-                    e.preventDefault();
-                    var master_plan_item_id = m.get('master_plan_item_id');
-                    var placed_at = m.get('placed_at');
-                    var date_token = m.get('date_token');
-                    v.html('').css('background-color', 'yellow');
-                    m.destroy({
-                        success: function(model, response) {
-                            var master_plan_item = new MasterPlanItem({id: master_plan_item_id});
-                            master_plan_item.fetch({
-                                success: function() {
-                                    var master_plan_item_view = new MasterPlanItemView({model: master_plan_item});
-                                    master_plan_item_view.render();
-                                    resetSpotPlanItemCell(master_plan_item, placed_at, date_token);
-
-                                    v.animate({'background-color': 'transparent'}, 500);
-                                }
-                            });
-                        }
-                    });
-                }
-            }
-            ])
-            return this;
-        }
-    })
 });
 
-function bindEmptySpotPlanItemCellEvent(model, placed_at, date_token) {
-    $('#master-plan-item' + model.get('id') + ' .spot-plan-item-cell' + date_token + ' .empty-spot-plan-item').unbind('click').click(function() {
-        var new_spot_plan_item = new SpotPlanItem({master_plan_item_id: model.get('id'), count: 1, placed_at: placed_at});
-        new_spot_plan_item.save(null, {
-            success: function() {
-                var spot_plan_item_view = new SpotPlanItemView({model: new_spot_plan_item});
-                spot_plan_item_view.render();
-                model.fetch();
+function click_spot_plan_item(target, count) {
+    if (target.data('spot-plan-item-id') == undefined) { // is empty item
+        empty_spot_plan_item_clicked(target, count);
+    } else {
+        spot_plan_item_clicked(target, count);
+    }
+}
+
+function empty_spot_plan_item_clicked(target, count) {
+    var master_plan_item_id = target.data('master-plan-item-id');
+    var placed_at = target.data('placed-at');
+    var count_val = 1;
+    if (count != null) {
+        count_val = count;
+    }
+    var version = target.data('version');
+
+    if (count_val > 0) {
+        change_spot_plan_item_and_master_plan_item_counts(0, count_val, target);
+        highlight_changing_items(target);
+        create_spot_plan_item(master_plan_item_id, placed_at, count_val, version, target);
+    }
+}
+
+function spot_plan_item_clicked(target, count) {
+    var count_val = parseInt(target.data('count'));
+    var new_count_val = count_val + 1;
+    if (count != null) {
+        new_count_val = count;
+    }
+    var spot_plan_item_id = target.data('spot-plan-item-id');
+
+    if (count_val != new_count_val) {
+        change_spot_plan_item_and_master_plan_item_counts(count_val, new_count_val, target);
+        highlight_changing_items(target);
+        modify_spot_plan_item_count(spot_plan_item_id, new_count_val, target);
+    }
+}
+
+function reset_spot_plan_item_count(target) {
+    var count = target.data('count');
+    var master_plan_item_count_cell = get_master_plan_item_reality_count_cell(target);
+    var master_plan_item_ideal_count_cell = get_master_plan_item_ideal_count_cell(target);
+
+    var reality_count = parseInt(master_plan_item_count_cell.data('count'));
+    var ideal_count = parseInt(master_plan_item_ideal_count_cell.data('count'));
+    var new_reality_count = reality_count - count;
+
+    target.text('');
+
+    master_plan_item_count_cell.text(new_reality_count);
+    if (new_reality_count > ideal_count) {
+        master_plan_item_count_cell.addClass('warning');
+    } else {
+        master_plan_item_count_cell.removeClass('warning');
+    }
+
+    highlight_changing_items(target);
+
+    delete_spot_plan_item(target.data('spot-plan-item-id'), target);
+}
+
+function get_master_plan_item_reality_count_cell(target) {
+    var master_plan_item_id = target.data('master-plan-item-id');
+    return $('.reality_count.master_plan_item_' + master_plan_item_id);
+}
+
+function get_master_plan_item_ideal_count_cell(target) {
+    var master_plan_item_id = target.data('master-plan-item-id');
+    return $('.ideal_count.master_plan_item_' + master_plan_item_id);
+}
+
+function change_spot_plan_item_and_master_plan_item_counts(original_count, new_count, target) {
+    var master_plan_item_count_cell = get_master_plan_item_reality_count_cell(target);
+    var master_plan_item_ideal_count_cell = get_master_plan_item_ideal_count_cell(target);
+
+    var reality_count = parseInt(master_plan_item_count_cell.data('count'));
+    var ideal_count = parseInt(master_plan_item_ideal_count_cell.data('count'));
+    var new_reality_count = reality_count - original_count + new_count;
+
+    target.text(new_count);
+
+    master_plan_item_count_cell.text(new_reality_count);
+    if (new_reality_count > ideal_count) {
+        master_plan_item_count_cell.addClass('warning');
+    } else {
+        master_plan_item_count_cell.removeClass('warning');
+    }
+}
+
+function highlight_changing_items(target) {
+    target.css('background-color', 'yellow');
+    var master_plan_item_count_cell = get_master_plan_item_reality_count_cell(target);
+    master_plan_item_count_cell.css('background-color', 'yellow');
+}
+
+function complete_spot_plan_item_operation(target) {
+    target.animate({'background-color': 'transparent'}, 500);
+    var master_plan_item_count_cell = get_master_plan_item_reality_count_cell(target);
+    master_plan_item_count_cell.animate({'background-color' : 'transparent'}, 500);
+
+    console.log("target text: " + target.text());
+    console.log('target count: ' + target.data('count'));
+
+    console.log("master plan item text: " + master_plan_item_count_cell.text());
+    console.log('master plan item reality count: ' + master_plan_item_count_cell.data('count'));
+}
+
+function recover_spot_plan_item_original_data(target) {
+    target.text(target.data('count'));
+    var master_plan_item_count_cell = get_master_plan_item_reality_count_cell(target);
+    master_plan_item_count_cell.text(master_plan_item_count_cell.data('count'));
+}
+
+function update_spot_plan_item_values(target, data) {
+    if (data == null) {
+        target
+            .data('spot-plan-item-easy-id', null)
+            .data('spot-plan-item-id', null)
+            .data('count', null);
+
+        var master_plan_item_count_cell = get_master_plan_item_reality_count_cell(target);
+        master_plan_item_count_cell.data('count', master_plan_item_count_cell.text());
+
+        console.log('spot plan item count ' + target.data('count'));
+    } else {
+        target
+            .data('placed-at', data['placed_at'])
+            .data('master-plan-item-id', data['master_plan_item_id'])
+            .data('version', data['version'])
+            .data('spot-plan-item-easy-id', data['easy_id'])
+            .data('spot-plan-item-id', data['id'])
+            .data('count', data['count']);
+
+        var master_plan_item_count_cell = get_master_plan_item_reality_count_cell(target);
+        master_plan_item_count_cell.data('count', data['master_plan_item_reality_count']);
+    }
+}
+
+function modify_spot_plan_item_count(spot_plan_item_id, count, target) {
+    $.ajax({
+        url: '/spot_plan_items/' + spot_plan_item_id + '.json',
+        type: 'PUT',
+        data: {
+            id: spot_plan_item_id,
+            'spot_plan_item': {
+                'count' : count
             }
-        });
+        },
+        success: function(data) {
+            update_spot_plan_item_values(target, data);
+        },
+        complete: function() {
+            complete_spot_plan_item_operation(target);
+        },
+        error: function() {
+            recover_spot_plan_item_original_data(target);
+        }
     });
 }
 
-function resetSpotPlanItemCell(model, placed_at, date_token) {
-    $('#master-plan-item' + model.get('id') + ' .spot-plan-item-cell' + date_token + ' span').remove();
-    $('#master-plan-item' + model.get('id') + ' .spot-plan-item-cell' + date_token).html('<span class="empty-spot-plan-item" data-placed-at="' + placed_at + '"></span>');
+function modify_spot_plan_item_placed_at(spot_plan_item_id, new_placed_at, target, new_target) {
+    $.ajax({
+        url: '/spot_plan_items/' + spot_plan_item_id + '/modify_placed_at.json',
+        type: 'POST',
+        data: {
+            id: spot_plan_item_id,
+            'spot_plan_item': {
+                'placed_at' : new_placed_at
+            }
+        },
+        success: function(data) {
+            update_spot_plan_item_values(target, data['origin']);
+            if (new_target != null) {
+                update_spot_plan_item_values(new_target, data['new_item']);
+            }
+        },
+        complete: function() {
+            complete_spot_plan_item_operation(target);
+        },
+        error: function() {
+            recover_spot_plan_item_original_data(target);
+        }
+    });
+}
 
-    bindEmptySpotPlanItemCellEvent(model, placed_at, date_token);
+function create_spot_plan_item(master_plan_item_id, placed_at, count, version, target) {
+
+    $.ajax({
+        url: '/spot_plan_items.json',
+        type: 'POST',
+        data: {
+            'spot_plan_item': {
+                'master_plan_item_id'   : master_plan_item_id,
+                'placed_at'             : placed_at,
+                'count'                 : count,
+                'version'               : version
+            }
+        },
+        success: function(data, status, xhr) {
+            update_spot_plan_item_values(target, data);
+        },
+        complete: function() {
+            complete_spot_plan_item_operation(target);
+        },
+        error: function() {
+            recover_spot_plan_item_original_data(target);
+        }
+    });
+}
+
+function delete_spot_plan_item(spot_plan_item_id, target) {
+    $.ajax({
+        url: '/spot_plan_items/' + spot_plan_item_id + '.json',
+        type: 'DELETE',
+        success: function(data, status, xhr) {
+            update_spot_plan_item_values(target, null);
+        },
+        complete: function() {
+            complete_spot_plan_item_operation(target);
+        },
+        error: function() {
+            recover_spot_plan_item_original_data(target);
+        }
+    });
+}
+
+function attach_context_menu(target_name) {
+    $.contextMenu({
+        selector: target_name,
+        build: function ($trigger, e){
+            var target = $trigger;
+            return {
+                callback: function() {},
+                items: {
+                    adjustCount: {
+                        name: '调整数量',
+                        callback: function(key, options) {
+                            $('#spot_plan_item_count').val(target.data('count'));
+                            $('#spot-plan-item-modify-count-modal .submit')
+                                .off('click').on('click', function() {
+                                    var new_count = parseInt($('#spot_plan_item_count').val());
+                                    click_spot_plan_item(target, new_count);
+                                    $('#spot-plan-item-modify-count-modal').modal('hide');
+                                });
+                            $('#spot-plan-item-modify-count-modal').modal();
+                        }
+                    },
+                    adjustPlacedAt: {
+                        name: '移动日期',
+                        callback: function(key, options) {
+                            $('#spot_plan_item_placed_at').parent().data('datetimepicker').setDate(new Date(target.data('placed-at')));
+                            $('#spot-plan-item-modify-placed-at-modal .submit')
+                                .off('click').on('click', function() {
+                                    var new_placed_at = $('#spot_plan_item_placed_at').val();
+                                    var spot_plan_item_id = target.data('spot-plan-item-id');
+                                    var count = parseInt(target.data('count'));
+                                    var master_plan_item_id = target.data('master-plan-item-id');
+
+                                    var new_target_name = get_easy_id(new_placed_at, master_plan_item_id);
+                                    var new_target = $('.' + new_target_name);
+
+                                    change_spot_plan_item_and_master_plan_item_counts(count, 0, target);
+                                    change_spot_plan_item_and_master_plan_item_counts(0, count, new_target);
+
+                                    highlight_changing_items(target);
+                                    highlight_changing_items(new_target);
+
+                                    modify_spot_plan_item_placed_at(spot_plan_item_id, new_placed_at, target, new_target);
+                                    $('#spot-plan-item-modify-placed-at-modal').modal('hide');
+                                });
+                            $('#spot-plan-item-modify-placed-at-modal').modal();
+                        }
+                    },
+                    resetCount: {
+                        name: '删除',
+                        callback: function(key, options) {
+                            reset_spot_plan_item_count(target);
+                        }
+                    }
+                }
+            };
+        }
+    });
+}
+
+function get_easy_id(placed_at, master_plan_item_id) {
+    return 'SPI_' + master_plan_item_id + '_' + moment(placed_at).format('YYYYMMDD')
 }

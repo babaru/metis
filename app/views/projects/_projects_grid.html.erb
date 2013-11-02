@@ -1,4 +1,8 @@
 <%= grid(@projects_grid, :show_filters => :always) do |g|
+  g.column name: t('activerecord.attributes.client.name') do |project|
+    project.client.name
+  end
+
   g.column name: t('activerecord.attributes.project.name') do |project|
     link_to content_tag(:strong, project.name), client_project_master_plan_path(id: project.current_master_plan_id, client_id: project.client_id, project_id: project.id)
   end

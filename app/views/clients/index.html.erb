@@ -13,10 +13,16 @@
 })
 %>
 
-<%= render partial: 'shared/icon_grid',
-  locals:
+<%= render_cell :icon_grid, :show,
+  data:
   {
-    items: @clients.collect {|client| {name: client.name, url: client_projects_path(client), icon: client.logo.url(:thumb)}},
+    items: @clients.collect {|client| {
+      name: client.name,
+      url: client_projects_path(client),
+      icon: client.logo.url(:thumb),
+      edit_url: edit_client_path(client),
+      remove_url: client_path(client)
+    }},
     editable: can?(:manage, Client)
   }
 %>

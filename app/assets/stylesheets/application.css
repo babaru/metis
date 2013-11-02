@@ -2,7 +2,6 @@
  *= require jquery.ui.all
  *= require wice_grid
  *= require nebulas
- *= require icon_grid
  */
 
 #spot-candidates-panel {

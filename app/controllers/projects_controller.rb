@@ -1,9 +1,11 @@
-#encoding: utf-8
 class ProjectsController < ApplicationController
+  add_crumb(I18n.t('model.list', model: Client.model_name.human)) {|instance| instance.send :clients_path }
+
   # GET /projects
   # GET /projects.json
   def index
     @client = Client.find params[:client_id]
+    add_crumb("#{@client.name} #{t('model.list', model: Project.model_name.human)}")
     @projects_grid = initialize_grid(Project.where(client_id: params[:client_id]))
 
     respond_to do |format|

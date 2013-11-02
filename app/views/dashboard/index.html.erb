@@ -1,1 +1,5 @@
 <%= render_cell :page_title, :show, data: {name: t('dashboard')} %>
+
+<%= render_cell :section_title, :show, data: {name: '正在执行中的项目'} %>
+
+<%= render partial: 'projects/projects_grid' %>

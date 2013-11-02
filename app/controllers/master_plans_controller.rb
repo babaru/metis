@@ -1,4 +1,6 @@
 class MasterPlansController < ApplicationController
+  add_crumb(I18n.t('model.list', model: Client.model_name.human)) {|instance| instance.send :clients_path }
+
   # GET /master_plans
   # GET /master_plans.json
   def index
@@ -14,6 +16,8 @@ class MasterPlansController < ApplicationController
   # GET /master_plans/1.json
   def show
     @master_plan = MasterPlan.find(params[:id])
+    add_crumb("#{@master_plan.client.name} #{t('model.list', model: Project.model_name.human)}", client_projects_path)
+    add_crumb(@master_plan.project.name)
 
     if @master_plan.medium_master_plans.count > 0
       if params[:medium_id]
@@ -237,6 +241,9 @@ class MasterPlansController < ApplicationController
 
   def spot_plan
     @master_plan = MasterPlan.find params[:id]
+    add_crumb("#{@master_plan.client.name} #{t('model.list', model: Project.model_name.human)}", client_projects_path)
+    add_crumb(@master_plan.project.name, client_project_master_plan_path)
+    add_crumb('排期表')
     if @master_plan.medium_master_plans.count > 0
       if params[:medium_id]
         @selected_medium_master_plan = @master_plan.medium_master_plans.where(medium_id: params[:medium_id]).first

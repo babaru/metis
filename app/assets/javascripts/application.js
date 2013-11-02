@@ -6,9 +6,7 @@
 //= require wice_grid
 //= require nebulas
 //= require icon_grid
-//= require bootstrap-contextmenu
 //= require backbone-rails
-//= require context
 //= require accounting
 //= require jquery.contextMenu
 //= require moment.min

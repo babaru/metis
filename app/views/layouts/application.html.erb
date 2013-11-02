@@ -13,11 +13,7 @@
   <%= render partial: 'shared/scaffold/header' %>
 
   <div id="main">
-    <ul class="breadcrumb">
-      <li><a href="#">Home</a> <i class="icon-angle-right divider"></i></li>
-      <li><a href="#">Library</a> <i class="icon-angle-right divider"></i></li>
-      <li class="active">Data</li>
-    </ul>
+    <%= render_crumbs %>
     <%= render partial: 'shared/components/notification' %>
     <%= yield %>
   </div>

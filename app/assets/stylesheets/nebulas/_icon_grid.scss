@@ -1,6 +1,8 @@
-@import 'bootstrap/mixins';
+
 .icon-grid {
-  .cell2 {
+  @extend .container-fluid;
+
+  .span2 {
     height: 160px;
     .item {
       display: block;
@@ -8,7 +10,8 @@
       @include border-radius(50px);
       width: 100px; height: 100px;
       margin: auto; clear: both;
-      @include box-shadow(rgba(0, 0, 0, 0.5) 0px 0px 3px inset);
+      border: 1px solid $tableBorder;
+      // @include box-shadow(rgba(0, 0, 0, 0.5) 0px 0px 10px inset);
 
       &:hover {
         // @include box-shadow(rgba(0, 0, 0, 0.3) 0px -5px 15px inset);

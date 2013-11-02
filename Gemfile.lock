@@ -71,6 +71,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.3)
+    crummy (1.8.0)
     curb (0.8.5)
     devise (3.1.1)
       bcrypt-ruby (~> 3.0)
@@ -280,6 +281,7 @@ DEPENDENCIES
   capistrano
   cells
   coffee-rails (~> 3.2.1)
+  crummy
   devise
   factory_girl
   factory_girl_rails
