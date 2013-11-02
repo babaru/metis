@@ -73,7 +73,7 @@ class SpotPlanItemsController < ApplicationController
       @spot_plan_item.master_plan_item.master_plan.save!
       respond_to do |format|
         format.html { redirect_to spot_plan_item_path(@spot_plan_item), notice: 'Spot plan item was successfully updated.' }
-        format.json { head :no_content }
+        format.json { render json: @spot_plan_item, status: :ok, location: @spot_plan_item }
       end
     end
   end
@@ -99,7 +99,7 @@ class SpotPlanItemsController < ApplicationController
         @spot_plan_item.master_plan_item.master_plan.is_dirty = true
         @spot_plan_item.master_plan_item.master_plan.save!
         respond_to do |format|
-          format.json { render json: @new_spot_plan_item }
+          format.json { render json: { new_item: @new_spot_plan_item, origin: @spot_plan_item } }
         end
       end
     end

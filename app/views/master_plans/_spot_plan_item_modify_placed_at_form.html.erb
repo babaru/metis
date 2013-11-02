@@ -1,12 +1,17 @@
 
 <div class="modal-body form-horizontal">
   <div class="form-inputs">
-    <div class="control-group date_picker required spot_plan_item_placed_at">
-      <label class="date_picker required control-label" for="spot_plan_item_placed_at">
+    <div class="control-group date_picker spot_plan_item_placed_at">
+      <label class="date_picker control-label" for="spot_plan_item_placed_at">
         选择新日期
       </label>
       <div class="controls">
-        <input class="date_picker" id="spot_plan_item_placed_at" name="placed_at" size="30" type="text">
+        <div class="date datepicker input-append date-picker">
+          <input class="date_picker" id="spot_plan_item_placed_at" name="placed_at" size="30" type="text">
+          <span class="add-on">
+            <i data-date-icon="icon-calendar" data-time-icon="icon-time" class="icon-calendar"></i>
+          </span>
+        </div>
       </div>
     </div>
   </div>

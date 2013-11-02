@@ -21,26 +21,29 @@
         background: lighten($orange, 30%);
       }
 
-      &.warning {
-        color: #ff0000;
-        font-weight: bold;
-      }
-
       &.spot_name {
         text-align: left;
         font-weight: bold;
       }
 
-      &.reality_count {
+      &.reality_count,
+      &.ideal_count {
         padding: 0px;
+        width: 40px;
       }
 
       span {
-        &.reality_count {
+        &.reality_count,
+        &.ideal_count {
           display: block;
           height: 25px;
           line-height: 25px;
           padding: 0px $tiny-space;
+        }
+
+        &.warning {
+          color: #ff0000;
+          font-weight: bold;
         }
       }
     }

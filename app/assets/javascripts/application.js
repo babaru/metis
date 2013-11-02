@@ -11,6 +11,7 @@
 //= require context
 //= require accounting
 //= require jquery.contextMenu
+//= require moment.min
 
 $(function() {
   $('[data-pjax-container]').pjax('a:not([data-remote]):not([data-behavior]):not([data-skip-pjax])');

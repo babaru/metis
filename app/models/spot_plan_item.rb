@@ -44,8 +44,7 @@ class SpotPlanItem < ActiveRecord::Base
 
   def as_json(options={})
     item = super(options)
-    item['date_token'] = self.placed_at.strftime('%Y%m%d')
-    item['day_index'] = self.placed_at.strftime('%d')
+    item['master_plan_item_reality_count'] = self.master_plan_item.reality_count(self.version)
     item['placed_at'] = self.placed_at.strftime('%Y-%m-%d')
     item['easy_id'] = self.easy_id
     item['is_old_spot_plan_item'] = self.new_spot_plan_item && self.master_plan_item.master_plan.is_dirty && self.version > 0
