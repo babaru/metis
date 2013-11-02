@@ -12,6 +12,10 @@ class SpotPlanItem < ActiveRecord::Base
 
   scope :in_version, lambda{|master_plan_item_id, version| where(master_plan_item_id: master_plan_item_id, version: version)}
 
+  def easy_id
+    "SPI_#{self.master_plan_item_id}_#{self.placed_at.strftime('%Y%m%d')}"
+  end
+
   def change_placed_at!(new_placed_at)
     SpotPlanItem.transaction do
       @new_spot_plan_item = SpotPlanItem.create_by_data!({
@@ -43,6 +47,7 @@ class SpotPlanItem < ActiveRecord::Base
     item['date_token'] = self.placed_at.strftime('%Y%m%d')
     item['day_index'] = self.placed_at.strftime('%d')
     item['placed_at'] = self.placed_at.strftime('%Y-%m-%d')
+    item['easy_id'] = self.easy_id
     item['is_old_spot_plan_item'] = self.new_spot_plan_item && self.master_plan_item.master_plan.is_dirty && self.version > 0
     item
   end
@@ -52,7 +57,7 @@ class SpotPlanItem < ActiveRecord::Base
       SpotPlanItem.transaction do
         @spot_plan_item = SpotPlanItem.find_by_master_plan_item_id_and_placed_at_and_version(data[:master_plan_item_id], data[:placed_at], data[:version])
         if @spot_plan_item
-          @spot_plan_item.count += data[:count]
+          @spot_plan_item.count += data[:count].to_i
           @spot_plan_item.save!
         else
           @spot_plan_item = SpotPlanItem.create!(data)

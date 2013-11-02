@@ -9,7 +9,7 @@
   </tr>
 
   <tr class="spot-plan-calendar-days-row">
-    <td colspan="5"></td>
+    <td colspan="5" rowspan="2"><%= @selected_year %>年 <%= @selected_month %>月</td>
     <% 1.upto(31) do |n| %>
     <% if n > Time.days_in_month(@selected_month, @selected_year) %>
     <td class="disabled">&nbsp;</td>
@@ -24,7 +24,7 @@
   </tr>
 
   <tr class="spot-plan-calendar-month-row">
-    <td colspan="5"><%= @selected_year %>年 <%= @selected_month %>月</td>
+
     <% 1.upto(31) do |n| %>
     <% if n > Time.days_in_month(@selected_month, @selected_year) %>
     <td>&nbsp;</td>
@@ -46,10 +46,45 @@
       <%= content_tag(:span, master_plan_item.spot_name, class: master_plan_item.is_on_house? ? 'is_on_house' : '') %>
     </td>
     <td class="ideal_count"><%= master_plan_item.count %></td>
-    <td class="reality_count"><%= content_tag(:span, master_plan_item.reality_count, class: 'reality_count') %></td>
+
+    <td class="reality_count">
+      <%= content_tag(:span,
+        master_plan_item.reality_count,
+        class: "reality_count master_plan_item_#{master_plan_item.id}",
+        'data-master-plan-id'       => @master_plan.id,
+        'data-master-plan-item-id'  => master_plan_item.id,
+        'data-reality-count'        => master_plan_item.reality_count
+      ) %>
+    </td>
+
     <% 1.upto(31) do |n| %>
     <% if @selected_days.length >= n && @selected_days[n - 1] && @selected_days[n - 1] > 0 %>
-    <%= content_tag :td, content_tag(:span, '', class: "empty-spot-plan-item", 'data-placed-at' => "#{@selected_year}-#{sprintf('%02d', @selected_month)}-#{sprintf '%02d', n}"), class: "spot-plan-item-cell spot-plan-item-cell#{@selected_year}#{sprintf('%02d', @selected_month)}#{sprintf '%02d', n} #{Time.new(@selected_year, @selected_month, n).strftime('%a').downcase}" %>
+    <% if @spot_plan_items["SPI_#{master_plan_item.id}_#{@selected_year}#{sprintf('%02d', @selected_month)}#{sprintf('%02d', n)}"] %>
+    <%= content_tag(:td,
+      content_tag(:span,
+        @spot_plan_items["SPI_#{master_plan_item.id}_#{@selected_year}#{sprintf('%02d', @selected_month)}#{sprintf('%02d', n)}"].count,
+        class: "spot-plan-item",
+        'data-placed-at'                    => "#{@selected_year}-#{sprintf('%02d', @selected_month)}-#{sprintf '%02d', n}",
+        'data-master-plan-item-id'          => master_plan_item.id,
+        'data-version'                      => @spot_plan_version,
+        'data-spot-plan-item-easy-id'       => @spot_plan_items["SPI_#{master_plan_item.id}_#{@selected_year}#{sprintf('%02d', @selected_month)}#{sprintf('%02d', n)}"].easy_id,
+        'data-spot-plan-item-id'            => @spot_plan_items["SPI_#{master_plan_item.id}_#{@selected_year}#{sprintf('%02d', @selected_month)}#{sprintf('%02d', n)}"].id,
+        'data-count' => @spot_plan_items["SPI_#{master_plan_item.id}_#{@selected_year}#{sprintf('%02d', @selected_month)}#{sprintf('%02d', n)}"].count
+      ),
+      class: "spot-plan-item-cell spot-plan-item-cell-#{master_plan_item.id}-#{@selected_year}#{sprintf('%02d', @selected_month)}#{sprintf '%02d', n} #{Time.new(@selected_year, @selected_month, n).strftime('%a').downcase}"
+    ) %>
+    <% else %>
+    <%= content_tag(:td,
+      content_tag(:span,
+        nil,
+        class: "spot-plan-item",
+        'data-placed-at'            => "#{@selected_year}-#{sprintf('%02d', @selected_month)}-#{sprintf '%02d', n}",
+        'data-master-plan-item-id'  => master_plan_item.id,
+        'data-version'              => @spot_plan_version
+      ),
+      class: "spot-plan-item-cell spot-plan-item-cell-#{master_plan_item.id}-#{@selected_year}#{sprintf('%02d', @selected_month)}#{sprintf '%02d', n} #{Time.new(@selected_year, @selected_month, n).strftime('%a').downcase}"
+    ) %>
+    <% end %>
     <% else %>
     <td class="disabled"></td>
     <% end %>

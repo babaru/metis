@@ -1,11 +1,17 @@
-<%= simple_form_for(:spot_plan_item, url: spot_plan_items_path, method: :post, remote: true, html: {id: 'spot-plan-item-modify-placed-at-form', class: 'form-horizontal' }) do |f| %>
-  <div class="modal-body">
-    <div class="form-inputs">
-      <%= f.input :placed_at, as: :date_picker, label: '日期' %>
+
+<div class="modal-body form-horizontal">
+  <div class="form-inputs">
+    <div class="control-group date_picker required spot_plan_item_placed_at">
+      <label class="date_picker required control-label" for="spot_plan_item_placed_at">
+        选择新日期
+      </label>
+      <div class="controls">
+        <input class="date_picker" id="spot_plan_item_placed_at" name="placed_at" size="30" type="text">
+      </div>
     </div>
   </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
-    <%= f.button :submit, '确定', class: 'btn btn-primary' %>
-  </div>
-<% end %>
+</div>
+<div class="modal-footer">
+  <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  <button class="btn btn-primary submit">确定</button>
+</div>

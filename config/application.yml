@@ -1,7 +1,7 @@
 defaults: &defaults
   app:
-    name: 'metis.tida'
-    copy_right: ''
+    name: '百孚思媒介管理系统'
+    copy_right: '&copy; 2013 北京百孚思广告有限公司 All Rights Reserved.'
 
 development:
   <<: *defaults

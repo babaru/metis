@@ -10,6 +10,7 @@
 //= require backbone-rails
 //= require context
 //= require accounting
+//= require jquery.contextMenu
 
 $(function() {
   $('[data-pjax-container]').pjax('a:not([data-remote]):not([data-behavior]):not([data-skip-pjax])');

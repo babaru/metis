@@ -42,6 +42,17 @@ class MasterPlan < ActiveRecord::Base
     self.items.where('medium_id=?', medium_id).count
   end
 
+  def spot_plan(version = nil)
+    version = self.spot_plan_version unless version
+    result = {}
+    items.each do |item|
+      SpotPlanItem.in_version(item.id, version).each do |spi|
+        result[spi.easy_id] = spi
+      end
+    end
+    result
+  end
+
   def confirm!
     MasterPlan.transaction do
       spot_plan_items = SpotPlanItem.where('master_plan_id=? and version=?', self.id, self.spot_plan_version)

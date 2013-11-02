@@ -245,6 +245,8 @@ class MasterPlansController < ApplicationController
       @master_plan_items = MasterPlanItem.where(master_plan_id: @master_plan.id, medium_id: @selected_medium_master_plan.medium_id).order('is_on_house, created_at')
       @spot_plan_version = params[:version]
       @spot_plan_version = @master_plan.spot_plan_version if params[:version].nil?
+
+      @spot_plan_items = @master_plan.spot_plan(@spot_plan_version)
     end
 
     @months = @master_plan.project.months

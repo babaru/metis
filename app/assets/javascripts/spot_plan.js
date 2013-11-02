@@ -99,7 +99,7 @@ $(document).ready(function() {
 
     MasterPlanItemView = Backbone.View.extend({
         initialize: function() {
-            this.listenTo(this.model, 'change', this.render);
+            this.model.on('change', this.render, this);
         },
         render: function() {
             console.log('render master plan item view: ' + this.model.get('id'));
@@ -117,7 +117,7 @@ $(document).ready(function() {
         tagName: 'span',
         template: _.template('<span class="count-value"><%= count %></span>'),
         initialize: function() {
-            this.on('change', this.render, this.model);
+            this.model.on('change', this.render, this);
         },
 
         events: {
@@ -171,7 +171,7 @@ $(document).ready(function() {
                                     spi.setMasterPlanItem(m.getMasterPlanItem());
                                     var spot_plan_item_view = new SpotPlanItemView({model: spi});
                                     spot_plan_item_view.render();
-                                    spi.on('change', function() { m.getMasterPlanItem().fetch(); }, m.getMasterPlanItem());
+                                    spi.on('change', function() { m.getMasterPlanItem().fetch(); }, spot_plan_item_view);
                                     m.getMasterPlanItem().getSpotPlanItems().push(spi);
                                 }
                             });
