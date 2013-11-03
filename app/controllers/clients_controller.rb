@@ -1,6 +1,6 @@
 class ClientsController < ApplicationController
-  add_crumb I18n.t('model.list', model: Client.model_name.human), only: :index
-  add_crumb(I18n.t('model.list', model: Client.model_name.human), except: :index) {|instance| instance.send :clients_path }
+  add_breadcrumb I18n.t('model.list', model: Client.model_name.human), nil, only: :index
+  add_breadcrumb(I18n.t('model.list', model: Client.model_name.human), :clients_path, except: :index)
 
   # GET /clients
   # GET /clients.json
@@ -15,6 +15,7 @@ class ClientsController < ApplicationController
 
   def assigns
     @client = Client.find(params[:id])
+    add_breadcrumb("#{@client.name} #{t('model.manager', model: ClientAssignment.model_name.human)}")
   end
 
   def save_assignments
@@ -22,7 +23,7 @@ class ClientsController < ApplicationController
     if request.post?
       respond_to do |format|
       if @client.update_attributes(params[:client])
-        format.html { redirect_to manage_client_assignments_path(@client), notice: "#{ClientAssignment.model_name.human}保存成功！" }
+        format.html { redirect_to client_projects_path(@client), notice: "#{ClientAssignment.model_name.human}保存成功！" }
         format.json { head :no_content }
       else
         format.html { render action: "assigns" }
@@ -34,6 +35,7 @@ class ClientsController < ApplicationController
 
   def medium_policies
     @client = Client.find params[:id]
+    add_breadcrumb("#{@client.name} #{t('model.manager', model: MediumPolicy.model_name.human)}")
   end
 
   def save_medium_policies
@@ -79,7 +81,7 @@ class ClientsController < ApplicationController
   # GET /clients/new
   # GET /clients/new.json
   def new
-    add_crumb t('model.create', model: Client.model_name.human)
+    add_breadcrumb t('model.create', model: Client.model_name.human)
     @client = Client.new
     @client.created_by_id = current_user.id
 
@@ -91,6 +93,7 @@ class ClientsController < ApplicationController
 
   # GET /clients/1/edit
   def edit
+    add_breadcrumb t('model.edit', model: Client.model_name.human)
     @client = Client.find(params[:id])
   end
 

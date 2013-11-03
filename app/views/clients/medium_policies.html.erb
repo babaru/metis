@@ -1,11 +1,41 @@
-<%= render_page_title "<strong>#{@client.name}</strong> #{t('model.manager', model: MediumPolicy.model_name.human)}" %>
+<div class="narrow-center-page">
+
+<%= render_cell(
+  :page_title,
+  :show,
+  data:
+  {
+    name: "<strong>#{@client.name}</strong> #{t('model.manager', model: MediumPolicy.model_name.human)}",
+    toolbar:
+    {
+      left:
+      [
+        render_cell(
+          :button,
+          :show,
+          data:
+          {
+            name: fa_icon('level-up rotate-270'),
+            url: client_projects_path(@client.id),
+            options:
+            {
+              class: 'btn',
+              rel: 'tooltip',
+              title: "#{t('labels.back_to')} #{@client.name} #{t('model.list', :model => Project.model_name.human)}",
+            }
+          }
+        )
+      ]
+    }
+  }
+) %>
 
 <% if can? :manage, MediumPolicy %>
 
 <%= simple_form_for(:medium_policies, url: save_client_medium_policies_path(@client), method: :post, html: {class: 'form-horizontal no-border' }) do |f| %>
 <%= f.error_notification %>
 
-  <table id="medium-policies-table" class="table table-ordered table-striped">
+  <table id="medium-policies-table" class="table table-bordered table-striped">
     <tr>
       <th><strong>媒体</strong></th>
       <th><strong><%= t('activerecord.attributes.medium_policy.medium_discount') %></strong>（0~10）折</th>
@@ -30,27 +60,25 @@
 
 <% else %>
 
-<article>
-  <div class="padding">
-    <table id="medium-policies-table" class="table table-ordered table-striped">
-      <tr>
-        <th><strong>媒体</strong></th>
-        <th><strong><%= t('activerecord.attributes.medium_policy.medium_discount') %></strong></th>
-        <th><strong><%= t('activerecord.attributes.medium_policy.company_discount') %></strong></th>
-        <th><strong><%= t('activerecord.attributes.medium_policy.medium_bonus_ratio') %></strong></th>
-        <th><strong><%= t('activerecord.attributes.medium_policy.company_bonus_ratio') %></strong></th>
-      </tr>
-      <% Medium.all.each do |medium| %>
-      <tr>
-        <td><%= medium.name %><%= hidden_field_tag 'medium_ids[]', medium.id %></td>
-        <td><%= MediumPolicy.medium_discount(medium.id, @client.id) %></td>
-        <td><%= MediumPolicy.company_discount(medium.id, @client.id) %></td>
-        <td><%= MediumPolicy.medium_bonus_ratio(medium.id, @client.id) %></td>
-        <td><%= MediumPolicy.company_bonus_ratio(medium.id, @client.id) %></td>
-      </tr>
-      <% end %>
-    </table>
-  </div>
-</article>
+<table id="medium-policies-table" class="table-striped table-bordered table">
+  <tr>
+    <th><strong>媒体</strong></th>
+    <th><strong><%= t('activerecord.attributes.medium_policy.medium_discount') %></strong></th>
+    <th><strong><%= t('activerecord.attributes.medium_policy.company_discount') %></strong></th>
+    <th><strong><%= t('activerecord.attributes.medium_policy.medium_bonus_ratio') %></strong></th>
+    <th><strong><%= t('activerecord.attributes.medium_policy.company_bonus_ratio') %></strong></th>
+  </tr>
+  <% Medium.all.each do |medium| %>
+  <tr>
+    <td><%= medium.name %><%= hidden_field_tag 'medium_ids[]', medium.id %></td>
+    <td><%= MediumPolicy.medium_discount(medium.id, @client.id) %></td>
+    <td><%= MediumPolicy.company_discount(medium.id, @client.id) %></td>
+    <td><%= MediumPolicy.medium_bonus_ratio(medium.id, @client.id) %></td>
+    <td><%= MediumPolicy.company_bonus_ratio(medium.id, @client.id) %></td>
+  </tr>
+  <% end %>
+</table>
 
 <% end %>
+
+</div>

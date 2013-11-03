@@ -45,6 +45,7 @@ GEM
       sass (~> 3.2)
     bootstrap-x-editable-rails (1.5.0)
       railties (>= 3.0)
+    breadcrumbs_on_rails (2.3.0)
     builder (3.0.4)
     cancan (1.6.10)
     capistrano (2.15.5)
@@ -71,7 +72,6 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.3)
-    crummy (1.8.0)
     curb (0.8.5)
     devise (3.1.1)
       bcrypt-ruby (~> 3.0)
@@ -277,11 +277,11 @@ DEPENDENCIES
   bootstrap-datetimepicker-rails
   bootstrap-sass (~> 2.3.2.1)
   bootstrap-x-editable-rails
+  breadcrumbs_on_rails
   cancan
   capistrano
   cells
   coffee-rails (~> 3.2.1)
-  crummy
   devise
   factory_girl
   factory_girl_rails

@@ -13,7 +13,7 @@
   <%= render partial: 'shared/scaffold/header' %>
 
   <div id="main">
-    <%= render_crumbs %>
+    <%= render_breadcrumbs builder: ::Tida::Metis::BootstrapBreadcrumbsBuilder, separator: content_tag(:span, '/', class: 'divider').html_safe %>
     <%= render partial: 'shared/components/notification' %>
     <%= yield %>
   </div>

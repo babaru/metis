@@ -1,11 +1,11 @@
 class ProjectsController < ApplicationController
-  add_crumb(I18n.t('model.list', model: Client.model_name.human)) {|instance| instance.send :clients_path }
+  add_breadcrumb(I18n.t('model.list', model: Client.model_name.human), :clients_path, only: :index)
 
   # GET /projects
   # GET /projects.json
   def index
     @client = Client.find params[:client_id]
-    add_crumb("#{@client.name} #{t('model.list', model: Project.model_name.human)}")
+    add_breadcrumb("#{@client.name} #{t('model.list', model: Project.model_name.human)}")
     @projects_grid = initialize_grid(Project.where(client_id: params[:client_id]))
 
     respond_to do |format|
@@ -63,6 +63,9 @@ class ProjectsController < ApplicationController
     @project.client_id = params[:client_id]
     @project.created_by_id = current_user.id
 
+    add_breadcrumb("#{@project.client.name} #{t('model.list', model: Project.model_name.human)}", client_projects_path(client_id: @project.client_id))
+    add_breadcrumb(t('model.create', model: Project.model_name.human))
+
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @project }
@@ -72,6 +75,8 @@ class ProjectsController < ApplicationController
   # GET /projects/1/edit
   def edit
     @project = Project.find(params[:id])
+    add_breadcrumb("#{@project.client.name} #{t('model.list', model: Project.model_name.human)}", client_projects_path(client_id: @project.client_id))
+    add_breadcrumb(t('model.edit', model: Project.model_name.human))
   end
 
   # POST /projects

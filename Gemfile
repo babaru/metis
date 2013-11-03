@@ -54,7 +54,7 @@ gem 'spreadsheet'
 gem 'remotipart'
 gem 'pdfkit'
 gem 'cancan'
-gem 'crummy'
+gem 'breadcrumbs_on_rails'
 
 gem 'axlsx'
 

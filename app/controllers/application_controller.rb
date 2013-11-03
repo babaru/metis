@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
 
   layout :layout_by_resource
   before_filter :initialize_sessions
-  add_crumb I18n.t('dashboard'), '/'
+  add_breadcrumb '控制台', '/'
 
   protected
 
