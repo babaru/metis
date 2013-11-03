@@ -46,7 +46,7 @@ Metis::Application.configure do
   # config.action_controller.asset_host = "http://assets.example.com"
 
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
-  config.assets.precompile += %w( single.css retina.css master_plan.css icon_grid.css icon_grid.js spot_plan.js master_plan_summary.js medium_master_plan_summary.js medium_master_plan_items_grid.js)
+  config.assets.precompile += %w( nebulas.css icon_grid.js spot_plan.js master_plan_summary.js medium_master_plan_summary.js medium_master_plan_items_grid.js)
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
