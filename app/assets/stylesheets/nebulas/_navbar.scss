@@ -32,7 +32,7 @@ body {
           padding-left: $large-space;
           padding-right: $large-space;
 
-          &:hover, &:focus {
+          &:hover, &:focus, &.active {
             @include navbar-highlight-link;
           }
         }
@@ -55,6 +55,12 @@ body {
           }
         }
 
+        .dropdown-menu {
+          i {
+            color: $grayLight;
+          }
+        }
+
         &.dropdown {
 
           > .dropdown-menu {
@@ -70,10 +76,6 @@ body {
               > a {
                 padding-top: $tiny-space;
                 padding-bottom: $tiny-space;
-
-                > i {
-                  color: #999;
-                }
 
                 &:hover, &:focus {
                   background-color: $logo-blue;

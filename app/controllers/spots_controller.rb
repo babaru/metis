@@ -4,7 +4,8 @@ class SpotsController < ApplicationController
   # GET /spots.json
   def index
     @media = Medium.all
-    @medium = Medium.find params[:medium_id]
+    @medium = Medium.find params[:medium_id] if params[:medium_id]
+    @medium = @media.first unless @medium
     @spot_categories = @medium.spot_categories
     @spot_category = SpotCategory.find params[:spot_category_id] if params[:spot_category_id]
     @spot_category = @spot_categories.first if @spot_category.nil?

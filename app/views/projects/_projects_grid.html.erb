@@ -19,6 +19,10 @@
     content_tag(:strong, number_to_currency(project.budget, precision: 0, unit: '￥'))
   end
 
+  g.column name: t('activerecord.attributes.project.created_by') do |project|
+    project.created_by.name
+  end
+
   g.column :html => {class: 'btn-cell'} do |project|
     link_to(icon('icon-user'), manage_project_assignments_path(id: project), rel: 'tooltip', title: '分配项目', class: 'btn-inverse btn') if can? :manage, :project
   end

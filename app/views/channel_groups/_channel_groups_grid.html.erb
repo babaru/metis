@@ -8,12 +8,30 @@
   end
 
   if can?(:manage, ChannelGroup)
-  g.column :html => {class: 'buttons'} do |channel_group|
-    link_to(icon('icon-edit'), edit_channel_group_path(channel_group), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
-  end
+    g.column :html => {class: 'btn-cell'} do |channel_group|
+      link_to(
+        fa_icon('edit'),
+        edit_channel_group_path(channel_group),
+        {
+          class: 'btn',
+          rel: 'tooltip',
+          title: t('buttons.edit')
+        }
+      )
+    end
 
-  g.column :html => {class: 'buttons'} do |channel_group|
-    link_to(icon('icon-trash'), channel_group_path(channel_group), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete'))
-  end
+    g.column :html => {class: 'btn-cell'} do |channel_group|
+      link_to(
+        fa_icon('trash'),
+        channel_group_path(channel_group),
+        {
+          method: :delete,
+          confirm: t("confirms.delete"),
+          class: 'btn btn-danger',
+          rel: 'tooltip',
+          title: t('buttons.delete')
+        }
+      )
+    end
   end
 end -%>

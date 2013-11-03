@@ -7,7 +7,7 @@ zh-CN:
       medium: 媒体
       channel: 频道
       channel_group: 频道分组
-      spot: 媒体刊例
+      spot: 刊例
       spot_category: 刊例分类
       role: 身份
       master_plan: Master Plan
@@ -32,6 +32,7 @@ zh-CN:
         ended_at: 结束日期
         assigned_to: 项目分配给
         assigned_users: 执行人员列表
+        created_by: 创建人
       master_plan:
         name: 名称
         updated_at: 最后修改时间

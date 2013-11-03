@@ -47,7 +47,7 @@ module Tida
           options = options_for(item)
           options = options.merge(opt)
           options[:class] = [] unless options[:class]
-          options[:class] << 'dropdown-toggle'
+          options[:class] << ' dropdown-toggle'
           options['data-toggle'] = 'dropdown'
           content = []
 

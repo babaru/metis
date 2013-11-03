@@ -32,41 +32,177 @@ SimpleNavigation::Configuration.run do |navigation|
 
   # Define the primary navigation
   navigation.items do |primary|
-    primary.item :page_dashboard, t('dashboard'), dashboard_path, link: {icon: 'icon-dashboard'}, :highlights_on => /dashboard/
-    primary.item :page_clients, Client.model_name.human, nil, link: {icon: 'icon-briefcase'} do |clients|
-      clients.item :page_client_list, t('model.list', model: Client.model_name.human), clients_path, link: {icon: 'icon-list'}, highlights_on: ::Regexp.new("clients$")
+    primary.item(
+      :page_dashboard,
+      t('dashboard'),
+      dashboard_path,
+      {
+        highlights_on: /dashboard/
+      }
+    )
+
+    primary.item(
+      :page_clients,
+      Client.model_name.human,
+      nil,
+      {
+        highlights_on: /clients/
+      }
+    ) do |client_menu|
+
+      # Client List
+      # ------------------------------------------------------------------------
+
+      client_menu.item(
+        :page_client_list,
+        t('model.list', model: Client.model_name.human),
+        clients_path,
+        {
+          link:
+          {
+            icon: 'list'
+          }
+        }
+      )
+
+      # Client Sub Menu
+      # ------------------------------------------------------------------------
+
       current_user.viewable_clients.each do |client|
-        clients.item "page_client_#{client.id}".to_sym, client.name, nil, highlights_on: ::Regexp.new("clients/#{client.id}") do |client_items|
-          client_items.item "page_client_#{client.id}_item_projects".to_sym,
+
+        client_menu.item(
+          "page_client_#{client.id}".to_sym,
+          client.name,
+          nil
+        ) do |client_sub_menu|
+
+          # 项目列表
+          #---------------------------------------------------------------------
+
+          client_sub_menu.item(
+            "page_client_#{client.id}_item_projects".to_sym,
             t('model.list', model: Project.model_name.human),
             client_projects_path(client),
-            link: {icon: 'icon-folder-close'},
-            highlights_on: ::Regexp.new("clients/#{client.id}/projects")
+            {
+              link:
+              {
+                icon: 'folder-close'
+              }
+            }
+          )
 
-          client_items.item "page_client_#{client.id}_item_assigns".to_sym,
+          # 客户人员
+          #---------------------------------------------------------------------
+
+          client_sub_menu.item(
+            "page_client_#{client.id}_item_assigns".to_sym,
             t('model.manager', model: ClientAssignment.model_name.human),
             manage_client_assignments_path(client),
-            link: {icon: 'icon-male'},
-            highlights_on: ::Regexp.new("clients/#{client.id}/assigns")
+            {
+              link:
+              {
+                icon: 'male'
+              }
+            }
+          )
 
-          client_items.item "page_client_#{client.id}_item_medium_policies".to_sym,
+          # 客户媒体政策
+          #---------------------------------------------------------------------
+
+          client_sub_menu.item(
+            "page_client_#{client.id}_item_medium_policies".to_sym,
             t('model.manager', model: MediumPolicy.model_name.human),
             manage_client_medium_policies_path(client),
-            link: {icon: 'icon-file-text'},
-            highlights_on: ::Regexp.new("clients/#{client.id}/medium_policies")
+            {
+              link:
+              {
+                icon: 'file-text'
+              }
+            }
+          )
+
+          if can? :manage, Client
+            client_sub_menu.item(
+              :page_client_items_divider_1, nil, nil, link: {divider: true})
+
+            client_sub_menu.item(
+              :page_edit_client,
+              t('model.edit', model: Client.model_name.human),
+              edit_client_path(client),
+              link:
+              {
+                icon: 'pencil'
+              }
+            )
+
+          end
+
         end
       end
-    end
-    primary.item :page_spots, Spot.model_name.human, nil, link: {icon: 'icon-map-marker'} do |media|
-      media.item :page_media, t('model.list', model: Medium.model_name.human), media_path, link: {icon: 'icon-list'}, highlights_on: ::Regexp.new("media$")
-      Medium.all.each do |item|
-        media.item "page_medium_#{item.id}".to_sym, item.name, medium_spots_path(item.id), highlights_on: ::Regexp.new("media/#{item.id}")
+
+      if can? :manage, Client
+
+        client_menu.item(
+          :page_clients_divider_1, nil, nil, link: {divider: true})
+
+        client_menu.item(
+          :page_create_client,
+          t('model.create', model: Client.model_name.human),
+          new_client_path,
+          link:
+          {
+            icon: 'plus-sign'
+          }
+        )
       end
+    end
+
+    primary.item(
+      :page_media,
+      Medium.model_name.human,
+      nil,
+      highlights_on: /media/
+    ) do |medium_menu|
+
+      medium_menu.item(
+        :page_medium_list,
+        t('model.list', model: Medium.model_name.human),
+        media_path,
+        link:
+        {
+          icon: 'list'
+        }
+      )
+
+      medium_menu.item(
+        :page_spot_list,
+        t('model.list', model: Spot.model_name.human),
+        spots_path,
+        link:
+        {
+          icon: 'list'
+        }
+      )
+
     end
 
     if can? :manage, User
-      primary.item :page_users, User.model_name.human, nil, link: {icon: 'icon-user'} do |users|
-        users.item :page_user_list, t('model.list', model: User.model_name.human), users_path, link: {icon: 'icon-list'}, highlights_on: ::Regexp.new("users$")
+      primary.item(
+        :page_users,
+        User.model_name.human,
+        nil,
+        highlights_on: /users/
+      ) do |user_menu|
+
+        user_menu.item(
+          :page_user_list,
+          t('model.list', model: User.model_name.human),
+          users_path,
+          link:
+          {
+            icon: 'list'
+          }
+        )
       end
     end
   end
