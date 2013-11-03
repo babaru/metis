@@ -2,7 +2,7 @@ module Tida
   module Metis
     module Menus
       class GlobalMenuRenderer < ::SimpleNavigation::Renderer::Base
-        include FontAwesome::Rails::IconHelper
+        include ::FontAwesome::Rails::IconHelper
 
         def render(item_container)
           list_content = item_container.items.inject([]) do |list, item|
