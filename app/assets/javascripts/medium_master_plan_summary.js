@@ -2,7 +2,6 @@ var medium_master_plan = null;
 var medium_master_plan_summary_view = null;
 
 $(document).ready(function() {
-    context.init({ preventDoubleContext: false });
     var MediumMasterPlan = Backbone.Model.extend({urlRoot: '/medium_master_plans'});
     var MediumMasterPlanSummaryView = Backbone.View.extend({
         initialize: function() {

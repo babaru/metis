@@ -12,13 +12,13 @@
       <strong>
         <%= @pool.get_options(medium_id)[:medium_name] %></strong> <%= @pool.get_options(medium_id)[:is_combo] ? content_tag(:span, '打包价', class: 'label label-warning') : '' %>
       <% unless @pool.get_options(medium_id)[:is_combo] %>
-      <%= link_to(icon_text('icon-gift', '打包'),
+      <%= link_to(fa_icon('gift', text: '打包'),
         go_combo_path(id: @master_plan, medium_id: medium_id, is_combo: true),
-        class: 'button button-warning', method: :post, remote: true) %>
+        class: 'btn btn-warning', method: :post, remote: true) %>
       <% else %>
-      <%= link_to(icon_text('icon-folder-open', '不打包'),
+      <%= link_to(fa_icon('folder-open', text: '不打包'),
         go_combo_path(id: @master_plan, medium_id: medium_id, is_combo: false),
-        class: 'button button-inverse', method: :post, remote: true) if @pool.get_options(medium_id)[:is_combo] %>
+        class: 'btn btn-inverse', method: :post, remote: true) if @pool.get_options(medium_id)[:is_combo] %>
       <% end %>
     </td>
     <td></td>
@@ -28,8 +28,8 @@
     <td>
 
     </td>
-    <td class="buttons">
-      <%= link_to(icon('icon-trash'), remove_medium_from_cart_path(id: @master_plan, medium_id: medium_id), method: :post, confirm: t('confirms.delete'), class: 'button button-danger', remote: true) %>
+    <td class="btn-cell">
+      <%= link_to(fa_icon('trash'), remove_medium_from_cart_path(id: @master_plan, medium_id: medium_id), method: :post, confirm: t('confirms.delete'), class: 'btn btn-danger', remote: true) %>
     </td>
   </tr>
   <% @pool.get_items(medium_id).map do |key, item| %>
@@ -69,8 +69,8 @@
         'data-source' => "[{value: 'false', text:'购买'}, {value: 'true', text: '配送'}]"
       ) %>
     </td>
-    <td class="buttons">
-      <%= link_to(icon('icon-trash'), remove_from_cart_path(id: @master_plan, key: key, medium_id: item[:medium_id]), method: :post, confirm: t('confirms.delete'), class: 'button button-danger', remote: true) %>
+    <td class="btn-cell">
+      <%= link_to(fa_icon('trash'), remove_from_cart_path(id: @master_plan, key: key, medium_id: item[:medium_id]), method: :post, confirm: t('confirms.delete'), class: 'btn btn-danger', remote: true) %>
     </td>
   </tr>
   <% end %>

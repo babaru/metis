@@ -2,7 +2,6 @@ var master_plan = null;
 var master_plan_summary_view = null;
 
 $(document).ready(function() {
-    context.init({ preventDoubleContext: false });
     MasterPlan = Backbone.Model.extend({urlRoot: '/master_plans'});
     MasterPlanSummaryView = Backbone.View.extend({
         initialize: function() {
