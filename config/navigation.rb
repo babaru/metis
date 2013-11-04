@@ -195,6 +195,16 @@ SimpleNavigation::Configuration.run do |navigation|
       ) do |user_menu|
 
         user_menu.item(
+          :page_create_user,
+          t('model.create', model: User.model_name.human),
+          new_user_path,
+          link:
+          {
+            icon: 'plus-sign'
+          }
+        )
+
+        user_menu.item(
           :page_user_list,
           t('model.list', model: User.model_name.human),
           users_path,
