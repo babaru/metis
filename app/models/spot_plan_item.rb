@@ -1,11 +1,13 @@
 class SpotPlanItem < ActiveRecord::Base
   belongs_to :master_plan_item
+  belongs_to :master_plan
   belongs_to :new_spot_plan_item, class_name: 'SpotPlanItem', foreign_key: :new_spot_plan_item_id
   has_one :spot_plan_item
 
   attr_accessible :count,
     :placed_at,
     :master_plan_item_id,
+    :master_plan_id,
     :version,
     :new_spot_plan_item_id,
     :date_id
@@ -19,6 +21,7 @@ class SpotPlanItem < ActiveRecord::Base
   def change_placed_at!(new_placed_at)
     SpotPlanItem.transaction do
       @new_spot_plan_item = SpotPlanItem.create_by_data!({
+        master_plan_id: self.master_plan_id,
         master_plan_item_id: self.master_plan_item_id,
         placed_at: new_placed_at,
         count: self.count,
@@ -35,6 +38,7 @@ class SpotPlanItem < ActiveRecord::Base
   def clone_new_version!(version)
     new_version = version + 1
     SpotPlanItem.create_by_data!({
+      master_plan_id: self.master_plan_id,
       master_plan_item_id: self.master_plan_item_id,
       placed_at: self.placed_at,
       count: self.count,
@@ -44,6 +48,8 @@ class SpotPlanItem < ActiveRecord::Base
 
   def as_json(options={})
     item = super(options)
+    item['master_plan_id'] = self.master_plan_id
+    item['master_plan_is_dirty'] = self.master_plan.is_dirty
     item['master_plan_item_reality_count'] = self.master_plan_item.reality_count(self.version)
     item['placed_at'] = self.placed_at.strftime('%Y-%m-%d')
     item['easy_id'] = self.easy_id

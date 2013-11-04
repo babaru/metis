@@ -307,4 +307,15 @@ class MasterPlansController < ApplicationController
       end
     end
   end
+
+  def remove_spot_plan_version
+    @master_plan = MasterPlan.find params[:id]
+    if request.post?
+      @master_plan.remove_spot_plan_version!(params[:version].to_i)
+
+      respond_to do |format|
+        format.html { redirect_to spot_plan_path(id: @master_plan, project_id: @master_plan.project_id, client_id: @master_plan.client_id), notice: '版本已成功删除.' }
+      end
+    end
+  end
 end

@@ -16,6 +16,71 @@
             title: "#{t('labels.back_to')} Master Plan #{@master_plan.name}",
           }
         })
+      ],
+
+      right:
+      [
+        render_cell(
+          :button,
+          :show,
+          data:
+          {
+            type: 'dropdown',
+            name: fa_icon('bookmark', text: (@spot_plan_version.to_i > 0 ? "版本#{@spot_plan_version}" : "初始版本")),
+            options:
+            {
+              class: 'btn'
+            },
+            items: (@master_plan.spot_plan_versions.inject([]){|list, n| list << {name: (n > 0 ? "版本#{n}" : "初始版本"), url: spot_plan_path(medium_id: @selected_medium_master_plan.medium_id, y: @selected_year, m: @selected_month, version: n)}})
+          }
+        ),
+
+        render_cell(
+          :button,
+          :show,
+          data:
+          {
+            name: fa_icon('trash', text: '删除版本'),
+            url: remove_spot_plan_version_path(
+              id: @master_plan.id,
+              medium_id: @selected_medium_master_plan.medium_id,
+              version: @spot_plan_version),
+            options:
+            {
+              class: 'btn btn-danger',
+              method: :post,
+              confirm: t('confirms.delete')
+            }
+          }
+        ),
+
+        render_cell(:button, :show,
+          data:
+          {
+            name: fa_icon('thumbs-up', text: "排期表客户已确认"),
+            url: confirm_spot_plan_path(@master_plan),
+            options:
+            {
+              id: 'confirm-spot-plan-button',
+              class: 'btn btn-success',
+              style: @master_plan.is_dirty? ? '' : 'display: none;',
+              method: :post
+            }
+          }
+        ),
+
+        render_cell(:button, :show,
+          data:
+          {
+            name: fa_icon('download-alt', text: "下载排期表文件"),
+            url: generate_spot_plan_path(id: @master_plan, version: @spot_plan_version),
+            options:
+            {
+              class: 'btn btn-info',
+              method: :post
+            }
+          }
+        )
       ]
     }
   }
@@ -44,42 +109,7 @@
     </div>
     <div class="span6">
       <div class="btn-toolbar pull-right">
-        <%= render_cell(:button, :show,
-          data:
-          {
-            type: 'dropdown',
-            name: fa_icon('bookmark', text: (@spot_plan_version.to_i > 0 ? "版本#{@spot_plan_version}" : "初始版本")),
-            options: {class: 'btn'},
-            items: (@master_plan.spot_plan_version..1).inject([]){|list, n| list << {name: (n > 0 ? "版本#{n}" : "初始版本"), url: spot_plan_path(medium_id: @selected_medium_master_plan.medium_id, y: @selected_year, m: @selected_month, version: n)}}
-          }
-        )
-        %>
-        <%= render_cell(:button, :show,
-          data:
-          {
-            name: fa_icon('thumbs-up', text: "排期表客户已确认"),
-            url: confirm_spot_plan_path(@master_plan),
-            options:
-            {
-              class: 'btn btn-success',
-              method: :post
-            }
-          }
-        ) if @master_plan.is_dirty?
-        %>
-        <%= render_cell(:button, :show,
-          data:
-          {
-            name: fa_icon('download-alt', text: "下载排期表文件"),
-            url: generate_spot_plan_path(id: @master_plan, version: @spot_plan_version),
-            options:
-            {
-              class: 'btn btn-info',
-              method: :post
-            }
-          }
-        )
-        %>
+
       </div>
     </div>
   </div>

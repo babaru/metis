@@ -53,13 +53,30 @@ class MasterPlan < ActiveRecord::Base
     result
   end
 
+  def spot_plan_versions
+    result = MasterPlan.connection.select_all("SELECT distinct version FROM metis_development.spot_plan_items WHERE master_plan_id=#{self.id} ORDER BY version DESC")
+    return [0] if result.count == 0
+    result.collect {|v| v['version']}
+  end
+
   def confirm!
     MasterPlan.transaction do
       spot_plan_items = SpotPlanItem.where('master_plan_id=? and version=?', self.id, self.spot_plan_version)
       spot_plan_items.each {|item| item.clone_new_version!(self.spot_plan_version)}
-      self.spot_plan_version += 1
+      self.spot_plan_version = self.spot_plan_versions.max
       self.is_dirty = false
       self.save!
+    end
+  end
+
+  def remove_spot_plan_version!(version)
+    if self.spot_plan_versions.include?(version)
+      MasterPlan.transaction do
+        spot_plan_items = SpotPlanItem.destroy_all(master_plan_id: self.id, version: version)
+        self.spot_plan_version = self.spot_plan_versions.max
+        self.is_dirty = false
+        self.save!
+      end
     end
   end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131104011833) do
+ActiveRecord::Schema.define(:version => 20131104030455) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -286,8 +286,10 @@ ActiveRecord::Schema.define(:version => 20131104011833) do
     t.integer  "version",               :default => 0
     t.integer  "new_spot_plan_item_id"
     t.string   "date_id"
+    t.integer  "master_plan_id"
   end
 
+  add_index "spot_plan_items", ["master_plan_id"], :name => "index_spot_plan_items_on_master_plan_id"
   add_index "spot_plan_items", ["master_plan_item_id"], :name => "index_spot_plan_items_on_master_plan_item_id"
   add_index "spot_plan_items", ["new_spot_plan_item_id"], :name => "index_spot_plan_items_on_new_spot_plan_item_id"
 

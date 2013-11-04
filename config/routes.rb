@@ -28,6 +28,7 @@ Metis::Application.routes.draw do
   post 'master_plans/:id/clear_cart' => 'master_plans#clear_cart', as: :clear_cart
   post 'master_plans/:id/save_candidates' => 'master_plans#save_candidates_to_master_plan', as: :save_candidates_to_master_plan
   post 'master_plans/:id/clone' => 'master_plans#clone_master_plan', as: :clone_master_plan
+  post 'master_plans/:id/remove_spot_plan_version' => 'master_plans#remove_spot_plan_version', as: :remove_spot_plan_version
 
   post 'medium_master_plans/:id/get_combo' => 'medium_master_plans#get_combo', as: :medium_master_plan_get_combo
   post 'medium_master_plans/:id/out_of_combo' => 'medium_master_plans#out_of_combo', as: :medium_master_plan_out_of_combo

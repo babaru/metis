@@ -16,6 +16,7 @@ function click_spot_plan_item(target, count) {
 
 function empty_spot_plan_item_clicked(target, count) {
     var master_plan_item_id = target.data('master-plan-item-id');
+    var master_plan_id = target.data('master-plan-id');
     var placed_at = target.data('placed-at');
     var count_val = 1;
     if (count != null) {
@@ -26,7 +27,7 @@ function empty_spot_plan_item_clicked(target, count) {
     if (count_val > 0) {
         change_spot_plan_item_and_master_plan_item_counts(0, count_val, target);
         highlight_changing_items(target);
-        create_spot_plan_item(master_plan_item_id, placed_at, count_val, version, target);
+        create_spot_plan_item(master_plan_id, master_plan_item_id, placed_at, count_val, version, target);
     }
 }
 
@@ -131,6 +132,8 @@ function update_spot_plan_item_values(target, data) {
         master_plan_item_count_cell.data('count', master_plan_item_count_cell.text());
 
         console.log('spot plan item count ' + target.data('count'));
+
+        $('#confirm-spot-plan-button').show();
     } else {
         target
             .data('placed-at', data['placed_at'])
@@ -142,6 +145,10 @@ function update_spot_plan_item_values(target, data) {
 
         var master_plan_item_count_cell = get_master_plan_item_reality_count_cell(target);
         master_plan_item_count_cell.data('count', data['master_plan_item_reality_count']);
+
+        if (data['master_plan_is_dirty'] == true) {
+            $('#confirm-spot-plan-button').show();
+        }
     }
 }
 
@@ -192,13 +199,14 @@ function modify_spot_plan_item_placed_at(spot_plan_item_id, new_placed_at, targe
     });
 }
 
-function create_spot_plan_item(master_plan_item_id, placed_at, count, version, target) {
+function create_spot_plan_item(master_plan_id, master_plan_item_id, placed_at, count, version, target) {
 
     $.ajax({
         url: '/spot_plan_items.json',
         type: 'POST',
         data: {
             'spot_plan_item': {
+                'master_plan_id'        : master_plan_id,
                 'master_plan_item_id'   : master_plan_item_id,
                 'placed_at'             : placed_at,
                 'count'                 : count,

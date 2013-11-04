@@ -46,6 +46,7 @@ class SpotPlanItemsController < ApplicationController
   # POST /spot_plan_items.json
   def create
     data = {}
+    data[:master_plan_id] = params[:spot_plan_item][:master_plan_id]
     data[:master_plan_item_id] = params[:spot_plan_item][:master_plan_item_id]
     data[:placed_at] = Time.parse(params[:spot_plan_item][:placed_at])
     data[:version] = params[:spot_plan_item][:version]

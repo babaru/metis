@@ -73,6 +73,7 @@
         @spot_plan_items["SPI_#{master_plan_item.id}_#{@selected_year}#{sprintf('%02d', @selected_month)}#{sprintf('%02d', n)}"].count,
         class: "spot-plan-item SPI_#{master_plan_item.id}_#{@selected_year}#{sprintf('%02d', @selected_month)}#{sprintf('%02d', n)}",
         'data-placed-at'                    => "#{@selected_year}-#{sprintf('%02d', @selected_month)}-#{sprintf '%02d', n}",
+        'data-master-plan-id'               => @master_plan.id,
         'data-master-plan-item-id'          => master_plan_item.id,
         'data-version'                      => @spot_plan_version,
         'data-spot-plan-item-easy-id'       => @spot_plan_items["SPI_#{master_plan_item.id}_#{@selected_year}#{sprintf('%02d', @selected_month)}#{sprintf('%02d', n)}"].easy_id,
@@ -87,6 +88,7 @@
         nil,
         class: "spot-plan-item",
         'data-placed-at'            => "#{@selected_year}-#{sprintf('%02d', @selected_month)}-#{sprintf '%02d', n}",
+        'data-master-plan-id'       => @master_plan.id,
         'data-master-plan-item-id'  => master_plan_item.id,
         'data-version'              => @spot_plan_version
       ),
