@@ -54,7 +54,7 @@ class MasterPlan < ActiveRecord::Base
   end
 
   def spot_plan_versions
-    result = MasterPlan.connection.select_all("SELECT distinct version FROM metis_development.spot_plan_items WHERE master_plan_id=#{self.id} ORDER BY version DESC")
+    result = MasterPlan.connection.select_all("SELECT distinct version FROM spot_plan_items WHERE master_plan_id=#{self.id} ORDER BY version DESC")
     return [0] if result.count == 0
     result.collect {|v| v['version']}
   end
