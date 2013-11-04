@@ -1,5 +1,6 @@
-#encoding: utf-8
 class MediaController < ApplicationController
+  add_breadcrumb(I18n.t('model.list', model: Medium.model_name.human), nil, only: :index)
+
   # GET /media
   # GET /media.json
   def index
@@ -15,7 +16,7 @@ class MediaController < ApplicationController
   # GET /media/1
   # GET /media/1.json
   def show
-    redirect_to medium_channels_path(params[:id])
+    redirect_to medium_channel_groups_path(params[:id])
   end
 
   # GET /media/new

@@ -1,10 +1,11 @@
 class ClientsController < ApplicationController
-  add_breadcrumb I18n.t('model.list', model: Client.model_name.human), nil, only: :index
   add_breadcrumb(I18n.t('model.list', model: Client.model_name.human), :clients_path, except: :index)
 
   # GET /clients
   # GET /clients.json
   def index
+    add_breadcrumb(I18n.t('model.list', model: Client.model_name.human))
+
     @clients = current_user.viewable_clients
 
     respond_to do |format|

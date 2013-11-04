@@ -1,8 +1,0 @@
-<%= render_page_title "#{t('model.edit', model: MediumPolicy.model_name.human)} <small>#{t('simple_form.required.text') }</small>" do |toolbar|
-  toolbar << {
-    name: "#{t('labels.back_to')}#{t('model.list', :model => MediumPolicy.model_name.human)}",
-    url: medium_policies_path,
-    options: {class: 'button'}
-  }
-  end %>
-<%= render 'form' %>

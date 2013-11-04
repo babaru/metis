@@ -176,13 +176,44 @@ SimpleNavigation::Configuration.run do |navigation|
 
       medium_menu.item(
         :page_spot_list,
-        t('model.list', model: Spot.model_name.human),
+        '刊例库',
         spots_path,
         link:
         {
-          icon: 'list'
+          icon: 'search'
         }
       )
+
+      if can? :manage, Medium
+        medium_menu.item(
+          :page_medium_menu_divider_1,
+          nil,
+          link:
+          {
+            divider: 'true'
+          }
+        )
+
+        medium_menu.item(
+          :page_new_medium,
+          t('model.create', model: Medium.model_name.human),
+          new_medium_path,
+          link:
+          {
+            icon: 'plus-sign'
+          }
+        )
+
+        medium_menu.item(
+          :page_new_spot,
+          t('model.create', model: Spot.model_name.human),
+          new_spot_path,
+          link:
+          {
+            icon: 'plus-sign'
+          }
+        )
+      end
 
     end
 

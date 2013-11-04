@@ -1,8 +1,36 @@
-<%= render_page_title "#{t('model.create', model: ChannelGroup.model_name.human)} <small>#{t('simple_form.required.text') }</small>" do |toolbar|
-  toolbar << {
-    name: "#{t('labels.back_to')}#{t('model.list', :model => ChannelGroup.model_name.human)}",
-    url: medium_channel_groups_path(@medium),
-    options: {class: 'button'}
+<div class="narrow-center-page">
+
+<%= render_cell(
+  :page_title,
+  :show,
+  data:
+  {
+    name: "#{t('model.create', model: ChannelGroup.model_name.human)} <small>#{t('simple_form.required.text') }</small>",
+    toolbar:
+    {
+      left:
+      [
+        render_cell(
+          :button,
+          :show,
+          data:
+          {
+            name: fa_icon('level-up rotate-270'),
+            url: medium_channel_groups_path(@medium),
+            options:
+            {
+              class: 'btn',
+              rel: 'tooltip',
+              title: "#{t('labels.back_to')}#{t('model.list', :model => ChannelGroup.model_name.human)}",
+            }
+          }
+        )
+      ]
+    }
   }
-  end %>
+)
+%>
+
 <%= render 'form' %>
+
+</div>

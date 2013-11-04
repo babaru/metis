@@ -3,7 +3,7 @@
   :show,
   data:
   {
-    name: "<strong>#{@medium.name}</strong> #{t('model.list', model: Spot.model_name.human)}",
+    name: "刊例库",
     toolbar:
     {
       right:
@@ -14,7 +14,7 @@
           data:
           {
             name: fa_icon('plus-sign', text: t('model.create', model: Spot.model_name.human)),
-            url: new_medium_spot_path(medium_id: @medium.id, spot_category_id: @spot_category_id),
+            url: new_spot_path(),
             options:
             {
               class: 'btn btn-primary'
@@ -41,13 +41,10 @@
 )
 %>
 
-<ul class="nav nav-tabs">
-  <li><%= link_to icon_text('icon-trello', ChannelGroup.model_name.human), medium_channel_groups_path(@medium) %></li>
-  <li><%= link_to icon_text('icon-sitemap', Channel.model_name.human), medium_channels_path(@medium) %></li>
-  <li><%= link_to icon_text('icon-folder-close', SpotCategory.model_name.human), medium_spot_categories_path(@medium) %></li>
-  <li class="active"><%= link_to icon_text('icon-asterisk', Spot.model_name.human), medium_spots_path(@medium) %></li>
-</ul>
+<%= render partial: 'shared/spot_picker/spot_picker', locals: {media: @media, spot_picker: @spot_picker} %>
 
-<%= render partial: 'spot_category_navs', object: @spot_categories %>
+<% if @spot_picker.selected_medium %>
 
-<%= render partial: 'spots_grid' if @spots_grid %>
+<%= render partial: 'shared/spot_picker/spot_candidates_grid', locals: {spots: @spots_grid} if @spots_grid %>
+
+<% end %>

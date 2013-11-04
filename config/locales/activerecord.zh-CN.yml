@@ -56,7 +56,7 @@ zh-CN:
       channel:
         name: 名称
         medium: 所属媒体
-        channel_group: 所属分组
+        channel_group_id: 所属分组
       channel_group:
         name: 名称
         medium: 所属媒体
@@ -77,6 +77,7 @@ zh-CN:
       spot_category:
         name: 名称
         description: 说明
+        sample: 图例
       medium_policy:
         medium_discount: 媒体折扣
         company_discount: 公司折扣

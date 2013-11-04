@@ -13,11 +13,11 @@ module Tida
         :channels,
         :picker_params
 
-      def initialize(options, session)
+      def initialize(options, session = nil)
         @unit_types = ['day', 'cpm', 'cpc']
         @spots_query_clause = 'medium_id=0'
         @picker_params = {}
-        session[:spot_picker] = {}
+        session[:spot_picker] = {} if session
         where_clause = []
         unit_type_query_string = nil
 
@@ -60,10 +60,12 @@ module Tida
             where_clause << "spot_category_id=#{@selected_spot_category.id}"
           end
 
-          session[:spot_picker][:sp_selected_medium_id] = @selected_medium.id
-          session[:spot_picker][:sp_selected_channel_id] = @selected_channel.id if @selected_channel
-          session[:spot_picker][:sp_selected_unit_type] = @selected_unit_type if @selected_unit_type
-          session[:spot_picker][:sp_selected_spot_category_id] = @selected_spot_category.id if @selected_spot_category
+          if session
+            session[:spot_picker][:sp_selected_medium_id] = @selected_medium.id
+            session[:spot_picker][:sp_selected_channel_id] = @selected_channel.id if @selected_channel
+            session[:spot_picker][:sp_selected_unit_type] = @selected_unit_type if @selected_unit_type
+            session[:spot_picker][:sp_selected_spot_category_id] = @selected_spot_category.id if @selected_spot_category
+          end
 
           @spots_query_clause = where_clause.join(' and ')
         end

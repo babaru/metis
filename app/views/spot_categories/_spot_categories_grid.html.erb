@@ -1,6 +1,6 @@
 <%= grid(@spot_categories_grid, :show_filters => :always) do |g|
   g.column name: t('activerecord.attributes.spot_category.name') do |spot_category|
-    link_to spot_category.name, spot_category_url(spot_category)
+    spot_category.name
   end
 
   g.column name: t('activerecord.attributes.spot_category.description') do |spot_category|
@@ -9,12 +9,12 @@
 
   if can?(:manage, SpotCategory)
 
-    g.column :html => {class: 'buttons'} do |spot_category|
-      link_to(icon('icon-edit'), edit_spot_category_path(spot_category), :class => 'button', :rel => 'tooltip', :title => t('buttons.edit'))
+    g.column :html => {class: 'btn-cell'} do |spot_category|
+      link_to(icon('icon-edit'), edit_spot_category_path(spot_category), :class => 'btn', :rel => 'tooltip', :title => t('buttons.edit'))
     end
 
-    g.column :html => {class: 'buttons'} do |spot_category|
-      link_to(icon('icon-trash'), spot_category_path(spot_category), :method => :delete, :confirm => t("confirms.delete"), :class => 'button', :rel => 'tooltip', :title => t('buttons.delete'))
+    g.column :html => {class: 'btn-cell'} do |spot_category|
+      link_to(icon('icon-trash'), spot_category_path(spot_category), :method => :delete, :confirm => t("confirms.delete"), :class => 'btn btn-danger', :rel => 'tooltip', :title => t('buttons.delete'))
     end
 
   end

@@ -1,9 +1,13 @@
 class ChannelGroupsController < ApplicationController
+  add_breadcrumb(I18n.t('model.list', model: Medium.model_name.human), :media_path)
+
   # GET /channel_groups
   # GET /channel_groups.json
   def index
     @medium = Medium.find params[:medium_id]
     @channel_groups_grid = initialize_grid(ChannelGroup.where(medium_id: @medium))
+
+    add_breadcrumb("#{@medium.name}#{t('model.list', model: ChannelGroup.model_name.human)}")
 
     respond_to do |format|
       format.html # index.html.erb

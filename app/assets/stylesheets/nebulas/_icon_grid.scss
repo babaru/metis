@@ -1,14 +1,16 @@
+$icon-size: 80px;
+
 
 .icon-grid {
   @extend .container-fluid;
 
   .span2 {
-    height: 160px;
+    height: $icon-size + 60px;
     .item {
       display: block;
       cursor: pointer;
-      @include border-radius(50px);
-      width: 100px; height: 100px;
+      @include border-radius($icon-size / 2);
+      width: $icon-size; height: $icon-size;
       margin: auto; clear: both;
       border: 1px solid $tableBorder;
       // @include box-shadow(rgba(0, 0, 0, 0.5) 0px 0px 10px inset);
@@ -19,15 +21,15 @@
       }
 
       > span {
-        position: relative; top: 110px;
+        position: relative; top: $icon-size + 10px;
         display: block;
-        min-width: 50px; height: 25px;
+        min-width: $icon-size / 2; height: 20px;
         margin: auto; clear: both;
         text-align: center;
-        font-size: 16px;
-        line-height: 25px;
+        font-size: 12px;
+        line-height: 20px;
         font-weight: bold;
-        color: #999;
+        color: $textColor;
 
         &:hover {
         }
@@ -37,7 +39,7 @@
     .edit-panel {
       display: block;
       position: relative;
-      left: 150px; top: -100px;
+      left: 150px; top: 0 - $icon-size;
       width: 24px;
       color: #666;
     }

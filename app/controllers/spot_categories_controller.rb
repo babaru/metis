@@ -1,9 +1,13 @@
 class SpotCategoriesController < ApplicationController
+  add_breadcrumb(I18n.t('model.list', model: Medium.model_name.human), :media_path)
+
   # GET /spot_categories
   # GET /spot_categories.json
   def index
     @medium = Medium.find params[:medium_id]
     @spot_categories_grid = initialize_grid(SpotCategory.where(medium_id: params[:medium_id]))
+
+    add_breadcrumb("#{@medium.name}#{t('model.list', model: SpotCategory.model_name.human)}")
 
     respond_to do |format|
       format.html # index.html.erb

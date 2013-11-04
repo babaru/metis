@@ -4,18 +4,11 @@ class SpotsController < ApplicationController
   # GET /spots.json
   def index
     @media = Medium.all
-    @medium = Medium.find params[:medium_id] if params[:medium_id]
-    @medium = @media.first unless @medium
-    @spot_categories = @medium.spot_categories
-    @spot_category = SpotCategory.find params[:spot_category_id] if params[:spot_category_id]
-    @spot_category = @spot_categories.first if @spot_category.nil?
-    if @spot_category
-      @spots_grid = initialize_grid(Spot.where(medium_id: @medium.id, spot_category_id: @spot_category.id))
-    end
-    @spot_category_id = @spot_category.id if @spot_category
+    @spot_picker = Tida::Metis::SpotPicker.new params
+    @spots_grid = initialize_grid(Spot.where(@spot_picker.spots_query_clause), name: 'spot_candidates_grid') if @spot_picker.selected_medium
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html
       format.json
     end
   end

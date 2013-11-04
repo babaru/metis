@@ -30,7 +30,6 @@
   <li><%= link_to icon_text('icon-trello', ChannelGroup.model_name.human), medium_channel_groups_path(@medium) %></li>
   <li><%= link_to icon_text('icon-sitemap', Channel.model_name.human), medium_channels_path(@medium) %></li>
   <li class="active"><%= link_to icon_text('icon-folder-close', SpotCategory.model_name.human), medium_spot_categories_path(@medium) %></li>
-  <li><%= link_to icon_text('icon-asterisk', Spot.model_name.human), medium_spots_path(@medium) %></li>
 </ul>
 
 <%= render partial: 'spot_categories_grid' %>
