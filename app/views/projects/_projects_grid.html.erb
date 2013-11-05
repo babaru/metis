@@ -24,11 +24,11 @@
   end
 
   g.column :html => {class: 'btn-cell'} do |project|
-    link_to(icon('icon-user'), manage_project_assignments_path(id: project), rel: 'tooltip', title: '分配项目', class: 'btn-inverse btn') if can? :manage, :project
+    link_to(icon('icon-user'), manage_project_assignments_path(id: project), rel: 'tooltip', title: '分配项目', class: 'btn') if can? :manage, :project
   end
 
   g.column :html => {class: 'btn-cell'} do |project|
-    link_to(icon('icon-edit'), edit_project_path(project), :class => 'btn btn-warning', :rel => 'tooltip', :title => t('buttons.edit')) if can? :update, Project
+    link_to(icon('icon-edit'), edit_project_path(project), :class => 'btn', :rel => 'tooltip', :title => t('buttons.edit')) if can? :update, Project
   end
 
   g.column :html => {class: 'btn-cell'} do |project|

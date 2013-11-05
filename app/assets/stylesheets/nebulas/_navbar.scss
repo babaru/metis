@@ -58,6 +58,22 @@ body {
         .dropdown-menu {
           i {
             color: $grayLight;
+
+            &:hover,
+            &:focus {
+              color: white;
+            }
+          }
+
+          > li {
+            > a {
+              &:hover,
+              &:focus {
+                i {
+                  color: white;
+                }
+              }
+            }
           }
         }
 
