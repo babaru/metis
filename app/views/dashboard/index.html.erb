@@ -2,4 +2,4 @@
 
 <%= render_cell :section_title, :show, data: {name: '正在执行中的项目'} %>
 
-<%= render partial: 'projects/projects_grid', locals: {show_detail: true} if current_space %>
+<%= render partial: 'projects/projects_grid', locals: {show_detail: true} if @projects_grid %>

@@ -16,6 +16,8 @@ class Client < ActiveRecord::Base
     :path => ":rails_root/public:url",
     :url => "/system/client_logos/:attachment_access_token/pic_:style.:extension"
 
+  scope :alone, where('space_id is null')
+
   def created_by?(user)
     user.id == created_by_id
   end

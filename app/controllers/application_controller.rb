@@ -21,8 +21,9 @@ class ApplicationController < ActionController::Base
   end
 
   def get_space
-    if current_user.is_sys_admin?
-      @space = Space.find params[:space_id]
+    if current_user && current_user.is_sys_admin?
+      @space = Space.find params[:space_id] if params[:space_id]
+      @space = Space.first
     else
       @space = current_space
     end

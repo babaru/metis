@@ -8,11 +8,11 @@
   end
 
   g.column html: {class: 'btn-cell'} do |space|
-    link_to(fa_icon('briefcase'), assign_space_client_path(space), class: 'btn', rel: 'tooltip', title: '分配客户')
+    link_to(fa_icon('briefcase'), assign_space_client_path(id: space, space_id: space.id), class: 'btn', rel: 'tooltip', title: '分配客户')
   end
 
   g.column html: {class: 'btn-cell'} do |space|
-    link_to(fa_icon('user'), assign_space_user_path(space), class: 'btn', rel: 'tooltip', title: '分配用户')
+    link_to(fa_icon('user'), assign_space_user_path(id: space, space_id: space.id), class: 'btn', rel: 'tooltip', title: '分配用户')
   end
 
   g.column html: {class: 'btn-cell'} do |space|
