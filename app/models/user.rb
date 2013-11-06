@@ -63,7 +63,8 @@ class User < ActiveRecord::Base
 
   def viewable_clients(space)
     return Client.all if self.is_sys_admin?
-    space.clients
+    return space.clients if space
+    []
   end
 
   def space_roles(space)
