@@ -20,15 +20,19 @@
     user.space_roles(@space).inject([]) {|list, space_role| list << content_tag(:span, space_role.human_name, class: 'label label-info')}.join(' ').html_safe
   end
 
-  g.column html: {class: 'btn-cell'} do |user|
-    link_to(fa_icon('smile'), assign_space_user_roles_path(user), :class => 'btn', :rel => 'tooltip', :title => '编辑用户权限')
-  end
+  if can? :manage, User
+    g.column html: {class: 'btn-cell'} do |user|
+      user.space_users.inject([]) do |list, space_user|
+        list << link_to(fa_icon('smile'), assign_space_user_roles_path(space_user), :class => 'btn', :rel => 'tooltip', :title => "编辑用户#{space_user.space.name}权限")
+      end.join.html_safe
+    end
 
-  g.column :html => {class: 'btn-cell'} do |user|
-    link_to(fa_icon('edit'), edit_user_path(user), :class => 'btn', :rel => 'tooltip', :title => t('buttons.edit'))
-  end
+    g.column :html => {class: 'btn-cell'} do |user|
+      link_to(fa_icon('edit'), edit_user_path(user), :class => 'btn', :rel => 'tooltip', :title => t('buttons.edit'))
+    end
 
-  g.column :html => {class: 'btn-cell'} do |user|
-    link_to(fa_icon('trash'), user_path(user), :method => :delete, :confirm => t("confirms.delete"), :class => 'btn btn-danger', :rel => 'tooltip', :title => t('buttons.delete'))
+    g.column :html => {class: 'btn-cell'} do |user|
+      link_to(fa_icon('trash'), user_path(user), :method => :delete, :confirm => t("confirms.delete"), :class => 'btn btn-danger', :rel => 'tooltip', :title => t('buttons.delete'))
+    end
   end
 end -%>

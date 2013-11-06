@@ -49,7 +49,7 @@ Metis::Application.routes.draw do
   post 'spaces/:id/save_client_assignments' => 'spaces#save_client_assignments', as: :save_space_client_assignments
   get 'spaces/:id/switch' => 'spaces#switch', as: :switch_space
 
-  get 'users/:user_id/assign_space_user_roles' => 'space_users#assign_space_user_roles', as: :assign_space_user_roles
+  get 'space_users/:id/assign_space_user_roles' => 'space_users#assign_space_user_roles', as: :assign_space_user_roles
   post 'space_users/:id/save_space_user_roles' => 'space_users#save_space_user_roles', as: :save_space_user_roles
 
   # post 'master_plans/:id/modify' => 'master_plans#modify', as: :modify_master_plan

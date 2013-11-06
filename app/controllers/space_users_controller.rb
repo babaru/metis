@@ -84,8 +84,7 @@ class SpaceUsersController < ApplicationController
   end
 
   def assign_space_user_roles
-    @user = User.find params[:user_id]
-    @space_user = SpaceUser.find_by_user_id_and_space_id(@user.id, @space.id)
+    @space_user = SpaceUser.find params[:id]
   end
 
   def save_space_user_roles
