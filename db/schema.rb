@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131104030455) do
+ActiveRecord::Schema.define(:version => 20131106063404) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -67,9 +67,12 @@ ActiveRecord::Schema.define(:version => 20131104030455) do
     t.string   "attachment_access_token"
     t.datetime "created_at",              :null => false
     t.datetime "updated_at",              :null => false
+    t.integer  "space_id"
+    t.string   "space_name"
   end
 
   add_index "clients", ["created_by_id"], :name => "index_clients_on_created_by_id"
+  add_index "clients", ["space_id"], :name => "index_clients_on_space_id"
 
   create_table "master_plan_items", :force => true do |t|
     t.integer  "spot_id"
@@ -235,6 +238,34 @@ ActiveRecord::Schema.define(:version => 20131104030455) do
   add_index "role_assignments", ["user_id"], :name => "index_role_assignments_on_user_id"
 
   create_table "roles", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.string   "readable_name"
+    t.string   "type"
+  end
+
+  create_table "space_user_roles", :force => true do |t|
+    t.integer  "space_user_id"
+    t.integer  "role_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "space_user_roles", ["role_id"], :name => "index_space_user_roles_on_role_id"
+  add_index "space_user_roles", ["space_user_id"], :name => "index_space_user_roles_on_space_user_id"
+
+  create_table "space_users", :force => true do |t|
+    t.integer  "space_id"
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "space_users", ["space_id"], :name => "index_space_users_on_space_id"
+  add_index "space_users", ["user_id"], :name => "index_space_users_on_user_id"
+
+  create_table "spaces", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false

@@ -21,18 +21,18 @@ class ProjectsController < ApplicationController
     @master_plan = @project.master_plans.order('created_at DESC').first
   end
 
-  def assigns
+  def assign_user
     @project = Project.find params[:id]
     @client = @project.client
   end
 
-  def save_assignments
+  def save_user_assignments
     if request.post?
       @project = Project.find(params[:id])
 
       respond_to do |format|
         if @project.update_attributes(params[:project])
-          format.html { redirect_to client_projects_path(@project.client_id), notice: "保存#{ProjectAssignment}成功！" }
+          format.html { redirect_to client_projects_path(@project.client_id), notice: "保存#{ProjectAssignment.model_name.human}成功！" }
           format.json { head :no_content }
         else
           format.html { render action: "assigns" }
@@ -87,7 +87,7 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if @project.save
-        format.html { redirect_to client_project_master_plan_path(id: @project.current_master_plan_id, client_id: @project.client_id, project_id: @project.id), notice: 'Project was successfully created.' }
+        format.html { redirect_to assign_project_user_path(@project), notice: "成功创建#{Project.model_name.human}" }
         format.json { render json: @project, status: :created, location: @project }
       else
         format.html { render action: "new" }

@@ -1,4 +1,5 @@
 class Project < ActiveRecord::Base
+  belongs_to :space
   belongs_to :client
   belongs_to :created_by, class_name: 'User', foreign_key: :created_by_id
   has_many :project_assignments, dependent: :destroy
@@ -6,15 +7,27 @@ class Project < ActiveRecord::Base
   has_many :master_plans, dependent: :destroy
   has_one :current_master_plan, class_name: 'MasterPlan', foreign_key: :current_master_plan_id
 
-  attr_accessible :ended_at, :name, :started_at, :created_by_id, :created_by_name, :created_by, :client_id, :client_name, :client, :budget, :assigned_user_ids, :current_master_plan_id
+  attr_accessible :ended_at, :name, :started_at, :created_by_id,
+    :created_by_name, :created_by, :client_id, :client_name,
+    :client, :budget, :assigned_user_ids, :current_master_plan_id
 
   before_create :copy_name_attributes, :create_default_master_plan
   after_create :set_current_master_plan
+
+  validates :name, presence: true
+  validates :budget, presence: true
+  validates :budget, numericality: { greater_than: 0 }
+  validates :started_at, presence: true
+  validates :ended_at, presence: true
 
   def assigned_to?(user)
     assigned_to_user = assigned_to
     return assigned_to_user.id == user.id if assigned_to_user
     return false
+  end
+
+  def belongs_to_any_space?(spaces)
+    spaces.include?(self.space)
   end
 
   def months

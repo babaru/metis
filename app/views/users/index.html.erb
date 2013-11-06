@@ -26,25 +26,4 @@
   }
 ) %>
 
-<%= grid(@users_grid, :show_filters => :always) do |g|
-
-  g.column name: t('activerecord.attributes.user.name') do |user|
-    user.name
-  end
-
-  g.column name: t('activerecord.attributes.user.email') do |user|
-    user.email
-  end
-
-  g.column name: t('activerecord.attributes.user.roles') do |user|
-    user.roles.inject([]) {|list, role| list << content_tag(:span, role.i18n_name, class: 'label label-inverse')}.join(' ').html_safe
-  end
-
-  g.column :html => {class: 'btn-cell'} do |user|
-    link_to(icon('icon-edit'), edit_user_path(user), :class => 'btn', :rel => 'tooltip', :title => t('buttons.edit'))
-  end
-
-  g.column :html => {class: 'btn-cell'} do |user|
-    link_to(icon('icon-trash'), user_path(user), :method => :delete, :confirm => t("confirms.delete"), :class => 'btn btn-danger', :rel => 'tooltip', :title => t('buttons.delete'))
-  end
-end -%>
+<%= render partial: 'users_grid', locals: {show_space: current_user.is_sys_admin?} %>

@@ -7,13 +7,13 @@ Metis::Application.routes.draw do
 
   match 'spots/upload' => 'spots#upload', as: :upload_spots
 
-  get 'clients/:id/assigns' => 'clients#assigns', as: :manage_client_assignments
-  post 'clients/:id/save_assignments' => 'clients#save_assignments', as: :save_client_assignments
+  get 'clients/:id/assign_user' => 'clients#assign_user', as: :assign_client_user
+  post 'clients/:id/save_user_assignments' => 'clients#save_user_assignments', as: :save_client_user_assignments
   get 'clients/:id/medium_policies' => 'clients#medium_policies', as: :manage_client_medium_policies
   post 'clients/:id/save_medium_policies' => 'clients#save_medium_policies', as: :save_client_medium_policies
 
-  get 'projects/:id/assigns' => 'projects#assigns', as: :manage_project_assignments
-  post 'projects/:id/save_assignments' => 'projects#save_assignments', as: :save_project_assignments
+  get 'projects/:id/assign_user' => 'projects#assign_user', as: :assign_project_user
+  post 'projects/:id/save_user_assignments' => 'projects#save_user_assignments', as: :save_project_user_assignments
   post 'projects/:id/set_current_master_plan' => 'projects#set_current_master_plan', as: :set_current_master_plan
 
   # get 'media/:website_id/channel_groups' => 'channel_groups#index'
@@ -43,11 +43,20 @@ Metis::Application.routes.draw do
   post 'master_plan_items/:id/modify' => 'master_plan_items#modify', as: :modify_master_plan_item
   match 'clients/:id/upload_spot_plan_excel_file' => 'clients#upload_spot_plan_excel_file', as: :upload_spot_plan_excel_file
 
+  get 'spaces/:id/assign_user' => 'spaces#assign_user', as: :assign_space_user
+  post 'spaces/:id/save_user_assignments' => 'spaces#save_user_assignments', as: :save_space_user_assignments
+  get 'spaces/:id/assign_client' => 'spaces#assign_client', as: :assign_space_client
+  post 'spaces/:id/save_client_assignments' => 'spaces#save_client_assignments', as: :save_space_client_assignments
+  get 'spaces/:id/switch' => 'spaces#switch', as: :switch_space
+
+  get 'users/:user_id/assign_space_user_roles' => 'space_users#assign_space_user_roles', as: :assign_space_user_roles
+  post 'space_users/:id/save_space_user_roles' => 'space_users#save_space_user_roles', as: :save_space_user_roles
+
   # post 'master_plans/:id/modify' => 'master_plans#modify', as: :modify_master_plan
 
   # get 'spots/apps' => 'spots#apps'
 
-  resources :media, :channels, :spots, :channel_groups, :spot_categories,
+  resources :spaces, :media, :channels, :spots, :channel_groups, :spot_categories,
     :master_plans, :master_plan_items, :spot_plan_items, :medium_policies,
     :medium_master_plans
 

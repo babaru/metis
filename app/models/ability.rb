@@ -2,17 +2,86 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    if user.has_role? :admin
+    if user.is_sys_admin?
       can :manage, :all
     else
-      can [:update, :destroy], Project do |p|
-        p.assigned_to?(user)
+
+      # User
+      # ------------------------------------------------------------------------
+
+      can :manage, user
+
+      can :manage, User do |u|
+        user.is_space_admin_of_any_space?(u.spaces)
       end
 
-      can :manage, MasterPlan, created_by_id: user.id
-      can :read, MasterPlan do |mp|
-        mp.project.assigned_user? user
+      # Space
+      # ------------------------------------------------------------------------
+
+      can :update, Space do |space|
+        space.assigned_to?(user) && user.is_space_admin?(space)
       end
+
+      can :read, Space do |space|
+        user.belongs_to_space? space
+      end
+
+      # Client
+
+      can :manage, Client do |c|
+        user.belongs_to_space?(c.space) && user.is_space_admin?(c.space)
+      end
+
+      can :update, Client do |c|
+        user.assigned_to_client?(c)
+      end
+
+      can :read, Client do |c|
+        user.belongs_to_space?(c.space)
+      end
+
+      # Project
+
+      can :manage, Project do |p|
+        user.belongs_to_space?(p.client.space) && user.is_space_admin?(p.client.space)
+      end
+
+      can :manage, Project do |p|
+        user.assigned_to_client?(p.client)
+      end
+
+      can :read, Project do |p|
+        user.belongs_to_space?(p.client.space)
+      end
+
+      # MediumPolicy
+
+      can :manage, MediumPolicy do |mp|
+        user.belongs_to_space?(mp.client.space) && user.is_space_admin?(mp.client.space)
+      end
+
+      can :read, MediumPolicy do |p|
+        user.belongs_to_space?(mp.client.space)
+      end
+
+      # MasterPlan
+
+      can :manage, MasterPlan do |mp|
+        user.belongs_to_space?(mp.client.space) && user.is_space_admin?(mp.client.space)
+      end
+
+      can :manage, MasterPlan do |mp|
+        user.assigned_to_client?(mp.client)
+      end
+
+      can :manage, MasterPlan do |mp|
+        user.assigned_to_project?(mp.project)
+      end
+
+      can :read, MasterPlan do |mp|
+        user.belongs_to_space?(mp.client.space)
+      end
+
     end
     # Define abilities for the passed in user here. For example:
     #

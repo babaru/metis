@@ -30,12 +30,12 @@
   }
 ) %>
 
-<%= simple_form_for(@client, url: save_client_assignments_path(@client), method: :post, html: {class: 'form-horizontal'}) do |f| %>
+<%= simple_form_for(@client, url: save_client_user_assignments_path(@client), method: :post, html: {class: 'form-horizontal'}) do |f| %>
   <%= f.error_notification %>
 
   <div class="form-inputs">
     <%= f.association :assigned_users,
-    :collection => User.all_the_other_users(@client.created_by).collect{|u| [u.email, u.id] },
+    :collection => User.all_the_other_users(@client.created_by).collect{|u| ["#{u.name} (#{u.email})", u.id] },
     :as => :check_boxes %>
   </div>
 

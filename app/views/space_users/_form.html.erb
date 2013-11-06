@@ -1,0 +1,14 @@
+
+<%= simple_form_for(@space_user , :html => {:class => 'form-horizontal' }) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :space_id, as: :hidden %>
+    <%= f.input :user_id, as: :hidden %>
+    <%= f.association :space_user_roles, Role.space_roles.collect{|r| [r.human_name, r.id]}, as: :check_boxes %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: 'btn btn-primary' %>
+  </div>
+<% end %>

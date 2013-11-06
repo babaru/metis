@@ -2,7 +2,11 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users_grid = initialize_grid(User)
+    if current_user.is_sys_admin?
+      @users_grid = initialize_grid(User)
+    else
+      @users_grid = initialize_grid(User.joins(:space_users).where("space_users.space_id=?", @space.id))
+    end
 
     respond_to do |format|
       format.html # index.html.erb
@@ -25,6 +29,8 @@ class UsersController < ApplicationController
   # GET /users/new.json
   def new
     @user = User.new
+    @space = current_space unless current_user.has_role?(:sys_admin)
+    @space = Space.find params[:id] if current_user.has_role?(:sys_admin)
 
     respond_to do |format|
       format.html # new.html.erb
@@ -35,6 +41,8 @@ class UsersController < ApplicationController
   # GET /users/1/edit
   def edit
     @user = User.find(params[:id])
+    @space = current_space unless current_user.has_role?(:sys_admin)
+    @space = Space.find params[:id] if current_user.has_role?(:sys_admin)
   end
 
   # POST /users

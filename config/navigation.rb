@@ -41,6 +41,18 @@ SimpleNavigation::Configuration.run do |navigation|
       }
     )
 
+    if current_user.is_sys_admin?
+      primary.item(
+        :page_spaces,
+        Space.model_name.human,
+        spaces_path,
+        {
+          highlights_on: /spaces/
+        }
+      )
+
+    end
+
     primary.item(
       :page_clients,
       Client.model_name.human,
@@ -68,7 +80,7 @@ SimpleNavigation::Configuration.run do |navigation|
       # Client Sub Menu
       # ------------------------------------------------------------------------
 
-      current_user.viewable_clients.each do |client|
+      current_user.viewable_clients(current_space).each do |client|
 
         client_menu.item(
           "page_client_#{client.id}".to_sym,
@@ -97,7 +109,7 @@ SimpleNavigation::Configuration.run do |navigation|
           client_sub_menu.item(
             "page_client_#{client.id}_item_assigns".to_sym,
             t('model.manager', model: ClientAssignment.model_name.human),
-            manage_client_assignments_path(client),
+            assign_client_user_path(client),
             {
               link:
               {
@@ -217,6 +229,12 @@ SimpleNavigation::Configuration.run do |navigation|
 
     end
 
+    primary.item(
+      :page_reports,
+      '报表',
+      nil
+    )
+
     if can? :manage, User
       primary.item(
         :page_users,
@@ -224,6 +242,16 @@ SimpleNavigation::Configuration.run do |navigation|
         nil,
         highlights_on: /users/
       ) do |user_menu|
+
+        user_menu.item(
+          :page_user_list,
+          t('model.list', model: User.model_name.human),
+          users_path,
+          link:
+          {
+            icon: 'list'
+          }
+        )
 
         user_menu.item(
           :page_create_user,
@@ -235,15 +263,28 @@ SimpleNavigation::Configuration.run do |navigation|
           }
         )
 
-        user_menu.item(
-          :page_user_list,
-          t('model.list', model: User.model_name.human),
-          users_path,
-          link:
-          {
-            icon: 'list'
-          }
-        )
+        if can? :manage, Role
+
+          user_menu.item(
+            :page_user_menu_divider_1,
+            nil,
+            link:
+            {
+              divider: 'true'
+            }
+          )
+
+          user_menu.item(
+            :page_role_list,
+            t('model.list', model: Role.model_name.human),
+            roles_path,
+            link:
+            {
+              icon: 'list'
+            }
+          )
+        end
+
       end
     end
   end

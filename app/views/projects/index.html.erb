@@ -1,4 +1,3 @@
-
 <%= render_cell(:page_title, :show, data:{name: "<strong>#{@client.name}</strong> #{t('model.list', model: Project.model_name.human)}",
   toolbar: {
     right:
@@ -13,5 +12,10 @@
   }
 })
 %>
+
+<div class="well">
+  <%= ClientAssignment.model_name.human %>：<%= @client.assigned_users.inject([]) {|list, u| list << content_tag(:span, u.name, class: 'label label-success')}.join(' ').html_safe %>
+  <%= link_to(t('model.manager', model: ClientAssignment.model_name.human), assign_client_user_path(@client), class: 'btn-small btn-inverse pull-right') %>
+</div>
 
 <%= render partial: 'projects/projects_grid' %>

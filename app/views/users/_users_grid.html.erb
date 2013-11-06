@@ -1,0 +1,34 @@
+<% show_space = false if local_assigns[:show_space].nil? %>
+
+<%= grid(@users_grid, :show_filters => :always) do |g|
+
+  g.column name: t('activerecord.attributes.user.name') do |user|
+    user.name
+  end
+
+  g.column name: t('activerecord.attributes.user.email') do |user|
+    user.email
+  end
+
+  if show_space
+    g.column name: t('activerecord.attributes.user.spaces') do |user|
+      user.spaces.inject([]) {|list, space| list << content_tag(:span, space.name, class: 'label label-success')}.join(' ').html_safe
+    end
+  end
+
+  g.column name: t('activerecord.attributes.user.roles') do |user|
+    user.space_roles(@space).inject([]) {|list, space_role| list << content_tag(:span, space_role.human_name, class: 'label label-info')}.join(' ').html_safe
+  end
+
+  g.column html: {class: 'btn-cell'} do |user|
+    link_to(fa_icon('smile'), assign_space_user_roles_path(user), :class => 'btn', :rel => 'tooltip', :title => '编辑用户权限')
+  end
+
+  g.column :html => {class: 'btn-cell'} do |user|
+    link_to(fa_icon('edit'), edit_user_path(user), :class => 'btn', :rel => 'tooltip', :title => t('buttons.edit'))
+  end
+
+  g.column :html => {class: 'btn-cell'} do |user|
+    link_to(fa_icon('trash'), user_path(user), :method => :delete, :confirm => t("confirms.delete"), :class => 'btn btn-danger', :rel => 'tooltip', :title => t('buttons.delete'))
+  end
+end -%>

@@ -5,6 +5,8 @@
   <div class="form-inputs">
     <%= f.input :name, required: true %>
     <%= f.input :logo, as: :file %>
+    <%= f.input :space_id, collection: Space.all.collect{|space| [space.name, space.id]} if current_user.has_role?(:sys_admin) %>
+    <%= f.input :space_id, as: :hidden, input_html: {val: current_space.id} unless current_user.has_role?(:sys_admin) %>
     <%= f.input :created_by_id, as: :hidden %>
   </div>
 

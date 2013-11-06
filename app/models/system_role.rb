@@ -1,0 +1,2 @@
+class SystemRole < Role
+end

@@ -14,23 +14,23 @@ class ClientsController < ApplicationController
     end
   end
 
-  def assigns
+  def assign_user
     @client = Client.find(params[:id])
     add_breadcrumb("#{@client.name} #{t('model.manager', model: ClientAssignment.model_name.human)}")
   end
 
-  def save_assignments
+  def save_user_assignments
     @client = Client.find(params[:id])
     if request.post?
       respond_to do |format|
-      if @client.update_attributes(params[:client])
-        format.html { redirect_to client_projects_path(@client), notice: "#{ClientAssignment.model_name.human}保存成功！" }
-        format.json { head :no_content }
-      else
-        format.html { render action: "assigns" }
-        format.json { render json: @client.errors, status: :unprocessable_entity }
+        if @client.update_attributes(params[:client])
+          format.html { redirect_to client_projects_path(@client), notice: "#{ClientAssignment.model_name.human}保存成功！" }
+          format.json { head :no_content }
+        else
+          format.html { render action: "assigns" }
+          format.json { render json: @client.errors, status: :unprocessable_entity }
+        end
       end
-    end
     end
   end
 
@@ -73,7 +73,7 @@ class ClientsController < ApplicationController
       end
 
       respond_to do |format|
-        format.html { redirect_to manage_client_medium_policies_path(@client), notice: "#{MediumPolicy.model_name.human}保存成功！" }
+        format.html { redirect_to client_projects_path(@client), notice: "#{MediumPolicy.model_name.human}保存成功！" }
         format.json { render json: @medium_policy }
       end
     end

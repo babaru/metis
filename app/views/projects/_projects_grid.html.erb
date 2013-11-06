@@ -1,6 +1,11 @@
+<% show_detail = false if local_assigns[:show_detail].nil? %>
+
 <%= grid(@projects_grid, :show_filters => :always) do |g|
-  g.column name: t('activerecord.attributes.client.name') do |project|
-    project.client.name
+
+  if show_detail
+    g.column name: t('activerecord.attributes.client.name') do |project|
+      project.client.name
+    end
   end
 
   g.column name: t('activerecord.attributes.project.name') do |project|
@@ -19,19 +24,23 @@
     content_tag(:strong, number_to_currency(project.budget, precision: 0, unit: '￥'))
   end
 
-  g.column name: t('activerecord.attributes.project.created_by') do |project|
-    project.created_by.name
+  g.column name: t('activerecord.attributes.project.assigned_users') do |project|
+    project.assigned_users.inject([]){|list, u| list << content_tag(:span, u.name, class: 'label label-success')}.join(' ').html_safe
   end
 
-  g.column :html => {class: 'btn-cell'} do |project|
-    link_to(icon('icon-user'), manage_project_assignments_path(id: project), rel: 'tooltip', title: '分配项目', class: 'btn') if can? :manage, :project
-  end
+  if can? :manage, Project
 
-  g.column :html => {class: 'btn-cell'} do |project|
-    link_to(icon('icon-edit'), edit_project_path(project), :class => 'btn', :rel => 'tooltip', :title => t('buttons.edit')) if can? :update, Project
-  end
+    g.column :html => {class: 'btn-cell'} do |project|
+      link_to(icon('icon-user'), assign_project_user_path(id: project), rel: 'tooltip', title: '分配项目', class: 'btn')
+    end
 
-  g.column :html => {class: 'btn-cell'} do |project|
-    link_to(icon('icon-trash'), project_path(project), :method => :delete, :confirm => t("confirms.delete"), :class => 'btn btn-danger', :rel => 'tooltip', :title => t('buttons.delete')) if can? :destroy, Project
+    g.column :html => {class: 'btn-cell'} do |project|
+      link_to(icon('icon-edit'), edit_project_path(project), :class => 'btn', :rel => 'tooltip', :title => t('buttons.edit'))
+    end
+
+    g.column :html => {class: 'btn-cell'} do |project|
+      link_to(icon('icon-trash'), project_path(project), :method => :delete, :confirm => t("confirms.delete"), :class => 'btn btn-danger', :rel => 'tooltip', :title => t('buttons.delete'))
+    end
+
   end
 end -%>

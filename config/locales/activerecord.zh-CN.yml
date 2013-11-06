@@ -15,6 +15,8 @@ zh-CN:
       project_assignment: 项目执行人员
       medium_policy: 媒体政策
       net_cost_spot: 净价点位
+      space: 公司
+      space_user: 公司成员
     attributes:
       user:
         name: 用户名
@@ -22,6 +24,7 @@ zh-CN:
         password: 密码
         password_confirmation: 确认密码
         roles: 用户身份
+        spaces: 公司
       client:
         name: 名称
         assigned_users: 执行人员列表
@@ -85,3 +88,12 @@ zh-CN:
         company_bonus_ratio: 公司配送比例
         medium_cpm_discount: 媒体CPM购买折扣
         company_cpm_discount: 公司CPM购买折扣
+      space:
+        name: 名称
+        users: 成员
+        clients: 客户
+      space_user:
+        roles: 公司用户权限
+      role:
+        name: 名称
+        readable_name: 说明

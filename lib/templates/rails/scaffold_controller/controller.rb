@@ -49,7 +49,7 @@ class <%= controller_class_name %>Controller < ApplicationController
 
     respond_to do |format|
       if @<%= class_name.split('::').last.underscore.downcase %>.save
-        format.html { redirect_to <%= singular_table_name %>_path(@<%= class_name.split('::').last.underscore.downcase %>), notice: <%= "'#{human_name} was successfully created.'" %> }
+        format.html { redirect_to <%= class_name.split('::').last.underscore.downcase.pluralize %>_path, notice: <%= "'#{human_name} was successfully created.'" %> }
         format.json { render json: <%= "@#{class_name.split('::').last.underscore.downcase}" %>, status: :created, location: <%= "@#{class_name.split('::').last.underscore.downcase}" %> }
       else
         format.html { render action: "new" }
@@ -65,7 +65,7 @@ class <%= controller_class_name %>Controller < ApplicationController
 
     respond_to do |format|
       if @<%= class_name.split('::').last.underscore.downcase %>.update_attributes(params[:<%= class_name.split('::').last.underscore.downcase %>])
-        format.html { redirect_to <%= singular_table_name %>_path(@<%= class_name.split('::').last.underscore.downcase %>), notice: <%= "'#{human_name} was successfully updated.'" %> }
+        format.html { redirect_to <%= class_name.split('::').last.underscore.downcase.pluralize %>_path, notice: <%= "'#{human_name} was successfully updated.'" %> }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

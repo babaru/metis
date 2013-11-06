@@ -1,5 +1,7 @@
 class MasterPlan < ActiveRecord::Base
   include ActionView::Helpers::NumberHelper
+
+  belongs_to :space
   belongs_to :client
   belongs_to :project
   belongs_to :created_by, class_name: 'User', foreign_key: :created_by_id
@@ -9,6 +11,8 @@ class MasterPlan < ActiveRecord::Base
   before_create :set_name, :copy_name_attributes
 
   attr_accessible :name,
+    :space_id,
+    :space,
     :project_id,
     :project_name,
     :created_by_id,
@@ -20,6 +24,10 @@ class MasterPlan < ActiveRecord::Base
     :spot_plan_version,
     :reality_medium_net_cost,
     :reality_company_net_cost
+
+  def belongs_to_any_space?(spaces)
+    spaces.include?(self.space)
+  end
 
   def medium_master_plan(medium_id)
     medium_master_plans.where(medium_id: medium_id).first
