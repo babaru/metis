@@ -235,7 +235,7 @@ SimpleNavigation::Configuration.run do |navigation|
       nil
     )
 
-    if can? :manage, User
+    if current_user.is_sys_admin? || current_user.is_space_admin?(@space)
       primary.item(
         :page_users,
         User.model_name.human,

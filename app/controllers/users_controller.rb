@@ -41,8 +41,6 @@ class UsersController < ApplicationController
   # GET /users/1/edit
   def edit
     @user = User.find(params[:id])
-    @space = current_space unless current_user.has_role?(:sys_admin)
-    @space = Space.find params[:id] if current_user.has_role?(:sys_admin)
   end
 
   # POST /users

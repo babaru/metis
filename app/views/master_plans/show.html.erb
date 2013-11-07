@@ -24,14 +24,14 @@
           }
         ),
 
-        render_cell(:button, :show,
+        (render_cell(:button, :show,
           data:
           {
             name: fa_icon('compass', text: '挑选点位'),
             url: choose_spots_path(@choose_spots_path_params),
             options: { class: 'btn btn-warning' }
           }
-        ),
+        ) if can? :manage, @master_plan),
 
         (render_cell(:button, :show,
           data:

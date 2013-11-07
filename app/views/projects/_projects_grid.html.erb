@@ -28,19 +28,15 @@
     project.assigned_users.inject([]){|list, u| list << content_tag(:span, u.name, class: 'label label-success')}.join(' ').html_safe
   end
 
-  if can? :manage, Project
+  g.column :html => {class: 'btn-cell'} do |project|
+    link_to(icon('icon-user'), assign_project_user_path(id: project), rel: 'tooltip', title: '分配项目', class: 'btn') if can? :manage, project
+  end
 
-    g.column :html => {class: 'btn-cell'} do |project|
-      link_to(icon('icon-user'), assign_project_user_path(id: project), rel: 'tooltip', title: '分配项目', class: 'btn')
-    end
+  g.column :html => {class: 'btn-cell'} do |project|
+    link_to(icon('icon-edit'), edit_project_path(project), :class => 'btn', :rel => 'tooltip', :title => t('buttons.edit')) if can? :manage, project
+  end
 
-    g.column :html => {class: 'btn-cell'} do |project|
-      link_to(icon('icon-edit'), edit_project_path(project), :class => 'btn', :rel => 'tooltip', :title => t('buttons.edit'))
-    end
-
-    g.column :html => {class: 'btn-cell'} do |project|
-      link_to(icon('icon-trash'), project_path(project), :method => :delete, :confirm => t("confirms.delete"), :class => 'btn btn-danger', :rel => 'tooltip', :title => t('buttons.delete'))
-    end
-
+  g.column :html => {class: 'btn-cell'} do |project|
+    link_to(icon('icon-trash'), project_path(project), :method => :delete, :confirm => t("confirms.delete"), :class => 'btn btn-danger', :rel => 'tooltip', :title => t('buttons.delete')) if can? :manage, project.client
   end
 end -%>

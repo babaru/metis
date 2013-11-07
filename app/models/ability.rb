@@ -19,11 +19,11 @@ class Ability
       # ------------------------------------------------------------------------
 
       can :update, Space do |space|
-        space.assigned_to?(user) && user.is_space_admin?(space)
+        user.belongs_to_space?(space) && user.is_space_admin?(space)
       end
 
       can :read, Space do |space|
-        user.belongs_to_space? space
+        user.belongs_to_space?(space)
       end
 
       # Client
@@ -43,7 +43,7 @@ class Ability
       # Project
 
       can :manage, Project do |p|
-        user.belongs_to_space?(p.client.space) && user.is_space_admin?(p.client.space)
+        user.belongs_to_space?(p.client.space) && (user.is_space_admin?(p.client.space) || user.is_space_super_user?(p.client.space))
       end
 
       can :manage, Project do |p|

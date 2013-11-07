@@ -2,12 +2,12 @@
   toolbar: {
     right:
     [
-      render_cell(:button, :show, data:
+      (render_cell(:button, :show, data:
       {
         name: fa_icon('plus-sign', text: t('model.create', :model => Client.model_name.human)),
         url: new_client_path,
         options: {class: 'btn btn-primary'}
-      })
+      }) if can?(:update, @space))
     ]
   }
 })
@@ -21,8 +21,8 @@
       url: client_projects_path(client),
       icon: client.logo.url(:thumb),
       edit_url: edit_client_path(client),
-      remove_url: client_path(client)
+      remove_url: client_path(client),
     }},
-    editable: can?(:manage, Client)
+    editable: can?(:update, @space)
   }
 %>
