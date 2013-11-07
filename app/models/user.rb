@@ -46,11 +46,11 @@ class User < ActiveRecord::Base
   end
 
   def belongs_to_any_space?(spaces)
-    spaces.any? {|space| space.assigned_to?(self)}
+    spaces.any? {|space| SpaceUser.find_by_user_id_and_space_id(self.id, space.id) != nil}
   end
 
   def belongs_to_space?(space)
-    space.assigned_to? self
+    SpaceUser.find_by_user_id_and_space_id(self.id, space.id) != nil
   end
 
   def assigned_to_project?(project)
