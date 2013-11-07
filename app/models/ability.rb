@@ -67,7 +67,7 @@ class Ability
       # MasterPlan
 
       can :manage, MasterPlan do |mp|
-        user.belongs_to_space?(mp.client.space) && user.is_space_admin?(mp.client.space)
+        user.belongs_to_space?(mp.client.space) && (user.is_space_admin?(mp.client.space) || user.is_space_super_user?(mp.client.space))
       end
 
       can :manage, MasterPlan do |mp|
