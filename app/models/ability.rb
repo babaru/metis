@@ -19,7 +19,7 @@ class Ability
       # ------------------------------------------------------------------------
 
       can :update, Space do |space|
-        user.belongs_to_space?(space) && user.is_space_admin?(space)
+        user.belongs_to_space?(space) && (user.is_space_admin?(space) || user.is_space_super_user?(space))
       end
 
       can :read, Space do |space|
