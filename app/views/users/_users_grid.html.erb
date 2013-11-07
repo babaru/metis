@@ -22,7 +22,7 @@
 
   if can? :manage, User
     g.column html: {class: 'btn-cell'} do |user|
-        link_to(fa_icon('smile'), assign_space_user_roles_path(user.space_users.where(space_id: @space.id).first), :class => 'btn', :rel => 'tooltip', :title => "编辑用户#{@space.name}权限") unless user.is_sys_admin? && !user.belongs_to_space?(@space)
+        link_to(fa_icon('smile'), assign_space_user_roles_path(user.space_users.where(space_id: @space.id).first), :class => 'btn', :rel => 'tooltip', :title => "编辑用户#{@space.name}权限") unless user.space_users.where(space_id: @space.id).first.nil?
     end
 
     g.column :html => {class: 'btn-cell'} do |user|
