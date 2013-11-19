@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131106063404) do
+ActiveRecord::Schema.define(:version => 20131114062654) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -214,13 +214,15 @@ ActiveRecord::Schema.define(:version => 20131106063404) do
     t.integer  "created_by_id"
     t.datetime "started_at"
     t.datetime "ended_at"
-    t.datetime "created_at",             :null => false
-    t.datetime "updated_at",             :null => false
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
     t.integer  "budget"
     t.string   "type"
     t.integer  "current_master_plan_id"
     t.string   "client_name"
     t.string   "created_by_name"
+    t.boolean  "is_started",             :default => false
+    t.datetime "is_started_at"
   end
 
   add_index "projects", ["client_id"], :name => "index_projects_on_client_id"

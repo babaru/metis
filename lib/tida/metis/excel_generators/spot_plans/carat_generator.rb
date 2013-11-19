@@ -165,6 +165,15 @@ module Tida
               border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]},
               bg_color: "DDDDDD"
             })
+            sub_total_currency_cell = styles.add_style({
+              format_code: "¥#,##0;[Red]¥-#,##0",
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: false,
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]},
+              bg_color: "DDDDDD"
+            })
             sub_total_on_house_cell = styles.add_style({
               sz: FONT_SIZE,
               font_name: FONT_NAME,
@@ -174,6 +183,15 @@ module Tida
               bg_color: "DDDDDD"
             })
             total_cell = styles.add_style({
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: true,
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]},
+              bg_color: "00CCFF"
+            })
+            total_currency_cell = styles.add_style({
+              format_code: "¥#,##0;[Red]¥-#,##0",
               sz: FONT_SIZE,
               font_name: FONT_NAME,
               b: true,
@@ -301,11 +319,10 @@ module Tida
               table_calendar_days_header_styles = [nil, table_header_first_cell2, Array.new(description_column_count, table_header_cell2)].flatten
 
               month_segs = []
-              total_day_count = 0
+              total_day_count = master_plan.project.duration
               months.each_with_index do |month, m_index|
                 key = "#{month[:year]}#{sprintf('%02d', month[:month])}"
                 table_headers << "#{month[:year]}-#{sprintf('%02d', month[:month])}"
-                col_count = 0
                 days[key].each_with_index do |day, index|
                   if m_index == 0
                     if day && day > 0
@@ -326,7 +343,6 @@ module Tida
                           table_calendar_days_header_styles << table_header_calendar_cell2
                         end
                       end
-                      col_count += 1 if index + 1 < days[key].length && index > 0
                     end
                   else
                     table_headers << nil if index > 0
@@ -346,11 +362,9 @@ module Tida
                           table_calendar_days_header_styles << table_header_calendar_cell2
                         end
                       end
-                    col_count += 1 if day > 0 && index > 0
                   end
                 end
-                month_segs << col_count
-                total_day_count += days[key].length
+                month_segs << master_plan.project.duration_by_month(month[:year], month[:month])
               end
 
               # Rails.logger.debug("total_day_count: #{total_day_count}")
@@ -362,18 +376,10 @@ module Tida
               row = sheet.add_row(table_calendar_days, style: table_calendar_days_header_styles)
               row.height = 20
 
-              0.upto(calendar_column_index - 1) do |n|
-                # sheet.merge_cells("#{get_column_name(n)}#{row.index}:#{get_column_name(n)}#{row.index + 1}")
-              end
-
               month_segs.each_with_index do |seg, index|
-                if index == 0
-                  sheet.merge_cells("#{get_column_name(calendar_column_index)}#{row.index}:#{get_column_name(calendar_column_index + seg + 1)}#{row.index}")
-                  calendar_column_index = calendar_column_index + seg + 2
-                else
-                  sheet.merge_cells("#{get_column_name(calendar_column_index)}#{row.index}:#{get_column_name(calendar_column_index + seg)}#{row.index}")
-                  calendar_column_index = calendar_column_index + seg + 1
-                end
+                Rails.logger.debug("seg: #{seg}")
+                sheet.merge_cells("#{get_column_name(calendar_column_index)}#{row.index}:#{get_column_name(calendar_column_index + seg - 1)}#{row.index}")
+                calendar_column_index = calendar_column_index + seg
               end
 
               # Fill records
@@ -392,14 +398,14 @@ module Tida
                   end
                 end
                 sheet.merge_cells("#{get_column_name(2)}#{start_index}:#{get_column_name(2)}#{row.index + 1}")
-                row = fill_sub_total_row(sheet, medium_master_plan.bonus_ratio, start_index, row.index + 1, total_day_count, center_cell, sub_total_cell, sub_total_on_house_cell)
+                row = fill_sub_total_row(sheet, medium_master_plan.bonus_ratio, start_index, row.index + 1, total_day_count, center_cell, sub_total_cell, sub_total_on_house_cell, sub_total_currency_cell)
                 sub_total_rows << row.index + 1
                 start_index = row.index + 2
               end
 
               sheet.merge_cells("#{get_column_name(1)}#{media_type_start_index}:#{get_column_name(1)}#{row.index + 1}")
 
-              row = fill_total_row(sheet, row.index + 1, sub_total_rows, total_day_count, total_cell)
+              row = fill_total_row(sheet, row.index + 1, sub_total_rows, total_day_count, total_cell, total_currency_cell)
 
               sheet.column_widths(2, 15, 12, 12, 35, 24, 16, 16, 16, 16, 16, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5)
             end
@@ -409,9 +415,6 @@ module Tida
             result_file = File.join root_folder, "#{master_plan.client.name} #{master_plan.project.name} #{master_plan.name} #{Time.now.strftime('%Y%m%d')} #{Time.now.strftime('%H%M%S')}.xlsx"
             ap.serialize result_file
             Rails.logger.info "* Created excel file succeed: #{result_file}"
-
-            # box_uploader = ::BackOffice::Box::Uploader.new
-            # box_uploader.upload result_file, "#{Settings.file_system.box.sina_weibo_report_root}/#{sina_weibo_url_package.name}"
             result_file
           end
 
@@ -420,13 +423,13 @@ module Tida
           def get_column_name(n)
             r = n % 26
             l = n / 26
-            Rails.logger.debug "l: #{l} r: #{r}"
+            # Rails.logger.debug "l: #{l} r: #{r}"
             first_char = COLUMN_NAMES_2[l]
             second_char = COLUMN_NAMES[r]
             "#{first_char}#{second_char}"
           end
 
-          def fill_total_row(sheet, end_row_index, sub_total_rows, calendar_column_count, total_cell)
+          def fill_total_row(sheet, end_row_index, sub_total_rows, calendar_column_count, total_cell, total_currency_cell)
             sp12 = "+#{get_column_name(12)}"
             sp13 = "+#{get_column_name(13)}"
             sp22 = "+#{get_column_name(22)}"
@@ -439,13 +442,13 @@ module Tida
               '-', '-', nil, '-', '-',
               "=#{get_column_name(22)}#{sub_total_rows.join(sp22)}", nil,
               Array.new(calendar_column_count, nil)].flatten,
-              style: [nil, Array.new(23 + calendar_column_count, total_cell)].flatten)
+              style: [nil, Array.new(21, total_cell), total_currency_cell, Array.new(1 + calendar_column_count, total_cell)].flatten)
             sheet.merge_cells("#{get_column_name(1)}#{row.index + 1}:#{get_column_name(3)}#{row.index + 1}")
             sheet.merge_cells("#{get_column_name(24)}#{row.index + 1}:#{get_column_name(23 + calendar_column_count)}#{row.index + 1}")
             row
           end
 
-          def fill_sub_total_row(sheet, on_house_ratio, start_row_index, end_row_index, calendar_column_count, center_cell, sub_total_cell, sub_total_on_house_cell)
+          def fill_sub_total_row(sheet, on_house_ratio, start_row_index, end_row_index, calendar_column_count, center_cell, sub_total_cell, sub_total_on_house_cell, sub_total_currency_cell)
             row = sheet.add_row([nil, nil, 'Sub Total', Array.new(7, nil), '-', '-',
               "=SUM(#{get_column_name(12)}#{start_row_index}:#{get_column_name(12)}#{end_row_index})",
               "=SUM(#{get_column_name(13)}#{start_row_index}:#{get_column_name(13)}#{end_row_index})",
@@ -456,7 +459,7 @@ module Tida
               "=SUM(#{get_column_name(22)}#{start_row_index}:#{get_column_name(22)}#{end_row_index})",
               "Bonus Ratio: #{on_house_ratio}",
               Array.new(calendar_column_count, nil)].flatten,
-              style: [nil, center_cell, Array.new(21, sub_total_cell), sub_total_on_house_cell, Array.new(calendar_column_count, sub_total_cell)].flatten)
+              style: [nil, center_cell, Array.new(20, sub_total_cell), sub_total_currency_cell, sub_total_on_house_cell, Array.new(calendar_column_count, sub_total_cell)].flatten)
             sheet.merge_cells("#{get_column_name(2)}#{row.index + 1}:#{get_column_name(3)}#{row.index + 1}")
             sheet.merge_cells("#{get_column_name(24)}#{row.index + 1}:#{get_column_name(23 + calendar_column_count)}#{row.index + 1}")
             row

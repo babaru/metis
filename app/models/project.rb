@@ -9,7 +9,8 @@ class Project < ActiveRecord::Base
 
   attr_accessible :ended_at, :name, :started_at, :created_by_id,
     :created_by_name, :created_by, :client_id, :client_name,
-    :client, :budget, :assigned_user_ids, :current_master_plan_id
+    :client, :budget, :assigned_user_ids, :current_master_plan_id,
+    :is_started, :is_started_at
 
   before_create :copy_name_attributes, :create_default_master_plan
   after_create :set_current_master_plan
@@ -19,6 +20,8 @@ class Project < ActiveRecord::Base
   validates :budget, numericality: { greater_than: 0 }
   validates :started_at, presence: true
   validates :ended_at, presence: true
+
+  scope :started, where(is_started: true)
 
   def assigned_to?(user)
     assigned_to_user = assigned_to
@@ -42,6 +45,16 @@ class Project < ActiveRecord::Base
       result[key][m.day - 1] = 1
     end
     result
+  end
+
+  def duration
+    (self.ended_at - self.started_at).to_i / 1.day + 1
+  end
+
+  def duration_by_month(year, month)
+    return (1.months.since(Time.new(year, month)) - self.started_at).to_i / 1.days if self.started_at.year == year && self.started_at.month == month
+    return (self.ended_at - Time.new(year, month)).to_i / 1.days + 1 if self.ended_at.year == year && self.ended_at.month == month
+    Time.days_in_month(month, year)
   end
 
   def remove_master_plan(master_plan, user)
@@ -74,6 +87,14 @@ class Project < ActiveRecord::Base
       self.save!
     end
     @new_master_plan
+  end
+
+  def start!
+    unless self.is_started
+      self.is_started = true
+      self.is_started_at = Time.now
+      self.save!
+    end
   end
 
   class << self

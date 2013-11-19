@@ -124,4 +124,17 @@ class ProjectsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def start
+    @project = Project.find params[:id]
+
+    if request.post?
+      @project.start!
+
+      respond_to do |format|
+        format.html { redirect_to client_projects_path(@project.client_id) }
+        format.json { head :no_content }
+      end
+    end
+  end
 end

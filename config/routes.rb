@@ -15,6 +15,7 @@ Metis::Application.routes.draw do
   get 'projects/:id/assign_user' => 'projects#assign_user', as: :assign_project_user
   post 'projects/:id/save_user_assignments' => 'projects#save_user_assignments', as: :save_project_user_assignments
   post 'projects/:id/set_current_master_plan' => 'projects#set_current_master_plan', as: :set_current_master_plan
+  post 'projects/:id/start' => 'projects#start', as: :start_project
 
   # get 'media/:website_id/channel_groups' => 'channel_groups#index'
   # get 'media/:website_id/channels' => 'channels#index'

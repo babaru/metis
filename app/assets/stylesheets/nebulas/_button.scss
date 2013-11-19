@@ -29,6 +29,13 @@
   @include button-background($btnBackground, $grayDark);
 }
 
+.btn-small {
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+}
+
 // Set the backgrounds
 // -------------------------
 

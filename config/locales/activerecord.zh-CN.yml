@@ -36,6 +36,8 @@ zh-CN:
         assigned_to: 项目分配给
         assigned_users: 执行人员列表
         created_by: 创建人
+        is_started: 已启动?
+        is_started_at: 启动时间
       master_plan:
         name: 名称
         updated_at: 最后修改时间

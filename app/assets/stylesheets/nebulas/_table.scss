@@ -32,3 +32,65 @@
     border-bottom: 2px solid $tableBorder;
   }
 }
+
+.wice-grid {
+  .desc,
+  .asc {
+    background: none;
+    &:after {
+      content: '\f163';
+      font-family: FontAwesome;
+      font-style: normal;
+      font-weight: normal;
+      text-decoration: inherit;
+      padding-left: 0.5em;
+    }
+  }
+  .asc {
+    &:after {
+      content: '\f162';
+    }
+  }
+
+  .wg-show-filter,
+  .wg-hide-filter {
+    &.clickable {
+      background: none;
+      &:after {
+        content: '\f0b0';
+        font-family: FontAwesome;
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: inherit;
+      }
+    }
+  }
+
+  .submit {
+    &.clickable {
+      background: none;
+      &:after {
+        content: '\f021';
+        font-family: FontAwesome;
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: inherit;
+        padding-left: 0.5em;
+      }
+    }
+  }
+
+  .reset {
+    &.clickable {
+      background: none;
+      &:after {
+        content: '\f00d';
+        font-family: FontAwesome;
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: inherit;
+        padding-left: 0.5em;
+      }
+    }
+  }
+}
