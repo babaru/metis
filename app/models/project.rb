@@ -5,14 +5,14 @@ class Project < ActiveRecord::Base
   has_many :project_assignments, dependent: :destroy
   has_many :assigned_users, through: :project_assignments
   has_many :master_plans, dependent: :destroy
-  has_one :current_master_plan, class_name: 'MasterPlan', foreign_key: :current_master_plan_id
+  belongs_to :current_master_plan, class_name: 'MasterPlan', foreign_key: :current_master_plan_id
 
   attr_accessible :ended_at, :name, :started_at, :created_by_id,
     :created_by_name, :created_by, :client_id, :client_name,
     :client, :budget, :assigned_user_ids, :current_master_plan_id,
     :is_started, :is_started_at
 
-  before_create :copy_name_attributes, :create_default_master_plan
+  before_create :copy_mandatory_attributes, :create_default_master_plan
   after_create :set_current_master_plan
 
   validates :name, presence: true
@@ -97,18 +97,9 @@ class Project < ActiveRecord::Base
     end
   end
 
-  class << self
-
-    def create_by_data!(data, user)
-      data[:created_by_id] = user.id
-      Project.create!(data)
-    end
-
-  end
-
   private
 
-  def copy_name_attributes
+  def copy_mandatory_attributes
     client_name = client.name unless client_name
     created_by_name = created_by.name unless created_by_name
   end

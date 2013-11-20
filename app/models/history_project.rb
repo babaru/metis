@@ -1,0 +1,2 @@
+class HistoryProject < Project
+end

@@ -11,11 +11,14 @@ Metis::Application.routes.draw do
   post 'clients/:id/save_user_assignments' => 'clients#save_user_assignments', as: :save_client_user_assignments
   get 'clients/:id/medium_policies' => 'clients#medium_policies', as: :manage_client_medium_policies
   post 'clients/:id/save_medium_policies' => 'clients#save_medium_policies', as: :save_client_medium_policies
+  get 'clients/:id/upload_spot_plan' => 'clients#upload_spot_plan', as: :upload_spot_plan
+  post 'clients/:id/save_uploaded_spot_plan' => 'clients#save_uploaded_spot_plan', as: :save_uploaded_spot_plan
 
   get 'projects/:id/assign_user' => 'projects#assign_user', as: :assign_project_user
   post 'projects/:id/save_user_assignments' => 'projects#save_user_assignments', as: :save_project_user_assignments
   post 'projects/:id/set_current_master_plan' => 'projects#set_current_master_plan', as: :set_current_master_plan
   post 'projects/:id/start' => 'projects#start', as: :start_project
+
 
   # get 'media/:website_id/channel_groups' => 'channel_groups#index'
   # get 'media/:website_id/channels' => 'channels#index'

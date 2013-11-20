@@ -1,20 +1,46 @@
-<%= render_page_title "<strong>#{@client.name}</strong>#{t('model.import', model: SpotPlanExcelFile.model_name.human)} <small>#{t('simple_form.required.text') }</small>" do |toolbar|
-  toolbar << {
-    name: "#{t('labels.back_to')}",
-    url: url_for(:back),
-    class: 'button'
-  }
-  end %>
+<div class="narrow-center-page">
 
-<%= simple_form_for(@upload_file, url: upload_spot_plan_excel_file_path(@client), method: :post, remote: true, :html => {:class => 'form-horizontal upload-spot-plan-excel-file-form'}) do |f| %>
+<%= render_cell(
+  :page_title,
+  :show,
+  data:
+  {
+    name: "<strong>#{@client.name}</strong> #{t('model.upload', model: MasterPlan.model_name.human)} ",
+    toolbar:
+    {
+      left:
+      [
+        render_cell(
+          :button,
+          :show,
+          data:
+          {
+            name: fa_icon('level-up rotate-270'),
+            url: client_projects_path(@client),
+            options:
+            {
+              class: 'btn',
+              rel: 'tooltip',
+              title: "#{t('labels.back_to')} #{@client.name} #{t('model.list', :model => Project.model_name.human)}",
+            }
+          }
+        )
+      ]
+    }
+  }
+) %>
+
+<%= simple_form_for(@upload_file, url: save_uploaded_spot_plan_path(@client), method: :post, html: {class: 'form-horizontal upload-spot-plan-excel-file-form'}) do |f| %>
   <%= f.error_notification %>
   <div class="form-inputs">
     <%= f.input :data_file, as: :file, label: '上传文件' %>
   </div>
   <div class="form-actions">
-    <%= f.button :submit, '确定', class: 'button button-primary' %>
+    <%= f.button :submit, '确定', class: 'btn btn-primary' %>
   </div>
 <% end %>
+
+</div>
 
 <% content_for :js do %>
 <script language='javascript'>

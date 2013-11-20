@@ -4,7 +4,7 @@
 
   if show_detail
     g.column name: "#{Client.model_name.human}#{t('activerecord.attributes.client.name')}", attribute: 'name', model: Client do |project|
-      project.client.name
+      link_to project.client.name, client_projects_path(client_id: project.client_id)
     end
   end
 

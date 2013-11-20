@@ -62,7 +62,9 @@ class MediumMasterPlan < ActiveRecord::Base
     else
       type = MediumMasterPlan.name
       type = ComboMediumMasterPlan.name if data[:is_combo]
+      type = HistoryMediumMasterPlan.name if data[:is_history]
       data.delete(:is_combo)
+      data.delete(:is_history)
       data[:type] = type
       item = MediumMasterPlan.create!(data)
     end
@@ -70,6 +72,10 @@ class MediumMasterPlan < ActiveRecord::Base
   end
 
   def is_combo?
+    false
+  end
+
+  def is_history?
     false
   end
 

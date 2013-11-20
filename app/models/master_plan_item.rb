@@ -8,7 +8,7 @@ class MasterPlanItem < ActiveRecord::Base
   belongs_to :channel
   has_many :spot_plan_items, dependent: :destroy
 
-  before_create :copy_useful_attributes
+  before_create :copy_mandatory_attributes
 
   attr_accessible :count,
     :spot, :spot_id, :spot_name, :reality_spot_name,
@@ -35,7 +35,8 @@ class MasterPlanItem < ActiveRecord::Base
     :unit_rate_card, :unit_rate_card_unit, :unit_rate_card_unit_type,
     :reality_medium_net_cost, :reality_company_net_cost,
     :original_medium_discount, :reality_medium_discount,
-    :original_company_discount, :reality_company_discount
+    :original_company_discount, :reality_company_discount,
+    :type
 
   def reality_count(version = nil)
     version = self.master_plan.spot_plan_version if version.nil?
@@ -89,12 +90,12 @@ class MasterPlanItem < ActiveRecord::Base
   end
 
   def medium_discount
-    return reality_medium_discount if reality_medium_discount && medium_master_plan.is_combo?
+    return reality_medium_discount if reality_medium_discount && (medium_master_plan.is_combo? || medium_master_plan.is_history?)
     original_medium_discount
   end
 
   def company_discount
-    return reality_company_discount if reality_company_discount && medium_master_plan.is_combo?
+    return reality_company_discount if reality_company_discount && (medium_master_plan.is_combo? || medium_master_plan.is_history?)
     original_company_discount
   end
 
@@ -105,19 +106,21 @@ class MasterPlanItem < ActiveRecord::Base
 
   private
 
-  def copy_useful_attributes
-    self.spot_name = self.spot.name unless self.spot_name
-    self.reality_spot_name = self.spot.name unless self.spot_name
-    self.unit_rate_card = self.spot.price unless self.unit_rate_card
-    self.unit_rate_card_unit = self.spot.unit unless self.unit_rate_card_unit
-    self.unit_rate_card_unit_type = self.spot.unit_type unless self.unit_rate_card_unit_type
-    self.material_format = self.spot.spec unless self.material_format
-    self.master_plan_name = self.master_plan.name unless master_plan_name
-    self.project_name = self.project.name unless project_name
-    self.client_name = self.client.name unless client_name
-    self.medium_name = self.spot.medium.name unless medium_name
-    self.channel_name = self.spot.channel.name unless channel_name
-    self.original_medium_discount = MediumPolicy.medium_discount(self.medium_id, self.client_id) unless original_medium_discount
-    self.original_company_discount = MediumPolicy.company_discount(self.medium_id, self.client_id) unless original_company_discount
+  def copy_mandatory_attributes
+    if spot_id
+      self.spot_name = self.spot.name unless self.spot_name
+      self.reality_spot_name = self.spot.name unless self.spot_name
+      self.unit_rate_card = self.spot.price unless self.unit_rate_card
+      self.unit_rate_card_unit = self.spot.unit unless self.unit_rate_card_unit
+      self.unit_rate_card_unit_type = self.spot.unit_type unless self.unit_rate_card_unit_type
+      self.material_format = self.spot.spec unless self.material_format
+      self.master_plan_name = self.master_plan.name unless master_plan_name
+      self.project_name = self.project.name unless project_name
+      self.client_name = self.client.name unless client_name
+      self.medium_name = self.spot.medium.name unless medium_name
+      self.channel_name = self.spot.channel.name unless channel_name
+      self.original_medium_discount = MediumPolicy.medium_discount(self.medium_id, self.client_id) unless original_medium_discount
+      self.original_company_discount = MediumPolicy.company_discount(self.medium_id, self.client_id) unless original_company_discount
+    end
   end
 end

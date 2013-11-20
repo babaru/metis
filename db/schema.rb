@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131114062654) do
+ActiveRecord::Schema.define(:version => 20131120075231) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -115,6 +115,7 @@ ActiveRecord::Schema.define(:version => 20131114062654) do
     t.decimal  "reality_medium_discount",   :precision => 8,  :scale => 2
     t.decimal  "reality_company_discount",  :precision => 8,  :scale => 2
     t.integer  "medium_master_plan_id"
+    t.string   "type"
   end
 
   add_index "master_plan_items", ["channel_id"], :name => "index_master_plan_items_on_channel_id"

@@ -2,7 +2,7 @@
 //= require jquery_ujs
 //= require jquery.ui.all
 //= require jquery.remotipart
-//= require wice_grid
+//= require wice_grid.js
 //= require nebulas
 //= require backbone-rails
 //= require accounting
