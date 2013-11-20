@@ -1,7 +1,7 @@
 <%= render_cell(:page_title, :show,
   data:
   {
-    name: "<strong>#{@master_plan.project.client.name}</strong> #{@master_plan.project.name}",
+    name: "<strong>#{@master_plan.project.client.name}</strong> #{@master_plan.project.name} #{fa_icon('cloud-upload') if @master_plan.project.is_a?(HistoryProject)}",
     toolbar: {
       left:
       [
@@ -20,7 +20,7 @@
 
       right:
       [
-        render_cell(
+        (render_cell(
           :button,
           :show,
           data:
@@ -33,9 +33,9 @@
             },
             items: (@master_plan.spot_plan_versions.inject([]){|list, n| list << {name: (n > 0 ? "版本#{n}" : "初始版本"), url: spot_plan_path(medium_id: @selected_medium_master_plan.medium_id, y: @selected_year, m: @selected_month, version: n)}})
           }
-        ),
+        ) unless @master_plan.project.is_a?(HistoryProject)),
 
-        render_cell(
+        (render_cell(
           :button,
           :show,
           data:
@@ -52,9 +52,9 @@
               confirm: t('confirms.delete')
             }
           }
-        ),
+        ) unless @master_plan.project.is_a?(HistoryProject)),
 
-        render_cell(:button, :show,
+        (render_cell(:button, :show,
           data:
           {
             name: fa_icon('thumbs-up', text: "排期表客户已确认"),
@@ -67,7 +67,7 @@
               method: :post
             }
           }
-        ),
+        ) unless @master_plan.project.is_a?(HistoryProject)),
 
         render_cell(:button, :show,
           data:
@@ -89,7 +89,7 @@
 
 <%= render partial: 'master_plan_summary' %>
 <%= render partial: 'medium_master_plan_spot_plan_navs' %>
-<%= render partial: 'medium_master_plan_summary' %>
+<%= render partial: 'medium_master_plan_summary', locals: {is_history: @master_plan.project.is_a?(HistoryProject)} %>
 
 <div class="container-fluid">
   <div class="row-fluid">
@@ -115,7 +115,7 @@
   </div>
 </div>
 
-<%= render partial: 'spot_plan_items_grid' %>
+<%= render partial: 'spot_plan_items_grid', locals: {is_history: @master_plan.project.is_a?(HistoryProject)} %>
 
 <%= content_tag :span, @selected_medium_master_plan.medium_id, class: 'hide', id: 'selected-medium-id-value' %>
 <%= content_tag :span, @master_plan.id, class: 'hide', id: 'master-plan-id-value' %>
@@ -143,5 +143,5 @@
 %>
 
 <% content_for :js do %>
-<% javascript_include_tag "spot_plan" %>
+<% javascript_include_tag "spot_plan" unless @master_plan.project.is_a?(HistoryProject) %>
 <% end %>

@@ -1,4 +1,10 @@
+<% is_history = false if local_assigns[:is_history].nil? %>
+
+<% if is_history %>
+<table id="spot-plan-table" class="table table-bordered table-striped is_history">
+<% else %>
 <table id="spot-plan-table" class="table table-bordered table-striped">
+<% end %>
   <tr>
     <th>网站</th>
     <th>频道</th>

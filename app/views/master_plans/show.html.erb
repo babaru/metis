@@ -1,12 +1,12 @@
 <%= render_cell(:page_title, :show,
   data:
   {
-    name: "<strong>#{@master_plan.project.client.name}</strong> #{@master_plan.project.name}",
+    name: "<strong>#{@master_plan.project.client.name}</strong> #{@master_plan.project.name} #{fa_icon('cloud-upload') if @master_plan.project.is_a?(HistoryProject)}",
     toolbar:
     {
       right:
       [
-        render_cell(:button, :show,
+        (render_cell(:button, :show,
           data:
           {
             name: @master_plan.name,
@@ -22,7 +22,7 @@
               {name: fa_icon('trash', text: '删除Master Plan'), url: master_plan_path(@master_plan), options: {method: :delete, confirm: t('confirms.delete')}}
             ].flatten
           }
-        ),
+        ) unless @master_plan.project.is_a?(HistoryProject)),
 
         (render_cell(:button, :show,
           data:
@@ -31,7 +31,7 @@
             url: choose_spots_path(@choose_spots_path_params),
             options: { class: 'btn btn-warning' }
           }
-        ) if can? :manage, @master_plan),
+        ) if !@master_plan.project.is_a?(HistoryProject) && can?(:manage, @master_plan)),
 
         (render_cell(:button, :show,
           data:
@@ -49,13 +49,13 @@
 
 <% if @master_plan.medium_master_plans.count > 0 %>
 <%= render partial: 'master_plan_summary' %>
-<%= render partial: 'medium_master_plan_navs' %>
-<%= render partial: 'medium_master_plan_summary' %>
-<%= render partial: 'medium_master_plan_items_grid' %>
+<%= render partial: 'medium_master_plan_navs', locals: {is_history: @master_plan.project.is_a?(HistoryProject)} %>
+<%= render partial: 'medium_master_plan_summary', locals: {is_history: @master_plan.project.is_a?(HistoryProject)} %>
+<%= render partial: 'medium_master_plan_items_grid', locals: {is_history: @master_plan.project.is_a?(HistoryProject)} %>
 <% end %>
 
 </div>
 
 <% content_for :js do %>
-<% javascript_include_tag "master_plan_summary", "medium_master_plan_summary", "medium_master_plan_items_grid" %>
+<% javascript_include_tag "master_plan_summary", "medium_master_plan_summary", "medium_master_plan_items_grid" if !@master_plan.project.is_a?(HistoryProject) %>
 <% end %>

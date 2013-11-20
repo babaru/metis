@@ -1,3 +1,72 @@
+<% is_history = false if local_assigns[:is_history].nil? %>
+
+<% if is_history %>
+
+<div class="padding">
+  <table class="plan-summary" id="medium-master-plan-summary">
+    <tr>
+      <th style="width:25%;">合同额(<%= @selected_medium_master_plan.medium_name %>-公司)</th>
+      <th>折扣(<%= @selected_medium_master_plan.medium_name %>-公司)</th>
+      <th style="width:25%;">预估利润(<%= @selected_medium_master_plan.medium_name %>)</th>
+      <th style="width:25%;">配送比例(实际-<%= @selected_medium_master_plan.medium_name %>-公司)</th>
+    </tr>
+    <tr>
+      <td>
+        <div class="label-group master-plan-value-group">
+          <span class="item medium">
+            <%= content_tag(
+              :span,
+              number_to_currency(@selected_medium_master_plan.medium_net_cost, unit: '￥', precision: 0),
+              class: 'medium-net-cost'
+            ) %>
+          </span>
+          <span class="item company">
+            <%= content_tag(
+              :span,
+              number_to_currency(@selected_medium_master_plan.company_net_cost, unit: '￥', precision: 0),
+              class: 'company-net-cost'
+            ) %>
+          </span>
+        </div>
+      </td>
+      <td>
+        <div class="label-group master-plan-value-group">
+          <span class="item medium">
+            <%= content_tag(
+              :span,
+              number_with_precision(@selected_medium_master_plan.medium_discount, precision: 2),
+              class: 'medium-discount'
+            ) %>
+          </span>
+          <span class="item company">
+            <%= content_tag(
+              :span,
+              number_with_precision(@selected_medium_master_plan.company_discount, precision: 2),
+              class: 'company-discount'
+            ) %>
+          </span>
+        </div>
+      </td>
+      <td><%= content_tag(:span, number_to_currency(@selected_medium_master_plan.profit, unit: '￥', precision: 0), class: 'profit') %></td>
+      <td>
+        <div class="label-group master-plan-value-group">
+          <span class="item reality bonus-ratio">
+            <%= @selected_medium_master_plan.bonus_ratio %>
+          </span>
+          <span class="item medium medium-bonus-ratio">
+            <%= MediumPolicy.medium_bonus_ratio(@selected_medium_master_plan.medium_id, @master_plan.client_id) %>
+          </span>
+          <span class="item company company-bonus-ratio">
+            <%= MediumPolicy.company_bonus_ratio(@selected_medium_master_plan.medium_id, @master_plan.client_id) %>
+          </span>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<% else %>
+
 <div class="padding">
   <table class="plan-summary" id="medium-master-plan-summary">
     <tr>
@@ -83,3 +152,5 @@
 </div>
 
 <%= content_tag :span, @selected_medium_master_plan.id, class: 'hide', id: 'medium-master-plan-id-value' %>
+
+<% end %>

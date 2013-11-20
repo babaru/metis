@@ -12,6 +12,12 @@
   -ms-user-select: none;
   user-select: none;
 
+  &.is_history {
+    .spot-plan-item-cell {
+      cursor: auto !important;
+    }
+  }
+
   .master-plan-item-row {
     td {
       vertical-align: center;

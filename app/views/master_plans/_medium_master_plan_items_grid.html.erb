@@ -1,3 +1,5 @@
+<% is_history = false if local_assigns[:is_history].nil? %>
+
 <%= grid(@master_plan_items_grid, :show_filters => :none, html: {id: 'medium-master-plan-items-grid'}) do |g|
 
   g.row_attributes do |master_plan_item|
@@ -9,17 +11,21 @@
   end
 
   g.column name: t('activerecord.attributes.spot.name') do |master_plan_item|
-    link_to(
-      content_tag(:strong, master_plan_item.position_name),
-      '#',
-      class: (master_plan_item.is_on_house ? 'master-plan-item-position-name is_on_house editable-field' : 'master-plan-item-position-name editable-field'),
-      'data-type' => 'text',
-      'data-pk' => master_plan_item.id,
-      'data-name' => "reality_spot_name",
-      'data-url' => modify_master_plan_item_path(master_plan_item),
-      'data-original-title' => t('activerecord.attributes.spot.name'),
-      'data-skip-pjax' => true
-    )
+    if is_history
+      content_tag(:strong, master_plan_item.position_name, class: (master_plan_item.is_on_house ? 'is_on_house' : ''))
+    else
+      link_to(
+        content_tag(:strong, master_plan_item.position_name),
+        '#',
+        class: (master_plan_item.is_on_house ? 'master-plan-item-position-name is_on_house editable-field' : 'master-plan-item-position-name editable-field'),
+        'data-type' => 'text',
+        'data-pk' => master_plan_item.id,
+        'data-name' => "reality_spot_name",
+        'data-url' => modify_master_plan_item_path(master_plan_item),
+        'data-original-title' => t('activerecord.attributes.spot.name'),
+        'data-skip-pjax' => true
+      )
+    end
   end
 
   g.column name: t('activerecord.attributes.master_plan_item.est_total_imp') do |master_plan_item|
@@ -31,29 +37,38 @@
   end
 
   g.column name: t('activerecord.attributes.master_plan_item.est_imp') do |master_plan_item|
-    link_to(
-      master_plan_item.est_imp,
-      '0',
-      class: 'est-editable-field',
-      'data-type' => 'text',
-      'data-pk' => master_plan_item.id,
-      'data-name' => "est_imp",
-      'data-url' => "/master_plan_items/#{master_plan_item.id}/modify",
-      'data-original-title' => t('activerecord.attributes.master_plan_item.est_imp'),
-      'data-params' => "{'selected_medium_id': #{@selected_medium_master_plan.medium_id}}")
+    if is_history
+      master_plan_item.est_imp
+    else
+      link_to(
+        master_plan_item.est_imp,
+        '0',
+        class: 'est-editable-field',
+        'data-type' => 'text',
+        'data-pk' => master_plan_item.id,
+        'data-name' => "est_imp",
+        'data-url' => "/master_plan_items/#{master_plan_item.id}/modify",
+        'data-original-title' => t('activerecord.attributes.master_plan_item.est_imp'),
+        'data-params' => "{'selected_medium_id': #{@selected_medium_master_plan.medium_id}}")
+    end
   end
 
   g.column name: t('activerecord.attributes.master_plan_item.est_clicks') do |master_plan_item|
-    link_to(
-      master_plan_item.est_clicks,
-      '0',
-      class: 'est-editable-field',
-      'data-type' => 'text',
-      'data-pk' => master_plan_item.id,
-      'data-name' => "est_clicks",
-      'data-url' => "/master_plan_items/#{master_plan_item.id}/modify",
-      'data-original-title' => t('activerecord.attributes.master_plan_item.est_clicks'),
-      'data-params' => "{'selected_medium_id': #{@selected_medium_master_plan.medium_id}}")
+    if is_history
+      master_plan_item.est_clicks
+    else
+      link_to(
+        master_plan_item.est_clicks,
+        '0',
+        class: 'est-editable-field',
+        'data-type' => 'text',
+        'data-pk' => master_plan_item.id,
+        'data-name' => "est_clicks",
+        'data-url' => "/master_plan_items/#{master_plan_item.id}/modify",
+        'data-original-title' => t('activerecord.attributes.master_plan_item.est_clicks'),
+        'data-params' => "{'selected_medium_id': #{@selected_medium_master_plan.medium_id}}"
+      )
+    end
   end
 
   g.column name: t('activerecord.attributes.master_plan_item.est_ctr') do |master_plan_item|
@@ -68,103 +83,171 @@
   end
 
   g.column name: t('activerecord.attributes.master_plan_item.count') do |master_plan_item|
-    [link_to(content_tag(:strong, master_plan_item.count), '#', class: 'master_plan_item_count editable-field', 'data-type' => 'text', 'data-pk' => master_plan_item.id, 'data-name' => "count", 'data-url' => "/master_plan_items/#{master_plan_item.id}/modify", 'data-original-title' => '输入数量', 'data-params' => "{'selected_medium_id': #{@selected_medium_master_plan.medium_id}}", 'data-skip-pjax' => true), content_tag(:span, t('activerecord.spot.unit_type.day'))].join(' ').html_safe
+    if is_history
+      master_plan_item.count
+    else
+      link_to(
+        content_tag(:strong, master_plan_item.count),
+        '#',
+        class: 'master_plan_item_count editable-field',
+        'data-type' => 'text',
+        'data-pk' => master_plan_item.id,
+        'data-name' => "count",
+        'data-url' => "/master_plan_items/#{master_plan_item.id}/modify",
+        'data-original-title' => '输入数量',
+        'data-params' => "{'selected_medium_id': #{@selected_medium_master_plan.medium_id}}",
+        'data-skip-pjax' => true
+      )
+    end
   end
 
   g.column name: t('activerecord.attributes.master_plan_item.medium_policy') do |master_plan_item|
-    content_tag(:div, [
-      (@selected_medium_master_plan.is_combo? ? link_to(
-        number_with_precision(master_plan_item.medium_discount, precision: 2),
-        '#',
-        class: 'editable-field medium value',
-        'data-type' => 'text',
-        'data-pk' => master_plan_item.id,
-        'data-name' => 'reality_medium_discount',
-        'data-url' => modify_master_plan_item_path(master_plan_item),
-        'data-original-title' => '修改媒体折扣',
-        'data-skip-pjax' => true
-      ) : content_tag(:span, number_with_precision(master_plan_item.medium_discount, precision: 2), class: 'medium value')),
-      (@selected_medium_master_plan.is_combo? ? link_to(
-        number_with_precision(master_plan_item.company_discount, precision: 2),
-        '#',
-        class: 'editable-field company value',
-        'data-type' => 'text',
-        'data-pk' => master_plan_item.id,
-        'data-name' => 'reality_company_discount',
-        'data-url' => modify_master_plan_item_path(master_plan_item),
-        'data-original-title' => '修改媒体折扣',
-        'data-skip-pjax' => true
-      ) : content_tag(:span, number_with_precision(master_plan_item.company_discount, precision: 2), class: 'company value'))
-      ].join(' ').html_safe, class: 'discounts', :style => master_plan_item.is_on_house ? 'display: none;' : '')
+    if is_history
+      content_tag(
+        :div,
+        [
+          content_tag(
+            :span,
+            number_with_precision(master_plan_item.medium_discount, precision: 2),
+            class: 'medium value'
+          ),
+          content_tag(
+            :span,
+            number_with_precision(master_plan_item.company_discount, precision: 2),
+            class: 'company value'
+          )
+        ].join(' ').html_safe,
+        class: 'discounts',
+        :style => master_plan_item.is_on_house ? 'display: none;' : ''
+      )
+    else
+      content_tag(
+        :div,
+        [
+          (@selected_medium_master_plan.is_combo? ? link_to(
+            number_with_precision(master_plan_item.medium_discount, precision: 2),
+            '#',
+            class: 'editable-field medium value',
+            'data-type' => 'text',
+            'data-pk' => master_plan_item.id,
+            'data-name' => 'reality_medium_discount',
+            'data-url' => modify_master_plan_item_path(master_plan_item),
+            'data-original-title' => '修改媒体折扣',
+            'data-skip-pjax' => true
+          ) : content_tag(:span, number_with_precision(master_plan_item.medium_discount, precision: 2), class: 'medium value')),
+          (@selected_medium_master_plan.is_combo? ? link_to(
+            number_with_precision(master_plan_item.company_discount, precision: 2),
+            '#',
+            class: 'editable-field company value',
+            'data-type' => 'text',
+            'data-pk' => master_plan_item.id,
+            'data-name' => 'reality_company_discount',
+            'data-url' => modify_master_plan_item_path(master_plan_item),
+            'data-original-title' => '修改媒体折扣',
+            'data-skip-pjax' => true
+          ) : content_tag(:span, number_with_precision(master_plan_item.company_discount, precision: 2), class: 'company value'))
+        ].join(' ').html_safe,
+        class: 'discounts',
+        :style => master_plan_item.is_on_house ? 'display: none;' : ''
+      )
+    end
   end
 
   g.column name: t('activerecord.attributes.master_plan_item.net_cost') do |master_plan_item|
-    content_tag(
-      :div,
-      [
-        (@selected_medium_master_plan.is_combo? ?
-          link_to(
-            number_to_currency(master_plan_item.medium_net_cost, precision: 0, unit: '￥'),
-            '#',
-            class: 'editable-field medium value medium-net-cost',
-            'data-type' => 'text',
-            'data-value' => number_with_precision(master_plan_item.medium_net_cost, precision: 0),
-            'data-pk' => master_plan_item.id,
-            'data-name' => 'reality_medium_net_cost',
-            'data-url' => modify_master_plan_item_path(master_plan_item),
-            'data-original-title' => '修改媒体报价',
-            'data-skip-pjax' => true) :
+    if is_history
+      content_tag(
+        :div,
+        [
           content_tag(
             :span,
             number_to_currency(master_plan_item.medium_net_cost, precision: 0, unit: '￥'),
-            class: 'medium value medium-net-cost')
-        ),
-        (@selected_medium_master_plan.is_combo? ?
-          link_to(
-            number_to_currency(master_plan_item.company_net_cost, precision: 0, unit: '￥'),
-            '#',
-            class: 'editable-field company value company-net-cost',
-            'data-type' => 'text',
-            'data-value' => number_with_precision(master_plan_item.company_net_cost, precision: 0),
-            'data-pk' => master_plan_item.id,
-            'data-name' => 'reality_company_net_cost',
-            'data-url' => modify_master_plan_item_path(master_plan_item),
-            'data-original-title' => '修改公司报价',
-            'data-skip-pjax' => true) :
+            class: 'medium value medium-net-cost'),
           content_tag(
             :span,
             number_to_currency(master_plan_item.company_net_cost, precision: 0, unit: '￥'),
             class: 'company value company-net-cost')
-        )
-      ].join(' ').html_safe, class: 'discounts', :style => master_plan_item.is_on_house ? 'display: none;' : '')
+        ].join(' ').html_safe, class: 'discounts', :style => master_plan_item.is_on_house ? 'display: none;' : ''
+      )
+    else
+      content_tag(
+        :div,
+        [
+          (@selected_medium_master_plan.is_combo? ?
+            link_to(
+              number_to_currency(master_plan_item.medium_net_cost, precision: 0, unit: '￥'),
+              '#',
+              class: 'editable-field medium value medium-net-cost',
+              'data-type' => 'text',
+              'data-value' => number_with_precision(master_plan_item.medium_net_cost, precision: 0),
+              'data-pk' => master_plan_item.id,
+              'data-name' => 'reality_medium_net_cost',
+              'data-url' => modify_master_plan_item_path(master_plan_item),
+              'data-original-title' => '修改媒体报价',
+              'data-skip-pjax' => true) :
+            content_tag(
+              :span,
+              number_to_currency(master_plan_item.medium_net_cost, precision: 0, unit: '￥'),
+              class: 'medium value medium-net-cost')
+          ),
+          (@selected_medium_master_plan.is_combo? ?
+            link_to(
+              number_to_currency(master_plan_item.company_net_cost, precision: 0, unit: '￥'),
+              '#',
+              class: 'editable-field company value company-net-cost',
+              'data-type' => 'text',
+              'data-value' => number_with_precision(master_plan_item.company_net_cost, precision: 0),
+              'data-pk' => master_plan_item.id,
+              'data-name' => 'reality_company_net_cost',
+              'data-url' => modify_master_plan_item_path(master_plan_item),
+              'data-original-title' => '修改公司报价',
+              'data-skip-pjax' => true) :
+            content_tag(
+              :span,
+              number_to_currency(master_plan_item.company_net_cost, precision: 0, unit: '￥'),
+              class: 'company value company-net-cost')
+          )
+        ].join(' ').html_safe, class: 'discounts', :style => master_plan_item.is_on_house ? 'display: none;' : '')
+    end
   end
 
   g.column html: {class: 'btn-cell'} do |master_plan_item|
-    [
-      link_to(
-        icon('icon-dollar'),
-        '#',
-        'data-id' => master_plan_item.id,
-        'data-value' => false,
-        'data-medium-id' => @selected_medium_master_plan.medium_id,
-        class: 'master_plan_item_is_on_house purchase btn btn-inverse',
-        rel: 'tooltip',
-        title: '转成购买',
-        style: master_plan_item.is_on_house? ? '' : 'display:none;'),
-      link_to(
-        icon('icon-thumbs-up'),
-        '#',
-        'data-id' => master_plan_item.id,
-        'data-medium-id' => @selected_medium_master_plan.medium_id,
-        class: 'master_plan_item_is_on_house on_house btn',
-        'data-value' => true,
-        rel: 'tooltip',
-        title: '转成配送',
-        style: master_plan_item.is_on_house? ? 'display:none;' : '')
-    ].join('').html_safe if master_plan_item.spot_id && !master_plan_item.spot.is_a?(NetCostSpot)
+    unless is_history
+      [
+        link_to(
+          fa_icon('icon-dollar'),
+          '#',
+          'data-id' => master_plan_item.id,
+          'data-value' => false,
+          'data-medium-id' => @selected_medium_master_plan.medium_id,
+          class: 'master_plan_item_is_on_house purchase btn btn-inverse',
+          rel: 'tooltip',
+          title: '转成购买',
+          style: master_plan_item.is_on_house? ? '' : 'display:none;'),
+        link_to(
+          icon('icon-thumbs-up'),
+          '#',
+          'data-id' => master_plan_item.id,
+          'data-medium-id' => @selected_medium_master_plan.medium_id,
+          class: 'master_plan_item_is_on_house on_house btn',
+          'data-value' => true,
+          rel: 'tooltip',
+          title: '转成配送',
+          style: master_plan_item.is_on_house? ? 'display:none;' : '')
+      ].join('').html_safe if master_plan_item.spot_id && !master_plan_item.spot.is_a?(NetCostSpot)
+    end
   end
 
   g.column html: { class: 'btn-cell' } do |master_plan_item|
-    link_to(icon('icon-remove'), master_plan_item_path(master_plan_item), :method => :delete, :confirm => t("confirms.delete"), :class => 'btn btn-danger', :rel => 'tooltip', :title => t('buttons.delete'))
+    unless is_history
+      link_to(
+        fa_icon('remove'),
+        master_plan_item_path(master_plan_item),
+        method: :delete,
+        confirm: t("confirms.delete"),
+        class: 'btn btn-danger',
+        rel: 'tooltip',
+        title: t('buttons.delete')
+      )
+    end
   end
 end -%>

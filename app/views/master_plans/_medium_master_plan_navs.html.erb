@@ -1,3 +1,4 @@
+<% is_history = false if local_assigns[:is_history].nil? %>
 
 <ul class="nav nav-tabs">
   <% @master_plan.medium_master_plans.each do |medium_master_plan| %>
@@ -19,11 +20,13 @@
     </li>
   <% end %>
 
+  <% unless is_history %>
+
   <div class="btn-toolbar">
     <%= link_to '改成打包价', medium_master_plan_get_combo_path(@selected_medium_master_plan), class: 'btn btn-warning', method: :post unless @selected_medium_master_plan.is_combo? %>
     <%= link_to '改回正常报价', medium_master_plan_out_of_combo_path(@selected_medium_master_plan), class: 'btn btn-inverse', method: :post if @selected_medium_master_plan.is_combo? %>
   </div>
 
+  <% end %>
+
 </ul>
-
-
