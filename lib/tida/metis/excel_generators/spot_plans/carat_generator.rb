@@ -166,7 +166,34 @@ module Tida
               bg_color: "DDDDDD"
             })
             sub_total_currency_cell = styles.add_style({
-              format_code: "¥#,##0;[Red]¥-#,##0",
+              format_code: "¥#,##0",
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: false,
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]},
+              bg_color: "DDDDDD"
+            })
+            sub_total_currency_with_precision_cell = styles.add_style({
+              format_code: "¥#,##0.00",
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: false,
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]},
+              bg_color: "DDDDDD"
+            })
+            sub_total_number_cell = styles.add_style({
+              format_code: "#,##0",
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: false,
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]},
+              bg_color: "DDDDDD"
+            })
+            sub_total_percent_cell = styles.add_style({
+              format_code: "0.00%",
               sz: FONT_SIZE,
               font_name: FONT_NAME,
               b: false,
@@ -177,8 +204,8 @@ module Tida
             sub_total_on_house_cell = styles.add_style({
               sz: FONT_SIZE,
               font_name: FONT_NAME,
-              b: true,
-              alignment: {horizontal: :center, vertical: :center},
+              b: false,
+              alignment: {horizontal: :left, vertical: :center},
               border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]},
               bg_color: "DDDDDD"
             })
@@ -191,7 +218,34 @@ module Tida
               bg_color: "00CCFF"
             })
             total_currency_cell = styles.add_style({
-              format_code: "¥#,##0;[Red]¥-#,##0",
+              format_code: "¥#,##0",
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: true,
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]},
+              bg_color: "00CCFF"
+            })
+            total_currency_with_precision_cell = styles.add_style({
+              format_code: "¥#,##0.00",
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: true,
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]},
+              bg_color: "00CCFF"
+            })
+            total_number_cell = styles.add_style({
+              format_code: "#,##0",
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: true,
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]},
+              bg_color: "00CCFF"
+            })
+            total_percent_cell = styles.add_style({
+              format_code: "0.00%",
               sz: FONT_SIZE,
               font_name: FONT_NAME,
               b: true,
@@ -200,7 +254,15 @@ module Tida
               bg_color: "00CCFF"
             })
             currency_cell = styles.add_style({
-              format_code: "¥#,##0;[Red]¥-#,##0",
+              format_code: "¥#,##0",
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: false,
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]}
+            })
+            currency_with_precision_cell = styles.add_style({
+              format_code: "¥#,##0.00",
               sz: FONT_SIZE,
               font_name: FONT_NAME,
               b: false,
@@ -208,7 +270,16 @@ module Tida
               border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]}
             })
             currency_on_house_cell = styles.add_style({
-              format_code: "¥#,##0;[Red]¥-#,##0",
+              format_code: "¥#,##0",
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: false,
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]},
+              fg_color: "FF0000"
+            })
+            currency_with_precision_on_house_cell = styles.add_style({
+              format_code: "¥#,##0.00",
               sz: FONT_SIZE,
               font_name: FONT_NAME,
               b: false,
@@ -226,6 +297,23 @@ module Tida
             })
             number_on_house_cell = styles.add_style({
               format_code: "#,##0",
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: false,
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]},
+              fg_color: "FF0000"
+            })
+            percent_cell = styles.add_style({
+              format_code: "0.00%",
+              sz: FONT_SIZE,
+              font_name: FONT_NAME,
+              b: false,
+              alignment: {horizontal: :center, vertical: :center},
+              border: {style: :thin, color: "00", edges: [:left, :top, :bottom, :right]}
+            })
+            percent_on_house_cell = styles.add_style({
+              format_code: "0.00%",
               sz: FONT_SIZE,
               font_name: FONT_NAME,
               b: false,
@@ -389,23 +477,26 @@ module Tida
 
               sub_total_rows = []
 
+              current_data_index = start_index
               master_plan.medium_master_plans.each do |medium_master_plan|
                 medium_master_plan.master_plan_items.order('is_on_house').each do |item|
                   if item.is_on_house?
-                    row = fill_data_row(sheet, item, months, days, center_cell, on_house_left_cell, on_house_center_cell, currency_on_house_cell, number_on_house_cell, old_cell, version)
+                    row = fill_data_row(sheet, current_data_index, item, months, days, center_cell, on_house_left_cell, on_house_center_cell, currency_on_house_cell, currency_with_precision_on_house_cell, number_on_house_cell, percent_cell, old_cell, version)
                   else
-                    row = fill_data_row(sheet, item, months, days, center_cell, left_cell, center_cell, currency_cell, number_cell, old_cell, version)
+                    row = fill_data_row(sheet, current_data_index, item, months, days, center_cell, left_cell, center_cell, currency_cell, currency_with_precision_cell, number_cell, percent_on_house_cell, old_cell, version)
                   end
+                  current_data_index += 1
                 end
                 sheet.merge_cells("#{get_column_name(2)}#{start_index}:#{get_column_name(2)}#{row.index + 1}")
-                row = fill_sub_total_row(sheet, medium_master_plan.bonus_ratio, start_index, row.index + 1, total_day_count, center_cell, sub_total_cell, sub_total_on_house_cell, sub_total_currency_cell)
+                row = fill_sub_total_row(sheet, medium_master_plan.bonus_ratio, start_index, row.index + 1, total_day_count, center_cell, sub_total_cell, sub_total_on_house_cell, sub_total_currency_cell, sub_total_currency_with_precision_cell, sub_total_number_cell, sub_total_percent_cell)
                 sub_total_rows << row.index + 1
                 start_index = row.index + 2
+                current_data_index = start_index
               end
 
               sheet.merge_cells("#{get_column_name(1)}#{media_type_start_index}:#{get_column_name(1)}#{row.index + 1}")
 
-              row = fill_total_row(sheet, row.index + 1, sub_total_rows, total_day_count, total_cell, total_currency_cell)
+              row = fill_total_row(sheet, row.index + 1, sub_total_rows, total_day_count, total_cell, total_currency_cell, total_currency_with_precision_cell, total_number_cell, total_percent_cell)
 
               sheet.column_widths(2, 15, 12, 12, 35, 24, 16, 16, 16, 16, 16, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5)
             end
@@ -429,66 +520,147 @@ module Tida
             "#{first_char}#{second_char}"
           end
 
-          def fill_total_row(sheet, end_row_index, sub_total_rows, calendar_column_count, total_cell, total_currency_cell)
+          def fill_total_row(sheet, end_row_index, sub_total_rows, calendar_column_count, total_cell, total_currency_cell, total_currency_with_precision_cell, total_number_cell, total_percent_cell)
             sp12 = "+#{get_column_name(12)}"
             sp13 = "+#{get_column_name(13)}"
             sp22 = "+#{get_column_name(22)}"
-            row = sheet.add_row([nil, 'Total', Array.new(8, nil), '-', '-',
-              "=#{get_column_name(12)}#{sub_total_rows.join(sp12)}",
-              "=#{get_column_name(13)}#{sub_total_rows.join(sp13)}",
-              "=#{get_column_name(13)}#{end_row_index + 1}/#{get_column_name(12)}#{end_row_index + 1}",
-              "=#{get_column_name(22)}#{end_row_index + 1}/#{get_column_name(13)}#{end_row_index + 1}",
-              "=#{get_column_name(22)}#{end_row_index + 1}/#{get_column_name(13)}#{end_row_index + 1}*1000",
-              '-', '-', nil, '-', '-',
-              "=#{get_column_name(22)}#{sub_total_rows.join(sp22)}", nil,
-              Array.new(calendar_column_count, nil)].flatten,
-              style: [nil, Array.new(21, total_cell), total_currency_cell, Array.new(1 + calendar_column_count, total_cell)].flatten)
+            sp23 = "+#{get_column_name(23)}"
+            row = sheet.add_row(
+              [
+                nil,
+                'Total',
+                Array.new(8, nil),
+                '-',
+                '-',
+                "=#{get_column_name(12)}#{sub_total_rows.join(sp12)}",
+                "=#{get_column_name(13)}#{sub_total_rows.join(sp13)}",
+                "=#{get_column_name(13)}#{end_row_index + 1}/#{get_column_name(12)}#{end_row_index + 1}",
+                "=#{get_column_name(22)}#{end_row_index + 1}/#{get_column_name(13)}#{end_row_index + 1}",
+                "=#{get_column_name(22)}#{end_row_index + 1}/#{get_column_name(12)}#{end_row_index + 1}*1000",
+                '-',
+                '-',
+                '-',
+                '-',
+                '-',
+                "=#{get_column_name(22)}#{sub_total_rows.join(sp22)}",
+                "=#{get_column_name(23)}#{sub_total_rows.join(sp23)}",
+                Array.new(calendar_column_count, nil)
+              ].flatten,
+              style: [
+                nil,
+                Array.new(11, total_cell),
+                total_number_cell,
+                total_number_cell,
+                total_percent_cell,
+                total_currency_with_precision_cell,
+                total_currency_with_precision_cell,
+                Array.new(5, total_number_cell),
+                total_currency_cell,
+                total_currency_cell,
+                Array.new(calendar_column_count, total_cell)
+              ].flatten
+            )
             sheet.merge_cells("#{get_column_name(1)}#{row.index + 1}:#{get_column_name(3)}#{row.index + 1}")
             sheet.merge_cells("#{get_column_name(24)}#{row.index + 1}:#{get_column_name(23 + calendar_column_count)}#{row.index + 1}")
             row
           end
 
-          def fill_sub_total_row(sheet, on_house_ratio, start_row_index, end_row_index, calendar_column_count, center_cell, sub_total_cell, sub_total_on_house_cell, sub_total_currency_cell)
-            row = sheet.add_row([nil, nil, 'Sub Total', Array.new(7, nil), '-', '-',
-              "=SUM(#{get_column_name(12)}#{start_row_index}:#{get_column_name(12)}#{end_row_index})",
-              "=SUM(#{get_column_name(13)}#{start_row_index}:#{get_column_name(13)}#{end_row_index})",
-              "=#{get_column_name(13)}#{end_row_index + 1}/#{get_column_name(12)}#{end_row_index + 1}",
-              "=#{get_column_name(22)}#{end_row_index + 1}/#{get_column_name(13)}#{end_row_index + 1}",
-              "=#{get_column_name(22)}#{end_row_index + 1}/#{get_column_name(13)}#{end_row_index + 1}*1000",
-              "-", "-", nil, '-', '-',
-              "=SUM(#{get_column_name(22)}#{start_row_index}:#{get_column_name(22)}#{end_row_index})",
-              "Bonus Ratio: #{on_house_ratio}",
-              Array.new(calendar_column_count, nil)].flatten,
-              style: [nil, center_cell, Array.new(20, sub_total_cell), sub_total_currency_cell, sub_total_on_house_cell, Array.new(calendar_column_count, sub_total_cell)].flatten)
+          def fill_sub_total_row(sheet, on_house_ratio, start_row_index, end_row_index, calendar_column_count, center_cell, sub_total_cell, sub_total_on_house_cell, sub_total_currency_cell, sub_total_currency_with_precision_cell, sub_total_number_cell, sub_total_percent_cell)
+            row = sheet.add_row(
+              [
+                nil,
+                nil,
+                'Sub Total',
+                Array.new(7, nil),
+                '-',
+                '-',
+                "=SUM(#{get_column_name(12)}#{start_row_index}:#{get_column_name(12)}#{end_row_index})",
+                "=SUM(#{get_column_name(13)}#{start_row_index}:#{get_column_name(13)}#{end_row_index})",
+                "=#{get_column_name(13)}#{end_row_index + 1}/#{get_column_name(12)}#{end_row_index + 1}",
+                "=#{get_column_name(22)}#{end_row_index + 1}/#{get_column_name(13)}#{end_row_index + 1}",
+                "=#{get_column_name(22)}#{end_row_index + 1}/#{get_column_name(12)}#{end_row_index + 1}*1000",
+                "-",
+                "-",
+                '-',
+                '-',
+                '-',
+                "=SUM(#{get_column_name(22)}#{start_row_index}:#{get_column_name(22)}#{end_row_index})",
+                "=SUM(#{get_column_name(23)}#{start_row_index}:#{get_column_name(23)}#{end_row_index})",
+                "Bonus Ratio: #{on_house_ratio}",
+                Array.new(calendar_column_count - 1, nil)
+              ].flatten,
+              style: [
+                nil,
+                center_cell,
+                Array.new(10, sub_total_cell),
+                sub_total_number_cell,
+                sub_total_number_cell,
+                sub_total_percent_cell,
+                sub_total_currency_with_precision_cell,
+                sub_total_currency_with_precision_cell,
+                sub_total_number_cell,
+                sub_total_number_cell,
+                sub_total_number_cell,
+                sub_total_currency_cell,
+                sub_total_percent_cell,
+                sub_total_currency_cell,
+                sub_total_currency_cell,
+                sub_total_on_house_cell,
+                Array.new(calendar_column_count - 1, sub_total_cell)
+              ].flatten
+            )
             sheet.merge_cells("#{get_column_name(2)}#{row.index + 1}:#{get_column_name(3)}#{row.index + 1}")
             sheet.merge_cells("#{get_column_name(24)}#{row.index + 1}:#{get_column_name(23 + calendar_column_count)}#{row.index + 1}")
             row
           end
 
-          def fill_data_row(sheet, master_plan_item, months, days, medium_name_cell, left_cell, center_cell, currency_cell, number_cell, old_cell, version)
+          def fill_data_row(sheet, current_data_index, master_plan_item, months, days, medium_name_cell, left_cell, center_cell, currency_cell, currency_with_precision_cell, number_cell, percent_cell, old_cell, version)
             spot_plan_item_cells, spot_plan_item_cells_styles = get_spot_plan_item_cells(master_plan_item, months, days, center_cell, old_cell, version)
-            sheet.add_row([nil, '网站',
-              master_plan_item.medium_name,
-              master_plan_item.channel_name,
-              master_plan_item.position_name,
-              master_plan_item.material_format,
-              Array.new(4, nil),
-              master_plan_item.est_imp,
-              master_plan_item.est_clicks,
-              master_plan_item.est_total_imp,
-              master_plan_item.est_total_clicks,
-              master_plan_item.est_ctr,
-              nil, nil,
-              master_plan_item.count,
-              nil, nil,
-              master_plan_item.unit_rate_card,
-              master_plan_item.is_on_house? ? '0%' : "#{master_plan_item.medium_discount * 100}%",
-              master_plan_item.is_on_house? ? 0 : master_plan_item.medium_net_cost,
-              master_plan_item.unit_rate_card * master_plan_item.count,
-              spot_plan_item_cells].flatten,
-              style: [nil, medium_name_cell, medium_name_cell, center_cell, left_cell, left_cell, Array.new(4, center_cell),
+            sheet.add_row(
+              [
+                nil,
+                '网站',
+                master_plan_item.medium_name,
+                master_plan_item.channel_name,
+                master_plan_item.position_name,
+                master_plan_item.material_format,
+                Array.new(4, nil),
+                master_plan_item.est_imp,
+                master_plan_item.est_clicks,
+                master_plan_item.est_total_imp,
+                master_plan_item.est_total_clicks,
+                master_plan_item.est_ctr,
+                "=#{get_column_name(22)}#{current_data_index}/#{get_column_name(13)}#{current_data_index}",
+                "=#{get_column_name(22)}#{current_data_index}/#{get_column_name(12)}#{current_data_index}*1000",
+                master_plan_item.count,
+                '-',
+                '-',
+                master_plan_item.unit_rate_card,
+                master_plan_item.company_discount,
+                master_plan_item.company_net_cost,
+                master_plan_item.total_rate_card,
+                spot_plan_item_cells
+              ].flatten,
+              style: [
+                nil,
+                medium_name_cell,
+                medium_name_cell,
+                center_cell,
+                left_cell,
+                left_cell,
+                Array.new(4, center_cell),
                 Array.new(4, number_cell),
-                Array.new(6, center_cell), currency_cell, center_cell, currency_cell, currency_cell, spot_plan_item_cells_styles].flatten)
+                percent_cell,
+                currency_with_precision_cell,
+                currency_with_precision_cell,
+                Array.new(3, center_cell),
+                currency_cell,
+                percent_cell,
+                currency_cell,
+                currency_cell,
+                spot_plan_item_cells_styles
+              ].flatten
+            )
           end
 
           def get_spot_plan_item_cells(master_plan_item, months, days, normal_style, old_cell_style, version)

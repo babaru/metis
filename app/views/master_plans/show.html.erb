@@ -40,7 +40,20 @@
             url: spot_plan_path(medium_id: @selected_medium_master_plan.medium_id),
             options: { class: 'btn btn-primary' }
           }
-        ) if @master_plan.medium_master_plans.count > 0)
+        ) if @master_plan.medium_master_plans.count > 0),
+
+        render_cell(:button, :show,
+          data:
+          {
+            name: fa_icon('download-alt', text: "下载排期表文件"),
+            url: generate_spot_plan_path(id: @master_plan, version: @spot_plan_version),
+            options:
+            {
+              class: 'btn btn-info',
+              method: :post
+            }
+          }
+        )
       ]
     }
   }

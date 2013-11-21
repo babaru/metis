@@ -164,7 +164,12 @@ class ClientsController < ApplicationController
     if request.post?
       @upload_file = SpotPlanExcelFile.new(params[:spot_plan_excel_file])
       @upload_file.save!
-      @project = @upload_file.parse(@client.id, current_user.id)
+      @project = @upload_file.parse(
+        @client.id,
+        current_user.id,
+        params[:spot_plan_excel_file][:project_name]
+      )
+
       if @project
         redirect_to client_project_master_plan_path(client_id: @project.client_id, project_id: @project.id, id: @project.current_master_plan_id)
       else

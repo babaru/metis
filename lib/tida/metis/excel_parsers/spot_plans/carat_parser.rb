@@ -11,33 +11,32 @@ module Tida
             @user_id = user_id
           end
 
-          def parse(excel_file)
+          def parse(project_name, excel_file)
             Spreadsheet.open excel_file do |excel|
               ws = excel.worksheet(0)
               master_plan_data = {}
               medium_name = nil
 
-              calendar_month_row = ws.row(12)
-              calendar_day_row = ws.row(13)
+              calendar_month_row = ws.row(0)
+              calendar_day_row = ws.row(1)
 
               calendar_array = []
               calendar_month_value = nil
-              23.upto(ws.column_count) do |index|
+              24.upto(ws.column_count) do |index|
                 if calendar_day_row[index]
                   if calendar_month_row[index]
                     calendar_month_row.format(index).number_format = 'yyyy-mm-dd'
                     calendar_month_value = calendar_month_row[index]
                   end
                   calendar_day_row.format(index).number_format = '@'
+                  Rails.logger.debug "#{calendar_month_value}"
+                  Rails.logger.debug calendar_day_row[index].to_i
                   calendar_array << Date.new(calendar_month_value.year, calendar_month_value.month, calendar_day_row[index].to_i)
                 end
               end
 
               0.upto(ws.last_row_index) do |index|
-                if index == 6
-                  get_master_plan_name(master_plan_data, ws.row(index))
-                end
-                if index > 13
+                if index > 1
                   medium_name = get_medium_name(ws.row(index), medium_name)
                   get_master_plan_item(master_plan_data, medium_name, ws.row(index), calendar_array)
                 end
@@ -71,7 +70,7 @@ module Tida
 
               Project.transaction do
                 @project = HistoryProject.create!({
-                  name: master_plan_data[:name],
+                  name: project_name,
                   client_id: self.client_id,
                   created_by_id: self.user_id,
                   budget: 0.1,
@@ -148,17 +147,16 @@ module Tida
               mpi[:est_total_imp] = get_integer_field_value(row[12])
               mpi[:est_total_clicks] = get_integer_field_value(row[13])
               mpi[:est_ctr] = get_decimal_field_value(row[14])
-              mpi[:est_cpc] = get_integer_field_value(row[15])
-              mpi[:est_cpm] = get_integer_field_value(row[16])
-              mpi[:count] = get_integer_field_value(row[17])
-              mpi[:cpc] = get_integer_field_value(row[18])
-              mpi[:unit_rate_card] = get_integer_field_value(row[19])
-              mpi[:reality_company_discount] = get_decimal_field_value(row[20])
-              mpi[:reality_company_net_cost] = get_integer_field_value(row[21])
+              mpi[:count] = get_integer_field_value(row[17]) if row[17]
+              mpi[:count] = get_integer_field_value(row[18]) if row[18]
+              mpi[:leads] = get_integer_field_value(row[19])
+              mpi[:unit_rate_card] = get_integer_field_value(row[20])
+              mpi[:reality_company_discount] = get_decimal_field_value(row[21])
+              mpi[:reality_company_net_cost] = get_integer_field_value(row[22])
               mpi[:is_on_house] = true if mpi[:reality_company_net_cost] == 0
               mpi[:spot_plan] = []
               (0..calendar_array.length - 1).each do |n|
-                spot_count = get_integer_field_value(row[23 + n])
+                spot_count = get_integer_field_value(row[24 + n])
                 mpi[:spot_plan] << spot_count
               end
               # mpi[:total_rate_card] = get_integer_field_value(row[22])

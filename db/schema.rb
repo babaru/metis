@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131120075231) do
+ActiveRecord::Schema.define(:version => 20131121011128) do
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -98,8 +98,6 @@ ActiveRecord::Schema.define(:version => 20131120075231) do
     t.integer  "est_clicks"
     t.decimal  "est_ctr",                   :precision => 8,  :scale => 4
     t.integer  "est_cpc"
-    t.integer  "est_cpm"
-    t.integer  "cpc"
     t.decimal  "unit_rate_card",            :precision => 10, :scale => 3
     t.decimal  "original_medium_discount",  :precision => 8,  :scale => 2
     t.decimal  "original_company_discount", :precision => 8,  :scale => 2
@@ -116,6 +114,7 @@ ActiveRecord::Schema.define(:version => 20131120075231) do
     t.decimal  "reality_company_discount",  :precision => 8,  :scale => 2
     t.integer  "medium_master_plan_id"
     t.string   "type"
+    t.integer  "leads"
   end
 
   add_index "master_plan_items", ["channel_id"], :name => "index_master_plan_items_on_channel_id"

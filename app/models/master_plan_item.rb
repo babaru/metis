@@ -30,8 +30,7 @@ class MasterPlanItem < ActiveRecord::Base
     :est_total_clicks,
     :est_ctr,
     :est_cpc,
-    :est_cpm,
-    :cpc,
+    :leads,
     :unit_rate_card, :unit_rate_card_unit, :unit_rate_card_unit_type,
     :reality_medium_net_cost, :reality_company_net_cost,
     :original_medium_discount, :reality_medium_discount,
@@ -102,6 +101,14 @@ class MasterPlanItem < ActiveRecord::Base
   def position_name
     return reality_spot_name if reality_spot_name
     spot_name
+  end
+
+  def est_cpm_cost
+    total_rate_card / est_total_imp * 1000
+  end
+
+  def est_cpc_cost
+    total_rate_card / est_total_clicks
   end
 
   private

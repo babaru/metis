@@ -33,6 +33,7 @@
 <%= simple_form_for(@upload_file, url: save_uploaded_spot_plan_path(@client), method: :post, html: {class: 'form-horizontal upload-spot-plan-excel-file-form'}) do |f| %>
   <%= f.error_notification %>
   <div class="form-inputs">
+    <%= f.input :project_name %>
     <%= f.input :data_file, as: :file, label: '上传文件' %>
   </div>
   <div class="form-actions">
