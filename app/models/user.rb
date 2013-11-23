@@ -61,12 +61,6 @@ class User < ActiveRecord::Base
     assigned_clients.include? client
   end
 
-  def viewable_clients(space)
-    return Client.all if self.is_sys_admin?
-    return space.clients if space
-    []
-  end
-
   def space_roles(space)
     space_user = SpaceUser.find_by_user_id_and_space_id(self.id, space.id)
     if space_user

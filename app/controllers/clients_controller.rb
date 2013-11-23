@@ -6,7 +6,7 @@ class ClientsController < ApplicationController
   def index
     add_breadcrumb(I18n.t('model.list', model: Client.model_name.human))
 
-    @clients = current_user.viewable_clients(@space)
+    @clients = current_space.clients
 
     respond_to do |format|
       format.html # index.html.erb

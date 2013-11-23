@@ -7,7 +7,7 @@
         name: fa_icon('plus-sign', text: t('model.create', :model => Client.model_name.human)),
         url: new_client_path,
         options: {class: 'btn btn-primary'}
-      }) if can?(:update, @space))
+      }) if can?(:update, current_space))
     ]
   }
 })
@@ -23,6 +23,6 @@
       edit_url: edit_client_path(client),
       remove_url: client_path(client),
     }},
-    editable: can?(:update, @space)
+    editable: can?(:update, current_space)
   }
 %>

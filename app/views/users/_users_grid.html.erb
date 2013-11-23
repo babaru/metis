@@ -17,12 +17,12 @@
   end
 
   g.column name: t('activerecord.attributes.user.roles') do |user|
-    user.space_roles(@space).inject([]) {|list, space_role| list << content_tag(:span, space_role.human_name, class: 'label label-info')}.join(' ').html_safe
+    user.space_roles(current_space).inject([]) {|list, space_role| list << content_tag(:span, space_role.human_name, class: 'label label-info')}.join(' ').html_safe
   end
 
   if can? :manage, User
     g.column html: {class: 'btn-cell'} do |user|
-        link_to(fa_icon('smile'), assign_space_user_roles_path(user.space_users.where(space_id: @space.id).first), :class => 'btn', :rel => 'tooltip', :title => "编辑用户#{@space.name}权限") unless user.space_users.where(space_id: @space.id).first.nil?
+        link_to(fa_icon('smile'), assign_space_user_roles_path(user.space_users.where(space_id: current_space.id).first), :class => 'btn', :rel => 'tooltip', :title => "编辑用户#{current_space.name}权限") unless user.space_users.where(space_id: current_space.id).first.nil?
     end
 
     g.column :html => {class: 'btn-cell'} do |user|

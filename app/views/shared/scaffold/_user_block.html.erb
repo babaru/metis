@@ -13,13 +13,13 @@
     </ul>
   </li>
 
-  <% if !current_user.is_sys_admin? && current_user.spaces.count > 1 %>
+  <% if current_user_spaces.count > 1 %>
   <li class="dropdown">
     <a href="#" data-toggle="dropdown-toggle" class="dropdown-toggle">
       <%= current_space.name %> <%= fa_icon('angle-down') %>
     </a>
     <ul class="dropdown-menu">
-      <% current_user.spaces.each do |space| %>
+      <% current_user_spaces.each do |space| %>
       <li>
         <%= link_to(fa_icon('ok', text: space.name), nil) if space.id == current_space.id %>
         <%= link_to(" #{space.name}", switch_space_path(space)) unless space.id == current_space.id %>

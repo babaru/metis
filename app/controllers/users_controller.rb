@@ -5,7 +5,7 @@ class UsersController < ApplicationController
     if current_user.is_sys_admin?
       @users_grid = initialize_grid(User)
     else
-      @users_grid = initialize_grid(User.joins(:space_users).where("space_users.space_id=?", @space.id))
+      @users_grid = initialize_grid(User.joins(:space_users).where("space_users.space_id=?", current_space.id))
     end
 
     respond_to do |format|
@@ -29,8 +29,6 @@ class UsersController < ApplicationController
   # GET /users/new.json
   def new
     @user = User.new
-    @space = current_space unless current_user.has_role?(:sys_admin)
-    @space = Space.find params[:id] if current_user.has_role?(:sys_admin)
 
     respond_to do |format|
       format.html # new.html.erb

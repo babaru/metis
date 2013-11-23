@@ -80,7 +80,7 @@ SimpleNavigation::Configuration.run do |navigation|
       # Client Sub Menu
       # ------------------------------------------------------------------------
 
-      current_user.viewable_clients(current_space).each do |client|
+      current_space.clients.each do |client|
 
         client_menu.item(
           "page_client_#{client.id}".to_sym,

@@ -25,7 +25,7 @@ class SpaceUsersController < ApplicationController
   # GET /space_users/new.json
   def new
     @space_user = SpaceUser.new
-    @space_user.space_id = @space.id
+    @space_user.space_id = current_space.id
     @space_user.user_id = params[:user_id]
 
     respond_to do |format|
