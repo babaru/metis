@@ -1,0 +1,13 @@
+defaults: &defaults
+  invoice_types:
+    tax: 1
+    service: 2
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

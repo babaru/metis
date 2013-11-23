@@ -3,8 +3,9 @@
 //= require jquery.ui.all
 //= require jquery.remotipart
 //= require wice_grid.js
-//= require nebulas
+//= require nebulas.js
 //= require backbone-rails
 //= require accounting
 //= require jquery.contextMenu
 //= require moment.min
+//= require jquery.blockUI.min

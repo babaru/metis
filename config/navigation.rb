@@ -170,6 +170,142 @@ SimpleNavigation::Configuration.run do |navigation|
     end
 
     primary.item(
+      :page_finance,
+      '财务',
+      nil,
+      highlights_on: /finance/
+    ) do |finance_menu|
+
+      finance_menu.item(
+        :page_payment_invoice,
+        Payment.model_name.human,
+        nil,
+        highlights_on: /payments/
+      ) do |payment_menu|
+        payment_menu.item(
+          :page_create_payment,
+          t('model.add', model: Payment.model_name.human),
+          new_payment_path,
+          link: {
+            icon: 'plus-sign'
+          }
+        )
+
+        payment_menu.item(
+          :page_payment_list,
+          t('model.list', model: Payment.model_name.human),
+          payments_path,
+          link: {
+            icon: 'list'
+          }
+        )
+
+        payment_menu.item(
+          :page_client_items_divider_1,
+          nil,
+          nil,
+          link: {divider: true})
+
+        payment_menu.item(
+          :page_create_payment_invoice,
+          t('model.add', model: PaymentInvoice.model_name.human),
+          new_payment_invoice_path,
+          link: {
+            icon: 'plus-sign'
+          },
+          highlights_on: /payment_invoices/
+        )
+
+        payment_menu.item(
+          :page_payment_invoice_list,
+          t('model.list', model: PaymentInvoice.model_name.human),
+          payment_invoices_path,
+          link: {
+            icon: 'list'
+          },
+          highlights_on: /payment_invoices/
+        )
+      end
+    end
+
+    primary.item(
+      :page_vendors,
+      Vendor.model_name.human,
+      nil,
+      highlights_on: /vendors/
+    ) do |vendor_menu|
+
+      vendor_menu.item(
+        :page_vendor_list,
+        t('model.list', model: Vendor.model_name.human),
+        vendors_path,
+        link: {
+          icon: 'list'
+        }
+      )
+
+      if can? :manage, Vendor
+        vendor_menu.item(
+          :page_vendor_menu_divider_1,
+          nil,
+          link:
+          {
+            divider: 'true'
+          }
+        )
+
+        vendor_menu.item(
+          :page_new_vendor,
+          t('model.create', model: Vendor.model_name.human),
+          new_vendor_path,
+          link:
+          {
+            icon: 'plus-sign'
+          }
+        )
+      end
+
+    end
+
+    primary.item(
+      :page_agencies,
+      Agency.model_name.human,
+      nil,
+      highlights_on: /agencies/
+    ) do |agency_menu|
+
+      agency_menu.item(
+        :page_agency_list,
+        t('model.list', model: Agency.model_name.human),
+        agencies_path,
+        link: {
+          icon: 'list'
+        }
+      )
+
+      if can? :manage, Agency
+        agency_menu.item(
+          :page_agency_menu_divider_1,
+          nil,
+          link:
+          {
+            divider: 'true'
+          }
+        )
+
+        agency_menu.item(
+          :page_new_agency,
+          t('model.create', model: Agency.model_name.human),
+          new_agency_path,
+          link:
+          {
+            icon: 'plus-sign'
+          }
+        )
+      end
+    end
+
+    primary.item(
       :page_media,
       Medium.model_name.human,
       nil,

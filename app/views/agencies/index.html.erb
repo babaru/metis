@@ -1,0 +1,42 @@
+<%= render_cell(
+  :page_title,
+  :show,
+  data:
+  {
+    name: "#{t('model.list', model: Agency.model_name.human)}",
+    toolbar:
+    {
+      right:
+      [
+        render_cell(
+          :button,
+          :show,
+          data:
+          {
+            name: fa_icon('plus-sign', text: t('model.create', :model => Agency.model_name.human)),
+            url: new_agency_path,
+            options:
+            {
+              class: 'btn btn-primary'
+            }
+          }
+        )
+      ]
+    }
+  }
+)
+%>
+
+<%= grid(@agencies_grid, :show_filters => :when_filtered) do |g|
+  g.column name: t('activerecord.attributes.agency.name') do |agency|
+    agency.name
+  end
+
+  g.column html: {class: 'btn-cell'} do |agency|
+    link_to(fa_icon('edit'), edit_agency_path(agency), class: 'btn', rel: 'tooltip', title: t('buttons.edit'))
+  end
+
+  g.column html: {class: 'btn-cell'} do |agency|
+    link_to(fa_icon('trash'), agency_path(agency), method: :delete, confirm: t("confirms.delete"), class: 'btn btn-danger', rel: 'tooltip', title: t('buttons.delete'))
+  end
+end -%>

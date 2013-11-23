@@ -19,11 +19,9 @@ Metis::Application.routes.draw do
   post 'projects/:id/set_current_master_plan' => 'projects#set_current_master_plan', as: :set_current_master_plan
   post 'projects/:id/start' => 'projects#start', as: :start_project
 
+  get 'search/projects' => 'search#query_projects', as: :query_projects
+  post 'search/do_query_projects' => 'search#do_query_projects', as: :do_query_projects
 
-  # get 'media/:website_id/channel_groups' => 'channel_groups#index'
-  # get 'media/:website_id/channels' => 'channels#index'
-
-  get 'clients/:client_id/projects/:project_id/master_plans/:id/choose_spots' => 'master_plans#choose_spots', as: :choose_spots
   post 'master_plans/:id/add_to_cart' => 'master_plans#add_to_cart', as: :add_to_cart
   post 'master_plans/:id/modify_cart' => 'master_plans#modify_cart', as: :modify_cart
   post 'master_plans/:id/remove_from_cart' => 'master_plans#remove_from_cart', as: :remove_from_cart
@@ -39,6 +37,7 @@ Metis::Application.routes.draw do
   post 'medium_master_plans/:id/modify' => 'medium_master_plans#modify', as: :modify_medium_master_plan
 
   get 'clients/:client_id/projects/:project_id/master_plans/:id/spot_plan' => 'master_plans#spot_plan', as: :spot_plan
+  get 'clients/:client_id/projects/:project_id/master_plans/:id/choose_spots' => 'master_plans#choose_spots', as: :choose_spots
 
   post 'master_plans/:id/generate_spot_plan' => 'master_plans#generate_spot_plan', as: :generate_spot_plan
   post 'master_plans/:id/confirm' => 'master_plans#confirm_spot_plan', as: :confirm_spot_plan
@@ -62,7 +61,7 @@ Metis::Application.routes.draw do
 
   resources :spaces, :media, :channels, :spots, :channel_groups, :spot_categories,
     :master_plans, :master_plan_items, :spot_plan_items, :medium_policies,
-    :medium_master_plans
+    :medium_master_plans, :vendors, :agencies, :payments, :payment_invoices
 
   resources :shopping_cart_items
 

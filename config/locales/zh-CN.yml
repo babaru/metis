@@ -150,6 +150,9 @@ zh-CN:
     national: 全国媒体
     region_important: 地区重要媒体
     others: 其他媒体
+  invoice_types:
+    tax: 增值税发票
+    service: 服务发票
   weekdays:
     mon: 一
     tue: 二

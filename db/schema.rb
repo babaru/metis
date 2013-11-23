@@ -11,7 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131121011128) do
+ActiveRecord::Schema.define(:version => 20131123062003) do
+
+  create_table "agencies", :force => true do |t|
+    t.string   "name"
+    t.string   "type"
+    t.integer  "space_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "agencies", ["space_id"], :name => "index_agencies_on_space_id"
 
   create_table "channel_groups", :force => true do |t|
     t.string   "name"
@@ -198,6 +208,45 @@ ActiveRecord::Schema.define(:version => 20131121011128) do
   add_index "medium_policies", ["client_id"], :name => "index_medium_policies_on_client_id"
   add_index "medium_policies", ["medium_id"], :name => "index_medium_policies_on_medium_id"
 
+  create_table "payment_invoices", :force => true do |t|
+    t.string   "number"
+    t.decimal  "amount",          :precision => 10, :scale => 0
+    t.string   "unit"
+    t.integer  "invoice_type_id"
+    t.datetime "received_at"
+    t.integer  "payment_id"
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
+    t.integer  "vendor_id"
+    t.integer  "medium_id"
+    t.integer  "space_id"
+  end
+
+  add_index "payment_invoices", ["medium_id"], :name => "index_payment_invoices_on_medium_id"
+  add_index "payment_invoices", ["payment_id"], :name => "index_payment_invoices_on_payment_id"
+  add_index "payment_invoices", ["space_id"], :name => "index_payment_invoices_on_space_id"
+  add_index "payment_invoices", ["vendor_id"], :name => "index_payment_invoices_on_vendor_id"
+
+  create_table "payments", :force => true do |t|
+    t.integer  "client_id"
+    t.integer  "project_id"
+    t.decimal  "amount",     :precision => 10, :scale => 0
+    t.string   "unit"
+    t.integer  "medium_id"
+    t.integer  "vendor_id"
+    t.datetime "paid_at"
+    t.datetime "credit_on"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+    t.integer  "space_id"
+  end
+
+  add_index "payments", ["client_id"], :name => "index_payments_on_client_id"
+  add_index "payments", ["medium_id"], :name => "index_payments_on_medium_id"
+  add_index "payments", ["project_id"], :name => "index_payments_on_project_id"
+  add_index "payments", ["space_id"], :name => "index_payments_on_space_id"
+  add_index "payments", ["vendor_id"], :name => "index_payments_on_vendor_id"
+
   create_table "project_assignments", :force => true do |t|
     t.integer  "project_id"
     t.integer  "user_id"
@@ -374,5 +423,15 @@ ActiveRecord::Schema.define(:version => 20131121011128) do
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+
+  create_table "vendors", :force => true do |t|
+    t.string   "name"
+    t.string   "type"
+    t.integer  "space_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "vendors", ["space_id"], :name => "index_vendors_on_space_id"
 
 end

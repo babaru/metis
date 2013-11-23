@@ -1,0 +1,66 @@
+<%= render_cell(
+  :page_title,
+  :show,
+  data:
+  {
+    name: "#{t('model.list', model: PaymentInvoice.model_name.human)}",
+    toolbar:
+    {
+      right:
+      [
+        render_cell(
+          :button,
+          :show,
+          data:
+          {
+            name: fa_icon('plus-sign', text: t('model.create', :model => PaymentInvoice.model_name.human)),
+            url: new_payment_invoice_path,
+            options:
+            {
+              class: 'btn btn-primary'
+            }
+          }
+        )
+      ]
+    }
+  }
+)
+%>
+
+<%= grid(@payment_invoices_grid, :show_filters => :when_filtered) do |g|
+  g.column name: t('activerecord.attributes.payment_invoice.name') do |payment_invoice|
+    payment_invoice.name
+  end
+
+  g.column name: t('activerecord.attributes.payment_invoice.number'), attribute: 'number' do |payment_invoice|
+    payment_invoice.number
+  end
+
+  g.column name: t('activerecord.attributes.payment_invoice.medium'), attribute: 'name', model: Medium do |payment_invoice|
+    payment_invoice.medium.name if payment_invoice.medium
+  end
+
+  g.column name: t('activerecord.attributes.payment_invoice.vendor'), attribute: 'name', model: Vendor do |payment_invoice|
+    payment_invoice.vendor.name if payment_invoice.vendor
+  end
+
+  g.column name: t('activerecord.attributes.payment_invoice.received_at'), attribute: 'received_at' do |payment_invoice|
+    payment_invoice.received_at.strftime('%Y-%m-%d %H:%M:%S')
+  end
+
+  g.column name: t('activerecord.attributes.payment_invoice.amount'), attribute: 'amount' do |payment_invoice|
+    number_to_currency(payment_invoice.amount, unit: '￥', precision: 2)
+  end
+
+  g.column name: t('activerecord.attributes.payment_invoice.invoice_type_id'), attribute: 'invoice_type_id' do |payment_invoice|
+    PaymentInvoice.invoice_type_names[payment_invoice.invoice_type_id]
+  end
+
+  g.column html: {class: 'btn-cell'} do |payment_invoice|
+    link_to(fa_icon('edit'), edit_payment_invoice_path(payment_invoice), class: 'btn', rel: 'tooltip', title: t('buttons.edit'))
+  end
+
+  g.column html: {class: 'btn-cell'} do |payment_invoice|
+    link_to(fa_icon('trash'), payment_invoice_path(payment_invoice), method: :delete, confirm: t("confirms.delete"), class: 'btn btn-danger', rel: 'tooltip', title: t('buttons.delete'))
+  end
+end -%>
