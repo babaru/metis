@@ -8,7 +8,7 @@
     end
   end
 
-  g.column name: t('activerecord.attributes.project.name'), attribute: 'name' do |project|
+  g.column name: t('activerecord.attributes.project.name'), attribute: 'name', html: {class: 'auto'} do |project|
     link_to content_tag(:strong, project.name), client_project_master_plan_path(id: project.current_master_plan_id, client_id: project.client_id, project_id: project.id)
   end
 
@@ -36,8 +36,50 @@
     project.assigned_users.inject([]){|list, u| list << content_tag(:span, u.name, class: 'label label-success')}.join(' ').html_safe
   end
 
-  g.column html: {class: 'btn-cell'} do |project|
-    link_to(fa_icon('rocket'), start_project_path(project), class: 'btn btn-success', method: :post) unless project.is_started?
+  g.column html: { class: '' } do |project|
+    render_cell(
+      :button,
+      :show,
+      data: {
+        name: fa_icon('money', text: Payment.model_name.human),
+        url: new_project_payment_path(project),
+        type: 'split-dropdown',
+        options: {
+          class: 'btn btn-danger'
+        },
+        items: [
+          {
+            name: fa_icon('list', text: t('model.list', model: Payment.model_name.human)),
+            url: project_payments_path(project)
+          }
+        ]
+      }
+    )
+  end
+
+  g.column html: { class: '' } do |project|
+    render_cell(
+      :button,
+      :show,
+      data: {
+        name: fa_icon('money', text: Collection.model_name.human),
+        url: new_project_collection_path(project),
+        type: 'split-dropdown',
+        options: {
+          class: 'btn btn-info'
+        },
+        items: [
+          {
+            name: fa_icon('list', text: t('model.list', model: Collection.model_name.human)),
+            url: project_collections_path(project)
+          }
+        ]
+      }
+    )
+  end
+
+  g.column html: {class: ''} do |project|
+    link_to(fa_icon('rocket', text: '启动项目'), start_project_path(project), class: 'btn btn-success', method: :post) unless project.is_started?
   end
 
   g.column html: {class: 'btn-cell'} do |project|

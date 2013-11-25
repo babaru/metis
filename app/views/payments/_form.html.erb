@@ -3,11 +3,14 @@
   <%= f.error_notification %>
 
   <div class="form-inputs">
+    <%= f.input :space_id, as: :hidden %>
     <%= f.input :project_id, as: :hidden %>
-    <%= f.input :amount %>
-    <%= f.input :vendor_id, collection: current_space.vendors.map { |v| [v.name, v.id]} %>
-    <%= f.input :paid_at, as: :date_time_picker %>
-    <%= f.input :credit_on, as: :date_picker %>
+    <%= f.input :client_id, as: :hidden %>
+    <%= f.input :medium_id, collection: @project.current_master_plan.medium_master_plans.map{|v| [v.medium.name, v.medium.id]}, required: true %>
+    <%= f.input :vendor_id, collection: current_space.vendors.map { |v| [v.name, v.id]}, required: true %>
+    <%= f.input :amount, required: true %>
+    <%= f.input :paid_at, as: :date_time_picker, required: true %>
+    <%= f.input :credit_on, as: :date_picker, required: true %>
   </div>
 
   <div class="form-actions">

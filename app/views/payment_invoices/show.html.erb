@@ -28,6 +28,8 @@
 )
 %>
 
+<div class="narrow-center-page">
+
 <table class="table table-striped table-bordered">
   <thead>
     <tr>
@@ -40,8 +42,58 @@
     </tr>
   </thead>
   <tbody>
-      </tbody>
+    <tr>
+      <td>
+        <%= t('activerecord.attributes.payment_invoice.number') %>
+      </td>
+      <td>
+        <%= @payment_invoice.number %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= t('activerecord.attributes.payment_invoice.invoice_type_id') %>
+      </td>
+      <td>
+        <%= PaymentInvoice.invoice_type_names[@payment_invoice.invoice_type_id] %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= t('activerecord.attributes.payment_invoice.medium') %>
+      </td>
+      <td>
+        <%= @payment_invoice.medium.name %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= t('activerecord.attributes.payment_invoice.vendor') %>
+      </td>
+      <td>
+        <%= @payment_invoice.vendor.name %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= t('activerecord.attributes.payment_invoice.amount') %>
+      </td>
+      <td>
+        <%= number_to_currency(@payment_invoice.amount, unit: '￥', precision: 0) %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= t('activerecord.attributes.payment_invoice.received_at') %>
+      </td>
+      <td>
+        <%= @payment_invoice.received_at.strftime('%Y-%m-%d %H:%M:%S') %>
+      </td>
+    </tr>
+  </tbody>
   <tfoot>
 
   </tfoot>
 </table>
+
+</div>

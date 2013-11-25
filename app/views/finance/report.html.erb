@@ -1,0 +1,82 @@
+<%= render_cell(
+  :page_title,
+  :show,
+  data: {
+    name: "查询项目",
+    toolbar: {
+
+    }
+  }
+)
+%>
+
+<%= simple_form_for(:project_search, url: do_query_projects_path, html: {class: 'form-horizontal single-line', id:'project-search-form'}, method: :post, remote: true) do |f| %>
+<table class="table table-horizontal-bordered table-center-vertical-align">
+  <tr>
+    <td>
+      客户
+    </td>
+    <td colspan="2">
+      <ul class="pill-checkbox-group">
+        <% current_space.clients.each do |client| %>
+        <li> <%= link_to [check_box_tag('client_ids[]', client.id), client.name].join(' ').html_safe, '#' %> </li>
+        <% end %>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      查询时间段
+    </td>
+    <td>
+      <%= f.input(
+        :started_at,
+        as: :date_picker,
+        label: '项目开始时间',
+        wrapper: false
+      )
+      %>
+    </td>
+    <td>
+      <%= f.input(
+        :ended_at,
+        as: :date_picker,
+        label: '项目结束时间',
+        wrapper: false
+      )
+      %>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="3">
+      <%= f.submit '查询', class: 'btn btn-primary pull-right' %>
+    </td>
+  </tr>
+</table>
+
+<% end %>
+
+<div class="search_result">
+
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#project-search-form').on('ajax:beforeSend', function() {
+      block_overlay($(this));
+    }).on('ajax:complete', function() {
+      unblock_overlay($(this));
+    });
+
+    $('.pill-checkbox-group > li > a').on('click', function() {
+      var checkbox = $(this).find('input[type="checkbox"]');
+      if(checkbox.attr('checked') == undefined) {
+        checkbox.attr('checked', '');
+        $(this).parent().addClass('active');
+      } else {
+        checkbox.removeAttr('checked');
+        $(this).parent().removeClass('active');
+      }
+    })
+  });
+</script>

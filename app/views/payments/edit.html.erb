@@ -5,7 +5,7 @@
   :show,
   data:
   {
-    name: "#{t('model.edit', model: Payment.model_name.human)} <small>#{t('simple_form.required.text') }</small>",
+    name: "编辑 <strong>#{@payment.project.name}</strong> #{Payment.model_name.human}记录 <small>#{t('simple_form.required.text') }</small>",
     toolbar: {
       left:
       [
@@ -15,12 +15,12 @@
           data:
           {
             name: fa_icon('level-up rotate-270'),
-            url: payments_path,
+            url: project_payments_path(@payment.project),
             options:
             {
               class: 'btn',
               rel: 'tooltip',
-              title: "#{t('labels.back_to')}#{t('model.list', :model => Payment.model_name.human)}",
+              title: "#{t('labels.back_to')}#{@payment.project.name}#{t('model.list', :model => Payment.model_name.human)}",
             }
           }
         )

@@ -28,6 +28,46 @@
 %>
 
 <%= grid(@payments_grid, :show_filters => :when_filtered) do |g|
+  g.column name: t('activerecord.attributes.payment.name') do |payment|
+    payment.name
+  end
+
+  g.column name: t('activerecord.attributes.payment.project') do |payment|
+    payment.project.name
+  end
+
+  g.column name: t('activerecord.attributes.payment.medium') do |payment|
+    payment.medium.name
+  end
+
+  g.column name: t('activerecord.attributes.payment.vendor') do |payment|
+    payment.vendor.name
+  end
+
+  g.column name: t('activerecord.attributes.payment.amount') do |payment|
+    payment.amount
+  end
+
+  g.column name: t('activerecord.attributes.payment.paid_at') do |payment|
+    payment.paid_at.strftime('%Y-%m-%d %H:%M:%S')
+  end
+
+  g.column name: t('activerecord.attributes.payment.credit_on') do |payment|
+    payment.credit_on.strftime('%Y年%m月')
+  end
+
+  g.column name: t('activerecord.attributes.payment.payment_invoice'), html: {class: 'btn-cell extend'} do |payment|
+    if payment.payment_invoices.count > 1
+      link_to(fa_icon('ellipsis-horizontal'), '#', class: 'btn')
+    elsif payment.payment_invoices.count == 1
+      link_to(payment.payment_invoices.first.number, payment_invoice_path(payment.payment_invoices.first))
+    else
+    end
+  end
+
+  g.column html: {class: 'btn-cell extend'} do |payment|
+    link_to(fa_icon('link', text: '关联付款发票'), assign_payment_invoice_path(payment), class: 'btn')
+  end
 
   g.column html: {class: 'btn-cell'} do |payment|
     link_to(fa_icon('edit'), edit_payment_path(payment), class: 'btn', rel: 'tooltip', title: t('buttons.edit'))

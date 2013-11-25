@@ -12,6 +12,9 @@ zh-CN:
     show: "%{model}详细信息"
     create: "创建%{model}"
     add: "添加%{model}"
+    read: "读取%{model}"
+    update: "修改%{model}"
+    destroy: "删除%{model}"
     list: "%{model}列表"
     edit: "编辑%{model}"
     delete: "删除%{model}"
@@ -22,6 +25,7 @@ zh-CN:
     remove: "移除%{model}"
     upload: "上传%{model}"
     manager: "%{model}管理"
+    link: "关联%{model}"
   labels:
     welcome: '欢迎'
     duration: "时间区段"

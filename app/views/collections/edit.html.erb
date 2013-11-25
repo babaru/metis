@@ -1,0 +1,35 @@
+<div class="narrow-center-page">
+
+<%= render_cell(
+  :page_title,
+  :show,
+  data:
+  {
+    name: "编辑 <strong>#{@collection.client.name} #{@collection.project.name}</strong> #{Collection.model_name.human}记录 <small>#{t('simple_form.required.text') }</small>",
+    toolbar: {
+      left:
+      [
+        render_cell(
+          :button,
+          :show,
+          data:
+          {
+            name: fa_icon('level-up rotate-270'),
+            url: project_collections_path(@collection.project),
+            options:
+            {
+              class: 'btn',
+              rel: 'tooltip',
+              title: "#{t('labels.back_to')}#{t('model.list', :model => Collection.model_name.human)}",
+            }
+          }
+        )
+      ]
+    }
+  }
+)
+%>
+
+<%= render 'form' %>
+
+</div>

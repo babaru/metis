@@ -53,7 +53,7 @@
   end
 
   g.column name: t('activerecord.attributes.payment_invoice.invoice_type_id'), attribute: 'invoice_type_id' do |payment_invoice|
-    PaymentInvoice.invoice_type_names[payment_invoice.invoice_type_id]
+    InvoiceType.invoice_type_names[payment_invoice.invoice_type_id]
   end
 
   g.column html: {class: 'btn-cell'} do |payment_invoice|

@@ -14,17 +14,10 @@ class PaymentInvoice < ActiveRecord::Base
     :medium, :medium_id,
     :space, :space_id
 
+  scope :ion, where('payment_id IS NULL')
+  scope :in_space, lambda{|space| where(space_id: space.id)}
+
   def name
     "#{self.vendor.nil? ? (self.medium.nil? ? nil : self.medium.name) : self.vendor.name}-#{self.received_at.strftime('%Y-%m-%d %H:%M:%S')}-#{self.amount}"
-  end
-
-  class << self
-    def invoice_types
-      ::Tida::Metis::InvoiceType.invoice_types.map{ |k,v| [I18n.t("invoice_types.#{k}"),v] }
-    end
-
-    def invoice_type_names
-      Hash[::Tida::Metis::InvoiceType.invoice_types.map{ |k, v| [v, I18n.t("invoice_types.#{k}")]}]
-    end
   end
 end

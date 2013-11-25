@@ -1,0 +1,45 @@
+<div class="narrow-center-page">
+
+<%= render_cell(
+  :page_title,
+  :show,
+  data:
+  {
+    name: "#{@collection.name} 设置 #{CollectionInvoice.model_name.human} <small>#{t('simple_form.required.text') }</small>",
+    toolbar: {
+      left:
+      [
+        render_cell(
+          :button,
+          :show,
+          data:
+          {
+            name: fa_icon('level-up rotate-270'),
+            url: collections_path,
+            options:
+            {
+              class: 'btn',
+              rel: 'tooltip',
+              title: "#{t('labels.back_to')}#{t('model.list', :model => Payment.model_name.human)}",
+            }
+          }
+        )
+      ]
+    }
+  }
+)
+%>
+
+<%= simple_form_for(@collection, url: save_collection_invoice_assignment_path(@collection), method: :post, html: {class: 'form-horizontal' }) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.association :collection_invoices, collection: [CollectionInvoice.ion.in_space(current_space), @collection.collection_invoices].flatten.map {|v| [v.name, v.id]}, as: :check_boxes %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: 'btn btn-primary' %>
+  </div>
+<% end %>
+
+</div>

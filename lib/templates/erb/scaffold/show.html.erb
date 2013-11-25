@@ -1,3 +1,4 @@
+<div class="narrow-center-page">
 <%%= render_cell(
   :page_title,
   :show,
@@ -40,18 +41,21 @@
     </tr>
   </thead>
   <tbody>
-    <% attributes.each do |attribute| -%>
+    <% for attribute in class_name.split('::').last.constantize.columns -%>
+    <% if attribute.name != "id" && attribute.name !="created_at" && attribute.name !="updated_at" %>
     <tr>
       <td>
         <%%= t('activerecord.attributes.<%= class_name.split('::').last.underscore.downcase %>.<%= attribute.name %>') %>
       </td>
       <td>
-        <%%= <%= class_name.split('::').last.underscore.downcase %>.<%= attribute.name %> %>
+        <%%= @<%= class_name.split('::').last.underscore.downcase %>.<%= attribute.name %> %>
       </td>
     </tr>
-    <% end -%>
+    <% end %>
+    <% end %>
   </tbody>
   <tfoot>
 
   </tfoot>
 </table>
+</div>

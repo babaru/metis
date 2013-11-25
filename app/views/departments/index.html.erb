@@ -1,0 +1,50 @@
+<%= render_cell(
+  :page_title,
+  :show,
+  data:
+  {
+    name: "#{t('model.list', model: Department.model_name.human)}",
+    toolbar:
+    {
+      right:
+      [
+        render_cell(
+          :button,
+          :show,
+          data:
+          {
+            name: fa_icon('plus-sign', text: t('model.create', :model => Department.model_name.human)),
+            url: new_department_path,
+            options:
+            {
+              class: 'btn btn-primary'
+            }
+          }
+        )
+      ]
+    }
+  }
+)
+%>
+
+<%= grid(@departments_grid, :show_filters => :when_filtered) do |g|
+  g.column name: t('activerecord.attributes.department.name') do |department|
+    department.name
+  end
+
+  g.column html: {class: 'btn-cell extend'} do |department|
+    link_to(fa_icon('user', text: '部门成员设置'), assign_department_users_path(department), class: 'btn btn-success')
+  end
+
+  g.column html: {class: 'btn-cell extend'} do |department|
+    link_to(fa_icon('key', text: '部门权限设置'), assign_department_permissions_path(department), class: 'btn btn-info')
+  end
+
+  g.column html: {class: 'btn-cell'} do |department|
+    link_to(fa_icon('edit'), edit_department_path(department), class: 'btn', rel: 'tooltip', title: t('buttons.edit'))
+  end
+
+  g.column html: {class: 'btn-cell'} do |department|
+    link_to(fa_icon('trash'), department_path(department), method: :delete, confirm: t("confirms.delete"), class: 'btn btn-danger', rel: 'tooltip', title: t('buttons.delete'))
+  end
+end -%>

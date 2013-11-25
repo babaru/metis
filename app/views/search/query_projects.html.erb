@@ -10,14 +10,15 @@
 )
 %>
 
-<%= simple_form_for(@project_search, url: do_query_projects_path, html: {class: 'form-horizontal', id:'project-search-form'}, method: :post, remote: true) do |f| %>
-<table>
+<%= simple_form_for(@project_search, url: do_query_projects_path, html: {class: 'form-horizontal single-line', id:'project-search-form'}, method: :post, remote: true) do |f| %>
+<table style="width:100%;">
   <tr>
     <td>
       <%= f.input(
         :client_id,
         collection: current_space.clients.map {|v| [v.name, v.id]},
-        label: '客户列表'
+        label: '客户列表',
+        wrapper: false
       )
       %>
     </td>
@@ -25,7 +26,8 @@
       <%= f.input(
         :started_at,
         as: :date_picker,
-        label: '项目开始时间'
+        label: '项目开始时间',
+        wrapper: false
       )
       %>
     </td>
@@ -33,12 +35,13 @@
       <%= f.input(
         :ended_at,
         as: :date_picker,
-        label: '项目结束时间'
+        label: '项目结束时间',
+        wrapper: false
       )
       %>
     </td>
     <td>
-      <%= f.submit '搜索', class: 'btn btn-primary pull-right' %>
+      <%= f.submit '搜索', class: 'btn btn-primary' %>
     </td>
   </tr>
 </table>

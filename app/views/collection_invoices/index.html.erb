@@ -1,0 +1,57 @@
+<%= render_cell(
+  :page_title,
+  :show,
+  data:
+  {
+    name: "#{t('model.list', model: CollectionInvoice.model_name.human)}",
+    toolbar:
+    {
+      right:
+      [
+        render_cell(
+          :button,
+          :show,
+          data:
+          {
+            name: fa_icon('plus-sign', text: t('model.create', :model => CollectionInvoice.model_name.human)),
+            url: new_collection_invoice_path,
+            options:
+            {
+              class: 'btn btn-primary'
+            }
+          }
+        )
+      ]
+    }
+  }
+)
+%>
+
+<%= grid(@collection_invoices_grid, :show_filters => :when_filtered) do |g|
+  g.column :name => t('activerecord.attributes.collection_invoice.number'), :html => {:class => "grid-cell"} do |collection_invoice|
+    collection_invoice.number
+  end
+  g.column :name => t('activerecord.attributes.collection_invoice.amount'), :html => {:class => "grid-cell"} do |collection_invoice|
+    number_to_currency(collection_invoice.amount, unit: '￥', precision: 0)
+  end
+  g.column :name => t('activerecord.attributes.collection_invoice.invoice_type_id'), :html => {:class => "grid-cell"} do |collection_invoice|
+    InvoiceType.invoice_type_names[collection_invoice.invoice_type_id]
+  end
+  g.column :name => t('activerecord.attributes.collection_invoice.sent_at'), :html => {:class => "grid-cell"} do |collection_invoice|
+    collection_invoice.sent_at.strftime('%Y-%m-%d %H:%M:%S')
+  end
+  g.column :name => t('activerecord.attributes.collection_invoice.client_id'), :html => {:class => "grid-cell"} do |collection_invoice|
+    collection_invoice.client.name
+  end
+  g.column :name => t('activerecord.attributes.collection_invoice.agency_id'), :html => {:class => "grid-cell"} do |collection_invoice|
+    collection_invoice.agency.name
+  end
+
+  g.column html: {class: 'btn-cell'} do |collection_invoice|
+    link_to(fa_icon('edit'), edit_collection_invoice_path(collection_invoice), class: 'btn', rel: 'tooltip', title: t('buttons.edit'))
+  end
+
+  g.column html: {class: 'btn-cell'} do |collection_invoice|
+    link_to(fa_icon('trash'), collection_invoice_path(collection_invoice), method: :delete, confirm: t("confirms.delete"), class: 'btn btn-danger', rel: 'tooltip', title: t('buttons.delete'))
+  end
+end -%>

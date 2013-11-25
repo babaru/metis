@@ -25,6 +25,10 @@ class PaymentsController < ApplicationController
   # GET /payments/new.json
   def new
     @payment = Payment.new
+    @project = Project.find params[:project_id]
+    @payment.project = @project
+    @payment.client_id = @project.client_id
+    @payment.space = current_space
 
     respond_to do |format|
       format.html # new.html.erb
@@ -78,6 +82,20 @@ class PaymentsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to payments_url }
       format.json { head :no_content }
+    end
+  end
+
+  def assign_invoice
+    @payment = Payment.find params[:id]
+  end
+
+  def save_invoice_assignment
+    @payment = Payment.find params[:id]
+    if request.post?
+      @payment.update_attributes!(params[:payment])
+      respond_to do |format|
+        format.html { redirect_to payments_path, notice: '发票绑定完毕'}
+      end
     end
   end
 end

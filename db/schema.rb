@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131123062003) do
+ActiveRecord::Schema.define(:version => 20131125070249) do
 
   create_table "agencies", :force => true do |t|
     t.string   "name"
@@ -83,6 +83,72 @@ ActiveRecord::Schema.define(:version => 20131123062003) do
 
   add_index "clients", ["created_by_id"], :name => "index_clients_on_created_by_id"
   add_index "clients", ["space_id"], :name => "index_clients_on_space_id"
+
+  create_table "collection_invoices", :force => true do |t|
+    t.string   "number"
+    t.decimal  "amount",          :precision => 10, :scale => 0
+    t.string   "unit"
+    t.integer  "invoice_type_id"
+    t.datetime "sent_at"
+    t.integer  "collection_id"
+    t.integer  "space_id"
+    t.integer  "client_id"
+    t.integer  "agency_id"
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
+  end
+
+  add_index "collection_invoices", ["agency_id"], :name => "index_collection_invoices_on_agency_id"
+  add_index "collection_invoices", ["client_id"], :name => "index_collection_invoices_on_client_id"
+  add_index "collection_invoices", ["collection_id"], :name => "index_collection_invoices_on_collection_id"
+  add_index "collection_invoices", ["space_id"], :name => "index_collection_invoices_on_space_id"
+
+  create_table "collections", :force => true do |t|
+    t.integer  "client_id"
+    t.integer  "project_id"
+    t.decimal  "amount",     :precision => 10, :scale => 0
+    t.string   "unit"
+    t.integer  "agency_id"
+    t.datetime "made_at"
+    t.datetime "credit_on"
+    t.integer  "space_id"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+  end
+
+  add_index "collections", ["agency_id"], :name => "index_collections_on_agency_id"
+  add_index "collections", ["client_id"], :name => "index_collections_on_client_id"
+  add_index "collections", ["project_id"], :name => "index_collections_on_project_id"
+  add_index "collections", ["space_id"], :name => "index_collections_on_space_id"
+
+  create_table "department_permissions", :force => true do |t|
+    t.integer  "department_id"
+    t.integer  "permission_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "department_permissions", ["department_id"], :name => "index_department_permissions_on_department_id"
+  add_index "department_permissions", ["permission_id"], :name => "index_department_permissions_on_permission_id"
+
+  create_table "department_users", :force => true do |t|
+    t.integer  "department_id"
+    t.integer  "user_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "department_users", ["department_id"], :name => "index_department_users_on_department_id"
+  add_index "department_users", ["user_id"], :name => "index_department_users_on_user_id"
+
+  create_table "departments", :force => true do |t|
+    t.string   "name"
+    t.integer  "space_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "departments", ["space_id"], :name => "index_departments_on_space_id"
 
   create_table "master_plan_items", :force => true do |t|
     t.integer  "spot_id"
@@ -247,6 +313,30 @@ ActiveRecord::Schema.define(:version => 20131123062003) do
   add_index "payments", ["space_id"], :name => "index_payments_on_space_id"
   add_index "payments", ["vendor_id"], :name => "index_payments_on_vendor_id"
 
+  create_table "permission_group_permissions", :force => true do |t|
+    t.integer  "permission_group_id"
+    t.integer  "permission_id"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+  end
+
+  add_index "permission_group_permissions", ["permission_group_id"], :name => "index_permission_group_permissions_on_permission_group_id"
+  add_index "permission_group_permissions", ["permission_id"], :name => "index_permission_group_permissions_on_permission_id"
+
+  create_table "permission_groups", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "permissions", :force => true do |t|
+    t.string   "action"
+    t.string   "subject_class"
+    t.integer  "subject_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
   create_table "project_assignments", :force => true do |t|
     t.integer  "project_id"
     t.integer  "user_id"
@@ -272,11 +362,13 @@ ActiveRecord::Schema.define(:version => 20131123062003) do
     t.string   "created_by_name"
     t.boolean  "is_started",             :default => false
     t.datetime "is_started_at"
+    t.integer  "space_id"
   end
 
   add_index "projects", ["client_id"], :name => "index_projects_on_client_id"
   add_index "projects", ["created_by_id"], :name => "index_projects_on_created_by_id"
   add_index "projects", ["current_master_plan_id"], :name => "index_projects_on_current_master_plan_id"
+  add_index "projects", ["space_id"], :name => "index_projects_on_space_id"
 
   create_table "role_assignments", :force => true do |t|
     t.integer  "user_id"
@@ -404,6 +496,16 @@ ActiveRecord::Schema.define(:version => 20131123062003) do
     t.datetime "created_at",              :null => false
     t.datetime "updated_at",              :null => false
   end
+
+  create_table "user_permissions", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "permission_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "user_permissions", ["permission_id"], :name => "index_user_permissions_on_permission_id"
+  add_index "user_permissions", ["user_id"], :name => "index_user_permissions_on_user_id"
 
   create_table "users", :force => true do |t|
     t.string   "email",                  :default => "", :null => false

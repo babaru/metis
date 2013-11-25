@@ -28,11 +28,11 @@
 %>
 
 <%%= grid(@<%= class_name.split('::').last.underscore.downcase.pluralize %>_grid, :show_filters => :when_filtered) do |g|
-<% attributes.each do |attribute| -%>
+<% for attribute in class_name.split('::').last.constantize.columns -%>
   g.column :name => t('activerecord.attributes.<%= class_name.split('::').last.underscore.downcase %>.<%= attribute.name %>'), :html => {:class => "grid-cell"} do |<%= class_name.split('::').last.underscore.downcase %>|
     <%= class_name.split('::').last.underscore.downcase %>.<%= attribute.name %>
   end
-<% end -%>
+<% end %>
 
   g.column html: {class: 'btn-cell'} do |<%= class_name.split('::').last.underscore.downcase %>|
     link_to(fa_icon('edit'), edit_<%= singular_table_name %>_path(<%= class_name.split('::').last.underscore.downcase %>), class: 'btn', rel: 'tooltip', title: t('buttons.edit'))

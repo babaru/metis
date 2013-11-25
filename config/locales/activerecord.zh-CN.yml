@@ -17,10 +17,14 @@ zh-CN:
       net_cost_spot: 净价点位
       space: 公司
       space_user: 公司成员
+      department: 部门
+      permission: 权限
       vendor: 供应商
       agency: 代理商
       payment: 付款
       payment_invoice: 付款发票
+      collection: 收款
+      collection_invoice: 收款发票
     attributes:
       user:
         name: 用户名
@@ -100,6 +104,10 @@ zh-CN:
         clients: 客户
       space_user:
         roles: 公司用户权限
+      department:
+        name: 名称
+        users: 成员
+        permissions: 权限
       role:
         name: 名称
         readable_name: 说明
@@ -114,16 +122,49 @@ zh-CN:
         space_id: 公司
         space: 公司
       payment:
+        name: 名称
         amount: 金额
+        medium_id: 媒介
+        medium: 媒介
         vendor_id: 供应商
+        vendor: 供应商
+        project: 项目
+        project_id: 项目
         paid_at: 付款时间
         credit_on: 抵扣月份
+        payment_invoice: 付款发票
+        payment_invoice_id: 付款发票
       payment_invoice:
         name: 名称
         amount: 金额
-        number: 号码
+        number: 发票号码
         invoice_type_id: 发票类型
         invoice_type: 发票类型
         received_at: 接收时间
         medium: 媒介
         vendor: 供应商
+      collection:
+        name: 名称
+        amount: 金额
+        client_id: 客户
+        client: 客户
+        agency_id: 代理公司
+        agency: 代理公司
+        project: 项目
+        project_id: 项目
+        made_at: 收款时间
+        credit_on: 抵扣月份
+        collection_invoice: 收款发票
+        collection_invoice_id: 收款发票
+        collection_invoices: 收款发票
+      collection_invoice:
+        name: 名称
+        amount: 金额
+        number: 发票号码
+        invoice_type_id: 发票类型
+        invoice_type: 发票类型
+        sent_at: 发出时间
+        client: 客户
+        agency: 代理公司
+        client_id: 客户
+        agency_id: 代理公司

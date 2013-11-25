@@ -7,10 +7,16 @@ class Project < ActiveRecord::Base
   has_many :master_plans, dependent: :destroy
   belongs_to :current_master_plan, class_name: 'MasterPlan', foreign_key: :current_master_plan_id
 
-  attr_accessible :ended_at, :name, :started_at, :created_by_id,
-    :created_by_name, :created_by, :client_id, :client_name,
-    :client, :budget, :assigned_user_ids, :current_master_plan_id,
-    :is_started, :is_started_at
+  attr_accessible :ended_at,
+    :name,
+    :started_at,
+    :created_by_id,
+    :created_by_name, :created_by,
+    :client_id, :client_name, :client,
+    :budget, :assigned_user_ids,
+    :current_master_plan_id,
+    :is_started, :is_started_at,
+    :space, :space_id
 
   before_create :copy_mandatory_attributes, :create_default_master_plan
   after_create :set_current_master_plan

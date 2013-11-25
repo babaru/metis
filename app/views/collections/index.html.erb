@@ -1,0 +1,70 @@
+<%= render_cell(
+  :page_title,
+  :show,
+  data:
+  {
+    name: "#{t('model.list', model: Collection.model_name.human)}",
+    toolbar:
+    {
+      right:
+      [
+        render_cell(
+          :button,
+          :show,
+          data:
+          {
+            name: fa_icon('plus-sign', text: t('model.create', :model => Collection.model_name.human)),
+            url: new_collection_path,
+            options:
+            {
+              class: 'btn btn-primary'
+            }
+          }
+        )
+      ]
+    }
+  }
+)
+%>
+
+<%= grid(@collections_grid, :show_filters => :when_filtered) do |g|
+  g.column :name => t('activerecord.attributes.collection.client_id'), :html => {:class => "grid-cell"} do |collection|
+    collection.client.name
+  end
+  g.column :name => t('activerecord.attributes.collection.project_id'), :html => {:class => "grid-cell"} do |collection|
+    collection.project.name
+  end
+  g.column :name => t('activerecord.attributes.collection.amount'), :html => {:class => "grid-cell"} do |collection|
+    number_to_currency(collection.amount, unit: '￥', precision: 0)
+  end
+  g.column :name => t('activerecord.attributes.collection.agency_id'), :html => {:class => "grid-cell"} do |collection|
+    collection.agency.name
+  end
+  g.column :name => t('activerecord.attributes.collection.made_at'), :html => {:class => "grid-cell"} do |collection|
+    collection.made_at.strftime('%Y-%m-%d %H:%M:%S')
+  end
+  g.column :name => t('activerecord.attributes.collection.credit_on'), :html => {:class => "grid-cell"} do |collection|
+    collection.credit_on.strftime('%Y年%m月')
+  end
+
+  g.column name: t('activerecord.attributes.collection.collection_invoice'), html: {class: 'btn-cell extend'} do |collection|
+    if collection.collection_invoices.count > 1
+      link_to(fa_icon('ellipsis-horizontal'), '#', class: 'btn')
+    elsif collection.collection_invoices.count == 1
+      link_to(collection.collection_invoices.first.number, collection_invoice_path(collection.collection_invoices.first))
+    else
+    end
+  end
+
+  g.column html: {class: 'btn-cell extend'} do |payment|
+    link_to(fa_icon('link', text: t('model.link', model: CollectionInvoice.model_name.human)), assign_collection_invoice_path(payment), class: 'btn')
+  end
+
+  g.column html: {class: 'btn-cell'} do |collection|
+    link_to(fa_icon('edit'), edit_collection_path(collection), class: 'btn', rel: 'tooltip', title: t('buttons.edit'))
+  end
+
+  g.column html: {class: 'btn-cell'} do |collection|
+    link_to(fa_icon('trash'), collection_path(collection), method: :delete, confirm: t("confirms.delete"), class: 'btn btn-danger', rel: 'tooltip', title: t('buttons.delete'))
+  end
+end -%>

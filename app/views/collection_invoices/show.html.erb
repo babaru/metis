@@ -1,0 +1,143 @@
+<div class="narrow-center-page">
+<%= render_cell(
+  :page_title,
+  :show,
+  data:
+  {
+    name: "#{@collection_invoice.name}",
+    toolbar: {
+      left:
+      [
+        render_cell(
+          :button,
+          :show,
+          data:
+          {
+            name: fa_icon('level-up rotate-270'),
+            url: collection_invoices_path,
+            options:
+            {
+              class: 'btn',
+              rel: 'tooltip',
+              title: "#{t('labels.back_to')}#{t('model.list', :model => CollectionInvoice.model_name.human)}",
+            }
+          }
+        )
+      ]
+    }
+  }
+)
+%>
+
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>
+        属性
+      </th>
+      <th>
+        值
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+        
+        
+    <tr>
+      <td>
+        <%= t('activerecord.attributes.collection_invoice.number') %>
+      </td>
+      <td>
+        <%= @collection_invoice.number %>
+      </td>
+    </tr>
+    
+        
+    <tr>
+      <td>
+        <%= t('activerecord.attributes.collection_invoice.amount') %>
+      </td>
+      <td>
+        <%= @collection_invoice.amount %>
+      </td>
+    </tr>
+    
+        
+    <tr>
+      <td>
+        <%= t('activerecord.attributes.collection_invoice.unit') %>
+      </td>
+      <td>
+        <%= @collection_invoice.unit %>
+      </td>
+    </tr>
+    
+        
+    <tr>
+      <td>
+        <%= t('activerecord.attributes.collection_invoice.invoice_type_id') %>
+      </td>
+      <td>
+        <%= @collection_invoice.invoice_type_id %>
+      </td>
+    </tr>
+    
+        
+    <tr>
+      <td>
+        <%= t('activerecord.attributes.collection_invoice.sent_at') %>
+      </td>
+      <td>
+        <%= @collection_invoice.sent_at %>
+      </td>
+    </tr>
+    
+        
+    <tr>
+      <td>
+        <%= t('activerecord.attributes.collection_invoice.collection_id') %>
+      </td>
+      <td>
+        <%= @collection_invoice.collection_id %>
+      </td>
+    </tr>
+    
+        
+    <tr>
+      <td>
+        <%= t('activerecord.attributes.collection_invoice.space_id') %>
+      </td>
+      <td>
+        <%= @collection_invoice.space_id %>
+      </td>
+    </tr>
+    
+        
+    <tr>
+      <td>
+        <%= t('activerecord.attributes.collection_invoice.client_id') %>
+      </td>
+      <td>
+        <%= @collection_invoice.client_id %>
+      </td>
+    </tr>
+    
+        
+    <tr>
+      <td>
+        <%= t('activerecord.attributes.collection_invoice.agency_id') %>
+      </td>
+      <td>
+        <%= @collection_invoice.agency_id %>
+      </td>
+    </tr>
+    
+        
+        
+    
+  </tbody>
+  <tfoot>
+
+  </tfoot>
+</table>
+</div>

@@ -23,6 +23,12 @@ class User < ActiveRecord::Base
   has_many :spaces, through: :space_users
   has_many :space_user_roles, through: :space_users, dependent: :destroy
 
+  has_many :user_permissions
+  has_many :permissions, through: :user_permissions
+
+  has_many :department_users
+  has_many :departments, through: :department_users
+
   attr_accessor :current_space_id, :space_roles
 
   def is_sys_admin?

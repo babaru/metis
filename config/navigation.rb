@@ -41,16 +41,53 @@ SimpleNavigation::Configuration.run do |navigation|
       }
     )
 
-    if current_user.is_sys_admin?
-      primary.item(
-        :page_spaces,
-        Space.model_name.human,
-        spaces_path,
-        {
-          highlights_on: /spaces/
-        }
-      )
+    primary.item(
+      :page_spaces,
+      Space.model_name.human,
+      nil,
+      {
+        link: {
+          icon: 'building'
+        },
+        highlights_on: /spaces/
+      }
+    ) do |space_menu|
 
+      space_menu.item(
+        :page_department,
+        Department.model_name.human,
+        nil,
+        {
+          link: {
+            icon: 'sitemap'
+          },
+          highlights_on: /departments/
+        }
+      ) do |department_menu|
+
+        department_menu.item(
+          :page_department_list,
+          t('model.list', model: Department.model_name.human),
+          departments_path,
+          {
+            link: {
+              icon: 'list'
+            }
+          }
+        )
+
+        department_menu.item(
+          :page_create_department,
+          t('model.create', model: Department.model_name.human),
+          new_department_path,
+          {
+            link: {
+              icon: 'plus-sign'
+            }
+          }
+        )
+
+      end
     end
 
     primary.item(
@@ -201,7 +238,7 @@ SimpleNavigation::Configuration.run do |navigation|
         )
 
         payment_menu.item(
-          :page_client_items_divider_1,
+          :page_payment_menu_divider_1,
           nil,
           nil,
           link: {divider: true})
@@ -226,6 +263,66 @@ SimpleNavigation::Configuration.run do |navigation|
           highlights_on: /payment_invoices/
         )
       end
+
+      finance_menu.item(
+        :page_collection_invoice,
+        Collection.model_name.human,
+        nil,
+        highlights_on: /collections/
+      ) do |collection_menu|
+        collection_menu.item(
+          :page_create_collection,
+          t('model.add', model: Collection.model_name.human),
+          new_collection_path,
+          link: {
+            icon: 'plus-sign'
+          }
+        )
+
+        collection_menu.item(
+          :page_collection_list,
+          t('model.list', model: Collection.model_name.human),
+          collections_path,
+          link: {
+            icon: 'list'
+          }
+        )
+
+        collection_menu.item(
+          :page_collection_menu_divider_1,
+          nil,
+          nil,
+          link: {divider: true})
+
+        collection_menu.item(
+          :page_create_collection_invoice,
+          t('model.add', model: CollectionInvoice.model_name.human),
+          new_collection_invoice_path,
+          link: {
+            icon: 'plus-sign'
+          },
+          highlights_on: /collection_invoices/
+        )
+
+        collection_menu.item(
+          :page_collection_invoice_list,
+          t('model.list', model: CollectionInvoice.model_name.human),
+          collection_invoices_path,
+          link: {
+            icon: 'list'
+          },
+          highlights_on: /collection_invoices/
+        )
+      end
+
+      finance_menu.item(
+        :page_finance_report,
+        '报表',
+        finance_report_path,
+        link: {
+          icon: 'file-text'
+        }
+      )
     end
 
     primary.item(

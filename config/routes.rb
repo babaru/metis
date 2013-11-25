@@ -55,15 +55,28 @@ Metis::Application.routes.draw do
   get 'space_users/:id/assign_space_user_roles' => 'space_users#assign_space_user_roles', as: :assign_space_user_roles
   post 'space_users/:id/save_space_user_roles' => 'space_users#save_space_user_roles', as: :save_space_user_roles
 
+  get 'payments/:id/assign_invoice' => 'payments#assign_invoice', as: :assign_payment_invoice
+  post 'payments/:id/save_payment_invoice_assignment' => 'payments#save_invoice_assignment', as: :save_payment_invoice_assignment
+
+  get 'collections/:id/assign_invoice' => 'collections#assign_invoice', as: :assign_collection_invoice
+  post 'collections/:id/save_collection_invoice_assignment' => 'collections#save_invoice_assignment', as: :save_collection_invoice_assignment
+
   # post 'master_plans/:id/modify' => 'master_plans#modify', as: :modify_master_plan
 
   # get 'spots/apps' => 'spots#apps'
 
-  resources :spaces, :media, :channels, :spots, :channel_groups, :spot_categories,
-    :master_plans, :master_plan_items, :spot_plan_items, :medium_policies,
-    :medium_master_plans, :vendors, :agencies, :payments, :payment_invoices
+  get 'departments/:id/assign_permissions' => 'departments#assign_permissions', as: :assign_department_permissions
+  post 'departments/:id/save_department_permissions' => 'departments#save_department_permissions', as: :save_department_permissions
 
-  resources :shopping_cart_items
+  get 'departments/:id/assign_users' => 'departments#assign_users', as: :assign_department_users
+  post 'departments/:id/save_department_users' => 'departments#save_department_users', as: :save_department_users
+
+  get 'finance/report' => 'finance#report', as: :finance_report
+
+  resources :spaces, :departments, :media, :channels, :spots, :channel_groups, :spot_categories,
+    :master_plans, :master_plan_items, :spot_plan_items, :medium_policies,
+    :medium_master_plans, :vendors, :agencies, :payments, :payment_invoices,
+    :collections, :collection_invoices
 
   resources :media do
     resources :channels, :channel_groups, :spots, :spot_categories
@@ -84,7 +97,7 @@ Metis::Application.routes.draw do
   end
 
   resources :projects do
-    resources :master_plans
+    resources :master_plans, :payments, :collections
   end
 
   resources :master_plans do

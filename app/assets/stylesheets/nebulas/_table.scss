@@ -2,17 +2,38 @@
   th,
   td {
     padding: 4px 7px;
+    white-space:nowrap;
+
+    &.auto {
+      width: 100%;
+    }
 
     &.btn-cell {
       padding: 0px;
       width: 26px;
 
       .btn {
-        width: 10px; height: 18px;
+        width: 10px; min-height: 18px; height: 100%;
         padding: 4px 8px; margin: 0px;
         @include border-radius(0);
       }
+
+      &.extend {
+        width: auto; min-width: 25px;
+        .btn {
+          width: auto;
+        }
+      }
     }
+  }
+
+  .nav-pills {
+    margin: 0;
+  }
+
+  label {
+    margin: 0;
+    vertical-align: middle;
   }
 }
 
@@ -30,6 +51,23 @@
 
   th {
     border-bottom: 2px solid $tableBorder;
+  }
+}
+
+.table-horizontal-bordered {
+  @extend .table-bordered;
+  th,
+  td {
+    border-left: none;
+  }
+
+  border-right: none;
+}
+
+.table-center-vertical-align {
+  th,
+  td {
+    vertical-align: middle !important;
   }
 }
 

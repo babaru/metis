@@ -1,0 +1,18 @@
+
+<%= simple_form_for(@collection , :html => {:class => 'form-horizontal' }) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :client_id, as: :hidden %>
+    <%= f.input :project_id, as: :hidden %>
+    <%= f.input :agency_id, collection: current_space.agencies.map{|v| [v.name, v.id]} %>
+    <%= f.input :amount, required: true %>
+    <%= f.input :made_at, as: :date_time_picker, required: true %>
+    <%= f.input :credit_on, as: :date_picker, required: true %>
+    <%= f.input :space_id, as: :hidden %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: 'btn btn-primary' %>
+  </div>
+<% end %>

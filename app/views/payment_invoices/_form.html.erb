@@ -3,9 +3,12 @@
   <%= f.error_notification %>
 
   <div class="form-inputs">
-    <%= f.input :invoice_type_id, collection: PaymentInvoice.invoice_types %>
+    <%= f.input :number %>
+    <%= f.input :amount %>
+    <%= f.input :invoice_type_id, collection: InvoiceType.invoice_types %>
     <%= f.input :medium_id, collection: Medium.all.map{|v| [v.name, v.id]} %>
     <%= f.input :vendor_id, collection: current_space.vendors.map{|v| [v.name, v.id]} %>
+    <%= f.input :space_id, as: :hidden %>
     <%= f.input :number %>
     <%= f.input :amount, as: :decimal %>
     <%= f.input :received_at, as: :date_time_picker %>
