@@ -3,26 +3,7 @@
   :show,
   data:
   {
-    name: "#{t('model.list', model: Collection.model_name.human)}",
-    toolbar:
-    {
-      right:
-      [
-        render_cell(
-          :button,
-          :show,
-          data:
-          {
-            name: fa_icon('plus-sign', text: t('model.create', :model => Collection.model_name.human)),
-            url: new_collection_path,
-            options:
-            {
-              class: 'btn btn-primary'
-            }
-          }
-        )
-      ]
-    }
+    name: "#{t('model.list', model: Collection.model_name.human)}"
   }
 )
 %>
