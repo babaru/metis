@@ -43,9 +43,6 @@
   g.column :name => t('activerecord.attributes.collection.made_at'), :html => {:class => "grid-cell"} do |collection|
     collection.made_at.strftime('%Y-%m-%d %H:%M:%S')
   end
-  g.column :name => t('activerecord.attributes.collection.credit_on'), :html => {:class => "grid-cell"} do |collection|
-    collection.credit_on.strftime('%Y年%m月')
-  end
 
   g.column name: t('activerecord.attributes.collection.collection_invoice'), html: {class: 'btn-cell extend'} do |collection|
     if collection.collection_invoices.count > 1
