@@ -41,7 +41,7 @@
   end
 
   g.column name: t('activerecord.attributes.payment.vendor') do |payment|
-    payment.vendor.name
+    payment.vendor.name if payment.vendor_id
   end
 
   g.column name: t('activerecord.attributes.payment.amount') do |payment|

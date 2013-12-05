@@ -44,7 +44,7 @@
     collection_invoice.client.name
   end
   g.column :name => t('activerecord.attributes.collection_invoice.agency_id'), :html => {:class => "grid-cell"} do |collection_invoice|
-    collection_invoice.agency.name
+    collection_invoice.agency.name if collection_invoice.agency_id
   end
 
   g.column html: {class: 'btn-cell'} do |collection_invoice|

@@ -38,7 +38,7 @@
     number_to_currency(collection.amount, unit: '￥', precision: 0)
   end
   g.column :name => t('activerecord.attributes.collection.agency_id'), :html => {:class => "grid-cell"} do |collection|
-    collection.agency.name
+    collection.agency.name if collection.agency_id
   end
   g.column :name => t('activerecord.attributes.collection.made_at'), :html => {:class => "grid-cell"} do |collection|
     collection.made_at.strftime('%Y-%m-%d %H:%M:%S')
