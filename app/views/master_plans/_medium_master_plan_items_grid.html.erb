@@ -10,7 +10,7 @@
     master_plan_item.channel_name
   end
 
-  g.column name: t('activerecord.attributes.spot.name') do |master_plan_item|
+  g.column name: t('activerecord.attributes.spot.name'), html: {class: 'auto'} do |master_plan_item|
     if is_history
       content_tag(:strong, master_plan_item.position_name, class: (master_plan_item.is_on_house ? 'is_on_house' : ''))
     else
@@ -99,6 +99,10 @@
         'data-skip-pjax' => true
       )
     end
+  end
+
+  g.column name: t('activerecord.attributes.master_plan_item.reality_count') do |master_plan_item|
+    master_plan_item.reality_count
   end
 
   g.column name: t('activerecord.attributes.master_plan_item.medium_policy') do |master_plan_item|
@@ -214,7 +218,7 @@
     unless is_history
       [
         link_to(
-          fa_icon('icon-dollar'),
+          '买',
           '#',
           'data-id' => master_plan_item.id,
           'data-value' => false,
@@ -224,7 +228,7 @@
           title: '转成购买',
           style: master_plan_item.is_on_house? ? '' : 'display:none;'),
         link_to(
-          icon('icon-thumbs-up'),
+          '送',
           '#',
           'data-id' => master_plan_item.id,
           'data-medium-id' => @selected_medium_master_plan.medium_id,

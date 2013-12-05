@@ -29,6 +29,10 @@ class MasterPlan < ActiveRecord::Base
     spaces.include?(self.space)
   end
 
+  def is_current_master_plan?
+    self.id == self.project.current_master_plan_id
+  end
+
   def medium_master_plan(medium_id)
     medium_master_plans.where(medium_id: medium_id).first
   end

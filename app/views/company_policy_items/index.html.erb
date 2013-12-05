@@ -1,0 +1,51 @@
+<%= render_cell(
+  :page_title,
+  :show,
+  data:
+  {
+    name: "<strong>#{@company_policy.name}</strong> #{t('model.list', model: CompanyPolicyItem.model_name.human)}",
+    toolbar:
+    {
+      right:
+      [
+        render_cell(
+          :button,
+          :show,
+          data:
+          {
+            name: fa_icon('plus-sign', text: t('model.create', :model => CompanyPolicyItem.model_name.human)),
+            url: new_client_company_policy_company_policy_item_path,
+            options:
+            {
+              class: 'btn btn-primary'
+            }
+          }
+        )
+      ]
+    }
+  }
+)
+%>
+
+<%= grid(@company_policy_items_grid, :show_filters => :when_filtered) do |g|
+  g.column :name => t('activerecord.attributes.company_policy_item.remark'), :html => {:class => "grid-cell"} do |company_policy_item|
+    company_policy_item.remark
+  end
+  g.column :name => t('activerecord.attributes.company_policy_item.min'), :html => {:class => "grid-cell"} do |company_policy_item|
+    company_policy_item.min
+  end
+  g.column :name => t('activerecord.attributes.company_policy_item.max'), :html => {:class => "grid-cell"} do |company_policy_item|
+    company_policy_item.max
+  end
+  g.column :name => t('activerecord.attributes.company_policy_item.rebate'), :html => {:class => "grid-cell"} do |company_policy_item|
+    company_policy_item.rebate
+  end
+
+  g.column html: {class: 'btn-cell'} do |company_policy_item|
+    link_to(fa_icon('edit'), edit_company_policy_item_path(company_policy_item), class: 'btn', rel: 'tooltip', title: t('buttons.edit'))
+  end
+
+  g.column html: {class: 'btn-cell'} do |company_policy_item|
+    link_to(fa_icon('trash'), company_policy_item_path(company_policy_item), method: :delete, confirm: t("confirms.delete"), class: 'btn btn-danger', rel: 'tooltip', title: t('buttons.delete'))
+  end
+end -%>

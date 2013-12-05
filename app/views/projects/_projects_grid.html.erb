@@ -82,6 +82,10 @@
     link_to(fa_icon('rocket', text: '启动项目'), start_project_path(project), class: 'btn btn-success', method: :post) unless project.is_started?
   end
 
+  g.column html: {class: ''} do |project|
+    link_to(fa_icon('file', text: '项目执行单'), project_execution_path(id: project.id, client_id: project.client_id), class: 'btn btn-warning')
+  end
+
   g.column html: {class: 'btn-cell'} do |project|
     link_to(fa_icon('user'), assign_project_user_path(id: project), rel: 'tooltip', title: '分配项目', class: 'btn') if can? :manage, project
   end

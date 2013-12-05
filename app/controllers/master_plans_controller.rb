@@ -26,7 +26,8 @@ class MasterPlansController < ApplicationController
       @selected_medium_master_plan = @master_plan.medium_master_plans.first unless @selected_medium_master_plan
       @master_plan_items_grid = initialize_grid(
         MasterPlanItem.where("master_plan_id=#{@master_plan.id} and medium_id=#{@selected_medium_master_plan.medium_id}").order('is_on_house, created_at'),
-        name: 'medium_master_plan_items_grid')
+        name: 'medium_master_plan_items_grid',
+        per_page: 100)
     end
 
     @choose_spots_path_params =

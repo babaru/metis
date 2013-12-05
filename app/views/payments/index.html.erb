@@ -52,10 +52,6 @@
     payment.paid_at.strftime('%Y-%m-%d %H:%M:%S')
   end
 
-  g.column name: t('activerecord.attributes.payment.credit_on') do |payment|
-    payment.credit_on.strftime('%Y年%m月')
-  end
-
   g.column name: t('activerecord.attributes.payment.payment_invoice'), html: {class: 'btn-cell extend'} do |payment|
     if payment.payment_invoices.count > 1
       link_to(fa_icon('ellipsis-horizontal'), '#', class: 'btn')

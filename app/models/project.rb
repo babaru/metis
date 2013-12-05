@@ -6,6 +6,10 @@ class Project < ActiveRecord::Base
   has_many :assigned_users, through: :project_assignments
   has_many :master_plans, dependent: :destroy
   belongs_to :current_master_plan, class_name: 'MasterPlan', foreign_key: :current_master_plan_id
+  has_many :payments
+  has_many :payment_invoices
+  has_many :collections
+  # has_many :collection_invoices
 
   attr_accessible :ended_at,
     :name,
@@ -101,6 +105,28 @@ class Project < ActiveRecord::Base
       self.is_started_at = Time.now
       self.save!
     end
+  end
+
+  def collection_amount
+    self.collections.inject(0) {|sum, item| sum += item.amount}
+  end
+
+  def collection_invoice_amount
+    self.collections.inject(0) {|sum, item| sum += item.collection_invoices.inject(0){|s, i| s += i.amount}}
+  end
+
+  def incollection_amount
+    return 0 unless current_master_plan_id
+    self.current_master_plan.company_net_cost - self.collection_amount
+  end
+
+  def incollection_invoice_amount
+    return 0 unless current_master_plan_id
+    self.current_master_plan.company_net_cost - self.collection_invoice_amount
+  end
+
+  def total_profit
+    self.current_master_plan.medium_master_plans.inject(0){|sum, medium_master_plan| sum += medium_master_plan.total_profit}
   end
 
   private

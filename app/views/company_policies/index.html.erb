@@ -1,0 +1,51 @@
+<%= render_cell(
+  :page_title,
+  :show,
+  data:
+  {
+    name: "<strong>#{@client.name}</strong> #{t('model.list', model: CompanyPolicy.model_name.human)}",
+    toolbar:
+    {
+      right:
+      [
+        render_cell(
+          :button,
+          :show,
+          data:
+          {
+            name: fa_icon('plus-sign', text: t('model.create', :model => CompanyPolicy.model_name.human)),
+            url: new_client_company_policy_path,
+            options:
+            {
+              class: 'btn btn-primary'
+            }
+          }
+        )
+      ]
+    }
+  }
+)
+%>
+
+<%= grid(@company_policies_grid, :show_filters => :when_filtered) do |g|
+  g.column :name => t('activerecord.attributes.company_policy.year'), :html => {:class => "grid-cell"} do |company_policy|
+    company_policy.year
+  end
+  g.column :name => t('activerecord.attributes.company_policy.medium'), :html => {:class => "grid-cell"} do |company_policy|
+    company_policy.medium.name
+  end
+  g.column :name => t('activerecord.attributes.company_policy.framework'), :html => {:class => "grid-cell"} do |company_policy|
+    company_policy.framework
+  end
+  g.column :name => t('activerecord.attributes.company_policy.rebate'), :html => {:class => "grid-cell"} do |company_policy|
+    company_policy.rebate
+  end
+
+  g.column html: {class: 'btn-cell'} do |company_policy|
+    link_to(fa_icon('edit'), edit_company_policy_path(company_policy), class: 'btn', rel: 'tooltip', title: t('buttons.edit'))
+  end
+
+  g.column html: {class: 'btn-cell'} do |company_policy|
+    link_to(fa_icon('trash'), company_policy_path(company_policy), method: :delete, confirm: t("confirms.delete"), class: 'btn btn-danger', rel: 'tooltip', title: t('buttons.delete'))
+  end
+end -%>

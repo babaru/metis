@@ -32,6 +32,10 @@
     payment_invoice.name
   end
 
+  g.column name: t('activerecord.attributes.payment_invoice.project') do |payment_invoice|
+    payment_invoice.project.name if payment_invoice.project_id
+  end
+
   g.column name: t('activerecord.attributes.payment_invoice.number'), attribute: 'number' do |payment_invoice|
     payment_invoice.number
   end
@@ -54,6 +58,10 @@
 
   g.column name: t('activerecord.attributes.payment_invoice.invoice_type_id'), attribute: 'invoice_type_id' do |payment_invoice|
     InvoiceType.invoice_type_names[payment_invoice.invoice_type_id]
+  end
+
+  g.column name: t('activerecord.attributes.payment_invoice.credit_on') do |payment_invoice|
+    payment_invoice.credit_on.strftime('%Y年%m月') if payment_invoice.credit_on
   end
 
   g.column html: {class: 'btn-cell'} do |payment_invoice|

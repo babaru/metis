@@ -13,6 +13,7 @@ module Tida
 
           def parse(project_name, excel_file)
             Spreadsheet.open excel_file do |excel|
+              Rails.logger.debug 'Opened'
               ws = excel.worksheet(0)
               master_plan_data = {}
               medium_name = nil
@@ -90,6 +91,7 @@ module Tida
                       {
                         medium_id: medium.id,
                         master_plan_id: master_plan.id,
+                        reality_medium_discount: item_data[:discount],
                         reality_company_discount: item_data[:discount],
                         is_history: true
                       }
@@ -147,12 +149,14 @@ module Tida
               mpi[:est_total_imp] = get_integer_field_value(row[12])
               mpi[:est_total_clicks] = get_integer_field_value(row[13])
               mpi[:est_ctr] = get_decimal_field_value(row[14])
-              mpi[:count] = get_integer_field_value(row[17]) if row[17]
-              mpi[:count] = get_integer_field_value(row[18]) if row[18]
+              mpi[:count] = get_integer_field_value(row[17])
+              mpi[:cpm] = get_integer_field_value(row[18])
               mpi[:leads] = get_integer_field_value(row[19])
               mpi[:unit_rate_card] = get_integer_field_value(row[20])
               mpi[:reality_company_discount] = get_decimal_field_value(row[21])
               mpi[:reality_company_net_cost] = get_integer_field_value(row[22])
+              mpi[:reality_medium_discount] = get_decimal_field_value(row[21])
+              mpi[:reality_medium_net_cost] = get_integer_field_value(row[22])
               mpi[:is_on_house] = true if mpi[:reality_company_net_cost] == 0
               mpi[:spot_plan] = []
               (0..calendar_array.length - 1).each do |n|

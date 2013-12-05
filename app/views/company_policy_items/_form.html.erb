@@ -1,0 +1,16 @@
+
+<%= simple_form_for(@company_policy_item , :html => {:class => 'form-horizontal' }) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :company_policy_id, as: :hidden %>
+    <%= f.input :min %>
+    <%= f.input :max %>
+    <%= f.input :rebate %>
+    <%= f.input :remark %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, class: 'btn btn-primary' %>
+  </div>
+<% end %>

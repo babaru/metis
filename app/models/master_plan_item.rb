@@ -10,7 +10,7 @@ class MasterPlanItem < ActiveRecord::Base
 
   before_create :copy_mandatory_attributes
 
-  attr_accessible :count,
+  attr_accessible :count, :cpm,
     :spot, :spot_id, :spot_name, :reality_spot_name,
     :master_plan, :master_plan_id, :master_plan_name,
     :project, :project_id, :project_name,
@@ -55,26 +55,46 @@ class MasterPlanItem < ActiveRecord::Base
 
   def medium_net_cost
     return 0 if is_on_house?
-    return reality_medium_net_cost if reality_medium_net_cost && medium_master_plan.is_combo?
+    return reality_medium_net_cost if reality_medium_net_cost && (medium_master_plan.is_combo? || medium_master_plan.is_history?)
     theoritical_medium_net_cost
   end
 
+  def medium_net_cost_by_month(year, month)
+    target_spot_plan_items = self.spot_plan_items.where(placed_at: (Date.new(year, month, 1)..Date.new(year, month, 1).end_of_month()))
+    (self.medium_net_cost / self.count) * target_spot_plan_items.count
+  end
+
   def theoritical_medium_net_cost
+    r_count = self.reality_count
+    return unit_rate_card * r_count * original_medium_discount if r_count > 0
     unit_rate_card * count * original_medium_discount
   end
 
   def company_net_cost
     return 0 if is_on_house?
-    return reality_company_net_cost if reality_company_net_cost && medium_master_plan.is_combo?
+    return reality_company_net_cost if reality_company_net_cost && (medium_master_plan.is_combo? || medium_master_plan.is_history?)
     theoritical_company_net_cost
   end
 
+  def company_net_cost_by_month(year, month)
+    target_spot_plan_items = self.spot_plan_items.where(placed_at: (Date.new(year, month, 1)..Date.new(year, month, 1).end_of_month()))
+    (self.company_net_cost / self.count) * target_spot_plan_items.count
+  end
+
   def theoritical_company_net_cost
+    r_count = self.reality_count
+    return unit_rate_card * r_count * original_company_discount if r_count > 0
     unit_rate_card * count * original_company_discount
   end
 
   def total_rate_card
+    r_count = self.reality_count
+    return unit_rate_card * r_count if r_count > 0
     unit_rate_card * count
+  end
+
+  def unit_rate_card_per_day
+    self.unit_rate_card
   end
 
   def self.create_by_data!(data)

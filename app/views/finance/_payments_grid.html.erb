@@ -1,0 +1,84 @@
+<%= grid(@payments_grid, :show_filters => :when_filtered) do |g|
+  g.after_row do |payment, number_of_columns|
+    if payment.payment_invoices.count > 1
+      payment_invoices = payment.payment_invoices.order('received_at asc')
+      content = []
+      payment_invoices.each_with_index do |payment_invoice, index|
+        if index > 0
+          content << content_tag(:tr,
+            [
+              content_tag(:td,
+                '',
+                :colspan => 8),
+
+              content_tag(:td,
+                payment_invoice.number),
+              content_tag(:td,
+                payment_invoice.amount),
+              content_tag(:td,
+                payment_invoice.received_at.strftime('%Y-%m-%d %H:%M:%S')),
+              content_tag(:td,
+                InvoiceType.invoice_type_names[payment_invoice.invoice_type_id]),
+              content_tag(:td,
+                payment_invoice.credit_on.strftime('%Y年%m月'))
+            ].join('').html_safe
+           )
+        end
+      end
+
+      content.join('').html_safe
+    end
+  end
+
+  g.column name: t('activerecord.attributes.payment.client') do |payment|
+    payment.client.name
+  end
+
+  g.column name: t('activerecord.attributes.payment.project') do |payment|
+    payment.project.name
+  end
+
+  g.column name: t('activerecord.attributes.payment.medium') do |payment|
+    payment.medium.name
+  end
+
+  g.column name: t('activerecord.attributes.payment.medium_net_cost') do |payment|
+    payment.project.current_master_plan.medium_master_plan(payment.medium_id).medium_net_cost
+  end
+
+  g.column name: t('activerecord.attributes.payment.amount') do |payment|
+    payment.amount
+  end
+
+  g.column name: t('activerecord.attributes.payment.payable') do |payment|
+    payment.payable(payment.project.current_master_plan.medium_master_plan(payment.medium_id).medium_net_cost, payment.project.payments.where(medium_id: payment.medium_id).order('paid_at asc'))
+  end
+
+  g.column name: t('activerecord.attributes.payment.paid_at') do |payment|
+    payment.paid_at.strftime('%Y-%m-%d %H:%M:%S')
+  end
+
+  g.column name: t('activerecord.attributes.payment.invoice_amount') do |payment|
+    payment.invoice_amount
+  end
+
+  g.column name: t('activerecord.attributes.payment_invoice.number') do |payment|
+    payment.payment_invoices.order('received_at asc').first.number if payment.payment_invoices.count > 0
+  end
+
+  g.column name: t('activerecord.attributes.payment_invoice.amount') do |payment|
+    payment.payment_invoices.order('received_at asc').first.amount if payment.payment_invoices.count > 0
+  end
+
+  g.column name: t('activerecord.attributes.payment_invoice.received_at') do |payment|
+    payment.payment_invoices.order('received_at asc').first.received_at.strftime('%Y-%m-%d %H:%M:%S') if payment.payment_invoices.count > 0
+  end
+
+  g.column name: t('activerecord.attributes.payment_invoice.invoice_type') do |payment|
+    InvoiceType.invoice_type_names[payment.payment_invoices.order('received_at asc').first.invoice_type_id] if payment.payment_invoices.count > 0
+  end
+
+  g.column name: t('activerecord.attributes.payment_invoice.credit_on') do |payment|
+    payment.payment_invoices.order('received_at asc').first.credit_on.strftime('%Y年%m月') if payment.payment_invoices.count > 0 && payment.payment_invoices.order('received_at asc').first.credit_on
+  end
+end %>

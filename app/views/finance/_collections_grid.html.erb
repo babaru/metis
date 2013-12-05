@@ -1,0 +1,29 @@
+<%= grid(@collections_grid, :show_filters => :when_filtered) do |g|
+  g.column name: t('activerecord.attributes.project.client') do |project|
+    project.client.name
+  end
+
+  g.column name: t('activerecord.attributes.project.project') do |project|
+    project.name
+  end
+
+  g.column name: t('activerecord.attributes.project.company_net_cost') do |project|
+    project.current_master_plan.company_net_cost
+  end
+
+  g.column name: t('activerecord.attributes.project.collection_invoice_amount') do |project|
+    project.collection_invoice_amount
+  end
+
+  g.column name: t('activerecord.attributes.project.incollection_invoice_amount') do |project|
+    project.incollection_invoice_amount
+  end
+
+  g.column name: t('activerecord.attributes.project.collection_amount') do |project|
+    project.collection_amount
+  end
+
+  g.column name: t('activerecord.attributes.project.incollection_amount') do |project|
+    project.incollection_amount
+  end
+end %>

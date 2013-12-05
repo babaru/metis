@@ -170,6 +170,21 @@ SimpleNavigation::Configuration.run do |navigation|
             }
           )
 
+          # 公司媒体政策
+          #---------------------------------------------------------------------
+
+          client_sub_menu.item(
+            "page_client_#{client.id}_item_company_policies".to_sym,
+            t('model.manager', model: CompanyPolicy.model_name.human),
+            client_company_policies_path(client),
+            {
+              link:
+              {
+                icon: 'file-text'
+              }
+            }
+          )
+
           if can? :manage, Client
             client_sub_menu.item(
               :page_client_items_divider_1, nil, nil, link: {divider: true})

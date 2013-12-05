@@ -8,7 +8,6 @@
     <%= f.input :agency_id, collection: current_space.agencies.map{|v| [v.name, v.id]} %>
     <%= f.input :amount, required: true %>
     <%= f.input :made_at, as: :date_time_picker, required: true %>
-    <%= f.input :credit_on, as: :date_picker, required: true %>
     <%= f.input :space_id, as: :hidden %>
   </div>
 

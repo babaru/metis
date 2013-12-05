@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131125070249) do
+ActiveRecord::Schema.define(:version => 20131205034439) do
 
   create_table "agencies", :force => true do |t|
     t.string   "name"
@@ -86,7 +86,7 @@ ActiveRecord::Schema.define(:version => 20131125070249) do
 
   create_table "collection_invoices", :force => true do |t|
     t.string   "number"
-    t.decimal  "amount",          :precision => 10, :scale => 0
+    t.decimal  "amount",          :precision => 20, :scale => 3
     t.string   "unit"
     t.integer  "invoice_type_id"
     t.datetime "sent_at"
@@ -106,7 +106,7 @@ ActiveRecord::Schema.define(:version => 20131125070249) do
   create_table "collections", :force => true do |t|
     t.integer  "client_id"
     t.integer  "project_id"
-    t.decimal  "amount",     :precision => 10, :scale => 0
+    t.decimal  "amount",     :precision => 20, :scale => 3
     t.string   "unit"
     t.integer  "agency_id"
     t.datetime "made_at"
@@ -120,6 +120,31 @@ ActiveRecord::Schema.define(:version => 20131125070249) do
   add_index "collections", ["client_id"], :name => "index_collections_on_client_id"
   add_index "collections", ["project_id"], :name => "index_collections_on_project_id"
   add_index "collections", ["space_id"], :name => "index_collections_on_space_id"
+
+  create_table "company_policies", :force => true do |t|
+    t.integer  "client_id"
+    t.integer  "medium_id"
+    t.decimal  "framework",  :precision => 20, :scale => 3
+    t.integer  "year"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+    t.decimal  "rebate",     :precision => 8,  :scale => 4
+  end
+
+  add_index "company_policies", ["client_id"], :name => "index_company_policies_on_client_id"
+  add_index "company_policies", ["medium_id"], :name => "index_company_policies_on_medium_id"
+
+  create_table "company_policy_items", :force => true do |t|
+    t.integer  "company_policy_id"
+    t.decimal  "min",               :precision => 20, :scale => 3
+    t.decimal  "max",               :precision => 20, :scale => 3
+    t.decimal  "rebate",            :precision => 8,  :scale => 4
+    t.string   "remark"
+    t.datetime "created_at",                                       :null => false
+    t.datetime "updated_at",                                       :null => false
+  end
+
+  add_index "company_policy_items", ["company_policy_id"], :name => "index_company_policy_items_on_company_policy_id"
 
   create_table "department_permissions", :force => true do |t|
     t.integer  "department_id"
@@ -191,6 +216,7 @@ ActiveRecord::Schema.define(:version => 20131125070249) do
     t.integer  "medium_master_plan_id"
     t.string   "type"
     t.integer  "leads"
+    t.integer  "cpm"
   end
 
   add_index "master_plan_items", ["channel_id"], :name => "index_master_plan_items_on_channel_id"
@@ -253,6 +279,8 @@ ActiveRecord::Schema.define(:version => 20131125070249) do
     t.decimal  "reality_company_discount",  :precision => 8,  :scale => 2
     t.decimal  "original_medium_discount",  :precision => 8,  :scale => 2
     t.decimal  "original_company_discount", :precision => 8,  :scale => 2
+    t.decimal  "regular_medium_rebate",     :precision => 8,  :scale => 4
+    t.decimal  "extra_medium_rebate",       :precision => 8,  :scale => 4
   end
 
   add_index "medium_master_plans", ["master_plan_id"], :name => "index_medium_master_plans_on_master_plan_id"
@@ -276,7 +304,7 @@ ActiveRecord::Schema.define(:version => 20131125070249) do
 
   create_table "payment_invoices", :force => true do |t|
     t.string   "number"
-    t.decimal  "amount",          :precision => 10, :scale => 0
+    t.decimal  "amount",          :precision => 20, :scale => 3
     t.string   "unit"
     t.integer  "invoice_type_id"
     t.datetime "received_at"
@@ -286,22 +314,24 @@ ActiveRecord::Schema.define(:version => 20131125070249) do
     t.integer  "vendor_id"
     t.integer  "medium_id"
     t.integer  "space_id"
+    t.integer  "project_id"
+    t.datetime "credit_on"
   end
 
   add_index "payment_invoices", ["medium_id"], :name => "index_payment_invoices_on_medium_id"
   add_index "payment_invoices", ["payment_id"], :name => "index_payment_invoices_on_payment_id"
+  add_index "payment_invoices", ["project_id"], :name => "index_payment_invoices_on_project_id"
   add_index "payment_invoices", ["space_id"], :name => "index_payment_invoices_on_space_id"
   add_index "payment_invoices", ["vendor_id"], :name => "index_payment_invoices_on_vendor_id"
 
   create_table "payments", :force => true do |t|
     t.integer  "client_id"
     t.integer  "project_id"
-    t.decimal  "amount",     :precision => 10, :scale => 0
+    t.decimal  "amount",     :precision => 20, :scale => 3
     t.string   "unit"
     t.integer  "medium_id"
     t.integer  "vendor_id"
     t.datetime "paid_at"
-    t.datetime "credit_on"
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
     t.integer  "space_id"

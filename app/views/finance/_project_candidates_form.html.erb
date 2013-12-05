@@ -1,0 +1,41 @@
+<%= simple_form_for(:report, url: finance_generate_report_path, html: {class: 'form-horizontal single-line', id:'project-candidates-form'}, method: :post, remote: true) do |f| %>
+<%= hidden_field_tag 'kind', @kind %>
+<table class="table table-bordered table-striped">
+  <tr>
+    <th></th>
+    <th><%= t("activerecord.attributes.project.name") %></th>
+    <th><%= t("activerecord.attributes.client.name") %></th>
+    <th><%= t("activerecord.attributes.project.started_at") %></th>
+    <th><%= t("activerecord.attributes.project.ended_at") %></th>
+  </tr>
+  <% @projects.each do |project| %>
+  <tr>
+    <td>
+      <%= check_box_tag('project_ids[]', project.id) %>
+    </td>
+    <td class="auto"><%= project.name %></td>
+    <td><%= project.client.name %></td>
+    <td><%= project.started_at.strftime('%Y-%m-%d') %></td>
+    <td><%= project.ended_at.strftime('%Y-%m-%d') %></td>
+  </tr>
+  <% end %>
+  <tr>
+    <td colspan="5">
+      <!-- <%= f.submit '下载报表', name: 'download_report', class: 'btn btn-info' %> -->
+      <%= f.submit '生成报表', class: 'btn btn-primary generate-report-button' %>
+    </td>
+  </tr>
+</table>
+
+<% end %>
+
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#project-candidates-form').on('ajax:beforeSend', function() {
+      block_overlay($(this));
+    }).on('ajax:complete', function() {
+      unblock_overlay($(this));
+    });
+  });
+</script>

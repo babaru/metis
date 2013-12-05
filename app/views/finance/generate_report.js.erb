@@ -1,0 +1,6 @@
+<% if @kind == 'payment' %>
+$('.report-panel').html('<%= escape_javascript(render partial: "payments_grid") %>');
+<% else %>
+$('.report-panel').html('<%= escape_javascript(render partial: "collections_grid") %>');
+<% end %>
+$('.report-panel').show();

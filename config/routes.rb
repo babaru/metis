@@ -18,6 +18,8 @@ Metis::Application.routes.draw do
   post 'projects/:id/save_user_assignments' => 'projects#save_user_assignments', as: :save_project_user_assignments
   post 'projects/:id/set_current_master_plan' => 'projects#set_current_master_plan', as: :set_current_master_plan
   post 'projects/:id/start' => 'projects#start', as: :start_project
+  get 'clients/:client_id/projects/:id/execution' => 'projects#execution', as: :project_execution
+  post 'projects/:id/download_execution' => 'projects#download_execution', as: :download_project_execution
 
   get 'search/projects' => 'search#query_projects', as: :query_projects
   post 'search/do_query_projects' => 'search#do_query_projects', as: :do_query_projects
@@ -72,11 +74,13 @@ Metis::Application.routes.draw do
   post 'departments/:id/save_department_users' => 'departments#save_department_users', as: :save_department_users
 
   get 'finance/report' => 'finance#report', as: :finance_report
+  post 'finance/generate_report' => 'finance#generate_report', as: :finance_generate_report
+  post 'finance/do_query_projects' => 'finance#do_query_projects', as: :finance_do_query_projects
 
   resources :spaces, :departments, :media, :channels, :spots, :channel_groups, :spot_categories,
     :master_plans, :master_plan_items, :spot_plan_items, :medium_policies,
     :medium_master_plans, :vendors, :agencies, :payments, :payment_invoices,
-    :collections, :collection_invoices
+    :collections, :collection_invoices, :company_policies, :company_policy_items
 
   resources :media do
     resources :channels, :channel_groups, :spots, :spot_categories
@@ -93,6 +97,10 @@ Metis::Application.routes.draw do
   resources :clients do
     resources :projects do
       resources :master_plans
+    end
+
+    resources :company_policies do
+      resources :company_policy_items
     end
   end
 

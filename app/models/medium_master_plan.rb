@@ -5,6 +5,7 @@ class MediumMasterPlan < ActiveRecord::Base
   attr_accessible :reality_medium_net_cost, :reality_company_net_cost,
     :reality_medium_discount, :reality_company_discount,
     :original_medium_discount, :original_company_discount,
+    :regular_medium_rebate, :extra_medium_rebate,
     :medium_id, :medium_name,
     :master_plan_id, :master_plan_name,
     :type
@@ -14,7 +15,7 @@ class MediumMasterPlan < ActiveRecord::Base
   def medium_net_cost
     sum = 0
     MasterPlanItem.where(medium_id: medium_id, master_plan_id: master_plan_id, is_on_house: false).each do |item|
-      sum += item.theoritical_medium_net_cost
+      sum += item.medium_net_cost
     end
     sum
   end
@@ -22,7 +23,23 @@ class MediumMasterPlan < ActiveRecord::Base
   def company_net_cost
     sum = 0
     MasterPlanItem.where(medium_id: medium_id, master_plan_id: master_plan_id, is_on_house: false).each do |item|
-      sum += item.theoritical_company_net_cost
+      sum += item.company_net_cost
+    end
+    sum
+  end
+
+  def medium_net_cost_by_month(year, month)
+    sum = 0
+    MasterPlanItem.where(medium_id: medium_id, master_plan_id: master_plan_id, is_on_house: false).each do |item|
+      sum += item.medium_net_cost_by_month(year, month)
+    end
+    sum
+  end
+
+  def company_net_cost_by_month(year, month)
+    sum = 0
+    MasterPlanItem.where(company_id: company_id, master_plan_id: master_plan_id, is_on_house: false).each do |item|
+      sum += item.company_net_cost_by_month(year, month)
     end
     sum
   end
@@ -37,6 +54,17 @@ class MediumMasterPlan < ActiveRecord::Base
 
   def profit
     company_net_cost - medium_net_cost
+  end
+
+  def rebate_profit
+    sum = 0
+    sum += self.medium_net_cost * self.regular_medium_rebate if self.regular_medium_rebate
+    sum += self.medium_net_cost * self.extra_medium_rebate if self.extra_medium_rebate
+    sum
+  end
+
+  def total_profit
+    profit + rebate_profit
   end
 
   def bonus_ratio
@@ -85,6 +113,9 @@ class MediumMasterPlan < ActiveRecord::Base
     item[:medium_net_cost] = self.medium_net_cost
     item[:company_net_cost] = self.company_net_cost
     item[:profit] = self.profit
+    item[:rebate_profit] = self.rebate_profit
+    item[:total_profit] = self.total_profit
+    item[:project_total_profit] = self.master_plan.project.total_profit
     item[:medium_discount] = self.medium_discount
     item[:company_discount] = self.company_discount
     item[:medium_bonus_ratio] = MediumPolicy.medium_bonus_ratio(self.medium_id, self.master_plan.client_id)

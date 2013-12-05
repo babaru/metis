@@ -5,7 +5,7 @@
   :show,
   data:
   {
-    name: "正在给<strong>#{@project.name} #{Payment.model_name.human}</strong> <small>#{t('simple_form.required.text') }</small>",
+    name: "正在给<strong>#{@payment.project.name} #{Payment.model_name.human}</strong> <small>#{t('simple_form.required.text') }</small>",
     toolbar: {
       left:
       [
@@ -15,12 +15,12 @@
           data:
           {
             name: fa_icon('level-up rotate-270'),
-            url: project_payments_path,
+            url: project_payments_path(@payment.project_id),
             options:
             {
               class: 'btn',
               rel: 'tooltip',
-              title: "#{t('labels.back_to')}#{@project.name}#{t('model.list', :model => Payment.model_name.human)}",
+              title: "#{t('labels.back_to')}#{@payment.project.name}#{t('model.list', :model => Payment.model_name.human)}",
             }
           }
         )

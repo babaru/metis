@@ -53,13 +53,13 @@ function update_estimation_fields(data) {
 
 function update_grid_content(is_on_house, button, data) {
   if (is_on_house) {
-    button.parent().find('.button.purchase').show();
-    button.parent().find('.button.on_house').hide();
+    button.parent().find('.btn.purchase').show();
+    button.parent().find('.btn.on_house').hide();
     button.parent().closest('.master-plan-item-row').find('.master-plan-item-position-name').removeClass('is_on_house').addClass('is_on_house');
     button.parent().parent().find('.discounts').hide();
   } else {
-    button.parent().find('.button.purchase').hide();
-    button.parent().find('.button.on_house').show();
+    button.parent().find('.btn.purchase').hide();
+    button.parent().find('.btn.on_house').show();
     update_master_plan_item_fields(data);
     button.parent().closest('.master-plan-item-row').find('.master-plan-item-position-name').removeClass('is_on_house');
     button.parent().parent().find('.discounts').show();

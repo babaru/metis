@@ -1,0 +1,119 @@
+<%= render_cell(:page_title, :show, data:{name: "<strong>#{@project.name}</strong> 项目执行单",
+  toolbar: {
+    left:
+    [
+      render_cell(:button, :show, data:
+      {
+        name: fa_icon('level-up rotate-270'),
+        url: client_projects_path(@project.client_id),
+        options:
+        {
+          class: 'btn',
+          rel: 'tooltip',
+          title: "#{t('labels.back_to')}#{t('model.list', :model => Project.model_name.human)}",
+        }
+      })
+    ],
+    right:
+    [
+      render_cell(
+        :button,
+        :show,
+        data:
+        {
+          name: fa_icon('cloud-download', text: '下载项目执行单'),
+          url: download_project_execution_path(@project),
+          options: {class: 'btn btn-info'}
+        }
+      )
+    ]
+  }
+})
+%>
+
+<table class="table table-bordered table-striped">
+  <tr>
+    <th class="auto">
+      执行媒体
+    </th>
+    <th>
+      客户金额
+    </th>
+    <th>
+      媒体金额
+    </th>
+    <th>
+      常规返点
+    </th>
+    <th>
+      额外返点
+    </th>
+    <th>
+      差额利润
+    </th>
+    <th>
+      返点利润
+    </th>
+    <th>
+      利润小计
+    </th>
+  </tr>
+  <% if @project.current_master_plan %>
+  <% @project.current_master_plan.medium_master_plans.each do |medium_master_plan| %>
+  <tr class="medium_master_plan_<%= medium_master_plan.id %>">
+    <td>
+      <%= medium_master_plan.medium.name %>
+    </td>
+    <td>
+      <%= medium_master_plan.company_net_cost %>
+    </td>
+    <td>
+      <%= medium_master_plan.medium_net_cost %>
+    </td>
+    <td>
+      <%= medium_master_plan.regular_medium_rebate %>
+    </td>
+    <td>
+      <%= link_to(
+        medium_master_plan.extra_medium_rebate,
+        '0',
+        class: 'editable-field',
+        'data-type' => 'text',
+        'data-pk' => medium_master_plan.id,
+        'data-name' => "extra_medium_rebate",
+        'data-url' => "/medium_master_plans/#{medium_master_plan.id}/modify",
+        'data-original-title' => t('activerecord.attributes.medium_master_plan.extra_medium_rebate')
+        )
+      %>
+    </td>
+    <td>
+      <%= medium_master_plan.profit %>
+    </td>
+    <td>
+      <%= medium_master_plan.rebate_profit %>
+    </td>
+    <td>
+      <%= medium_master_plan.total_profit %>
+    </td>
+  </tr>
+  <% end %>
+  <tr>
+    <td colspan="8" style="text-align: right; font-weight: bold;">
+      利润小计：<span style="font-size: 16px;" class="project-total-profit"><%= @project.total_profit %></span>
+    </td>
+  </tr>
+  <% end %>
+</table>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.editable-field').editable({
+      success: function(data) {
+        var medium_master_plan_id = data['id'];
+        $('.medium_master_plan_' + medium_master_plan_id + ' td:nth-child(7)').text(data['rebate_profit']);
+        $('.medium_master_plan_' + medium_master_plan_id + ' td:nth-child(8)').text(data['total_profit']);
+        $('.project-total-profit').text(data['project_total_profit']);
+      }
+    });
+  });
+</script>

@@ -25,6 +25,7 @@ zh-CN:
       payment_invoice: 付款发票
       collection: 收款
       collection_invoice: 收款发票
+      company_policy: 媒介返点
     attributes:
       user:
         name: 用户名
@@ -49,10 +50,13 @@ zh-CN:
       master_plan:
         name: 名称
         updated_at: 最后修改时间
+      medium_master_plan:
+        extra_medium_rebate: 额外媒介返点
       master_plan_item:
         spot_name: 媒体点位
         channel_name: 频道
-        count: 数量
+        count: 计划数量
+        reality_count: 实际数量
         is_on_house: 是否配送
         est_imp: 预估日展示数
         est_clicks: 预估日点击数
@@ -123,7 +127,7 @@ zh-CN:
         space: 公司
       payment:
         name: 名称
-        amount: 金额
+        amount: 付款金额
         medium_id: 媒介
         medium: 媒介
         vendor_id: 供应商
@@ -131,18 +135,23 @@ zh-CN:
         project: 项目
         project_id: 项目
         paid_at: 付款时间
-        credit_on: 抵扣月份
         payment_invoice: 付款发票
         payment_invoice_id: 付款发票
+        medium_net_cost: 媒介购买金额
+        payable: 未付金额
+        invoice_amount: 发票总额
       payment_invoice:
         name: 名称
-        amount: 金额
+        amount: 发票金额
         number: 发票号码
         invoice_type_id: 发票类型
         invoice_type: 发票类型
         received_at: 接收时间
         medium: 媒介
         vendor: 供应商
+        credit_on: 抵扣月份
+        medium_id: 媒介
+        vendor_id: 供应商
       collection:
         name: 名称
         amount: 金额
@@ -153,7 +162,6 @@ zh-CN:
         project: 项目
         project_id: 项目
         made_at: 收款时间
-        credit_on: 抵扣月份
         collection_invoice: 收款发票
         collection_invoice_id: 收款发票
         collection_invoices: 收款发票
@@ -168,3 +176,9 @@ zh-CN:
         agency: 代理公司
         client_id: 客户
         agency_id: 代理公司
+      company_policy:
+        rebate: 媒介返点
+        year: 年度
+        medium: 媒介
+        medium_id: 媒介
+        framework: 框架量

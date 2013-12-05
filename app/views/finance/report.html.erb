@@ -2,7 +2,7 @@
   :page_title,
   :show,
   data: {
-    name: "查询项目",
+    name: "财务统计报表",
     toolbar: {
 
     }
@@ -10,7 +10,13 @@
 )
 %>
 
-<%= simple_form_for(:project_search, url: do_query_projects_path, html: {class: 'form-horizontal single-line', id:'project-search-form'}, method: :post, remote: true) do |f| %>
+<ul class="nav nav-tabs">
+  <%= content_tag(:li, link_to('媒介统计表', finance_report_path(kind: 'payment')), class: @kind == 'payment' ? 'active' : '') %>
+  <%= content_tag(:li, link_to('销售统计表', finance_report_path(kind: 'collection')), class: @kind == 'collection' ? 'active' : '') %>
+</ul>
+
+<%= simple_form_for(:project_search, url: finance_do_query_projects_path, html: {class: 'form-horizontal single-line', id:'project-search-form'}, method: :post, remote: true) do |f| %>
+<%= hidden_field_tag 'kind', @kind %>
 <table class="table table-horizontal-bordered table-center-vertical-align">
   <tr>
     <td>
@@ -49,14 +55,18 @@
   </tr>
   <tr>
     <td colspan="3">
-      <%= f.submit '查询', class: 'btn btn-primary pull-right' %>
+      <%= f.submit '查询', class: 'btn btn-success pull-right' %>
     </td>
   </tr>
 </table>
 
 <% end %>
 
-<div class="search_result">
+<div class="search-result">
+
+</div>
+
+<div class="report-panel" style="display: none;">
 
 </div>
 

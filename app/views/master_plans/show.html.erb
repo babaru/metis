@@ -1,7 +1,7 @@
 <%= render_cell(:page_title, :show,
   data:
   {
-    name: "<strong>#{@master_plan.project.client.name}</strong> #{@master_plan.project.name} #{fa_icon('cloud-upload') if @master_plan.project.is_a?(HistoryProject)}",
+    name: "#{fa_icon('star', text:' ') if @master_plan.is_current_master_plan?} #{@master_plan.project.name} #{fa_icon('cloud-upload') if @master_plan.project.is_a?(HistoryProject)}",
     toolbar:
     {
       right:
@@ -14,7 +14,7 @@
             type: 'dropdown',
             items:
             [
-              @master_plan.project.master_plans.inject([]){|list, item| list << {name: fa_icon(item.id == @master_plan.id ? 'sign-blank' : 'unchecked', text: item.name), url: client_project_master_plan_path(id:item)}},
+              @master_plan.project.master_plans.inject([]){|list, item| list << {name: fa_icon(item.id == @master_plan.id ? 'star' : 'unchecked', text: item.name), url: client_project_master_plan_path(id:item)}},
               {divider: true},
               {name: fa_icon('star', text: '设为默认Master Plan'), url: set_current_master_plan_path(id: @master_plan.project_id, master_plan_id: @master_plan.id), options: {method: :post}},
               {name: fa_icon('copy', text: '克隆当前Master Plan'), url: clone_master_plan_path(@master_plan), options: {method: :post}},

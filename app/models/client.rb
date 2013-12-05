@@ -9,6 +9,7 @@ class Client < ActiveRecord::Base
   has_many :client_assignments, dependent: :destroy
   has_many :assigned_users, class_name: 'User', through: :client_assignments
   has_many :discounts, class_name: 'ClientDiscount', foreign_key: :client_id, dependent: :destroy
+
   attr_accessible :logo, :name, :created_by_id, :created_by, :assigned_user_ids,
     :space_id, :space
 

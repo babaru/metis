@@ -137,4 +137,14 @@ class ProjectsController < ApplicationController
       end
     end
   end
+
+  def execution
+    @project = Project.find params[:id]
+    @project.current_master_plan.medium_master_plans.each do |medium_master_plan|
+      unless medium_master_plan.regular_medium_rebate
+        medium_master_plan.regular_medium_rebate = CompanyPolicy.rebate(@project.client_id, medium_master_plan.medium_id)
+        medium_master_plan.save!
+      end
+    end
+  end
 end
