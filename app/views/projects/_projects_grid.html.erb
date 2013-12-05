@@ -51,6 +51,11 @@
           {
             name: fa_icon('list', text: t('model.list', model: Payment.model_name.human)),
             url: project_payments_path(project)
+          },
+
+          {
+            name: fa_icon('plus-sign', text: t('model.add', model: PaymentInvoice.model_name.human)),
+            url: new_payment_invoice_path
           }
         ]
       }
@@ -72,6 +77,11 @@
           {
             name: fa_icon('list', text: t('model.list', model: Collection.model_name.human)),
             url: project_collections_path(project)
+          },
+
+          {
+            name: fa_icon('plus-sign', text: t('model.add', model: CollectionInvoice.model_name.human)),
+            url: new_collection_invoice_path
           }
         ]
       }

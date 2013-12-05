@@ -41,54 +41,54 @@ SimpleNavigation::Configuration.run do |navigation|
       }
     )
 
-    primary.item(
-      :page_spaces,
-      Space.model_name.human,
-      nil,
-      {
-        link: {
-          icon: 'building'
-        },
-        highlights_on: /spaces/
-      }
-    ) do |space_menu|
+    # primary.item(
+    #   :page_spaces,
+    #   Space.model_name.human,
+    #   nil,
+    #   {
+    #     link: {
+    #       icon: 'building'
+    #     },
+    #     highlights_on: /spaces/
+    #   }
+    # ) do |space_menu|
 
-      space_menu.item(
-        :page_department,
-        Department.model_name.human,
-        nil,
-        {
-          link: {
-            icon: 'sitemap'
-          },
-          highlights_on: /departments/
-        }
-      ) do |department_menu|
+    #   space_menu.item(
+    #     :page_department,
+    #     Department.model_name.human,
+    #     nil,
+    #     {
+    #       link: {
+    #         icon: 'sitemap'
+    #       },
+    #       highlights_on: /departments/
+    #     }
+    #   ) do |department_menu|
 
-        department_menu.item(
-          :page_department_list,
-          t('model.list', model: Department.model_name.human),
-          departments_path,
-          {
-            link: {
-              icon: 'list'
-            }
-          }
-        )
+    #     department_menu.item(
+    #       :page_department_list,
+    #       t('model.list', model: Department.model_name.human),
+    #       departments_path,
+    #       {
+    #         link: {
+    #           icon: 'list'
+    #         }
+    #       }
+    #     )
 
-        department_menu.item(
-          :page_create_department,
-          t('model.create', model: Department.model_name.human),
-          new_department_path,
-          {
-            link: {
-              icon: 'plus-sign'
-            }
-          }
-        )
+    #     department_menu.item(
+    #       :page_create_department,
+    #       t('model.create', model: Department.model_name.human),
+    #       new_department_path,
+    #       {
+    #         link: {
+    #           icon: 'plus-sign'
+    #         }
+    #       }
+    #     )
 
-      end
-    end
+    #   end
+    # end
 
     primary.item(
       :page_clients,
@@ -232,16 +232,11 @@ SimpleNavigation::Configuration.run do |navigation|
         :page_payment_invoice,
         Payment.model_name.human,
         nil,
+        link: {
+          icon: 'hand-left'
+        },
         highlights_on: /payments/
       ) do |payment_menu|
-        payment_menu.item(
-          :page_create_payment,
-          t('model.add', model: Payment.model_name.human),
-          new_payment_path,
-          link: {
-            icon: 'plus-sign'
-          }
-        )
 
         payment_menu.item(
           :page_payment_list,
@@ -253,10 +248,21 @@ SimpleNavigation::Configuration.run do |navigation|
         )
 
         payment_menu.item(
+          :page_payment_invoice_list,
+          t('model.list', model: PaymentInvoice.model_name.human),
+          payment_invoices_path,
+          link: {
+            icon: 'list'
+          },
+          highlights_on: /payment_invoices/
+        )
+
+        payment_menu.item(
           :page_payment_menu_divider_1,
           nil,
           nil,
-          link: {divider: true})
+          link: {divider: true}
+        )
 
         payment_menu.item(
           :page_create_payment_invoice,
@@ -268,31 +274,17 @@ SimpleNavigation::Configuration.run do |navigation|
           highlights_on: /payment_invoices/
         )
 
-        payment_menu.item(
-          :page_payment_invoice_list,
-          t('model.list', model: PaymentInvoice.model_name.human),
-          payment_invoices_path,
-          link: {
-            icon: 'list'
-          },
-          highlights_on: /payment_invoices/
-        )
       end
 
       finance_menu.item(
         :page_collection_invoice,
         Collection.model_name.human,
         nil,
+        link: {
+          icon: 'hand-right'
+        },
         highlights_on: /collections/
       ) do |collection_menu|
-        collection_menu.item(
-          :page_create_collection,
-          t('model.add', model: Collection.model_name.human),
-          new_collection_path,
-          link: {
-            icon: 'plus-sign'
-          }
-        )
 
         collection_menu.item(
           :page_collection_list,
@@ -304,10 +296,21 @@ SimpleNavigation::Configuration.run do |navigation|
         )
 
         collection_menu.item(
+          :page_collection_invoice_list,
+          t('model.list', model: CollectionInvoice.model_name.human),
+          collection_invoices_path,
+          link: {
+            icon: 'list'
+          },
+          highlights_on: /collection_invoices/
+        )
+
+        collection_menu.item(
           :page_collection_menu_divider_1,
           nil,
           nil,
-          link: {divider: true})
+          link: {divider: true}
+        )
 
         collection_menu.item(
           :page_create_collection_invoice,
@@ -319,20 +322,17 @@ SimpleNavigation::Configuration.run do |navigation|
           highlights_on: /collection_invoices/
         )
 
-        collection_menu.item(
-          :page_collection_invoice_list,
-          t('model.list', model: CollectionInvoice.model_name.human),
-          collection_invoices_path,
-          link: {
-            icon: 'list'
-          },
-          highlights_on: /collection_invoices/
-        )
       end
 
       finance_menu.item(
+          :page_finance_menu_divider_1,
+          nil,
+          nil,
+          link: {divider: true})
+
+      finance_menu.item(
         :page_finance_report,
-        '报表',
+        '统计报表',
         finance_report_path,
         link: {
           icon: 'file-text'
